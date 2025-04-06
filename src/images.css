@@ -1,0 +1,14 @@
+.background1 {
+    background-image: url('../assets/background.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+  }
+  
+  .background2 {
+    background-image: url('../assets/new-background.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+  }
+  
