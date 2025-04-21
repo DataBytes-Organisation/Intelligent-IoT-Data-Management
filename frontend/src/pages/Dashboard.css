@@ -1,0 +1,84 @@
+/* Title */
+.dashboard-title {
+  text-align: center;
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin-bottom: 1rem;
+}
+
+/* Remove button  */
+.remove-btn {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background-color: #ef4444; 
+  color: white;
+  border-radius: 9999px;
+  width: 28px;
+  height: 28px;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.2s ease;
+  z-index: 10; 
+}
+
+.remove-btn:hover {
+  background-color: #dc2626; 
+}
+
+/* Widget card style */
+.widget-card {
+  background: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.2s ease;
+  position: relative;
+  z-index: 1; 
+}
+
+.widget-card:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+/* Input and select fields with no borders  */
+.widget-input {
+  background: transparent;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937; 
+  border: none;
+  outline: none;
+  border-bottom: 2px solid transparent;
+  width: 100%;
+  margin-bottom: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+/* Focus and hover effects for input/select fields */
+.widget-input:focus,
+.widget-input:hover {
+  border-bottom: 2px solid #3b82f6; 
+  color: #3b82f6; 
+}
+
+/*  adding widgets（+） */
+button.bg-green-500 {
+  background-color: #34d399; 
+  color: white;
+  padding: 0.75rem 1.25rem;
+  border-radius: 9999px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease;
+  z-index: 10; 
+}
+
+button.bg-green-500:hover {
+  background-color: #10b981; 
+}

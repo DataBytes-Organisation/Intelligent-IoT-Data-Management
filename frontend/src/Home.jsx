@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { Line, Bar, Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, BarElement, ArcElement } from 'chart.js';
+import { Link } from 'react-router-dom';
+
 
 // Register Chart.js components including ArcElement for Pie charts
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, BarElement, ArcElement);
@@ -101,15 +103,40 @@ const Home = () => {
                 <section id="features" className="features">
                     <h2>Explore Key Features</h2>
                     <div className="card-container">
-                        {features.map((feature, index) => (
-                        <div key={index} className="card">
-                            <h3>{feature.title}</h3>
-                            <p>{feature.description}</p>
-                        </div>
-                        ))}
-                    </div>
-                </section>
-            
+  {features.map((feature, index) => {
+    const isDashboard = feature.title === 'Customizable Dashboards';
+
+    const cardContent = (
+      <div className="card hover:shadow-xl transition cursor-pointer">
+        <h3>{feature.title}</h3>
+        <p>{feature.description}</p>
+      </div>
+    );
+
+    return (
+      <div key={index}>
+        {isDashboard ? (
+          <Link
+          to="/dashboard"
+          className=""
+          style={{ textDecoration: 'none', color: 'inherit' }}
+        >
+          <div className="card hover:shadow-xl transition cursor-pointer">
+            <h3>{feature.title}</h3>
+            <p>{feature.description}</p>
+          </div>
+        </Link>
+        
+        ) : (
+          cardContent
+        )}
+      </div>
+    );
+  })}
+</div>
+               </section>
+                
+
                 {/* Data Selection Section */}
                 <section id="data-selection" className="data-selection">
                     <h2>Select Your Data and Graph Type</h2>

@@ -7,6 +7,8 @@ import Footer from './Footer';
 import Login from './Login';
 import Register from './Register.jsx';
 import AnalyzePanel from './AnalyzePanel'; // ✅ Import the AnalyzePanel component
+import Dashboard from './pages/Dashboard';
+
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);  // State for dark mode
@@ -44,6 +46,8 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/analyze' element={<AnalyzePanel />} /> {/* ✅ New Analyze route */}
+        <Route path="/dashboard" element={<Dashboard />} />
+
       </Routes>
       <Footer />
     </div>
