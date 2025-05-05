@@ -18,4 +18,3 @@ def choose_algorithm(df, streams, start_date, end_date, threshold=None, type='co
         return volatility_based(df, streams, start_date, end_date, threshold)
     else:
         raise ValueError('Not a valid choice')
-

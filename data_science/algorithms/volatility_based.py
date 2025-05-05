@@ -31,9 +31,10 @@ def volatility_based(df, streams, start_date, end_date, threshold=None):
 
     # Filter data for the specified time period and streams
     df_period = df.loc[start_date:end_date, streams]
-
+    print('df_period',df_period)
     # Calculate the standard deviation (volatility) for each stream
     volatility = df_period.std()
+    print('volatility',volatility)
     # Invert the standard deviation to follow the same criteria: lower value indicates anomaly
     volatility_metric = -volatility
 

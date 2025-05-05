@@ -57,3 +57,5 @@ def correlation_based(df, streams, start_date, end_date, threshold=None):
     results = {stream: {"avg_corr": avg_corr_series[stream], "is_outlier": avg_corr_series[stream] < threshold}
                for stream in streams}
     return results
+
+
