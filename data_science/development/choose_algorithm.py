@@ -5,9 +5,9 @@ import seaborn as sns
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from algorithms.mean_based import mean_based
-from algorithms.volatility_based import volatility_based
-from algorithms.correlation_based import correlation_based
+from data_science.algorithms.mean_based import mean_based
+from data_science.algorithms.volatility_based import volatility_based
+from data_science.algorithms.correlation_based import correlation_based
 
 def choose_algorithm(df, streams, start_date, end_date, threshold=None, type='correlation'):
     if type == 'correlation':
