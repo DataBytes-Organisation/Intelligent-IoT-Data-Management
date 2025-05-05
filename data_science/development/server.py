@@ -30,11 +30,10 @@ def analyze():
 
     uploaded_file = request.files.get('file')
     if not uploaded_file:
-        return 'Không có file nào được gửi', 400
+        return 'No files were sent', 400
 
-    # Nếu người dùng không chọn file, browser vẫn gửi một field rỗng
     if uploaded_file.filename == '':
-        return 'Chưa chọn file', 400
+        return 'No files selected', 400
 
     os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
@@ -43,15 +42,13 @@ def analyze():
 
     try:
         # Read CSV directly from file path
-        # You can also do: df = pd.read_csv(uploaded_file) to read from file-like object
         df = pd.read_csv(save_path, parse_dates=['created_at'])
         df.sort_values(by='created_at', inplace=True)
         df.set_index('created_at', inplace=True)
         df = df.interpolate()
 
     except Exception as e:
-        return f'Lỗi khi đọc CSV: {e}', 400
-
+        return f'Error in reading CSV: {e}', 400
 
     # run analysis
     try:
