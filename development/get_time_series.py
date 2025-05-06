@@ -1,55 +1,30 @@
 import pandas as pd
 
-def get_time_series(dataset_name):
+def get_time_series(dataset_name, start_idx=0, end_idx=None):
     """
-    Loads and processes time-series data from a CSV file.
-    
-    - Automatically detects the most likely time column (non-numeric).
-    - Drops rows with missing/invalid time.
-    - Sets time as the index and sorts it.
-    - Keeps only numeric sensor columns.
-    - Interpolates missing sensor values.
-    - Flags rows where interpolation occurred.
+    Loads and slices time-series sensor data using row indices (not timestamps).
 
     Parameters:
         dataset_name (str): Path to the CSV file.
+        start_idx (int): Starting row index for the time window.
+        end_idx (int): Ending row index for the time window.
 
     Returns:
-        pd.DataFrame: Cleaned and processed time-series DataFrame.
+        pd.DataFrame: Cleaned sensor data in the selected range.
     """
     try:
         df = pd.read_csv(dataset_name)
 
-        # Step 1: Detecting the time column
-        time_col = None
-        for col in df.columns:
-            if not pd.api.types.is_numeric_dtype(df[col]):
-                try:
-                    converted = pd.to_datetime(df[col], errors='coerce')
-                    success_rate = converted.notna().mean()
-                    if success_rate > 0.8:
-                        time_col = col
-                        df[col] = converted
-                        break
-                except:
-                    continue
-
-        if time_col is None:
-            raise ValueError("⚠️ Could not detect a valid time column automatically.")
-
-        # Step 2: Drop invalid time values and sort
-        df = df.dropna(subset=[time_col])
-        df = df.set_index(time_col).sort_index()
-
-        # Step 3: Keep only numeric columns (sensor values)
-        df = df.drop(columns=[col for col in df.columns if not pd.api.types.is_numeric_dtype(df[col])], errors='ignore')
+        # Keep only numeric sensor columns
+        df = df.loc[:, df.dtypes.apply(pd.api.types.is_numeric_dtype)]
         df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
 
-        # Step 4: Flag and interpolate missing values
-        df['was_interpolated'] = df.isna().any(axis=1)
-        df = df.interpolate(method='time')
+        # Handle default end_idx
+        if end_idx is None or end_idx > len(df):
+            end_idx = len(df)
 
-        return df
+        # Slice by index
+        return df.iloc[start_idx:end_idx]
 
     except Exception as e:
         print(f"❌ Error loading dataset: {e}")
@@ -64,21 +39,31 @@ def export_to_json(df, filename="processed_data.json"):
         df (pd.DataFrame): DataFrame to export.
         filename (str): Output filename.
     """
-    df.reset_index().to_json(filename, orient="records", date_format="iso", indent=2)
+    df.to_json(filename, orient="records", indent=2)
     print(f"✅ JSON exported to {filename}")
 
 
-# Testing the function directly
+# ---------------- TESTING BLOCK ----------------
+
 if __name__ == "__main__":
-    file_path = "../datasets/swanHill_weather_10000_data.csv"  # Replace with any dataset
-    df = get_time_series(file_path)
+    # Path to your dataset
+    file_path = "../datasets/complex.csv"  
+
+    # Define time window using row indices
+    start_idx = 250
+    end_idx = 500
+
+    # Load and slice the data
+    df = get_time_series(file_path, start_idx, end_idx)
 
     if df is not None:
-        print("\n✅ Data processed successfully!\n")
+        print("\n✅ Data slice loaded successfully!\n")
         print(df.head())
 
-        # Optional: export to JSON if needed
-        export_to_json(df)
+        # Optional: export to JSON
+        export_to_json(df, filename="complex_slice.json")
 
+        # Optional: export to CSV for debug
+        df.to_csv("complex_slice.csv", index=False)
     else:
         print("❌ Failed to process the dataset.")
