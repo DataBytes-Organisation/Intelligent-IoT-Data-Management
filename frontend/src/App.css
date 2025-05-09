@@ -14,10 +14,13 @@ body.light-mode .top-nav {
   background-color: #ffffff;
   color: #333;
   border-bottom: 1px solid #ddd;
-  font-family: 'Roboto', sans-serif; /* New font for nav bar */
+  font-family: 'Roboto', sans-serif;
+  /* New font for nav bar */
   font-weight: 500;
-  letter-spacing: 1px; /* Adds space between characters */
-  text-transform: uppercase; /* Makes the nav text uppercase */
+  letter-spacing: 1px;
+  /* Adds space between characters */
+  text-transform: uppercase;
+  /* Makes the nav text uppercase */
 }
 
 body.light-mode .theme-toggle-btn {
@@ -55,10 +58,14 @@ body.dark-mode .theme-toggle-btn {
   justify-content: center;
   align-items: center;
   transition: background-color 0.3s, color 0.3s;
-  font-family: 'Roboto', sans-serif; /* Stylish font for nav */
-  font-weight: 500; /* Slightly bolder text */
-  letter-spacing: 1px; /* Adds space between characters */
-  text-transform: uppercase; /* Uppercase text for the navigation */
+  font-family: 'Roboto', sans-serif;
+  /* Stylish font for nav */
+  font-weight: 500;
+  /* Slightly bolder text */
+  letter-spacing: 1px;
+  /* Adds space between characters */
+  text-transform: uppercase;
+  /* Uppercase text for the navigation */
 }
 
 .top-nav .nav-links {
@@ -72,7 +79,8 @@ body.dark-mode .theme-toggle-btn {
   text-decoration: none;
   padding: 0.5rem 1rem;
   transition: color 0.3s, background-color 0.3s;
-  font-family: 'Roboto', sans-serif; /* New font for links */
+  font-family: 'Roboto', sans-serif;
+  /* New font for links */
   font-weight: 400;
   letter-spacing: 1px;
 }
@@ -177,14 +185,12 @@ body.dark-mode .theme-toggle-btn {
 }
 
 select {
-  padding: 1rem;
-  font-size: 1rem;
-  margin: 0.5rem;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  width: 200px;
-  background-color: #ffffff;
-  color: #333;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  background-color: white;
+  width: 100%;
 }
 
 button {
@@ -256,4 +262,159 @@ footer {
   background-color: #7f8c8d;
   color: white;
   transform: scale(1.05);
+}
+
+
+/* Minna */
+
+.analyze_container {
+  padding: 24px;  
+  margin: 0 auto;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.analyze_header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 16px;
+  color: #333;
+  justify-content: center;
+}
+
+.analyze_headerIcon {
+  font-size: 28px;
+  margin-right: 12px;
+}
+
+.analyze_title {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+  text-align: center;
+}
+
+.analyze_formGroup {
+  margin-bottom: 20px;
+}
+
+.analyze_label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #555;
+}
+
+.analyze_checkboxGroup {
+  display: flex;
+  flex-wrap: 15px;
+  gap: 15px;
+  margin-bottom: 15px;
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 6px;
+}
+
+.analyze_checkboxLabel {
+  display: "flex";
+  align-items: center;
+  cursor: pointer;
+  padding: 6px 12px;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.analyze_checkboxLabelSelected {
+  background-color: "#007bff";
+  color: white;
+}
+
+.analyze_input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  transition: border 0.2s ease;
+}
+
+.analyze_buttonGroup {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px
+}
+
+.analyze_button {
+  padding: 8px;
+  border-radius: 4px;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+  width: 100%;
+  justify-content: center;
+}
+
+.analyze_primaryButton {
+  background-color: green;
+  color: white;
+}
+
+.analyze_secondaryButton {
+  background-color: #ff7300;
+  color: white;
+  width: 100%;
+}
+
+.analyze_icon {
+  padding: 16px;
+  border-radius: 4px;
+  font-size: 16px;
+
+}
+
+.analyze_resultContainer {
+  margin-top: 24px;
+  background-color: #f8f9fa;
+  padding: 16px;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+}
+
+.analyze_resultHeader {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #333'
+
+}
+
+.analyze_resultContent {
+  background-color: white;
+  padding: 12px;
+  border-radius: 4px;
+  margin-top: 20px;
+  font-size: 14px;
+  font-family: monospace;
+  overflow-x: auto;
+  border: 1px solid #e0e0e0;
+}
+
+.ç {
+  margin-top: 30px;
+  background-color: #f8f9fa;
+  padding: 16px;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+}
+
+.analyze_icon {
+  margin-right: 8px;
 }
