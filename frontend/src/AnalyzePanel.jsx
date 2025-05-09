@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import RealTimeGraph from './RealTimeGraph';
+import './AnalyzePanel.css';
 
 const AnalyzePanel = () => {
   const [selectedStreams, setSelectedStreams] = useState([]);
@@ -8,6 +9,7 @@ const AnalyzePanel = () => {
   const [endTime, setEndTime] = useState('');
   const [expectedCorrelation, setExpectedCorrelation] = useState('');
   const [result, setResult] = useState(null);
+  const [error, setError] = useState('');
 
   const availableStreams = ['Sensor 1', 'Sensor 2', 'Sensor 3', 'Sensor 4', 'Sensor 5'];
 
@@ -19,9 +21,11 @@ const AnalyzePanel = () => {
 
   const handleAnalyze = async () => {
     if (selectedStreams.length < 3 || !startTime || !endTime || !expectedCorrelation) {
-      alert('Please select 3 streams and fill all fields.');
+      setError('Please select 3 streams and fill all fields.');
       return;
     }
+
+    setError('');
 
     try {
       const response = await axios.post('http://localhost:5000/api/analyze', {
@@ -33,19 +37,19 @@ const AnalyzePanel = () => {
       setResult(response.data);
     } catch (err) {
       console.error('Error during analysis:', err);
-      alert('Analysis failed. Check backend or network.');
+      setError('Analysis failed. Check backend or network.');
     }
   };
 
   return (
-    <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
+    <div className="analyze-container">
       <h2>📊 Analyze Sensor Correlation</h2>
 
-      <div>
+      <div className="form-group">
         <label>Select 3 Streams:</label>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '10px' }}>
+        <div className="checkbox-group">
           {availableStreams.map((stream) => (
-            <label key={stream}>
+            <label key={stream} className="checkbox-label">
               <input
                 type="checkbox"
                 checked={selectedStreams.includes(stream)}
@@ -57,17 +61,27 @@ const AnalyzePanel = () => {
         </div>
       </div>
 
-      <div>
+      <div className="form-group">
         <label>Start Time:</label>
-        <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
+        <input
+          type="time"
+          value={startTime}
+          onChange={(e) => setStartTime(e.target.value)}
+          className="input-field"
+        />
       </div>
 
-      <div>
+      <div className="form-group">
         <label>End Time:</label>
-        <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
+        <input
+          type="time"
+          value={endTime}
+          onChange={(e) => setEndTime(e.target.value)}
+          className="input-field"
+        />
       </div>
 
-      <div>
+      <div className="form-group">
         <label>Expected Correlation (0.0 - 1.0):</label>
         <input
           type="number"
@@ -76,28 +90,32 @@ const AnalyzePanel = () => {
           max="1"
           value={expectedCorrelation}
           onChange={(e) => setExpectedCorrelation(e.target.value)}
+          className="input-field"
         />
       </div>
 
-      <button onClick={handleAnalyze} style={{ marginTop: '15px' }}>
+      <button onClick={handleAnalyze} className="analyze-btn">
         🔍 Analyze
       </button>
 
+      {error && <div className="error-msg">{error}</div>}
+
       {result && (
-        <div style={{ marginTop: '20px', background: '#f0f0f0', padding: '10px' }}>
+        <div className="result-section">
           <strong>Result:</strong>
           <pre>{JSON.stringify(result, null, 2)}</pre>
         </div>
       )}
 
-      {/* Real-Time Graph Integration */}
-      <RealTimeGraph selectedStreams={selectedStreams} />
+      <div className="graph-section">
+        <div className="graph-header">
+          <h3>📈 Real-Time Data Graph</h3>
+          <span className="live-badge">🟢 Live Stream</span>
+        </div>
+        <RealTimeGraph selectedStreams={selectedStreams} />
+      </div>
     </div>
   );
 };
 
 export default AnalyzePanel;
-
-
-
-
