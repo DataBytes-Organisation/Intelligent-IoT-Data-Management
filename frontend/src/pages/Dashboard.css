@@ -4,7 +4,6 @@
   font-size: 2.25rem;
   font-weight: 800;
   color: #1f2937;
-  margin-bottom: 1rem;
 }
 
 /* Remove button  */
@@ -12,7 +11,7 @@
   position: absolute;
   top: 0.75rem;
   right: 0.75rem;
-  background-color: #ef4444; 
+  background-color: #ef4444;
   color: white;
   border-radius: 9999px;
   width: 28px;
@@ -23,11 +22,11 @@
   justify-content: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
   transition: background-color 0.2s ease;
-  z-index: 10; 
 }
 
+/* Remove button hover effect */
 .remove-btn:hover {
-  background-color: #dc2626; 
+  background-color: #266cdc;
 }
 
 /* Widget card style */
@@ -38,11 +37,36 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
   transition: box-shadow 0.2s ease;
   position: relative;
-  z-index: 1; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
+/* Hover effect on widget card */
 .widget-card:hover {
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+/* Grid layout for widgets */
+.grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+/* Single column layout on small screens */
+.grid-cols-1 {
+  grid-template-columns: repeat(1, 1fr);
+}
+
+/* Two columns layout on small screens */
+.sm\\:grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* Two columns layout on large screens */
+.lg\\:grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
 }
 
 /* Input and select fields with no borders  */
@@ -50,7 +74,7 @@
   background: transparent;
   font-size: 1rem;
   font-weight: 600;
-  color: #1f2937; 
+  color: #1f2937;
   border: none;
   outline: none;
   border-bottom: 2px solid transparent;
@@ -59,16 +83,35 @@
   transition: border-color 0.3s ease;
 }
 
-/* Focus and hover effects for input/select fields */
-.widget-input:focus,
-.widget-input:hover {
-  border-bottom: 2px solid #3b82f6; 
-  color: #3b82f6; 
+/* More Information button styling */
+.more-info-btn {
+  background: none;
+  border: none;
+  color: #3498db;
+  font-weight: bold;
+  font-size: 14px;
+  text-decoration: none; 
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+  display: inline-block;
 }
 
-/*  adding widgets（+） */
+/* More Information button hover effect */
+.more-info-btn:hover {
+  color: #2980b9;
+  transform: scale(1.05); /* Slightly enlarge button */
+  text-decoration: none; 
+}
+
+/* Remove input field outline on focus */
+.widget-input:focus {
+  outline: none;
+}
+
+/* Green button for adding widgets */
 button.bg-green-500 {
-  background-color: #34d399; 
+  background-color: #34d399;
   color: white;
   padding: 0.75rem 1.25rem;
   border-radius: 9999px;
@@ -76,9 +119,239 @@ button.bg-green-500 {
   font-weight: 600;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
   transition: background-color 0.3s ease;
-  z-index: 10; 
 }
 
+/* Hover effect on the green button */
 button.bg-green-500:hover {
-  background-color: #10b981; 
+  background-color: #10b981;
+}
+
+/* Widget input container for centering */
+.widget-input-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+/* Responsive grid layout for small screens */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(1, 1fr); /* 1 item per row on smaller screens */
+  }
+}
+
+/* Grid layout for larger screens */
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 items per row on medium screens */
+  }
+}
+
+/* Dark mode adjustments for title */
+.dark-mode .dashboard-title {
+  color: #ffffff; 
+}
+
+/* Ensure the dashboard container takes full height */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Content area takes up the remaining space, ensuring footer stays at the bottom */
+.content {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+/* Footer at the bottom of the page */
+footer {
+  background-color: #2c3e50;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  width: 100%;
+  position: relative;
+  bottom: 0;
+  margin-top: auto;
+}
+
+/* Footer spacing for small screens */
+@media screen and (max-width: 768px) {
+  .content {
+    padding-bottom: 60px;
+  }
+}
+
+/* When More Information section is visible */
+.more-info-section.visible {
+  display: block;
+  height: auto;
+}
+
+/* Styling for the More Information text */
+.more-info-text {
+  font-size: 14px;
+  color: #2c3e50;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .more-info-btn {
+    font-size: 12px;
+  }
+
+  .more-info-text {
+    font-size: 12px;
+  }
+}
+
+/* Delete confirmation modal styles */
+.confirmation-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.confirmation-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Buttons inside confirmation modal */
+.confirmation-btn {
+  padding: 10px 20px;
+  margin: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.confirmation-btn.confirm {
+  background-color: #34d399;
+  color: white;
+}
+
+.confirmation-btn.cancel {
+  background-color: #ef4444;
+  color: white;
+}
+
+.confirmation-btn:hover {
+  opacity: 0.8;
+}
+
+/* Creating widgets */
+.create-widget-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Widget input inside modal */
+.widget-input {
+  background: transparent;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937;
+  border: none;
+  outline: none;
+  border-bottom: 2px solid transparent;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.widget-input:focus,
+.widget-input:hover {
+  border-bottom: 2px solid #3b82f6;
+  color: #3b82f6;
+}
+
+/* Modal buttons for confirming/canceling */
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.modal-btn {
+  padding: 10px 20px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.modal-btn.confirm {
+  background-color: #34d399;
+  color: white;
+}
+
+.modal-btn.cancel {
+  background-color: #ef4444;
+  color: white;
+}
+
+.modal-btn:hover {
+  opacity: 0.8;
+}
+
+/* General modal content style */
+.modal-content,
+.confirmation-content {
+  background-color: white;
+  color: #1f2937;
+}
+
+/* Collapse button styling */
+.collapse-btn {
+  background: none;
+  border: none;
+  color: #3498db;
+  font-weight: bold;
+  padding: 5px 10px;
+  font-size: 14px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.collapse-btn:hover {
+  color: #2980b9;
+  transform: scale(1.05);
+}
+
+/* Dark mode creation time text color */
+.dark-mode .text-gray-400 {
+  color: #060708;
 }
