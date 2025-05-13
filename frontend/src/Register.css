@@ -50,3 +50,7 @@
 .register a:hover {
     text-decoration: underline;
 }
+
+.errorText {
+    color: red
+}

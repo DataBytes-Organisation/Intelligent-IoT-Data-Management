@@ -1,79 +1,93 @@
-// RealTimeGraph.jsx
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-import axios from "axios";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+// Register Chart.js components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
-const RealTimeGraph = () => {
-  const [data, setData] = useState({
-    labels: [],  // x-axis labels
+const RealTimeGraph = ({
+  selectedStreams,
+  timeRange,
+  sensorFilter,
+  valueThreshold,
+}) => {
+  const [chartData, setChartData] = useState({
+    labels: [],
     datasets: [
       {
-        label: 'Real-Time Data',
-        data: [], // y-axis data points
-        borderColor: 'rgb(75, 192, 192)',
-        fill: false,
+        label: "Sensor Value",
+        data: [],
+        borderColor: "rgb(0, 123, 255)",
+        backgroundColor: "rgba(0, 123, 255, 0.1)",
+        fill: true,
+        tension: 0.4,
+        pointRadius: 4,
+        borderWidth: 2,
       },
     ],
   });
 
-  // Fetch real-time data
-  const fetchData = async () => {
-    try {
-      const response = await axios.get('https://your-api-endpoint.com/data');
-      return response.data; // Ensure the response contains the necessary data for the graph
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
   useEffect(() => {
-    const interval = setInterval(async () => {
-      const newData = await fetchData();
-      setData((prevData) => {
-        const newLabels = [...prevData.labels, new Date().toLocaleTimeString()];
-        const newDataSet = [...prevData.datasets[0].data, newData];
+    const interval = setInterval(() => {
+      const now = new Date();
+      const timeLabel = now.toISOString().split("T")[1].split(".")[0]; // HH:MM:SS
+      const newValue = Math.floor(Math.random() * 30) + 20; // Simulated value
 
-        // Ensure the graph shows only the last 10 points for clarity
-        if (newLabels.length > 10) {
-          newLabels.shift();
-          newDataSet.shift();
-        }
+      setChartData((prev) => {
+        const updatedLabels = [...prev.labels, timeLabel].slice(-10);
+        const updatedData = [...prev.datasets[0].data, newValue].slice(-10);
 
         return {
-          labels: newLabels,
+          labels: updatedLabels,
           datasets: [
             {
-              ...prevData.datasets[0],
-              data: newDataSet,
+              ...prev.datasets[0],
+              data: updatedData,
             },
           ],
         };
       });
-    }, 2000); // Update every 2 seconds
+    }, 2000);
 
-    // Clear interval when the component unmounts
-    return () => clearInterval(interval);
+    return () => clearInterval(interval); // Cleanup
   }, []);
 
   const options = {
     responsive: true,
     plugins: {
       legend: {
-        position: 'top',
-      },
-      title: {
-        display: true,
-        text: 'Real-Time Data Graph',
+        display: false, // Hide default legend
       },
     },
   };
 
   return (
     <div>
-      <Line data={data} options={options} />
+      {/* Custom Legend Styled Like Live Stream */}
+      <div
+        className="custom-legend"
+        style={{ fontWeight: "bold", marginBottom: "10px" }}
+      >
+        📡 Sensor Stream {sensorFilter ? `(${sensorFilter})` : ""}
+      </div>
+      <Line data={chartData} options={options} />
     </div>
   );
 };
