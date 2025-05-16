@@ -27,7 +27,7 @@ body.light-mode .theme-toggle-btn {
 
 /* Dark Mode Styles */
 body.dark-mode {
-  background-color: #1C2A38;
+  
   color: #ffffff;
 }
 
@@ -237,6 +237,8 @@ footer {
   padding: 1rem;
   font-size: 1rem;
   margin-top: 3rem;
+  position: absolute;
+  width: 100%;
 }
 
 .submit-btn,

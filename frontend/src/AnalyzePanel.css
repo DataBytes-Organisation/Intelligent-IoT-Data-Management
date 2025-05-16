@@ -1,0 +1,199 @@
+.analyze-container {
+    padding: 20px;
+    max-width: 700px;
+    margin: 0 auto;
+    background-color: #f8fbfd;
+}
+
+.form-group {
+    display: flex;
+    gap: 1rem;
+    padding: 24px;
+  }
+  .form-group > div {
+    flex: 1;
+  }
+  .input-field {
+    width: 100%;
+  }
+  
+
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+
+.checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 8px;
+}
+
+.checkbox-label {
+    background-color: #f1f1f1;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+
+.input-field {
+    width: 100%;
+    padding: 10px;
+    margin-top: 4px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+.input-field,
+.input-field[type="number"],
+select.input-field {
+    width: 100%;
+    height: 45px;
+    padding: 10px 14px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+    background-color: #fff;
+    line-height: 1.5;
+    appearance: none;
+    transition: all 0.2s ease;
+}
+
+/* Hide number spinner */
+.input-field[type="number"]::-webkit-inner-spin-button,
+.input-field[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.input-field[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+/* Dropdown arrow */
+select.input-field {
+    background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='14' viewBox='0 0 20 20' width='14' xmlns='http://www.w3.org/2000/svg'><path d='M5.516 7.548l4.469 4.487 4.469-4.487-1.063-1.064-3.406 3.415-3.406-3.415z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 12px;
+    padding-right: 30px;
+}
+
+.input-field:focus-visible {
+    border-color: #339af0;
+    box-shadow: 0 0 0 2px rgba(51, 154, 240, 0.25);
+    outline: none;
+
+}
+
+.analyze-btn {
+    background-color: #decba4;
+    color: #1c2a38;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+
+    margin-top: 10px;
+
+
+}
+
+.analyze-btn:hover {
+    background-color: #7f8c8d;
+    color: white;
+    transform: scale(1.05);
+}
+
+
+
+.action-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+
+.error-msg {
+    background-color: #ffe5e5;
+    color: #b30000;
+    border: 1px solid #ffcccc;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 15px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.result-section {
+    margin-top: 20px;
+    background: #f0f0f0;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.graph-section {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.graph-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.live-badge {
+    background-color: #20c997;
+    color: white;
+
+    font-size: 0.8rem;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+
+    font-size: 0.85rem;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+
+}
+
+canvas {
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+
+
+}
+
+/* Filter Dropdown Panel */
+.filter-menu {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: #f9fbff;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+
+}
+
+ 
