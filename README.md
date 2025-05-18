@@ -11,7 +11,11 @@ Validates that the selection:
 
 Is a list of strings
 Contains only streams available in the dataset
+
 Includes at least one valid stream
+
 Warns if only one stream is selected (recommendation to select more)
+
 Optional support for setting a maximum number of streams
+
 Returns the cleaned and validated list of stream names
