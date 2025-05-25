@@ -7,14 +7,18 @@ const Register = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
+    const [errorMessage, setErrorMessage] = useState('')
 
     const handleSubmit = async (e) => {
         e.preventDefault()
 
         if (password !== confirmPassword) {
+            setErrorMessage("Passwords must match")
             throw new Error("Passwords must match")
         }
-        
+
+        setErrorMessage("")
+        console.log('Registering user: ', { firstName, lastName, email })
     }
 
     return (
@@ -26,12 +30,14 @@ const Register = () => {
                     id="firstName"
                     value={firstName}
                     onChange={e => setFirstName(e.target.value)}
+                    required
                 ></input>
                 <label htmlFor="lastName">Last Name</label>
                 <input 
                     id="lastName"
                     value={lastName}
                     onChange={e => setLastName(e.target.value)}
+                    required
                 ></input>
                 <label htmlFor="email">Email</label>
                 <input 
@@ -39,6 +45,7 @@ const Register = () => {
                     type="email"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
+                    required
                 ></input>
                 <label htmlFor="password">Password</label>
                 <input 
@@ -46,6 +53,7 @@ const Register = () => {
                     type="password"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
+                    required
                 ></input>
                 <label htmlFor="confirmPassword">Confirm Password</label>
                 <input 
@@ -53,7 +61,11 @@ const Register = () => {
                     type="password"
                     value={confirmPassword}
                     onChange={e => setConfirmPassword(e.target.value)}
+                    required
                 ></input>
+
+                {errorMessage && <p className='errorText'>{errorMessage}</p>}
+
                 <button type="submit">Register</button>
             </form>
             <p>Already have an account? Login here:</p>
