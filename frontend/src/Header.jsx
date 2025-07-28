@@ -29,7 +29,7 @@ const Header = ({ toggleTheme, isDarkMode }) => {
     { label: "Home", to: "/" },
     { label: "Features", href: "/#features" },
     { label: "Data Selection", href: "/#data-selection" },
-    { label: "Graphs", href: "/#graphs" },
+    { label: "Graphs", href: "/graphs" },
     { label: "Login", to: "/login" },
     { label: "Analyze", to: "/analyze" },
   ];
@@ -78,7 +78,7 @@ const Header = ({ toggleTheme, isDarkMode }) => {
             <Button href="/#data-selection" color="inherit">
               Data Selection
             </Button>
-            <Button href="/#graphs" color="inherit">
+            <Button href="/graphs" color="inherit">
               Graphs
             </Button>
             <Button component={RouterLink} to="/login" color="inherit">

@@ -9,6 +9,7 @@ import Register from "./Register.jsx";
 import AnalyzePanel from "./AnalyzePanel"; // ✅ Import the AnalyzePanel component
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { darkTheme, lightTheme } from "./utils/theme.jsx";
+import GraphsPageComponent from "./Graphs.jsx";
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false); // State for dark mode
@@ -48,6 +49,7 @@ function App() {
       {/* Navigation includes link */}
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/graphs" element={<GraphsPageComponent />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/analyze" element={<AnalyzePanel />} />{" "}

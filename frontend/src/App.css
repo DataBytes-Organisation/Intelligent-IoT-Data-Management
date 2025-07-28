@@ -239,6 +239,7 @@ footer {
   margin-top: 3rem;
   position: absolute;
   width: 100%;
+  bottom: 0;
 }
 
 .submit-btn,
