@@ -127,7 +127,7 @@ def analyze_corr():
     corrs = get_corr(uploaded_file, time_col, window_size, output_dir, start_year, start_month, start_day, start_hour,
                          start_minute, start_second, end_year, end_month, end_day, end_hour, end_minute, end_second, )
 
-    return jsonify({"success": False, "corrs": corrs})
+    return jsonify({"success": True, "corrs": corrs})
 
 
 def to_native(val):
