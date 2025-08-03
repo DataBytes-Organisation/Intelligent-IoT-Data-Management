@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Window Data Filter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .info-section {
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #17a2b8;
+        }
+        
+        .controls {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 20px;
+            align-items: end;
+            flex-wrap: wrap;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+            font-size: 14px;
+        }
+        
+        input, select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        input[type="date"] {
+            width: 150px;
+        }
+        
+        select {
+            width: 80px;
+        }
+        
+        .filter-btn {
+            background: #17a2b8;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 14px;
+            height: fit-content;
+            font-weight: bold;
+        }
+        
+        .filter-btn:hover {
+            background: #138496;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 6px;
+            text-align: center;
+        }
+        
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .table-container {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="info-section">
+            <div id="datasetInfo">Loading dataset information...</div>
+        </div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label>Start Date</label>
+                <input type="date" id="startDate" value="2025-03-18">
+            </div>
+            
+            <div class="control-group">
+                <label>Hour</label>
+                <select id="startHour"></select>
+            </div>
+            
+            <div class="control-group">
+                <label>Minute</label>
+                <select id="startMinute"></select>
+            </div>
+            
+            <div class="control-group">
+                <label>Second</label>
+                <select id="startSecond"></select>
+            </div>
+            
+            <div class="control-group">
+                <label>End Date</label>
+                <input type="date" id="endDate" value="2025-03-18">
+            </div>
+            
+            <div class="control-group">
+                <label>Hour</label>
+                <select id="endHour"></select>
+            </div>
+            
+            <div class="control-group">
+                <label>Minute</label>
+                <select id="endMinute"></select>
+            </div>
+            
+            <div class="control-group">
+                <label>Second</label>
+                <select id="endSecond"></select>
+            </div>
+            
+            <div class="control-group">
+                <button class="filter-btn" onclick="applyFilter()">Filter</button>
+            </div>
+        </div>
+        
+        <div class="table-container">
+            <div id="dataTable">Loading data...</div>
+        </div>
+    </div>
+
+    <script>
+        let dataset = [];
+        
+        // Main function - get_time_window()
+        function get_time_window(startDateTime, endDateTime) {
+            const startTime = new Date(startDateTime);
+            const endTime = new Date(endDateTime);
+            
+            console.log('Looking for data between:', startTime, 'and', endTime);
+            
+            const filtered = dataset.filter(row => {
+
+                let rowTimeStr = row.created_at;
+                
+    
+                rowTimeStr = rowTimeStr.replace('+00:00', '').replace(/\.\d{3}/, '');
+                
+                const rowTime = new Date(rowTimeStr);
+                const isInRange = rowTime >= startTime && rowTime <= endTime;
+                
+                if (isInRange) {
+                    console.log('Found matching record:', rowTimeStr, rowTime);
+                }
+                
+                return isInRange;
+            });
+            
+            console.log(`Found ${filtered.length} records in time window`);
+            return filtered;
+        }
+        
+
+        async function loadData() {
+            try {
+                const response = await fetch('processed_data.csv');
+                const csvText = await response.text();
+                
+                const lines = csvText.split('\n').filter(line => line.trim());
+                const headers = lines[0].split(',').map(h => h.trim());
+                
+                dataset = [];
+                for (let i = 1; i < lines.length; i++) {
+                    const values = lines[i].split(',');
+                    const row = {};
+                    
+                    headers.forEach((header, index) => {
+                        const value = values[index]?.trim();
+                        if (header === 'created_at') {
+                            row[header] = value;
+                        } else if (header === 'entry_id') {
+                            row[header] = parseInt(value);
+                        } else if (header === 'was_interpolated') {
+                            row[header] = value === 'True';
+                        } else {
+                            row[header] = parseFloat(value);
+                        }
+                    });
+                    dataset.push(row);
+                }
+                
+                console.log(`Loaded ${dataset.length} records from processed_data.csv`);
+                updateDatasetInfo();
+                initializeControls();
+                applyFilter();
+                
+            } catch (error) {
+                document.getElementById('datasetInfo').innerHTML = `
+                    <strong style="color: red;">Error: Cannot load processed_data.csv</strong><br>
+                    Make sure the file is in the same folder and use a local web server:<br>
+                    <code>python -m http.server 8000</code>
+                `;
+                document.getElementById('dataTable').innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #666;">
+                        <h3>processed_data.csv not found</h3>
+                        <p>Please ensure the CSV file is in the same folder and run with a local server.</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function updateDatasetInfo() {
+            const startTime = new Date(dataset[0].created_at);
+            const endTime = new Date(dataset[dataset.length - 1].created_at);
+            
+            document.getElementById('datasetInfo').innerHTML = `
+                <strong>Dataset Information:</strong><br>
+                The dataset starts recording at <strong>${startTime.toISOString().slice(0, 19).replace('T', ' ')} UTC</strong><br>
+                The dataset ends recording at <strong>${endTime.toISOString().slice(0, 19).replace('T', ' ')} UTC</strong>
+            `;
+        }
+        
+        function initializeControls() {
+            ['startHour', 'endHour'].forEach(id => {
+                const select = document.getElementById(id);
+                for (let i = 0; i < 24; i++) {
+                    const option = document.createElement('option');
+                    option.value = String(i).padStart(2, '0');
+                    option.textContent = String(i).padStart(2, '0');
+                    select.appendChild(option);
+                }
+                select.value = '07';
+            });
+            
+            ['startMinute', 'endMinute'].forEach(id => {
+                const select = document.getElementById(id);
+                for (let i = 0; i < 60; i++) {
+                    const option = document.createElement('option');
+                    option.value = String(i).padStart(2, '0');
+                    option.textContent = String(i).padStart(2, '0');
+                    select.appendChild(option);
+                }
+            });
+            document.getElementById('startMinute').value = '01';
+            document.getElementById('endMinute').value = '04';
+            
+            ['startSecond', 'endSecond'].forEach(id => {
+                const select = document.getElementById(id);
+                for (let i = 0; i < 60; i++) {
+                    const option = document.createElement('option');
+                    option.value = String(i).padStart(2, '0');
+                    option.textContent = String(i).padStart(2, '0');
+                    select.appendChild(option);
+                }
+                select.value = '00';
+            });
+        }
+        
+        function applyFilter() {
+            const startDate = document.getElementById('startDate').value;
+            const startHour = document.getElementById('startHour').value;
+            const startMinute = document.getElementById('startMinute').value;
+            const startSecond = document.getElementById('startSecond').value;
+            
+            const endDate = document.getElementById('endDate').value;
+            const endHour = document.getElementById('endHour').value;
+            const endMinute = document.getElementById('endMinute').value;
+            const endSecond = document.getElementById('endSecond').value;
+            
+            const startDateTime = `${startDate} ${startHour}:${startMinute}:${startSecond}`;
+            const endDateTime = `${endDate} ${endHour}:${endMinute}:${endSecond}`;
+            
+            console.log('Filter range:', startDateTime, 'to', endDateTime);
+            console.log('Sample data timestamps:', dataset.slice(0, 3).map(row => row.created_at));
+            
+            const filteredData = get_time_window(startDateTime, endDateTime);
+            console.log('Filtered results:', filteredData.length);
+            
+            displayTable(filteredData);
+        }
+        
+        function displayTable(data) {
+            const tableDiv = document.getElementById('dataTable');
+            
+            if (data.length === 0) {
+                tableDiv.innerHTML = '<div style="text-align: center; padding: 20px;">No data found in time window.</div>';
+                return;
+            }
+            
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Row</th>
+                            <th>created_at</th>
+                            <th>entry_id</th>
+                            <th>Temperature</th>
+                            <th>RH Humidity</th>
+                            <th>Usable Light Index</th>
+                            <th>Atmosphere hPa</th>
+                            <th>Voltage Charge</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            data.forEach((row, index) => {
+                const date = new Date(row.created_at);
+                const formattedDate = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getFullYear()).slice(-2)}`;
+                
+                html += `
+                    <tr>
+                        <td>${index + 25}</td>
+                        <td>${formattedDate}</td>
+                        <td>${row.entry_id}</td>
+                        <td>${row.Temperature.toFixed(1)}</td>
+                        <td>${row['RH Humidity'].toFixed(1)}</td>
+                        <td>${row['Usable Light Index'].toFixed(1)}</td>
+                        <td>${row['Atmosphere hPa'].toFixed(1)}</td>
+                        <td>${row['Voltage Charge'].toFixed(1)}</td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            tableDiv.innerHTML = html;
+        }
+        
+        window.addEventListener('load', loadData);
+    </script>
+</body>
+</html>
