@@ -1,8 +1,10 @@
-export default function Footer({ note = "Built with React & Tailwind" }) {
+export default function Footer() {
   return (
-    <footer className="border-t border-gray-200/70 bg-white">
-      <div className="mx-auto max-w-7xl px-6 py-6 text-sm text-slate-500">
-        © {new Date().getFullYear()} Intelligent IoT · {note}
+    <footer className="w-full border-t border-slate-200 dark:border-neutral-800 bg-transparent">
+      <div className="mx-auto max-w-7xl px-4 py-6">
+        <p className="text-center text-sm text-slate-500 dark:text-slate-400">
+          © 2025 Intelligent IoT · Built with React & Tailwind
+        </p>
       </div>
     </footer>
   );

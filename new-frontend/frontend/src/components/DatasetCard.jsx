@@ -10,23 +10,22 @@ const GRADIENT = {
 };
 
 export default function DatasetCard({ dataset }) {
-  const {
-    id,           // string (e.g., "temp-sensor-01")
-    name,         // display name
-    description,  // short text
-    type,         // "temperature" | "humidity" | "air" | ...
-    status,       // "live" | "offline" | "degraded"
-    anomalies24h, // number
-    gradient,     // optional override
-  } = dataset;
-
+  const { id, name, description, type, status, anomalies24h, gradient } = dataset;
   const g = gradient || GRADIENT[type] || GRADIENT.default;
 
   return (
     <Link
       to={`/dashboard/${encodeURIComponent(id)}`}
-      className="group rounded-2xl overflow-hidden bg-white shadow-md transition-all hover:-translate-y-0.5 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-indigo-300"
+      className="
+        group rounded-2xl overflow-hidden
+        bg-white border border-slate-200 shadow-md
+        transition-all hover:-translate-y-0.5 hover:shadow-xl
+        focus:outline-none focus:ring-4 focus:ring-indigo-300
+        dark:bg-black dark:border-neutral-800 dark:shadow-black/30
+        dark:focus:ring-indigo-800/40
+      "
     >
+      {/* Top gradient header */}
       <div className={`bg-gradient-to-r ${g} text-white`}>
         <div className="flex items-center justify-between p-6">
           <div className="flex items-center gap-3">
@@ -42,18 +41,29 @@ export default function DatasetCard({ dataset }) {
         </div>
         <div className="h-2 bg-white/25" />
       </div>
-      <div className="p-6 divide-y divide-gray-100">
+
+      {/* Body */}
+      <div className="p-6 divide-y divide-gray-100 dark:divide-neutral-800">
         <div className="pb-4">
-          <p className="text-slate-600">{description}</p>
+          <p className="text-slate-600 dark:text-white text-center">{description}</p>
         </div>
+
         <div className="py-4 flex items-center justify-between">
-          <span className="text-sm text-slate-500">Last 24h anomalies</span>
-          <span className={`rounded-full px-2.5 py-1 text-sm font-semibold ${anomalies24h > 0 ? "bg-rose-50 text-rose-600" : "bg-emerald-50 text-emerald-600"}`}>
+          <span className="text-sm text-slate-500 dark:text-white">Last 24h anomalies</span>
+          <span
+            className={`
+              rounded-full px-2.5 py-1 text-sm font-semibold
+              ${(anomalies24h ?? 0) > 0
+                ? "bg-rose-50 text-rose-600 dark:bg-rose-600/30 dark:text-rose-200"
+                : "bg-emerald-50 text-emerald-600 dark:bg-emerald-600/30 dark:text-emerald-200"}
+            `}
+          >
             {anomalies24h ?? 0}
           </span>
         </div>
+
         <div className="pt-4">
-          <span className="inline-flex items-center gap-1 text-indigo-600 font-medium group-hover:translate-x-0.5 transition-transform">
+          <span className="inline-flex items-center gap-1 text-indigo-600 dark:text-indigo-300 font-medium group-hover:translate-x-0.5 transition-transform">
             View dashboard →
           </span>
         </div>
