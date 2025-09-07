@@ -40,15 +40,35 @@ const Dashboard = () => {
     interval: selectedInterval
   });
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+  // quick way to grab dataset from the URL: /dashboard/sensor2 → "sensor2"
+  const datasetId = window.location.pathname.split('/').pop();
+
+  const payload = {
+    datasetId,                     // e.g. "sensor2"
+    streams: selectedStreams,      // array, e.g. ["field1","field2"]
+    interval: selectedInterval,    // "5min" | "15min" | "1h" | "6h"
+    startTime: selectedTimeStart,  // keep as-is for now
+    endTime: selectedTimeEnd
+  };
+
+  try {
+    const res = await fetch('/api/analyse', {         // <-- uses Vite proxy
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    console.log('Backend says:', data);
+  } catch (err) {
+    console.error('Request failed:', err);
+  }
+
+  // keep your local logs if you like
   console.log('Selected Time Range:', selectedTimeStart, '→', selectedTimeEnd);
-  
   console.log('selectedInterval:', selectedInterval);
-  // You can filter data, send to backend, or trigger chart updates
+}; 
 
-  console.log('Filtered Data:', filteredData);
-
-};
 
   if (loading) return <p>Loading dataset...</p>;
   if (error) return <p>Error loading data</p>;
