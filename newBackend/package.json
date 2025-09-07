@@ -10,7 +10,7 @@
     "db:apply": "psql -d $PGDATABASE -f ../sql/schema.sql",
     "ingest": "node scripts/ingest.js"
     
-  },
+  }, 
   "dependencies": {
     "cors": "^2.8.5",
     "csv-parse": "^6.1.0",
