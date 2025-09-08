@@ -9,7 +9,6 @@
     "dev": "node --watch server.js",
     "db:apply": "psql -d $PGDATABASE -f ../sql/schema.sql",
     "ingest": "node scripts/ingest.js"
-    
   }, 
   "dependencies": {
     "cors": "^2.8.5",

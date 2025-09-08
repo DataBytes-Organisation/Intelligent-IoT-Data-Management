@@ -5,5 +5,6 @@ router.use(require('./analyseRoutes'));  // POST /api/analyse
 
 router.use(require('./datasetsRoutes'));
 router.use(require('./seriesRoutes'));
+router.use(require('./timestampsRoutes')); 
 
 module.exports = router;
