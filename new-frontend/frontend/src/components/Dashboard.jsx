@@ -12,8 +12,8 @@ import Chart from './Chart.jsx';
 import MostCorrelatedPair from './MostCorrelatedPair.jsx';
 //import { useCorrelationMatrix } from '../hooks/useCorrelationMatrix.js/index.js';
 
-
-  
+// Import the sidebar
+import SideBar from "./SideBar.jsx";
 
 const Dashboard = () => {
   const { data, loading, error } = useSensorData(true); // mock mode
@@ -25,14 +25,14 @@ const Dashboard = () => {
   //const correlation = useCorrelationMatrix(data, streamNames, startTime, endTime);
   const [selectedStreams, setSelectedStreams] = useState([]);
   
-
   const intervals = ['5min', '15min', '1h', '6h'];
-
   const [selectedInterval, setSelectedInterval] = useState(intervals[0]);
+
+  //  New state for active sensor selection
+  const [activeSensor, setActiveSensor] = useState(null);
 
   //const [selectedTimeRange, setSelectedTimeRange] = useState(3600000); // 1 hour
   
-
   const filteredData = useFilteredData(data, {
     startTime: selectedTimeStart,
     endTime: selectedTimeEnd,
@@ -41,94 +41,94 @@ const Dashboard = () => {
   });
 
   const handleSubmit = () => {
-  console.log('Selected Time Range:', selectedTimeStart, '→', selectedTimeEnd);
-  
-  console.log('selectedInterval:', selectedInterval);
-  // You can filter data, send to backend, or trigger chart updates
-
-  console.log('Filtered Data:', filteredData);
-
-};
+    console.log('Selected Time Range:', selectedTimeStart, '→', selectedTimeEnd);
+    console.log('selectedInterval:', selectedInterval);
+    console.log('Filtered Data:', filteredData);
+  };
 
   if (loading) return <p>Loading dataset...</p>;
   if (error) return <p>Error loading data</p>;
 
   return (
-    <div >
+    <div className="flex">
+      {/* Sidebar on the left with interactive click handler */}
+      <SideBar onSelect={setActiveSensor} />
 
-      <div className='label-plate'>Hello World! I just came alive with this Sensor Data Set with 7 fields!!</div>
+      {/* existing dashboard */}
+      <div className="flex-1">
+        <div className='label-plate'>
+          Hello World! I just came alive with this Sensor Data Set with 7 fields!!
+        </div>
+
+        {/* Shows currently selected sensor if chosen */}
+        <div className='label-plate'>
+          {activeSensor
+            ? `Currently Viewing: ${activeSensor.name}`
+            : `Streams: ${streamNames.map(s => s.name).join(', ')}`}
+        </div>
+
         <div className='dashboard-container'>
-          <div className='label-plate'>Streams: {streamNames.map(s => s.name).join(', ')}
-          </div>
-
           <div className='selector-grid '>      
             <div className='selector-group card'>
+              <StreamSelector 
+                data={data}
+                // streams={streamNames}
+                selectedStreams={selectedStreams}
+                setSelectedStreams={setSelectedStreams}
+              />
+            </div>
 
-            <StreamSelector 
-            data={data}
-            // streams={streamNames}
-            selectedStreams={selectedStreams}
-            setSelectedStreams={setSelectedStreams}
-            />
-            </div>
             <div className='selector-group card'> 
-            <IntervalSelector
-            intervals={intervals}
-            selectedInterval={selectedInterval}
-            setSelectedInterval={setSelectedInterval}
-            />
+              <IntervalSelector
+                intervals={intervals}
+                selectedInterval={selectedInterval}
+                setSelectedInterval={setSelectedInterval}
+              />
             </div>
-      
-      {/* <p>Time Range: {startTime?.toISOString()} – {endTime?.toISOString()}</p>  */}
-      {/* <pre>{JSON.stringify(correlation, null, 2)}</pre>
-      {/* Add dropdowns, charts, etc. */}
 
             <div className='selector-group card'>
-            
-            <h3>Time Range Selection</h3>
-        
+              <h3>Time Range Selection</h3>
               <div className='card-content'>
                 <div>
-              <TimeSelector
-                label="Start Time"
-                timeOptions={timeOptions}
-                selectedTime={selectedTimeStart}
-                setSelectedTime={setSelectedTimeStart}
-              />
+                  <TimeSelector
+                    label="Start Time"
+                    timeOptions={timeOptions}
+                    selectedTime={selectedTimeStart}
+                    setSelectedTime={setSelectedTimeStart}
+                  />
                 </div>
                 <div>
-              <TimeSelector
-                label="End Time"
-                timeOptions={timeOptions}
-                selectedTime={selectedTimeEnd}
-                setSelectedTime={setSelectedTimeEnd}
-              />
+                  <TimeSelector
+                    label="End Time"
+                    timeOptions={timeOptions}
+                    selectedTime={selectedTimeEnd}
+                    setSelectedTime={setSelectedTimeEnd}
+                  />
                 </div>
-        
+
                 <div className='button'>
-                <button onClick={handleSubmit}>Analyse Time Range</button>
+                  <button onClick={handleSubmit}>Analyse Time Range</button>
                 </div>          
               </div>
             </div>
           </div>
-      <div>
-      <div className='stream-stats'>
-      {selectedStreams.map(stream => (
-      <StreamStats key={stream} data={filteredData} stream={stream} />
-      ))}
 
-      {selectedStreams.length > 2 && <MostCorrelatedPair data={filteredData} 
-      streams={selectedStreams} />}
+          <div className='stream-stats'>
+            {selectedStreams.map(stream => (
+              <StreamStats key={stream} data={filteredData} stream={stream} />
+            ))}
+
+            {selectedStreams.length > 2 && (
+              <MostCorrelatedPair data={filteredData} streams={selectedStreams} />
+            )}
+          </div>
+
+          <div className="chart-container">
+            <Chart data={filteredData} selectedStreams={selectedStreams} />
+          </div>
+        </div>
       </div>
-
-
-      </div>
-
-      <div className="chart-container">
-        <Chart data={filteredData} selectedStreams={selectedStreams} /></div>
-
     </div>
-</div>    
   );
 };
 
