@@ -20,11 +20,11 @@ A terminal (PowerShell on Windows, Terminal on macOS/Linux)
 
 # 2) Repo layout (relevant parts)
 
-/frontend          # Vite + React app
-/newBackend        # Express API
-/sql/schema.sql    # DB schema (datasets, timeseries_long)
-/datasets          # (local CSVs for ingest; gitignored)
-/mappings          # (optional mapping JSONs per dataset)
+- /frontend          # Vite + React app
+- /newBackend        # Express API
+- /sql/schema.sql    # DB schema (datasets, timeseries_long)
+- /datasets          # (local CSVs for ingest; gitignored)
+- /mappings          # (optional mapping JSONs per dataset)
 
 # 3) Database setup (PostgreSQL)
 
