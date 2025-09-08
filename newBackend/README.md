@@ -1,6 +1,6 @@
 # BackendPrototype
 
-Databytes – Intelligent IoT Data Management (MVP)
+# Databytes – Intelligent IoT Data Management (MVP)
 
 This MVP lets you:
 
@@ -10,7 +10,7 @@ fetch series via an Express API,
 
 visualise multiple streams in React with anomaly flags.
 
-1) Prerequisites
+# 1) Prerequisites
 
 Node.js 18+ and npm
 
@@ -18,7 +18,7 @@ PostgreSQL 14+ (server), psql (CLI), and optionally pgAdmin
 
 A terminal (PowerShell on Windows, Terminal on macOS/Linux)
 
-2) Repo layout (relevant parts)
+# 2) Repo layout (relevant parts)
 
 /frontend          # Vite + React app
 /newBackend        # Express API
@@ -26,14 +26,14 @@ A terminal (PowerShell on Windows, Terminal on macOS/Linux)
 /datasets          # (local CSVs for ingest; gitignored)
 /mappings          # (optional mapping JSONs per dataset)
 
-3) Database setup (PostgreSQL)
+# 3) Database setup (PostgreSQL)
 
 Open psql and run (adjust password as needed):
 
-# from repo root (adjust path if needed)
+from repo root (adjust path if needed)
 psql -U app -d appdb -h localhost -f sql/schema.sql
-# if using the 'postgres' superuser instead:
-# psql -U postgres -d appdb -h localhost -f sql/schema.sql
+if using the 'postgres' superuser instead:
+psql -U postgres -d appdb -h localhost -f sql/schema.sql
 
 
 appdb=# CREATE DATABASE appdb 
@@ -49,7 +49,7 @@ You should now have tables:
 
 - timeseries_long (id, dataset_id, ts, metric, value, quality_flag)
 
-4) Backend (Express API)
+# 4) Backend (Express API)
 
 cd newBackend
 npm install
@@ -64,7 +64,7 @@ PORT=3000
 
 Start the API:
 npm run dev   # if nodemon is configured
-# or
+or
 node server.js
 
 Key endpoints
@@ -79,12 +79,12 @@ GET /api/series?datasetId=...&stream=...&interval=raw&from=...&to=...
 → time series rows. For interval=raw, each item includes:
 { "ts": "...", "value": 12.34, "quality_flag": true }
 
-5) Frontend (React + Vite)
+# 5) Frontend (React + Vite)
 cd frontend
 npm install
 npm run dev
 
-7) Anomalies (quality flag)
+# 6) Anomalies (quality flag)
 
 quality_flag is boolean:
 
@@ -95,8 +95,7 @@ false = anomaly (red dot in chart)
 Frontend colors dots based on *_quality fields from the API.
 
 Data Science can update flags later without any API changes, e.g.:
-
-8) Typical workflow (quick start)
+# 7) Typical workflow (quick start)
 
 DB: create appdb, run sql/schema.sql.
 
