@@ -18,19 +18,25 @@ const getDatasetIdFromPath = () => {
 };
 const toISO = (t) => (t instanceof Date ? t.toISOString() : new Date(t).toISOString());
 
-// Merge { streamA:[{ts,value,quality_flag}], ... } -> [{ts, streamA, streamA_quality, ...}]
+// Merge { streamA:[{ts,value,quality_flag}], ... } -> [{ts, timestamp, streamA, streamA_quality, ...}]
 function mergeSeriesToWide(seriesMap) {
   if (!seriesMap) return null;
   const bucket = new Map();
+
   Object.entries(seriesMap).forEach(([stream, points]) => {
     points.forEach(({ ts, value, quality_flag }) => {
-      const key = new Date(ts).toISOString();
-      const row = bucket.get(key) || { ts: new Date(ts) };
-      row[stream] = value;                            // value for this stream
-      row[`${stream}_quality`] = quality_flag;        // carry boolean flag per stream
+      const d = new Date(ts);
+      const key = d.toISOString();
+      const row = bucket.get(key) || {
+        ts: d,                 // Date object (for debugging)
+        timestamp: d.getTime() // numeric ms since epoch (what Chart uses)
+      };
+      row[stream] = value;
+      row[`${stream}_quality`] = quality_flag; // boolean per-point flag (raw interval)
       bucket.set(key, row);
     });
   });
+
   return Array.from(bucket.values()).sort((a, b) => a.ts - b.ts);
 }
 
@@ -48,7 +54,7 @@ const Dashboard = () => {
   const intervals = ['raw', '5min', '15min', '1h', '6h'];
   const [selectedInterval, setSelectedInterval] = useState(intervals[0]);
 
-  // local filtering (fallback)
+  // local filtering (fallback only)
   const filteredData = useFilteredData(mockData, {
     startTime: selectedTimeStart,
     endTime: selectedTimeEnd,
@@ -69,7 +75,11 @@ const Dashboard = () => {
   const [apiError, setApiError] = useState(null);
   const [serverSeriesMap, setServerSeriesMap] = useState(null);
   const serverChartData = useMemo(() => mergeSeriesToWide(serverSeriesMap), [serverSeriesMap]);
-  const displayData = serverChartData || filteredData;
+
+  // prefer server merged data if it exists, otherwise mock-filtered
+  const displayData = (serverChartData && serverChartData.length > 0)
+    ? serverChartData
+    : filteredData;
 
   // load meta
   useEffect(() => {
@@ -90,7 +100,7 @@ const Dashboard = () => {
         if (!selectedTimeStart && json?.timeBounds?.start) setSelectedTimeStart(json.timeBounds.start);
         if (!selectedTimeEnd && json?.timeBounds?.end) setSelectedTimeEnd(json.timeBounds.end);
         if (selectedStreams.length === 0 && Array.isArray(json.fields) && json.fields.length > 0) {
-          setSelectedStreams([json.fields[0]]);
+          setSelectedStreams([json.fields[0]]); // default to first stream
         }
       } catch (e) {
         if (!cancelled) setMetaError(e.message);
@@ -102,7 +112,7 @@ const Dashboard = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [datasetId]);
 
-  // load timestamp options
+  // load timestamp options (optional)
   useEffect(() => {
     let cancelled = false;
     (async function loadTimestamps() {
@@ -151,9 +161,8 @@ const Dashboard = () => {
         }
         const json = await res.json(); // { series: [{ ts, value, quality_flag? }, ...] }
 
-        // 🔎 Logs (exactly what you asked for)
         console.log(`Stream "${stream}": ${json.series?.length || 0} rows`);
-        console.log(`Data for "${stream}":`, json.series); // each item includes ts, value, quality_flag
+        console.log(`Data for "${stream}":`, json.series); // ts, value, (quality_flag on raw)
 
         return [stream, json.series || []];
       });
@@ -163,7 +172,6 @@ const Dashboard = () => {
 
       setServerSeriesMap(map);
 
-      // merged rows used by Chart (also logged)
       const merged = mergeSeriesToWide(map);
       console.log('Merged chart data:', merged);
 
