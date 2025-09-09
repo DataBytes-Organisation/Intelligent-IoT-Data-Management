@@ -109,3 +109,17 @@ Select streams + interval (raw for flags) + time range → Analyse.
 
 See lines + green/red dots (when flags exist). 
 
+# 8) How to upload dataset into the PostgreSQL Databadse
+
+- To upload dataset 1 as sensor 1 plese run:
+
+npm run ingest -- --file ../datasets/2881821-sensor1.csv --map mappings/sensor1.json
+
+- To upload dataset 2 as sensor 2 plese run:
+
+npm run ingest -- --file ../datasets/1321079-sensor2.csv --map mappings/sensor2.json
+
+- To upload dataset 3 as sensor 3 plese run:
+
+npm run ingest -- --file ../datasets/518150-sensor3.csv --map mappings/sensor3.json
+

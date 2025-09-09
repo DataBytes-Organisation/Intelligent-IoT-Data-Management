@@ -24,22 +24,15 @@ function mergeSeriesToWide(seriesMap) {
   const bucket = new Map();
 
   Object.entries(seriesMap).forEach(([stream, points]) => {
-    points.forEach(({ ts, value, quality_flag, has_bad, flag_ratio }) => {
+    points.forEach(({ ts, value, quality_flag }) => {
       const d = new Date(ts);
       const key = d.toISOString();
       const row = bucket.get(key) || {
-        ts: d,                 // Date object (debugging)
-        timestamp: d.getTime() // numeric ms (Chart X-axis)
+        ts: d,
+        timestamp: d.getTime(), // numeric ms for Chart X axis
       };
       row[stream] = value;
-
-      // flags (raw uses quality_flag; bucketed uses has_bad/flag_ratio)
-      if (typeof quality_flag === 'boolean') {
-        row[`${stream}_quality`] = quality_flag;
-      } else if (typeof has_bad === 'boolean') {
-        row[`${stream}_quality`] = !has_bad;
-        row[`${stream}_flag_ratio`] = flag_ratio;
-      }
+      row[`${stream}_quality`] = quality_flag; // boolean (raw interval)
       bucket.set(key, row);
     });
   });
@@ -47,7 +40,7 @@ function mergeSeriesToWide(seriesMap) {
   return Array.from(bucket.values()).sort((a, b) => a.ts - b.ts);
 }
 
-const Dashboard = () => {
+export default function Dashboard() {
   // mock fallback (unchanged)
   const { data: mockData, loading: mockLoading, error: mockError } = useSensorData(true);
   const mockStreamNames = useStreamNames(mockData);
@@ -57,7 +50,7 @@ const Dashboard = () => {
   // selections
   const [selectedTimeStart, setSelectedTimeStart] = useState('');
   const [selectedTimeEnd, setSelectedTimeEnd] = useState('');
-  const [selectedStreams, setSelectedStreams] = useState([]); // MULTI-STREAM
+  const [selectedStreams, setSelectedStreams] = useState([]); // MULTI
   const intervals = ['raw', '5min', '15min', '1h', '6h'];
   const [selectedInterval, setSelectedInterval] = useState(intervals[0]);
 
@@ -66,7 +59,7 @@ const Dashboard = () => {
     startTime: selectedTimeStart,
     endTime: selectedTimeEnd,
     selectedStreams,
-    interval: selectedInterval
+    interval: selectedInterval,
   });
 
   const datasetId = getDatasetIdFromPath();
@@ -84,16 +77,17 @@ const Dashboard = () => {
   const serverChartData = useMemo(() => mergeSeriesToWide(serverSeriesMap), [serverSeriesMap]);
 
   // prefer server merged data if it exists, otherwise mock-filtered
-  const displayData = (serverChartData && serverChartData.length > 0)
-    ? serverChartData
-    : filteredData;
+  const displayData =
+    serverChartData && serverChartData.length > 0 ? serverChartData : filteredData;
 
-  // load meta (fields, bounds)
+  // load meta
   useEffect(() => {
     let cancelled = false;
     (async function loadMeta() {
       if (!datasetId) return;
-      setMetaLoading(true); setMetaError(null); setMeta(null);
+      setMetaLoading(true);
+      setMetaError(null);
+      setMeta(null);
       try {
         const res = await fetch(`/api/datasets/${encodeURIComponent(datasetId)}/meta`);
         if (!res.ok) {
@@ -104,13 +98,12 @@ const Dashboard = () => {
         if (cancelled) return;
 
         setMeta(json);
-
-        // default selections
-        if (!selectedTimeStart && json?.timeBounds?.start) setSelectedTimeStart(json.timeBounds.start);
-        if (!selectedTimeEnd && json?.timeBounds?.end) setSelectedTimeEnd(json.timeBounds.end);
+        if (!selectedTimeStart && json?.timeBounds?.start)
+          setSelectedTimeStart(json.timeBounds.start);
+        if (!selectedTimeEnd && json?.timeBounds?.end)
+          setSelectedTimeEnd(json.timeBounds.end);
         if (selectedStreams.length === 0 && Array.isArray(json.fields) && json.fields.length > 0) {
-          // If upstream provided multi-select defaults, keep them; else pick first one
-          setSelectedStreams([json.fields[0]]);
+          setSelectedStreams([json.fields[0]]); // default to first stream
         }
       } catch (e) {
         if (!cancelled) setMetaError(e.message);
@@ -118,17 +111,21 @@ const Dashboard = () => {
         if (!cancelled) setMetaLoading(false);
       }
     })();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [datasetId]);
 
-  // load timestamp options
+  // load timestamp options (optional)
   useEffect(() => {
     let cancelled = false;
     (async function loadTimestamps() {
       if (!datasetId) return;
       try {
-        const res = await fetch(`/api/timestamps?datasetId=${encodeURIComponent(datasetId)}&limit=2000`);
+        const res = await fetch(
+          `/api/timestamps?datasetId=${encodeURIComponent(datasetId)}&limit=2000`
+        );
         if (!res.ok) return;
         const { timestamps } = await res.json();
         if (cancelled) return;
@@ -137,14 +134,16 @@ const Dashboard = () => {
         if (!selectedTimeStart && opts.length) setSelectedTimeStart(opts[0]);
         if (!selectedTimeEnd && opts.length) setSelectedTimeEnd(opts[opts.length - 1]);
       } catch {
-        // fallback to mock options silently
+        // silent fallback to mock options
       }
     })();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [datasetId]);
 
-  // fetch series for multiple streams
+  // fetch series for multiple streams (parallel)
   const handleSubmit = async () => {
     setApiError(null);
     setApiLoading(true);
@@ -153,17 +152,20 @@ const Dashboard = () => {
     try {
       if (!datasetId) throw new Error('Missing datasetId from URL');
       if (!selectedStreams?.length) throw new Error('Please select at least one stream');
-      if (!selectedTimeStart || !selectedTimeEnd) throw new Error('Please select start and end time');
+      if (!selectedTimeStart || !selectedTimeEnd)
+        throw new Error('Please select start and end time');
 
       const fromISO = toISO(selectedTimeStart);
-      const toISO_  = toISO(selectedTimeEnd);
+      const toISO_ = toISO(selectedTimeEnd);
       const interval = selectedInterval || 'raw';
 
       const tasks = selectedStreams.map(async (stream) => {
-        const url = `/api/series?datasetId=${encodeURIComponent(datasetId)}`
-                  + `&stream=${encodeURIComponent(stream)}`
-                  + `&interval=${encodeURIComponent(interval)}`
-                  + `&from=${encodeURIComponent(fromISO)}&to=${encodeURIComponent(toISO_)}`;
+        const url =
+          `/api/series?datasetId=${encodeURIComponent(datasetId)}` +
+          `&stream=${encodeURIComponent(stream)}` +
+          `&interval=${encodeURIComponent(interval)}` +
+          `&from=${encodeURIComponent(fromISO)}&to=${encodeURIComponent(toISO_)}`;
+
         const res = await fetch(url);
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));
@@ -184,7 +186,6 @@ const Dashboard = () => {
 
       const merged = mergeSeriesToWide(map);
       console.log('Merged chart data:', merged);
-
     } catch (e) {
       console.error(e);
       setApiError(e.message);
@@ -195,7 +196,7 @@ const Dashboard = () => {
 
   const streamListForLabel = meta?.fields?.length
     ? meta.fields.join(', ')
-    : mockStreamNames.map(s => s.name).join(', ');
+    : mockStreamNames.map((s) => s.name).join(', ');
 
   if (mockLoading && metaLoading) return <p>Loading dataset...</p>;
   if (mockError) return <p>Error loading local dataset: {String(mockError)}</p>;
@@ -203,24 +204,23 @@ const Dashboard = () => {
 
   return (
     <div>
-      <div className='label-plate'>
+      <div className="label-plate">
         Hello World! I just came alive with this Sensor Data Set with {meta?.fieldCount ?? 7} fields!!
       </div>
 
-      <div className='dashboard-container'>
-        <div className='label-plate'>Streams: {streamListForLabel}</div>
+      <div className="dashboard-container">
+        <div className="label-plate">Streams: {streamListForLabel}</div>
 
-        <div className='selector-grid'>
-          <div className='selector-group card'>
+        <div className="selector-grid">
+          <div className="selector-group card">
             <StreamSelector
-              data={null}                  // not using mock data for names
-              streams={meta?.fields}       // backend-provided field names
-              selectedStreams={selectedStreams}
-              setSelectedStreams={setSelectedStreams}
+                streams={meta?.fields || []}
+  selectedStreams={selectedStreams}
+  setSelectedStreams={setSelectedStreams}
             />
           </div>
 
-          <div className='selector-group card'>
+          <div className="selector-group card">
             <IntervalSelector
               intervals={['raw', '5min', '15min', '1h', '6h']}
               selectedInterval={selectedInterval}
@@ -228,9 +228,9 @@ const Dashboard = () => {
             />
           </div>
 
-          <div className='selector-group card'>
+          <div className="selector-group card">
             <h3>Time Range Selection</h3>
-            <div className='card-content'>
+            <div className="card-content">
               <div>
                 <TimeSelector
                   label="Start Time"
@@ -247,7 +247,7 @@ const Dashboard = () => {
                   setSelectedTime={setSelectedTimeEnd}
                 />
               </div>
-              <div className='button'>
+              <div className="button">
                 <button onClick={handleSubmit} disabled={apiLoading}>
                   {apiLoading ? 'Loading…' : 'Analyse Time Range'}
                 </button>
@@ -261,8 +261,8 @@ const Dashboard = () => {
         </div>
 
         <div>
-          <div className='stream-stats'>
-            {selectedStreams.map(stream => (
+          <div className="stream-stats">
+            {selectedStreams.map((stream) => (
               <StreamStats key={stream} data={displayData} stream={stream} />
             ))}
             {selectedStreams.length > 2 && (
@@ -277,6 +277,4 @@ const Dashboard = () => {
       </div>
     </div>
   );
-};
-
-export default Dashboard;
+}

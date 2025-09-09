@@ -9,12 +9,13 @@
     "dev": "node --watch server.js",
     "db:apply": "psql -d $PGDATABASE -f ../sql/schema.sql",
     "ingest": "node scripts/ingest.js"
-  }, 
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "csv-parse": "^6.1.0",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
+    "fast-csv": "^5.0.5",
     "multer": "^2.0.2",
     "pg": "^8.16.3"
   }
