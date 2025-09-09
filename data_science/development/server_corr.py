@@ -6,7 +6,7 @@ import json
 import numpy as np
 from pathlib import Path
 
-from data_science.development.test import get_dataset, get_corr
+from test import get_dataset, get_corr
 
 UPLOAD_FOLDER = os.path.join('data_science', 'storage')
 

@@ -37,14 +37,16 @@ border-radius: 2rem;
 }
 
 /* use this for testing */
-.top-label{  
-  font-size: 1.5rem;
+.info-plate{  
+  font-size: 1.rem;
   color: blue;
-  background-color: palegoldenrod;
+  outline: 8px ridge rgba(19, 48, 42, 0.6);
+  background-color: rgb(244, 244, 241);
   margin-top: 5px;
-  padding: 5px 0;
+  padding: 5px 10px;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  text-align: left;
 
 }
 /* .homepage-grid {

@@ -24,15 +24,22 @@ function mergeSeriesToWide(seriesMap) {
   const bucket = new Map();
 
   Object.entries(seriesMap).forEach(([stream, points]) => {
-    points.forEach(({ ts, value, quality_flag }) => {
+    points.forEach(({ ts, value, quality_flag, has_bad, flag_ratio }) => {
       const d = new Date(ts);
       const key = d.toISOString();
       const row = bucket.get(key) || {
-        ts: d,                 // Date object (for debugging)
-        timestamp: d.getTime() // numeric ms since epoch (what Chart uses)
+        ts: d,                 // Date object (debugging)
+        timestamp: d.getTime() // numeric ms (Chart X-axis)
       };
       row[stream] = value;
-      row[`${stream}_quality`] = quality_flag; // boolean per-point flag (raw interval)
+
+      // flags (raw uses quality_flag; bucketed uses has_bad/flag_ratio)
+      if (typeof quality_flag === 'boolean') {
+        row[`${stream}_quality`] = quality_flag;
+      } else if (typeof has_bad === 'boolean') {
+        row[`${stream}_quality`] = !has_bad;
+        row[`${stream}_flag_ratio`] = flag_ratio;
+      }
       bucket.set(key, row);
     });
   });
@@ -50,7 +57,7 @@ const Dashboard = () => {
   // selections
   const [selectedTimeStart, setSelectedTimeStart] = useState('');
   const [selectedTimeEnd, setSelectedTimeEnd] = useState('');
-  const [selectedStreams, setSelectedStreams] = useState([]);
+  const [selectedStreams, setSelectedStreams] = useState([]); // MULTI-STREAM
   const intervals = ['raw', '5min', '15min', '1h', '6h'];
   const [selectedInterval, setSelectedInterval] = useState(intervals[0]);
 
@@ -81,7 +88,7 @@ const Dashboard = () => {
     ? serverChartData
     : filteredData;
 
-  // load meta
+  // load meta (fields, bounds)
   useEffect(() => {
     let cancelled = false;
     (async function loadMeta() {
@@ -97,10 +104,13 @@ const Dashboard = () => {
         if (cancelled) return;
 
         setMeta(json);
+
+        // default selections
         if (!selectedTimeStart && json?.timeBounds?.start) setSelectedTimeStart(json.timeBounds.start);
         if (!selectedTimeEnd && json?.timeBounds?.end) setSelectedTimeEnd(json.timeBounds.end);
         if (selectedStreams.length === 0 && Array.isArray(json.fields) && json.fields.length > 0) {
-          setSelectedStreams([json.fields[0]]); // default to first stream
+          // If upstream provided multi-select defaults, keep them; else pick first one
+          setSelectedStreams([json.fields[0]]);
         }
       } catch (e) {
         if (!cancelled) setMetaError(e.message);
@@ -112,7 +122,7 @@ const Dashboard = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [datasetId]);
 
-  // load timestamp options (optional)
+  // load timestamp options
   useEffect(() => {
     let cancelled = false;
     (async function loadTimestamps() {
@@ -127,14 +137,14 @@ const Dashboard = () => {
         if (!selectedTimeStart && opts.length) setSelectedTimeStart(opts[0]);
         if (!selectedTimeEnd && opts.length) setSelectedTimeEnd(opts[opts.length - 1]);
       } catch {
-        // silent fallback to mock options
+        // fallback to mock options silently
       }
     })();
     return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [datasetId]);
 
-  // fetch series and log everything (ts, value, quality_flag)
+  // fetch series for multiple streams
   const handleSubmit = async () => {
     setApiError(null);
     setApiLoading(true);
@@ -162,7 +172,7 @@ const Dashboard = () => {
         const json = await res.json(); // { series: [{ ts, value, quality_flag? }, ...] }
 
         console.log(`Stream "${stream}": ${json.series?.length || 0} rows`);
-        console.log(`Data for "${stream}":`, json.series); // ts, value, (quality_flag on raw)
+        console.log(`Data for "${stream}":`, json.series);
 
         return [stream, json.series || []];
       });
@@ -203,8 +213,8 @@ const Dashboard = () => {
         <div className='selector-grid'>
           <div className='selector-group card'>
             <StreamSelector
-              data={mockData}
-              streams={meta?.fields}                 // prefer backend field names
+              data={null}                  // not using mock data for names
+              streams={meta?.fields}       // backend-provided field names
               selectedStreams={selectedStreams}
               setSelectedStreams={setSelectedStreams}
             />
