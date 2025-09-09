@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { useSensorData } from '../hooks/useSensorData.js';
-import { useFilteredData } from '../hooks/useFilteredData.js';
-import { useStreamNames } from '../hooks/useStreamNames.js';
-import { useTimeRange } from '../hooks/useTimeRange.js';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useSensorData } from '../hooks/useSensorData.js';         // fallback/mock only
+import { useFilteredData } from '../hooks/useFilteredData.js';     // fallback/mock only
+import { useStreamNames } from '../hooks/useStreamNames.js';       // fallback/mock only
+import { useTimeRange } from '../hooks/useTimeRange.js';           // fallback/mock only
 import TimeSelector from './TimeSelector.jsx';
 import StreamSelector from './StreamSelector.jsx';
 import IntervalSelector from './IntervalSelector.jsx';
@@ -10,182 +10,271 @@ import StreamStats from './StreamStats.jsx';
 import './Dashboard.css';
 import Chart from './Chart.jsx';
 import MostCorrelatedPair from './MostCorrelatedPair.jsx';
-import ScatterPlot from './ScatterPlot.jsx';
 
+// helpers
+const getDatasetIdFromPath = () => {
+  const segs = window.location.pathname.replace(/\/+$/, '').split('/');
+  return segs[segs.length - 1] || '';
+};
+const toISO = (t) => (t instanceof Date ? t.toISOString() : new Date(t).toISOString());
 
+// Merge { streamA:[{ts,value,quality_flag}], ... } -> [{ts, timestamp, streamA, streamA_quality, ...}]
+function mergeSeriesToWide(seriesMap) {
+  if (!seriesMap) return null;
+  const bucket = new Map();
 
+  Object.entries(seriesMap).forEach(([stream, points]) => {
+    points.forEach(({ ts, value, quality_flag }) => {
+      const d = new Date(ts);
+      const key = d.toISOString();
+      const row = bucket.get(key) || {
+        ts: d,
+        timestamp: d.getTime(), // numeric ms for Chart X axis
+      };
+      row[stream] = value;
+      row[`${stream}_quality`] = quality_flag; // boolean (raw interval)
+      bucket.set(key, row);
+    });
+  });
 
-const Dashboard = () => {
-  const { data, loading, error } = useSensorData(true); // mock mode
-  const streamNames = useStreamNames(data);
-  const [startTime, endTime] = useTimeRange(data);
-  const timeOptions = useTimeRange(data);
+  return Array.from(bucket.values()).sort((a, b) => a.ts - b.ts);
+}
+
+export default function Dashboard() {
+  // mock fallback (unchanged)
+  const { data: mockData, loading: mockLoading, error: mockError } = useSensorData(true);
+  const mockStreamNames = useStreamNames(mockData);
+  const [mockStart, mockEnd] = useTimeRange(mockData);
+  const mockTimeOptions = useTimeRange(mockData);
+
+  // selections
   const [selectedTimeStart, setSelectedTimeStart] = useState('');
   const [selectedTimeEnd, setSelectedTimeEnd] = useState('');
-  //const correlation = useCorrelationMatrix(data, streamNames, startTime, endTime);
-  const [selectedStreams, setSelectedStreams] = useState([]);
-
-  const intervals = ['5min', '15min', '1h', '6h'];
-
+  const [selectedStreams, setSelectedStreams] = useState([]); // MULTI
+  const intervals = ['raw', '5min', '15min', '1h', '6h'];
   const [selectedInterval, setSelectedInterval] = useState(intervals[0]);
 
-  
-
-
-  const filteredData = useFilteredData(data, {
+  // local filtering (fallback only)
+  const filteredData = useFilteredData(mockData, {
     startTime: selectedTimeStart,
     endTime: selectedTimeEnd,
     selectedStreams,
-    interval: selectedInterval
+    interval: selectedInterval,
   });
 
-  const streamCount = selectedStreams.length;
+  const datasetId = getDatasetIdFromPath();
 
-  const handleSubmit = () => {
-  console.log('Selected Time Range:', selectedTimeStart, '→', selectedTimeEnd);
+  // meta + timestamps
+  const [metaLoading, setMetaLoading] = useState(false);
+  const [metaError, setMetaError] = useState(null);
+  const [meta, setMeta] = useState(null);
+  const [timestampOptions, setTimestampOptions] = useState([]);
 
-  
-  console.log('selectedInterval:', selectedInterval);
-  // You can filter data, send to backend, or trigger chart updates
+  // fetched series
+  const [apiLoading, setApiLoading] = useState(false);
+  const [apiError, setApiError] = useState(null);
+  const [serverSeriesMap, setServerSeriesMap] = useState(null);
+  const serverChartData = useMemo(() => mergeSeriesToWide(serverSeriesMap), [serverSeriesMap]);
 
-  console.log('Filtered Data:', filteredData);
-  console.log('Selected Pair:', selectedPair);
- 
-};
+  // prefer server merged data if it exists, otherwise mock-filtered
+  const displayData =
+    serverChartData && serverChartData.length > 0 ? serverChartData : filteredData;
 
-  if (loading) return <p>Loading dataset...</p>;
-  if (error) return <p>Error loading data</p>;
+  // load meta
+  useEffect(() => {
+    let cancelled = false;
+    (async function loadMeta() {
+      if (!datasetId) return;
+      setMetaLoading(true);
+      setMetaError(null);
+      setMeta(null);
+      try {
+        const res = await fetch(`/api/datasets/${encodeURIComponent(datasetId)}/meta`);
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.message || `Meta request failed (${res.status})`);
+        }
+        const json = await res.json();
+        if (cancelled) return;
+
+        setMeta(json);
+        if (!selectedTimeStart && json?.timeBounds?.start)
+          setSelectedTimeStart(json.timeBounds.start);
+        if (!selectedTimeEnd && json?.timeBounds?.end)
+          setSelectedTimeEnd(json.timeBounds.end);
+        if (selectedStreams.length === 0 && Array.isArray(json.fields) && json.fields.length > 0) {
+          setSelectedStreams([json.fields[0]]); // default to first stream
+        }
+      } catch (e) {
+        if (!cancelled) setMetaError(e.message);
+      } finally {
+        if (!cancelled) setMetaLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [datasetId]);
+
+  // load timestamp options (optional)
+  useEffect(() => {
+    let cancelled = false;
+    (async function loadTimestamps() {
+      if (!datasetId) return;
+      try {
+        const res = await fetch(
+          `/api/timestamps?datasetId=${encodeURIComponent(datasetId)}&limit=2000`
+        );
+        if (!res.ok) return;
+        const { timestamps } = await res.json();
+        if (cancelled) return;
+        const opts = Array.isArray(timestamps) ? timestamps : [];
+        setTimestampOptions(opts);
+        if (!selectedTimeStart && opts.length) setSelectedTimeStart(opts[0]);
+        if (!selectedTimeEnd && opts.length) setSelectedTimeEnd(opts[opts.length - 1]);
+      } catch {
+        // silent fallback to mock options
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [datasetId]);
+
+  // fetch series for multiple streams (parallel)
+  const handleSubmit = async () => {
+    setApiError(null);
+    setApiLoading(true);
+    setServerSeriesMap(null);
+
+    try {
+      if (!datasetId) throw new Error('Missing datasetId from URL');
+      if (!selectedStreams?.length) throw new Error('Please select at least one stream');
+      if (!selectedTimeStart || !selectedTimeEnd)
+        throw new Error('Please select start and end time');
+
+      const fromISO = toISO(selectedTimeStart);
+      const toISO_ = toISO(selectedTimeEnd);
+      const interval = selectedInterval || 'raw';
+
+      const tasks = selectedStreams.map(async (stream) => {
+        const url =
+          `/api/series?datasetId=${encodeURIComponent(datasetId)}` +
+          `&stream=${encodeURIComponent(stream)}` +
+          `&interval=${encodeURIComponent(interval)}` +
+          `&from=${encodeURIComponent(fromISO)}&to=${encodeURIComponent(toISO_)}`;
+
+        const res = await fetch(url);
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.message || `Series request failed (${res.status}) for ${stream}`);
+        }
+        const json = await res.json(); // { series: [{ ts, value, quality_flag? }, ...] }
+
+        console.log(`Stream "${stream}": ${json.series?.length || 0} rows`);
+        console.log(`Data for "${stream}":`, json.series);
+
+        return [stream, json.series || []];
+      });
+
+      const entries = await Promise.all(tasks);
+      const map = Object.fromEntries(entries);
+
+      setServerSeriesMap(map);
+
+      const merged = mergeSeriesToWide(map);
+      console.log('Merged chart data:', merged);
+    } catch (e) {
+      console.error(e);
+      setApiError(e.message);
+    } finally {
+      setApiLoading(false);
+    }
+  };
+
+  const streamListForLabel = meta?.fields?.length
+    ? meta.fields.join(', ')
+    : mockStreamNames.map((s) => s.name).join(', ');
+
+  if (mockLoading && metaLoading) return <p>Loading dataset...</p>;
+  if (mockError) return <p>Error loading local dataset: {String(mockError)}</p>;
+  if (metaError) return <p>Error loading metadata: {String(metaError)}</p>;
 
   return (
-<div >
+    <div>
+      <div className="label-plate">
+        Hello World! I just came alive with this Sensor Data Set with {meta?.fieldCount ?? 7} fields!!
+      </div>
 
-  <div className='info-plate'>
-    <h3>Note: </h3>
-      <ol>
-        <li>Select at least one stream to view the line chart.</li>
-        <li>Select two streams to see their scatter plot with a trendline, their correlation coefficient, and a rolling correlation line plot in the time interval using the selected time-window.</li>
-        <li>Select at least three streams and a time range, to see which two streams are the most correlated in the selected time range, their scatter plot with a trendline.</li>
-        
-        <li>If no scatter plot is shown, it means there is not enough variance in the data during the selected time range.</li>
-        <li>If no rolling correlation line is shown, it means there is not enough variance in the data during the selected time range.</li>
-        <li>If no meaningful scatter plot is available for the most correlated pair, it means one or both streams lack variance in the selected time range.</li>
-        <li>If no time range is selected, the entire dataset is used.</li>
-      </ol>
-    
-    <h3> Total Data Points in Dataset: {data.length} | 
-      
-      Data Points in Selected Range: {filteredData.length} 
-    </h3>
-  </div>
-  <div className='dashboard-container'>
-    <div className='label-plate'>Streams: {streamNames.map(s => s.name).join(', ')}   
+      <div className="dashboard-container">
+        <div className="label-plate">Streams: {streamListForLabel}</div>
+
+        <div className="selector-grid">
+          <div className="selector-group card">
+            <StreamSelector
+                streams={meta?.fields || []}
+  selectedStreams={selectedStreams}
+  setSelectedStreams={setSelectedStreams}
+            />
+          </div>
+
+          <div className="selector-group card">
+            <IntervalSelector
+              intervals={['raw', '5min', '15min', '1h', '6h']}
+              selectedInterval={selectedInterval}
+              setSelectedInterval={setSelectedInterval}
+            />
+          </div>
+
+          <div className="selector-group card">
+            <h3>Time Range Selection</h3>
+            <div className="card-content">
+              <div>
+                <TimeSelector
+                  label="Start Time"
+                  timeOptions={timestampOptions.length ? timestampOptions : mockTimeOptions}
+                  selectedTime={selectedTimeStart}
+                  setSelectedTime={setSelectedTimeStart}
+                />
+              </div>
+              <div>
+                <TimeSelector
+                  label="End Time"
+                  timeOptions={timestampOptions.length ? timestampOptions : mockTimeOptions}
+                  selectedTime={selectedTimeEnd}
+                  setSelectedTime={setSelectedTimeEnd}
+                />
+              </div>
+              <div className="button">
+                <button onClick={handleSubmit} disabled={apiLoading}>
+                  {apiLoading ? 'Loading…' : 'Analyse Time Range'}
+                </button>
+                {apiError && <p style={{ color: 'red' }}>{apiError}</p>}
+                {serverSeriesMap && !apiError && !apiLoading && (
+                  <p>Loaded server data for {Object.keys(serverSeriesMap).length} stream(s).</p>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div className="stream-stats">
+            {selectedStreams.map((stream) => (
+              <StreamStats key={stream} data={displayData} stream={stream} />
+            ))}
+            {selectedStreams.length > 2 && (
+              <MostCorrelatedPair data={displayData} streams={selectedStreams} />
+            )}
+          </div>
+        </div>
+
+        <div className="chart-container">
+          <Chart data={displayData} selectedStreams={selectedStreams} />
+        </div>
+      </div>
     </div>
-
-
-    <div className='selector-grid '>      
-      <div className='selector-group card'>
-
-        <StreamSelector 
-        data={data}
-        // streams={streamNames}
-        selectedStreams={selectedStreams}
-        setSelectedStreams={setSelectedStreams}
-        />
-      </div>
-      <div className='selector-group card'> 
-      <IntervalSelector
-      intervals={intervals}
-      selectedInterval={selectedInterval}
-      setSelectedInterval={setSelectedInterval}
-      />
-      </div>
-                  
-
-      <div className='selector-group card'>
-      
-      <h3>Time Range Selection</h3>
-
-        <div className='card-content'>
-          <div>
-            <TimeSelector
-              label="Start Time"
-              timeOptions={timeOptions}
-              selectedTime={selectedTimeStart}
-              setSelectedTime={setSelectedTimeStart}
-            />
-          </div>
-          <div>
-            <TimeSelector
-              label="End Time"
-              timeOptions={timeOptions}
-              selectedTime={selectedTimeEnd}
-              setSelectedTime={setSelectedTimeEnd}
-            />
-          </div>
-            {/* this button for future use */}
-          <div className='button'>
-          <button onClick={handleSubmit}>Analyse Time Range</button>
-          </div>           
-        </div>
-      </div>
-    </div> 
-{/* add some space here */}
-<p></p>
-    {streamCount === 0 && (
-      <div className='empty-state'>
-        <h3>Please select one or more streams to view statistics and charts.</h3>
-      </div>
-    )}
-    {streamCount === 1 && (
-      <div className='single-stream-block'>
-        <h3>Selected one stream to see their scatter plot. Select another stream to explore correlations.</h3>
-        
-      </div>
-    )}
-      {streamCount === 2 && (
-      <div className='pair-stream-block'>
-        <h4>Selected two streams to see their scatter plot and rolling correlation. Select one more stream to see the most correlated pair among the selected streams.</h4>
-        {/* <p>Note: If no scatter plot is shown, it means there is not enough data to display it.</p> */}
-
-        
-        <ScatterPlot data={filteredData}
-      streams={selectedStreams}
-      title={`Scatter Plot of selected two streams: `}
-       />
-      
-      </div>
-    )}
-
-      {streamCount > 2 && (
-        <div className='multi-stream-block'>
-          <h3>Selected {streamCount} streams.</h3>
-          <MostCorrelatedPair data={filteredData} streams={selectedStreams}  />
-          <p>Note: If no scatter plot is shown, it means there is not enough variance in the data during the selected time range.</p>
-          
-        </div>
-      )}
-
-      
-    <div>         
-      <div className='stream-stats'>
-      {selectedStreams.map(stream => (
-      <StreamStats key={stream} data={filteredData} stream={stream} />
-      ))}
-      </div>
-
-      
-       
-      
-
-    </div>    
-  </div> 
-     
-  <div className="chart-container">
-    <Chart data={filteredData} selectedStreams={selectedStreams} />
-  </div>
-
-</div>           
   );
-};
-
-export default Dashboard;
+}
