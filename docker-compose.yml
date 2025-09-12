@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  backend:
+    image: python:3.10
+    container_name: django_backend
+    working_dir: /app
+    command: bash -c "pip install -r requirements.txt && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./backend/iot_backend:/app
+    ports:
+      - "8000:8000"
+
+  frontend:
+    image: node:22
+    container_name: vite_frontend
+    working_dir: /app
+    command: bash -c "npm install && npm run dev"
+    volumes:
+      - ./frontend:/app
+      - ./frontend/node_modules:/app/node_modules
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_BACKEND_URL=http://localhost:8000
+
+  # ADD HOT RELOAD SUPPORT FOR VITE AND DJANGO
