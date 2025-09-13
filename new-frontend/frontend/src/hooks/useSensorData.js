@@ -1,6 +1,7 @@
 // hooks/useSensorData.js
 import { useState, useEffect } from 'react';
 import SensorData1 from '../data/sensorData1.json';
+import apiService from '../services/api';
 
 export const useSensorData = (useMock = false) => {
   const [data, setData] = useState([]);
@@ -8,34 +9,36 @@ export const useSensorData = (useMock = false) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (useMock) {
-      setData(SensorData1);
-      setLoading(false);
-      return;
-    }
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
 
-//     if (useMock) {
-//   const wrapped = {
-//     id: 'sensor1',
-//     name: 'Mock Sensor 1',
-//     data: SensorData1
-//   };
-//   setData(wrapped.data);
-//   setLoading(false);
-//   return;
-// }
+        if (useMock) {
+          setData(SensorData1);
+          setLoading(false);
+          return;
+        }
 
-
-    fetch('/api/sensor-data')
-      .then((res) => res.json())
-      .then((json) => {
-        setData(json);
+        // Use backend API
+        const response = await apiService.getStreams();
+        setData(response);
         setLoading(false);
-      })
-      .catch((err) => {
-        setError(err);
+      } catch (err) {
+        console.error('Error fetching sensor data:', err);
+        setError(err.message || 'Failed to fetch sensor data');
         setLoading(false);
-      });
+        
+        // Fallback to mock data on error
+        if (!useMock) {
+          console.log('Falling back to mock data due to API error');
+          setData(SensorData1);
+          setError(null);
+        }
+      }
+    };
+
+    fetchData();
   }, [useMock]);
 
   return { data, loading, error };
