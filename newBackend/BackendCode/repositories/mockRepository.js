@@ -1,13 +1,21 @@
 //handles data access for mock data, reading from local JSON file without a database yet
 
-require('dotenv').config({ path: '../.env' });
+// Try to load .env file, but don't fail if it doesn't exist
+try {
+  require('dotenv').config({ path: '../.env' });
+} catch (error) {
+  console.log('No .env file found, using default configuration');
+}
 
 const fs = require('fs');
 const path = require('path');
 
 class MockRepository {
   constructor() {
-    this.filePath = path.resolve(process.env.PROCESSED_DATA_PATH);
+    // Use environment variable if available, otherwise use default path
+    const dataPath = process.env.PROCESSED_DATA_PATH || path.join(__dirname, 'mock_data', 'processed_data.json');
+    this.filePath = path.resolve(dataPath);
+    console.log('Data file path:', this.filePath);
   }
 
   getMockData() {

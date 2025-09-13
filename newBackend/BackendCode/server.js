@@ -1,6 +1,11 @@
 //handles server setup and configuration for the Express backend
 
-require('dotenv').config({ path: '../.env' }); //Load .env from root
+// Try to load .env file, but don't fail if it doesn't exist
+try {
+  require('dotenv').config({ path: '../.env' }); //Load .env from root
+} catch (error) {
+  console.log('No .env file found, using default configuration');
+}
 
 const express = require('express');
 const cors = require('cors');

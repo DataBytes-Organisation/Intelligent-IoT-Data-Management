@@ -112,7 +112,7 @@ const getDataExport = (req, res) => {
 };
 
 // GET /algorithms — Returns available algorithms
-const getAvailableAlgorithms = (req, res) => {
+const getAvailableAlgorithmsController = (req, res) => {
   try {
     const algorithms = getAvailableAlgorithms();
     res.json(algorithms);
@@ -123,7 +123,7 @@ const getAvailableAlgorithms = (req, res) => {
 };
 
 // GET /statistics — Returns dataset statistics
-const getStatistics = (req, res) => {
+const getStatisticsController = (req, res) => {
   try {
     const stats = getStatistics();
     res.json(stats);
@@ -140,6 +140,6 @@ module.exports = {
   getCorrelationAnalysis,
   getAnomalyDetection,
   getDataExport,
-  getAvailableAlgorithms,
-  getStatistics
+  getAvailableAlgorithms: getAvailableAlgorithmsController,
+  getStatistics: getStatisticsController
 };
