@@ -10,21 +10,53 @@ import {
   Link,
   Fade,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [resetEmail, setResetEmail] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isResetMode, setIsResetMode] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
   //When submitting on login screen...
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage("");
+    setLoading(true);
+    try {
+      const baseUrl = import.meta?.env?.VITE_API_BASE_URL || "";
+      const response = await fetch(`${baseUrl}/api/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+        credentials: "include",
+      });
 
-    console.log("Email: ", email);
-    console.log("Password: ", password);
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        const message = data?.detail || data?.message || "Login failed. Please check your credentials.";
+        throw new Error(message);
+      }
 
-    //Fetch user details from DB
-    const response = await fetch();
+      const accessToken = data?.access_token || data?.token || data?.access || "";
+      if (accessToken) {
+        localStorage.setItem("access_token", accessToken);
+      }
+      if (data?.refresh_token) {
+        localStorage.setItem("refresh_token", data.refresh_token);
+      }
+
+      navigate("/");
+    } catch (err) {
+      setErrorMessage(err?.message || "Unexpected error during login.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleForgottenPasswordOverlay = () => {
@@ -73,6 +105,11 @@ const Login = () => {
           {!isResetMode ? (
             <Fade in={!isResetMode}>
               <Box component="form" onSubmit={handleSubmit}>
+                {errorMessage && (
+                  <Typography sx={{ color: "#ffb4b4" }} variant="body2">
+                    {errorMessage}
+                  </Typography>
+                )}
                 <TextField
                   fullWidth
                   label="Email"
@@ -128,8 +165,15 @@ const Login = () => {
 
                     marginTop: "20px",
                   }}
+                  disabled={loading}
                 >
-                  Login
+                  {loading ? (
+                    <>
+                      <CircularProgress size={20} sx={{ color: "#000", mr: 1 }} /> Logging in...
+                    </>
+                  ) : (
+                    "Login"
+                  )}
                 </Button>
 
                 <Box mt={2} textAlign="center">
