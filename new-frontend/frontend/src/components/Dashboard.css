@@ -1,0 +1,207 @@
+.dashboard-container {
+  padding: 1rem;
+  background-color: #f9f9f9;
+  
+}
+
+.dashboard {
+  padding: 2rem;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f9f9f9;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+h3 {
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: blue
+}
+
+.label-plate {
+  font-size: 1.5rem;
+  font-weight: 900;
+  outline: 8px ridge rgba(19, 48, 42, 0.6);
+border-radius: 2rem;
+  background-color: rgb(219, 223, 201);
+  margin: 5px;
+  padding: 5px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+}
+
+/* use this for testing */
+.info-plate{  
+  font-size: 1.rem;
+  color: blue;
+  outline: 8px ridge rgba(19, 48, 42, 0.6);
+  background-color: rgb(244, 244, 241);
+  margin-top: 5px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  text-align: left;
+
+}
+/* .homepage-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 1.5rem;
+} */
+
+.panel {
+  background-color: #f9f9f9;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+.selector-group {
+  display: flex;
+  /* gap: 1rem; */
+  margin-bottom: 0.2rem;
+  flex-wrap: wrap;
+}
+
+.selector-group label {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  padding-top: 5px;
+}
+
+.chart-container {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.selector-grid {
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: auto auto 1fr; /* first two fit content, last fills */
+  gap: 1rem;
+}
+
+@media (max-width: 600px) {
+  .selector-grid {
+    grid-template-columns: auto auto; /* just two columns */
+    grid-template-rows: auto auto; /* force extra row */
+  }
+  .selector-grid > :nth-child(3) {
+    grid-column: 1 / -1; /* third card spans full width below */
+  }
+}
+
+
+ul {
+  font-size: 1.2em;
+}
+
+.stream-stats {
+  margin-top: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  padding-bottom: 0;
+  /* padding-top: 10px; */
+}
+
+/* Variables for consistent theming */
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --background-light: #f8f9fa;
+    --text-dark: #343a40;
+    --card-background: #ffffff;
+    --border-color: #dee2e6;
+    --shadow-light: rgba(0, 0, 0, 0.1);
+}
+
+/* Global resets and body styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-light);
+    color: var(--text-dark);
+    line-height: 1.2;
+}
+
+/* Box sizing for easier layout management */
+* {
+    box-sizing: border-box;
+}
+
+.card {
+    background-color: var(--card-background);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px var(--shadow-light);
+    margin-bottom: 0px;
+    /* width: auto; */
+    /* height: auto; */
+    display: flex;
+    align-items: center;
+    padding: 15px 20px 10px; 
+    gap: 0px 10px;
+    transition: all 0.1s ease-in-out;    
+    /* margin: 5px; */
+    border-radius: 8px;
+}
+
+.card-content {
+    font-size: 1.2em;
+    font-weight: 500;
+    margin-bottom: 10px;
+    /* color: var(--primary-color); */
+    /* width: auto;
+    height: auto; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.1s ease-in-out;
+}
+
+
+/* .card-title {
+    font-size: 1.5em;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+} */
+
+.button {
+    font-size: 1em;
+    font-weight: 600;
+    /* background-color: var(--primary-color); */
+    background-color: lightblue;
+    border: 1px black;
+    padding: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: darken(var(--primary-color), 20%); /* Example with preprocessor function */
+}
+
+.nav-option {
+    width: 250px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding: 0 30px 0 20px;
+    gap: 20px;
+    transition: all 0.1s ease-in-out;
+}

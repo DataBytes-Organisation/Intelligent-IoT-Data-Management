@@ -1,0 +1,29 @@
+/* FetchData.css */
+
+.list_data_main {
+    list-style: none;
+    padding: 0;
+  }
+  .usefetch_heading{
+    text-align: center;
+  }
+ .list_data {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .list_data h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+  
+  .list_data p {
+    margin: 5px 0;
+  }
+  
