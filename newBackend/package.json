@@ -5,11 +5,11 @@
   "main": "server.js",
   "type": "commonjs",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js",
-    "db:apply": "psql -d $PGDATABASE -f ../sql/schema.sql",
-    "ingest": "node scripts/ingest.js"
-  },
+  "start": "node server.js",
+  "dev": "node --watch server.js",
+  "db:apply": "psql -U postgres -d appdb -f ../sql/schema.sql",
+  "ingest": "node scripts/ingest.js"
+},
   "dependencies": {
     "cors": "^2.8.5",
     "csv-parse": "^6.1.0",
