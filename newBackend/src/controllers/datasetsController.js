@@ -1,29 +1,45 @@
-const pool = require('../db/pool');
+class DatasetController {
+  constructor(datasetService) {
+    this.datasetService = datasetService;
+    
+    // Bind methods to preserve 'this' context
+    this.listDatasets = this.listDatasets.bind(this);
+    this.datasetMeta = this.datasetMeta.bind(this);
+  }
 
-exports.listDatasets = async (_req, res) => {
-  const q = await pool.query('SELECT name FROM datasets ORDER BY name');
-  res.json({ items: q.rows.map(r => ({ id: r.name, name: r.name })) });
-};
+  async listDatasets(req, res) {
+    try {
+      const result = await this.datasetService.getAllDatasets();
+      res.status(200).json(result);
+    } catch (error) {
+      console.error('DatasetController.listDatasets error:', error);
+      res.status(500).json({
+        code: 'internal_error',
+        message: 'Failed to retrieve datasets'
+      });
+    }
+  }
 
-exports.datasetMeta = async (req, res) => {
-  const datasetName = req.params.id;
-  const ds = await pool.query('SELECT id FROM datasets WHERE name=$1', [datasetName]);
-  if (ds.rowCount === 0) return res.status(404).json({ code: 'not_found', message: 'dataset not found' });
-  const datasetId = ds.rows[0].id;
+  async datasetMeta(req, res) {
+    try {
+      const datasetName = req.params.id;
+      const result = await this.datasetService.getDatasetMetadata(datasetName);
+      res.status(200).json(result.data);
+    } catch (error) {
+      if (error.code === 'NOT_FOUND') {
+        return res.status(404).json({
+          code: 'not_found',
+          message: 'dataset not found'
+        });
+      }
+      
+      console.error('DatasetController.datasetMeta error:', error);
+      res.status(500).json({
+        code: 'internal_error',
+        message: 'Failed to retrieve dataset metadata'
+      });
+    }
+  }
+}
 
-  const fieldsQ = await pool.query(
-    'SELECT DISTINCT metric FROM timeseries_long WHERE dataset_id=$1 ORDER BY metric',
-    [datasetId]
-  );
-  const boundsQ = await pool.query(
-    'SELECT MIN(ts) AS start, MAX(ts) AS "end" FROM timeseries_long WHERE dataset_id=$1',
-    [datasetId]
-  );
-
-  res.json({
-    datasetId: datasetName,
-    fieldCount: fieldsQ.rowCount,
-    fields: fieldsQ.rows.map(r => r.metric),
-    timeBounds: boundsQ.rows[0]
-  });
-};
+module.exports = DatasetController;

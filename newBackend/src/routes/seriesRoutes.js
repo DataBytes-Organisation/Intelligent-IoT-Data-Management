@@ -1,6 +1,8 @@
 const router = require('express').Router();
-const { getSeries } = require('../controllers/seriesController');
+const container = require('../container/DIContainer');
 
-router.get('/series', getSeries); // GET /api/series?datasetId=&stream=&interval=&from=&to=
+const seriesController = container.resolve('seriesController');
+
+router.get('/series', seriesController.getSeries);
 
 module.exports = router;

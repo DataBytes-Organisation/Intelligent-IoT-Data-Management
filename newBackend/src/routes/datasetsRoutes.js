@@ -1,7 +1,9 @@
 const router = require('express').Router();
-const { listDatasets, datasetMeta } = require('../controllers/datasetsController');
+const container = require('../container/DIContainer');
 
-router.get('/datasets', listDatasets);        // GET /api/datasets
-router.get('/datasets/:id/meta', datasetMeta); // GET /api/datasets/:id/meta
+const datasetController = container.resolve('datasetController');
+
+router.get('/datasets', datasetController.listDatasets);
+router.get('/datasets/:id/meta', datasetController.datasetMeta);
 
 module.exports = router;
