@@ -47,7 +47,7 @@ app.use('/api', seriesRoutes);
 app.use(errorHandler);
 
 // 404 handler
-app.use('*', (req, res) => {
+app.use((req, res) => {
   res.status(404).json({
     code: 'not_found',
     message: 'Endpoint not found'
