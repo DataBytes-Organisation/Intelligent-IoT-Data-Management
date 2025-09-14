@@ -1,6 +1,8 @@
 const router = require('express').Router();
-const { listTimestamps } = require('../controllers/timestampsController');
+const container = require('../container/DIContainer');
 
-router.get('/timestamps', listTimestamps);
+const timeseriesController = container.resolve('timeseriesController');
+
+router.get('/timeseries', timeseriesController.listTimeSeries);
 
 module.exports = router;

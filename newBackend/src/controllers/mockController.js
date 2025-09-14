@@ -1,55 +1,116 @@
-//handles HTTP request logic for mock data routes
+/**
+ * mockModule.js
+ * Combines Controller, Service, and Repository for mock data into one file.
+ * Optimized for readability and maintainability.
+ */
 
-const {
-  readProcessedData,
-  getAvailableStreamNames,
-  filterEntriesByStreamNames
-} = require('../services/mockService');
+const fs = require('fs');
+const path = require('path');
 
-//GET /streams — Returns JSON file containing the stream data
-const getStreams = (req, res) => {
-  try {
-    const data = readProcessedData();
-    res.json(data);
-  } catch (err) {
-    console.error('Error reading stream data:', err);
-    res.status(500).json({ error: 'Failed to load stream data' });
+/* ===============================
+   Repository Layer
+   =============================== */
+class MockRepository {
+  constructor(dataPath = '../data/processedData.json') {
+    this.dataPath = path.resolve(__dirname, dataPath);
   }
-};
 
-//Get /stream-names — Returns an array of available stream names
-const getStreamNames = (req, res) => {
-  try {
-    const streamNames = getAvailableStreamNames();
-    if (streamNames.length === 0) {
-      return res.status(404).json({ error: "No stream names found" });
+  readProcessedData() {
+    const raw = fs.readFileSync(this.dataPath, 'utf-8');
+    return JSON.parse(raw);
+  }
+
+  getAvailableStreamNames() {
+    const data = this.readProcessedData();
+    return [...new Set(data.map(d => d.streamName))];
+  }
+
+  filterEntriesByStreamNames(names) {
+    const data = this.readProcessedData();
+    return data.filter(d => names.includes(d.streamName));
+  }
+}
+
+/* ===============================
+   Service Layer
+   =============================== */
+class MockService {
+  constructor(mockRepository) {
+    this.mockRepository = mockRepository;
+  }
+
+  async fetchStreams() {
+    return this.mockRepository.readProcessedData();
+  }
+
+  async fetchStreamNames() {
+    return this.mockRepository.getAvailableStreamNames();
+  }
+
+  async filterByStreams(names) {
+    return this.mockRepository.filterEntriesByStreamNames(names);
+  }
+}
+
+/* ===============================
+   Controller Layer
+   =============================== */
+class MockController {
+  constructor(mockService) {
+    this.mockService = mockService;
+
+    this.getStreams = this.getStreams.bind(this);
+    this.getStreamNames = this.getStreamNames.bind(this);
+    this.postFilterStreams = this.postFilterStreams.bind(this);
+  }
+
+  async getStreams(req, res) {
+    try {
+      const data = await this.mockService.fetchStreams();
+      res.status(200).json(data);
+    } catch (err) {
+      console.error('MockController.getStreams error:', err);
+      res.status(500).json({ error: 'Failed to load stream data' });
     }
-    res.json(streamNames);
-  } catch (err) {
-    console.error('Error getting stream names:', err);
-    res.status(500).json({ error: 'Failed to get stream names' });
-  }
-};
-
-//POST /filter-streams — Returns JSON file by Filtering entries by stream names (without time window)
-const postFilterStreams = (req, res) => {
-  const { streamNames } = req.body;
-
-  if (!Array.isArray(streamNames) || streamNames.length === 0) {
-    return res.status(400).json({ error: 'streamNames must be a non-empty array' });
   }
 
-  try {
-    const filtered = filterEntriesByStreamNames(streamNames);
-    res.json(filtered);
-  } catch (err) {
-    console.error('Error filtering stream data:', err);
-    res.status(500).json({ error: 'Failed to filter stream data' });
+  async getStreamNames(req, res) {
+    try {
+      const names = await this.mockService.fetchStreamNames();
+      if (!names.length) {
+        return res.status(404).json({ error: 'No stream names found' });
+      }
+      res.json(names);
+    } catch (err) {
+      console.error('MockController.getStreamNames error:', err);
+      res.status(500).json({ error: 'Failed to get stream names' });
+    }
   }
-};
 
-module.exports = {
-  getStreams,
-  getStreamNames,
-  postFilterStreams
-};
+  async postFilterStreams(req, res) {
+    const { streamNames } = req.body;
+    if (!Array.isArray(streamNames) || streamNames.length === 0) {
+      return res.status(400).json({ error: 'streamNames must be a non-empty array' });
+    }
+
+    try {
+      const filtered = await this.mockService.filterByStreams(streamNames);
+      res.json(filtered);
+    } catch (err) {
+      console.error('MockController.postFilterStreams error:', err);
+      res.status(500).json({ error: 'Failed to filter stream data' });
+    }
+  }
+}
+
+/* ===============================
+   Export Factory
+   =============================== */
+function createMockModule() {
+  const repo = new MockRepository();
+  const service = new MockService(repo);
+  const controller = new MockController(service);
+  return controller;
+}
+
+module.exports = createMockModule;
