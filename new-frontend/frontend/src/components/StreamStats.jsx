@@ -1,5 +1,7 @@
 const getStats = (data, stream) => {
-  const values = data.map(d => parseFloat(d[stream])).filter(v => !isNaN(v));
+  const values = data
+    .map((d) => parseFloat(d[stream]))
+    .filter((v) => !isNaN(v));
   const count = values.length;
   const min = Math.min(...values);
   const max = Math.max(...values);
@@ -12,13 +14,27 @@ const StreamStats = ({ data, stream }) => {
   const stats = getStats(data, stream);
 
   return (
-    <div className="card">
-      <h3>{stream}</h3>
-      <ul>
-        <li>Count: {stats.count}</li>
-        <li>Min: {stats.min}</li>
-        <li>Max: {stats.max}</li>
-        <li>Average: {stats.avg}</li>
+    <div className=" p-6 max-w-sm w-full mx-auto">
+      <h3 className="text-xl text-left font-semibold text-gray-800 mb-4 border-b pb-2">
+        {stream}
+      </h3>
+      <ul className="space-y-2 text-gray-700">
+        <li className="flex justify-between">
+          <span>Count:</span>
+          <span className="font-medium">{stats.count}</span>
+        </li>
+        <li className="flex justify-between">
+          <span>Min:</span>
+          <span className="font-medium">{stats.min}</span>
+        </li>
+        <li className="flex justify-between">
+          <span>Max:</span>
+          <span className="font-medium">{stats.max}</span>
+        </li>
+        <li className="flex justify-between">
+          <span>Average:</span>
+          <span className="font-medium">{stats.avg}</span>
+        </li>
       </ul>
     </div>
   );
