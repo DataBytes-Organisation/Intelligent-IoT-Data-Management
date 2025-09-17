@@ -4,7 +4,7 @@ This folder contains the work for **Sprint 1 and 2** of my project. The focus of
 
 ---
 
-## 👤 Contribution
+##  Contribution
 
 - **Lokesh Ravichandran (S223767884)** – Sole contributor.  
   - Performed correlation analysis across multiple datasets.  
@@ -13,7 +13,7 @@ This folder contains the work for **Sprint 1 and 2** of my project. The focus of
 
 ---
 
-## 📂 Files in this Folder
+## Files in this Folder
 
 - `Lokesh_s223767884_sprint2.ipynb` – Main Jupyter Notebook with all code and analysis.
 - `complex.csv` – Raw dataset used for correlation analysis.
@@ -24,7 +24,7 @@ This folder contains the work for **Sprint 1 and 2** of my project. The focus of
 
 ---
 
-## ⚙️ How to Run
+##  How to Run
 
 1. Open the notebook in **Jupyter Notebook** or **Google Colab**:
    - `Lokesh_s223767884_sprint2.ipynb`
