@@ -1,0 +1,2625 @@
+{
+    "3036461.csv": [
+        {
+            "field1": 1,
+            "field2": 1,
+            "field3": 1
+        },
+        {
+            "field1": 1,
+            "field2": 1,
+            "field3": 1
+        },
+        {
+            "field1": 0,
+            "field2": 0,
+            "field3": 0
+        },
+        {
+            "field1": 1,
+            "field2": 1,
+            "field3": 1
+        },
+        {
+            "field1": 0,
+            "field2": 0,
+            "field3": 0
+        },
+        {
+            "field1": 1,
+            "field2": 1,
+            "field3": 1
+        },
+        {
+            "field1": 1,
+            "field2": 1,
+            "field3": 1
+        },
+        {
+            "field1": 0,
+            "field2": 0,
+            "field3": 0
+        },
+        {
+            "field1": 0,
+            "field2": 0,
+            "field3": 0
+        },
+        {
+            "field1": 1,
+            "field2": 1,
+            "field3": 1
+        },
+        {
+            "field1": 0,
+            "field2": 0,
+            "field3": 0
+        },
+        {
+            "field1": 1,
+            "field2": 1,
+            "field3": 1
+        },
+        {
+            "field1": 0,
+            "field2": 0,
+            "field3": 0
+        },
+        {
+            "field1": 1,
+            "field2": 1,
+            "field3": 1
+        },
+        {
+            "field1": 0,
+            "field2": 0,
+            "field3": 0
+        },
+        {
+            "field1": 1,
+            "field2": 1,
+            "field3": 1
+        },
+        {
+            "field1": 0,
+            "field2": 0,
+            "field3": 0
+        },
+        {
+            "field1": 0,
+            "field2": 0,
+            "field3": 0
+        },
+        {
+            "field1": 0,
+            "field2": 0,
+            "field3": 0
+        },
+        {
+            "field1": 0,
+            "field2": 0,
+            "field3": 0
+        },
+        {
+            "field1": 0,
+            "field2": 0,
+            "field3": 0
+        },
+        {
+            "field1": 1,
+            "field2": 1,
+            "field3": 1
+        },
+        {
+            "field1": 0,
+            "field2": 0,
+            "field3": 0
+        },
+        {
+            "field1": 0,
+            "field2": 0,
+            "field3": 0
+        },
+        {
+            "field1": 1,
+            "field2": 1,
+            "field3": 1
+        },
+        {
+            "field1": 0,
+            "field2": 0,
+            "field3": 0
+        },
+        {
+            "field1": 0,
+            "field2": 0,
+            "field3": 0
+        },
+        {
+            "field1": 1,
+            "field2": 1,
+            "field3": 1
+        },
+        {
+            "field1": 0,
+            "field2": 0,
+            "field3": 0
+        },
+        {
+            "field1": 1,
+            "field2": 1,
+            "field3": 1
+        },
+        {
+            "field1": 0,
+            "field2": 0,
+            "field3": 0
+        }
+    ],
+    "1350261.csv": [
+        {
+            "field1": 500.4,
+            "field2": 10.5,
+            "field3": 21.91,
+            "field4": 982.45,
+            "field5": 56.11,
+            "field6": 21.7,
+            "field7": 45.93,
+            "field8": 4.84
+        },
+        {
+            "field1": 503.1,
+            "field2": 9.3,
+            "field3": 22.11,
+            "field4": 982.39,
+            "field5": 55.21,
+            "field6": 21.89,
+            "field7": 46.01,
+            "field8": 4.83
+        },
+        {
+            "field1": 487.4,
+            "field2": 8.0,
+            "field3": 22.33,
+            "field4": 982.36,
+            "field5": 54.06,
+            "field6": 22.08,
+            "field7": 46.24,
+            "field8": 4.83
+        },
+        {
+            "field1": 486.1,
+            "field2": 6.0,
+            "field3": 22.52,
+            "field4": 982.32,
+            "field5": 53.53,
+            "field6": 22.26,
+            "field7": 46.28,
+            "field8": 4.82
+        },
+        {
+            "field1": 488.7,
+            "field2": 5.6,
+            "field3": 22.61,
+            "field4": 982.23,
+            "field5": 53.87,
+            "field6": 22.46,
+            "field7": 46.51,
+            "field8": 4.83
+        },
+        {
+            "field1": 489.5,
+            "field2": 6.1,
+            "field3": 22.77,
+            "field4": 982.2,
+            "field5": 53.61,
+            "field6": 22.66,
+            "field7": 47.01,
+            "field8": 4.87
+        },
+        {
+            "field1": 503.8,
+            "field2": 6.2,
+            "field3": 22.88,
+            "field4": 982.17,
+            "field5": 53.22,
+            "field6": 22.77,
+            "field7": 47.01,
+            "field8": 4.88
+        },
+        {
+            "field1": 513.9,
+            "field2": 5.0,
+            "field3": 23.01,
+            "field4": 982.08,
+            "field5": 53.58,
+            "field6": 22.89,
+            "field7": 47.24,
+            "field8": 4.89
+        },
+        {
+            "field1": 557.8,
+            "field2": 5.9,
+            "field3": 23.07,
+            "field4": 982.02,
+            "field5": 54.16,
+            "field6": 23.01,
+            "field7": 47.54,
+            "field8": 4.93
+        },
+        {
+            "field1": 568.0,
+            "field2": 8.0,
+            "field3": 23.09,
+            "field4": 981.99,
+            "field5": 54.67,
+            "field6": 23.06,
+            "field7": 47.43,
+            "field8": 4.99
+        },
+        {
+            "field1": 568.8,
+            "field2": 8.9,
+            "field3": 23.19,
+            "field4": 982.01,
+            "field5": 55.24,
+            "field6": 23.13,
+            "field7": 47.47,
+            "field8": 5.04
+        },
+        {
+            "field1": 595.4,
+            "field2": 10.3,
+            "field3": 23.31,
+            "field4": 982.02,
+            "field5": 55.24,
+            "field6": 23.19,
+            "field7": 47.66,
+            "field8": 5.09
+        },
+        {
+            "field1": 596.4,
+            "field2": 12.7,
+            "field3": 23.4,
+            "field4": 981.99,
+            "field5": 54.81,
+            "field6": 23.29,
+            "field7": 47.74,
+            "field8": 5.13
+        },
+        {
+            "field1": 607.6,
+            "field2": 12.9,
+            "field3": 23.49,
+            "field4": 981.9,
+            "field5": 55.22,
+            "field6": 23.37,
+            "field7": 47.81,
+            "field8": 5.16
+        },
+        {
+            "field1": 624.3,
+            "field2": 13.3,
+            "field3": 23.57,
+            "field4": 981.86,
+            "field5": 55.91,
+            "field6": 23.41,
+            "field7": 47.74,
+            "field8": 5.21
+        },
+        {
+            "field1": 610.8,
+            "field2": 15.3,
+            "field3": 23.62,
+            "field4": 981.81,
+            "field5": 55.47,
+            "field6": 23.46,
+            "field7": 47.89,
+            "field8": 5.24
+        },
+        {
+            "field1": 575.6,
+            "field2": 17.0,
+            "field3": 23.67,
+            "field4": 981.7,
+            "field5": 55.04,
+            "field6": 23.52,
+            "field7": 47.97,
+            "field8": 5.26
+        },
+        {
+            "field1": 565.4,
+            "field2": 19.4,
+            "field3": 23.72,
+            "field4": 981.69,
+            "field5": 54.45,
+            "field6": 23.57,
+            "field7": 47.89,
+            "field8": 5.29
+        },
+        {
+            "field1": 576.6,
+            "field2": 21.3,
+            "field3": 23.74,
+            "field4": 981.61,
+            "field5": 54.07,
+            "field6": 23.63,
+            "field7": 48.04,
+            "field8": 5.31
+        },
+        {
+            "field1": 610.6,
+            "field2": 22.6,
+            "field3": 23.77,
+            "field4": 981.51,
+            "field5": 54.38,
+            "field6": 23.67,
+            "field7": 48.24,
+            "field8": 5.34
+        },
+        {
+            "field1": 635.1,
+            "field2": 30.9,
+            "field3": 23.83,
+            "field4": 981.48,
+            "field5": 55.03,
+            "field6": 23.72,
+            "field7": 48.04,
+            "field8": 5.5
+        },
+        {
+            "field1": 652.0,
+            "field2": 33.5,
+            "field3": 23.89,
+            "field4": 981.44,
+            "field5": 56.02,
+            "field6": 23.75,
+            "field7": 48.2,
+            "field8": 5.58
+        },
+        {
+            "field1": 677.4,
+            "field2": 38.0,
+            "field3": 23.95,
+            "field4": 981.42,
+            "field5": 55.73,
+            "field6": 23.79,
+            "field7": 48.24,
+            "field8": 5.64
+        },
+        {
+            "field1": 709.7,
+            "field2": 40.0,
+            "field3": 24.01,
+            "field4": 981.36,
+            "field5": 56.49,
+            "field6": 23.82,
+            "field7": 48.35,
+            "field8": 5.71
+        },
+        {
+            "field1": 753.8,
+            "field2": 38.3,
+            "field3": 24.05,
+            "field4": 981.31,
+            "field5": 59.77,
+            "field6": 23.89,
+            "field7": 48.0,
+            "field8": 5.78
+        },
+        {
+            "field1": 801.1,
+            "field2": 41.1,
+            "field3": 24.12,
+            "field4": 981.23,
+            "field5": 60.13,
+            "field6": 23.92,
+            "field7": 48.31,
+            "field8": 5.86
+        },
+        {
+            "field1": 791.1,
+            "field2": 52.1,
+            "field3": 24.17,
+            "field4": 981.22,
+            "field5": 57.37,
+            "field6": 23.96,
+            "field7": 48.35,
+            "field8": 5.92
+        },
+        {
+            "field1": 812.2,
+            "field2": 56.7,
+            "field3": 24.21,
+            "field4": 981.11,
+            "field5": 57.49,
+            "field6": 24.02,
+            "field7": 48.31,
+            "field8": 6.0
+        },
+        {
+            "field1": 841.6,
+            "field2": 60.5,
+            "field3": 24.26,
+            "field4": 981.05,
+            "field5": 57.59,
+            "field6": 24.09,
+            "field7": 48.5,
+            "field8": 6.06
+        },
+        {
+            "field1": 862.2,
+            "field2": 62.7,
+            "field3": 24.34,
+            "field4": 981.0,
+            "field5": 59.12,
+            "field6": 24.12,
+            "field7": 48.43,
+            "field8": 6.14
+        },
+        {
+            "field1": 870.9,
+            "field2": 70.4,
+            "field3": 24.4,
+            "field4": 981.01,
+            "field5": 58.77,
+            "field6": 24.17,
+            "field7": 48.39,
+            "field8": 6.23
+        },
+        {
+            "field1": 862.6,
+            "field2": 74.3,
+            "field3": 24.47,
+            "field4": 980.99,
+            "field5": 59.38,
+            "field6": 24.21,
+            "field7": 48.43,
+            "field8": 6.31
+        },
+        {
+            "field1": 842.3,
+            "field2": 79.6,
+            "field3": 24.53,
+            "field4": 980.93,
+            "field5": 59.74,
+            "field6": 24.25,
+            "field7": 48.5,
+            "field8": 6.39
+        },
+        {
+            "field1": 842.5,
+            "field2": 85.3,
+            "field3": 24.6,
+            "field4": 980.83,
+            "field5": 59.46,
+            "field6": 24.29,
+            "field7": 48.93,
+            "field8": 6.46
+        },
+        {
+            "field1": 846.2,
+            "field2": 93.7,
+            "field3": 24.65,
+            "field4": 980.76,
+            "field5": 59.54,
+            "field6": 24.33,
+            "field7": 48.93,
+            "field8": 6.56
+        },
+        {
+            "field1": 861.6,
+            "field2": 101.4,
+            "field3": 24.69,
+            "field4": 980.69,
+            "field5": 59.77,
+            "field6": 24.38,
+            "field7": 48.81,
+            "field8": 6.65
+        },
+        {
+            "field1": 914.4,
+            "field2": 110.4,
+            "field3": 24.72,
+            "field4": 980.57,
+            "field5": 59.75,
+            "field6": 24.4,
+            "field7": 48.66,
+            "field8": 6.74
+        },
+        {
+            "field1": 919.7,
+            "field2": 115.5,
+            "field3": 24.76,
+            "field4": 980.49,
+            "field5": 60.29,
+            "field6": 24.42,
+            "field7": 48.89,
+            "field8": 6.82
+        },
+        {
+            "field1": 925.6,
+            "field2": 126.3,
+            "field3": 24.81,
+            "field4": 980.43,
+            "field5": 60.12,
+            "field6": 24.45,
+            "field7": 48.85,
+            "field8": 6.91
+        },
+        {
+            "field1": 935.8,
+            "field2": 134.0,
+            "field3": 24.87,
+            "field4": 980.33,
+            "field5": 60.27,
+            "field6": 24.51,
+            "field7": 48.73,
+            "field8": 7.0
+        },
+        {
+            "field1": 922.3,
+            "field2": 140.8,
+            "field3": 24.89,
+            "field4": 980.29,
+            "field5": 60.3,
+            "field6": 24.53,
+            "field7": 48.7,
+            "field8": 7.06
+        },
+        {
+            "field1": 950.7,
+            "field2": 149.3,
+            "field3": 24.94,
+            "field4": 980.22,
+            "field5": 60.18,
+            "field6": 24.56,
+            "field7": 48.93,
+            "field8": 7.14
+        },
+        {
+            "field1": 961.7,
+            "field2": 168.6,
+            "field3": 25.0,
+            "field4": 980.16,
+            "field5": 60.63,
+            "field6": 24.59,
+            "field7": 48.43,
+            "field8": 7.31
+        },
+        {
+            "field1": 975.3,
+            "field2": 184.1,
+            "field3": 25.02,
+            "field4": 980.07,
+            "field5": 60.46,
+            "field6": 24.62,
+            "field7": 47.85,
+            "field8": 7.42
+        },
+        {
+            "field1": 949.0,
+            "field2": 196.7,
+            "field3": 25.01,
+            "field4": 979.98,
+            "field5": 60.43,
+            "field6": 24.62,
+            "field7": 47.54,
+            "field8": 7.5
+        },
+        {
+            "field1": 922.0,
+            "field2": 209.0,
+            "field3": 25.03,
+            "field4": 979.97,
+            "field5": 60.37,
+            "field6": 24.63,
+            "field7": 47.31,
+            "field8": 7.58
+        },
+        {
+            "field1": 925.4,
+            "field2": 222.1,
+            "field3": 25.05,
+            "field4": 979.92,
+            "field5": 60.34,
+            "field6": 24.65,
+            "field7": 47.58,
+            "field8": 7.69
+        },
+        {
+            "field1": 930.2,
+            "field2": 234.0,
+            "field3": 25.08,
+            "field4": 979.86,
+            "field5": 60.27,
+            "field6": 24.69,
+            "field7": 47.58,
+            "field8": 7.77
+        },
+        {
+            "field1": 906.7,
+            "field2": 247.6,
+            "field3": 25.11,
+            "field4": 979.82,
+            "field5": 60.23,
+            "field6": 24.69,
+            "field7": 47.74,
+            "field8": 7.85
+        },
+        {
+            "field1": 914.0,
+            "field2": 258.1,
+            "field3": 25.13,
+            "field4": 979.82,
+            "field5": 60.3,
+            "field6": 24.72,
+            "field7": 47.43,
+            "field8": 7.92
+        },
+        {
+            "field1": 880.7,
+            "field2": 271.3,
+            "field3": 25.16,
+            "field4": 979.76,
+            "field5": 60.31,
+            "field6": 24.74,
+            "field7": 47.47,
+            "field8": 8.0
+        },
+        {
+            "field1": 904.3,
+            "field2": 273.1,
+            "field3": 25.22,
+            "field4": 979.69,
+            "field5": 60.93,
+            "field6": 24.77,
+            "field7": 48.31,
+            "field8": 8.05
+        },
+        {
+            "field1": 900.0,
+            "field2": 285.9,
+            "field3": 25.23,
+            "field4": 979.65,
+            "field5": 60.98,
+            "field6": 24.8,
+            "field7": 48.62,
+            "field8": 8.13
+        },
+        {
+            "field1": 929.3,
+            "field2": 290.8,
+            "field3": 25.31,
+            "field4": 979.57,
+            "field5": 61.08,
+            "field6": 24.83,
+            "field7": 48.54,
+            "field8": 8.19
+        },
+        {
+            "field1": 944.7,
+            "field2": 299.6,
+            "field3": 25.35,
+            "field4": 979.5,
+            "field5": 61.16,
+            "field6": 24.86,
+            "field7": 48.5,
+            "field8": 8.25
+        },
+        {
+            "field1": 928.3,
+            "field2": 308.4,
+            "field3": 25.36,
+            "field4": 979.46,
+            "field5": 61.24,
+            "field6": 24.9,
+            "field7": 48.48,
+            "field8": 8.3
+        },
+        {
+            "field1": 925.9,
+            "field2": 320.3,
+            "field3": 25.39,
+            "field4": 979.38,
+            "field5": 61.0,
+            "field6": 24.94,
+            "field7": 48.5,
+            "field8": 8.36
+        },
+        {
+            "field1": 935.3,
+            "field2": 325.2,
+            "field3": 25.42,
+            "field4": 979.3,
+            "field5": 60.92,
+            "field6": 24.95,
+            "field7": 48.58,
+            "field8": 8.4
+        },
+        {
+            "field1": 951.7,
+            "field2": 334.7,
+            "field3": 25.43,
+            "field4": 979.21,
+            "field5": 61.37,
+            "field6": 24.94,
+            "field7": 48.58,
+            "field8": 8.47
+        },
+        {
+            "field1": 955.2,
+            "field2": 348.3,
+            "field3": 25.43,
+            "field4": 979.11,
+            "field5": 61.44,
+            "field6": 24.94,
+            "field7": 48.62,
+            "field8": 8.54
+        },
+        {
+            "field1": 956.6,
+            "field2": 356.2,
+            "field3": 25.44,
+            "field4": 979.04,
+            "field5": 61.4,
+            "field6": 24.97,
+            "field7": 48.58,
+            "field8": 8.58
+        },
+        {
+            "field1": 959.6,
+            "field2": 365.9,
+            "field3": 25.48,
+            "field4": 978.95,
+            "field5": 61.3,
+            "field6": 25.0,
+            "field7": 48.58,
+            "field8": 8.63
+        },
+        {
+            "field1": 974.5,
+            "field2": 375.9,
+            "field3": 25.55,
+            "field4": 978.86,
+            "field5": 60.78,
+            "field6": 25.05,
+            "field7": 48.81,
+            "field8": 8.68
+        },
+        {
+            "field1": 980.6,
+            "field2": 384.3,
+            "field3": 25.6,
+            "field4": 978.8,
+            "field5": 60.78,
+            "field6": 25.07,
+            "field7": 48.81,
+            "field8": 8.73
+        },
+        {
+            "field1": 982.0,
+            "field2": 391.4,
+            "field3": 25.62,
+            "field4": 978.74,
+            "field5": 61.01,
+            "field6": 25.1,
+            "field7": 48.85,
+            "field8": 8.77
+        },
+        {
+            "field1": 985.5,
+            "field2": 402.6,
+            "field3": 25.66,
+            "field4": 978.7,
+            "field5": 60.84,
+            "field6": 25.12,
+            "field7": 48.77,
+            "field8": 8.83
+        },
+        {
+            "field1": 990.0,
+            "field2": 412.1,
+            "field3": 25.69,
+            "field4": 978.65,
+            "field5": 60.75,
+            "field6": 25.18,
+            "field7": 48.7,
+            "field8": 8.88
+        },
+        {
+            "field1": 1005.4,
+            "field2": 425.7,
+            "field3": 25.75,
+            "field4": 978.62,
+            "field5": 60.22,
+            "field6": 25.22,
+            "field7": 49.0,
+            "field8": 8.93
+        },
+        {
+            "field1": 1003.0,
+            "field2": 429.1,
+            "field3": 25.79,
+            "field4": 978.6,
+            "field5": 60.28,
+            "field6": 25.26,
+            "field7": 48.89,
+            "field8": 8.96
+        },
+        {
+            "field1": 1026.0,
+            "field2": 438.1,
+            "field3": 25.85,
+            "field4": 978.57,
+            "field5": 60.03,
+            "field6": 25.31,
+            "field7": 49.12,
+            "field8": 9.01
+        },
+        {
+            "field1": 1021.9,
+            "field2": 448.7,
+            "field3": 25.86,
+            "field4": 978.49,
+            "field5": 60.03,
+            "field6": 25.36,
+            "field7": 49.08,
+            "field8": 9.07
+        },
+        {
+            "field1": 1045.9,
+            "field2": 456.4,
+            "field3": 25.93,
+            "field4": 978.44,
+            "field5": 59.69,
+            "field6": 25.39,
+            "field7": 49.23,
+            "field8": 9.11
+        },
+        {
+            "field1": 1034.5,
+            "field2": 465.4,
+            "field3": 25.96,
+            "field4": 978.45,
+            "field5": 59.61,
+            "field6": 25.44,
+            "field7": 48.93,
+            "field8": 9.16
+        },
+        {
+            "field1": 1052.6,
+            "field2": 473.0,
+            "field3": 26.02,
+            "field4": 978.51,
+            "field5": 59.39,
+            "field6": 25.47,
+            "field7": 49.16,
+            "field8": 9.19
+        },
+        {
+            "field1": 1086.3,
+            "field2": 481.6,
+            "field3": 26.09,
+            "field4": 978.48,
+            "field5": 59.21,
+            "field6": 25.53,
+            "field7": 49.39,
+            "field8": 9.25
+        },
+        {
+            "field1": 1085.7,
+            "field2": 505.1,
+            "field3": 26.05,
+            "field4": 978.45,
+            "field5": 59.46,
+            "field6": 25.54,
+            "field7": 49.2,
+            "field8": 9.33
+        },
+        {
+            "field1": 1080.5,
+            "field2": 517.0,
+            "field3": 26.04,
+            "field4": 978.42,
+            "field5": 59.64,
+            "field6": 25.56,
+            "field7": 49.31,
+            "field8": 9.38
+        },
+        {
+            "field1": 1105.3,
+            "field2": 520.2,
+            "field3": 26.1,
+            "field4": 978.4,
+            "field5": 59.54,
+            "field6": 25.59,
+            "field7": 49.39,
+            "field8": 9.41
+        },
+        {
+            "field1": 1130.0,
+            "field2": 538.1,
+            "field3": 26.16,
+            "field4": 978.37,
+            "field5": 59.24,
+            "field6": 25.61,
+            "field7": 49.35,
+            "field8": 9.48
+        },
+        {
+            "field1": 1120.2,
+            "field2": 546.3,
+            "field3": 26.14,
+            "field4": 978.38,
+            "field5": 59.4,
+            "field6": 25.66,
+            "field7": 49.27,
+            "field8": 9.51
+        },
+        {
+            "field1": 1133.6,
+            "field2": 551.0,
+            "field3": 26.16,
+            "field4": 978.34,
+            "field5": 59.39,
+            "field6": 25.68,
+            "field7": 49.35,
+            "field8": 9.54
+        },
+        {
+            "field1": 1147.2,
+            "field2": 571.1,
+            "field3": 26.19,
+            "field4": 978.36,
+            "field5": 59.28,
+            "field6": 25.68,
+            "field7": 49.2,
+            "field8": 9.62
+        },
+        {
+            "field1": 1154.5,
+            "field2": 605.4,
+            "field3": 26.21,
+            "field4": 978.38,
+            "field5": 59.25,
+            "field6": 25.72,
+            "field7": 49.35,
+            "field8": 9.74
+        },
+        {
+            "field1": 1181.0,
+            "field2": 624.7,
+            "field3": 26.28,
+            "field4": 978.36,
+            "field5": 59.35,
+            "field6": 25.75,
+            "field7": 49.39,
+            "field8": 9.84
+        },
+        {
+            "field1": 1182.6,
+            "field2": 642.6,
+            "field3": 26.3,
+            "field4": 978.37,
+            "field5": 59.17,
+            "field6": 25.79,
+            "field7": 49.46,
+            "field8": 9.9
+        },
+        {
+            "field1": 1186.3,
+            "field2": 652.7,
+            "field3": 26.32,
+            "field4": 978.42,
+            "field5": 59.17,
+            "field6": 25.81,
+            "field7": 49.43,
+            "field8": 9.94
+        },
+        {
+            "field1": 1190.0,
+            "field2": 672.4,
+            "field3": 26.31,
+            "field4": 978.44,
+            "field5": 59.22,
+            "field6": 25.82,
+            "field7": 49.5,
+            "field8": 10.01
+        },
+        {
+            "field1": 1202.2,
+            "field2": 687.8,
+            "field3": 26.31,
+            "field4": 978.48,
+            "field5": 59.2,
+            "field6": 25.81,
+            "field7": 49.54,
+            "field8": 10.05
+        },
+        {
+            "field1": 1217.9,
+            "field2": 700.0,
+            "field3": 26.35,
+            "field4": 978.56,
+            "field5": 58.99,
+            "field6": 25.85,
+            "field7": 49.43,
+            "field8": 10.09
+        },
+        {
+            "field1": 1229.3,
+            "field2": 705.3,
+            "field3": 26.37,
+            "field4": 978.61,
+            "field5": 58.96,
+            "field6": 25.88,
+            "field7": 49.43,
+            "field8": 10.12
+        },
+        {
+            "field1": 1230.3,
+            "field2": 720.3,
+            "field3": 26.37,
+            "field4": 978.66,
+            "field5": 58.92,
+            "field6": 25.88,
+            "field7": 49.39,
+            "field8": 10.15
+        },
+        {
+            "field1": 1229.3,
+            "field2": 729.3,
+            "field3": 26.38,
+            "field4": 978.7,
+            "field5": 58.9,
+            "field6": 25.87,
+            "field7": 49.46,
+            "field8": 10.18
+        },
+        {
+            "field1": 1066.6,
+            "field2": 838.4,
+            "field3": 26.3,
+            "field4": 978.72,
+            "field5": 53.99,
+            "field6": 25.77,
+            "field7": 49.46,
+            "field8": 10.19
+        }
+    ],
+    "1321079.csv": [
+        {
+            "field1": 25.1,
+            "field2": 44.3,
+            "field3": 25.1,
+            "field4": 44.7
+        },
+        {
+            "field1": 25.0,
+            "field2": 44.1,
+            "field3": 25.1,
+            "field4": 44.6
+        },
+        {
+            "field1": 25.1,
+            "field2": 45.1,
+            "field3": 25.0,
+            "field4": 45.8
+        },
+        {
+            "field1": 25.1,
+            "field2": 44.9,
+            "field3": 24.9,
+            "field4": 45.5
+        },
+        {
+            "field1": 25.0,
+            "field2": 44.2,
+            "field3": 24.9,
+            "field4": 45.0
+        },
+        {
+            "field1": 25.0,
+            "field2": 43.8,
+            "field3": 24.8,
+            "field4": 44.5
+        },
+        {
+            "field1": 25.0,
+            "field2": 43.7,
+            "field3": 24.8,
+            "field4": 44.2
+        },
+        {
+            "field1": 25.0,
+            "field2": 43.5,
+            "field3": 24.9,
+            "field4": 44.0
+        },
+        {
+            "field1": 25.0,
+            "field2": 44.1,
+            "field3": 24.8,
+            "field4": 44.7
+        },
+        {
+            "field1": 24.8,
+            "field2": 44.1,
+            "field3": 24.6,
+            "field4": 44.7
+        },
+        {
+            "field1": 24.8,
+            "field2": 44.5,
+            "field3": 24.7,
+            "field4": 45.2
+        },
+        {
+            "field1": 24.8,
+            "field2": 44.1,
+            "field3": 24.7,
+            "field4": 44.8
+        },
+        {
+            "field1": 24.9,
+            "field2": 44.0,
+            "field3": 24.8,
+            "field4": 44.6
+        },
+        {
+            "field1": 24.9,
+            "field2": 44.2,
+            "field3": 24.8,
+            "field4": 44.8
+        },
+        {
+            "field1": 24.9,
+            "field2": 44.4,
+            "field3": 24.8,
+            "field4": 45.2
+        },
+        {
+            "field1": 24.9,
+            "field2": 44.5,
+            "field3": 24.8,
+            "field4": 45.1
+        },
+        {
+            "field1": 24.8,
+            "field2": 43.7,
+            "field3": 24.7,
+            "field4": 44.6
+        },
+        {
+            "field1": 25.0,
+            "field2": 44.5,
+            "field3": 25.1,
+            "field4": 45.0
+        },
+        {
+            "field1": 25.4,
+            "field2": 44.6,
+            "field3": 25.4,
+            "field4": 44.7
+        },
+        {
+            "field1": 25.5,
+            "field2": 45.1,
+            "field3": 25.5,
+            "field4": 45.5
+        },
+        {
+            "field1": 25.6,
+            "field2": 44.3,
+            "field3": 25.6,
+            "field4": 44.7
+        },
+        {
+            "field1": 25.6,
+            "field2": 45.3,
+            "field3": 25.6,
+            "field4": 45.5
+        },
+        {
+            "field1": 25.5,
+            "field2": 44.2,
+            "field3": 25.6,
+            "field4": 44.5
+        },
+        {
+            "field1": 25.5,
+            "field2": 43.3,
+            "field3": 25.5,
+            "field4": 43.5
+        },
+        {
+            "field1": 25.4,
+            "field2": 44.9,
+            "field3": 25.4,
+            "field4": 45.4
+        },
+        {
+            "field1": 25.4,
+            "field2": 44.7,
+            "field3": 25.2,
+            "field4": 45.2
+        },
+        {
+            "field1": 25.3,
+            "field2": 45.0,
+            "field3": 25.2,
+            "field4": 45.6
+        },
+        {
+            "field1": 25.3,
+            "field2": 45.3,
+            "field3": 25.2,
+            "field4": 46.1
+        },
+        {
+            "field1": 25.2,
+            "field2": 45.4,
+            "field3": 25.1,
+            "field4": 46.4
+        },
+        {
+            "field1": 25.2,
+            "field2": 45.8,
+            "field3": 25.2,
+            "field4": 46.5
+        },
+        {
+            "field1": 25.2,
+            "field2": 45.0,
+            "field3": 25.2,
+            "field4": 45.4
+        },
+        {
+            "field1": 25.1,
+            "field2": 44.3,
+            "field3": 25.0,
+            "field4": 45.3
+        },
+        {
+            "field1": 25.1,
+            "field2": 45.3,
+            "field3": 24.9,
+            "field4": 46.2
+        },
+        {
+            "field1": 25.1,
+            "field2": 46.2,
+            "field3": 24.9,
+            "field4": 47.0
+        },
+        {
+            "field1": 25.0,
+            "field2": 46.4,
+            "field3": 24.9,
+            "field4": 47.3
+        },
+        {
+            "field1": 25.1,
+            "field2": 46.7,
+            "field3": 24.9,
+            "field4": 47.5
+        },
+        {
+            "field1": 25.1,
+            "field2": 46.3,
+            "field3": 24.9,
+            "field4": 47.3
+        },
+        {
+            "field1": 25.1,
+            "field2": 46.8,
+            "field3": 24.9,
+            "field4": 47.7
+        },
+        {
+            "field1": 25.1,
+            "field2": 47.1,
+            "field3": 24.9,
+            "field4": 48.1
+        },
+        {
+            "field1": 25.0,
+            "field2": 47.3,
+            "field3": 24.9,
+            "field4": 48.4
+        },
+        {
+            "field1": 25.1,
+            "field2": 47.8,
+            "field3": 24.9,
+            "field4": 49.1
+        },
+        {
+            "field1": 25.0,
+            "field2": 48.2,
+            "field3": 24.9,
+            "field4": 49.5
+        },
+        {
+            "field1": 25.0,
+            "field2": 48.5,
+            "field3": 24.9,
+            "field4": 49.8
+        },
+        {
+            "field1": 25.0,
+            "field2": 48.2,
+            "field3": 24.9,
+            "field4": 49.4
+        },
+        {
+            "field1": 25.0,
+            "field2": 48.3,
+            "field3": 24.6,
+            "field4": 49.3
+        },
+        {
+            "field1": 25.0,
+            "field2": 48.3,
+            "field3": 24.9,
+            "field4": 49.5
+        },
+        {
+            "field1": 25.0,
+            "field2": 48.3,
+            "field3": 24.9,
+            "field4": 49.5
+        },
+        {
+            "field1": 24.9,
+            "field2": 48.2,
+            "field3": 24.9,
+            "field4": 49.5
+        },
+        {
+            "field1": 24.9,
+            "field2": 48.0,
+            "field3": 24.8,
+            "field4": 49.2
+        },
+        {
+            "field1": 24.9,
+            "field2": 48.0,
+            "field3": 24.8,
+            "field4": 49.1
+        },
+        {
+            "field1": 24.9,
+            "field2": 48.7,
+            "field3": 24.8,
+            "field4": 50.0
+        },
+        {
+            "field1": 24.9,
+            "field2": 48.3,
+            "field3": 24.8,
+            "field4": 49.5
+        },
+        {
+            "field1": 24.9,
+            "field2": 48.0,
+            "field3": 24.8,
+            "field4": 49.0
+        },
+        {
+            "field1": 24.9,
+            "field2": 47.6,
+            "field3": 24.7,
+            "field4": 48.6
+        },
+        {
+            "field1": 24.9,
+            "field2": 47.7,
+            "field3": 24.7,
+            "field4": 48.7
+        },
+        {
+            "field1": 24.8,
+            "field2": 47.1,
+            "field3": 24.7,
+            "field4": 48.0
+        },
+        {
+            "field1": 24.8,
+            "field2": 46.9,
+            "field3": 24.7,
+            "field4": 47.8
+        },
+        {
+            "field1": 24.8,
+            "field2": 46.8,
+            "field3": 24.7,
+            "field4": 47.7
+        },
+        {
+            "field1": 24.8,
+            "field2": 46.8,
+            "field3": 24.7,
+            "field4": 47.7
+        },
+        {
+            "field1": 24.9,
+            "field2": 46.5,
+            "field3": 24.9,
+            "field4": 47.2
+        },
+        {
+            "field1": 25.4,
+            "field2": 45.9,
+            "field3": 25.5,
+            "field4": 46.2
+        },
+        {
+            "field1": 25.6,
+            "field2": 45.5,
+            "field3": 25.7,
+            "field4": 45.7
+        },
+        {
+            "field1": 25.7,
+            "field2": 44.9,
+            "field3": 25.7,
+            "field4": 45.1
+        },
+        {
+            "field1": 25.6,
+            "field2": 44.6,
+            "field3": 25.7,
+            "field4": 45.1
+        },
+        {
+            "field1": 25.7,
+            "field2": 44.2,
+            "field3": 25.6,
+            "field4": 44.6
+        },
+        {
+            "field1": 25.6,
+            "field2": 43.7,
+            "field3": 25.6,
+            "field4": 44.0
+        },
+        {
+            "field1": 25.5,
+            "field2": 43.3,
+            "field3": 25.6,
+            "field4": 43.7
+        },
+        {
+            "field1": 25.5,
+            "field2": 43.4,
+            "field3": 25.4,
+            "field4": 44.1
+        },
+        {
+            "field1": 25.4,
+            "field2": 43.7,
+            "field3": 25.4,
+            "field4": 44.4
+        },
+        {
+            "field1": 25.3,
+            "field2": 44.3,
+            "field3": 25.3,
+            "field4": 44.8
+        },
+        {
+            "field1": 25.3,
+            "field2": 44.0,
+            "field3": 25.3,
+            "field4": 44.7
+        },
+        {
+            "field1": 25.2,
+            "field2": 44.4,
+            "field3": 25.3,
+            "field4": 44.9
+        },
+        {
+            "field1": 25.2,
+            "field2": 43.2,
+            "field3": 25.2,
+            "field4": 43.6
+        },
+        {
+            "field1": 25.3,
+            "field2": 42.5,
+            "field3": 25.3,
+            "field4": 43.0
+        },
+        {
+            "field1": 25.4,
+            "field2": 42.2,
+            "field3": 25.4,
+            "field4": 42.6
+        },
+        {
+            "field1": 25.4,
+            "field2": 42.3,
+            "field3": 25.5,
+            "field4": 42.6
+        },
+        {
+            "field1": 25.4,
+            "field2": 41.8,
+            "field3": 25.4,
+            "field4": 41.9
+        },
+        {
+            "field1": 25.4,
+            "field2": 42.4,
+            "field3": 25.5,
+            "field4": 42.6
+        },
+        {
+            "field1": 25.4,
+            "field2": 41.6,
+            "field3": 25.4,
+            "field4": 41.7
+        },
+        {
+            "field1": 25.4,
+            "field2": 41.7,
+            "field3": 25.4,
+            "field4": 42.0
+        },
+        {
+            "field1": 25.4,
+            "field2": 41.8,
+            "field3": 25.4,
+            "field4": 42.1
+        },
+        {
+            "field1": 25.4,
+            "field2": 41.8,
+            "field3": 25.5,
+            "field4": 42.0
+        },
+        {
+            "field1": 25.4,
+            "field2": 41.7,
+            "field3": 25.5,
+            "field4": 41.8
+        },
+        {
+            "field1": 25.4,
+            "field2": 41.2,
+            "field3": 25.5,
+            "field4": 41.3
+        },
+        {
+            "field1": 25.4,
+            "field2": 41.9,
+            "field3": 25.5,
+            "field4": 42.2
+        },
+        {
+            "field1": 25.4,
+            "field2": 42.4,
+            "field3": 25.4,
+            "field4": 42.6
+        },
+        {
+            "field1": 25.4,
+            "field2": 42.8,
+            "field3": 25.5,
+            "field4": 43.1
+        },
+        {
+            "field1": 25.4,
+            "field2": 42.8,
+            "field3": 25.6,
+            "field4": 43.0
+        },
+        {
+            "field1": 25.4,
+            "field2": 43.1,
+            "field3": 25.5,
+            "field4": 43.4
+        },
+        {
+            "field1": 25.4,
+            "field2": 43.6,
+            "field3": 25.5,
+            "field4": 43.9
+        },
+        {
+            "field1": 25.4,
+            "field2": 43.5,
+            "field3": 25.5,
+            "field4": 43.7
+        },
+        {
+            "field1": 25.3,
+            "field2": 40.1,
+            "field3": 25.3,
+            "field4": 40.3
+        },
+        {
+            "field1": 25.4,
+            "field2": 42.4,
+            "field3": 25.3,
+            "field4": 42.6
+        },
+        {
+            "field1": 25.3,
+            "field2": 42.9,
+            "field3": 25.4,
+            "field4": 43.3
+        },
+        {
+            "field1": 25.3,
+            "field2": 43.1,
+            "field3": 25.4,
+            "field4": 43.4
+        },
+        {
+            "field1": 25.2,
+            "field2": 42.1,
+            "field3": 25.3,
+            "field4": 42.3
+        },
+        {
+            "field1": 25.3,
+            "field2": 38.5,
+            "field3": 25.3,
+            "field4": 38.3
+        },
+        {
+            "field1": 25.1,
+            "field2": 38.5,
+            "field3": 25.1,
+            "field4": 38.5
+        },
+        {
+            "field1": 25.1,
+            "field2": 38.8,
+            "field3": 25.2,
+            "field4": 38.8
+        },
+        {
+            "field1": 25.2,
+            "field2": 41.2,
+            "field3": 25.2,
+            "field4": 41.3
+        }
+    ],
+    "518150.csv": [
+        {
+            "field1": -27.46,
+            "field2": -3.79,
+            "field3": -25.98,
+            "field4": 1.16625,
+            "field5": -0.78,
+            "field6": -21991.716875,
+            "field7": 5.32,
+            "field8": -2.185
+        },
+        {
+            "field1": -28.33,
+            "field2": -3.77,
+            "field3": -21.05,
+            "field4": 1.16625,
+            "field5": -0.86,
+            "field6": -21991.716875,
+            "field7": 5.25,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 4.16,
+            "field5": 0.010961538461538519,
+            "field6": -21932.9,
+            "field7": -1.0851923076923076,
+            "field8": -3.73
+        },
+        {
+            "field1": -29.27,
+            "field2": -3.67,
+            "field3": -39.53,
+            "field4": 1.16625,
+            "field5": -0.93,
+            "field6": -21991.716875,
+            "field7": 5.17,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 4.08,
+            "field5": 0.010961538461538519,
+            "field6": -21936.65,
+            "field7": -1.0851923076923076,
+            "field8": -3.72
+        },
+        {
+            "field1": -30.4,
+            "field2": -3.63,
+            "field3": -35.03,
+            "field4": 1.16625,
+            "field5": -1.02,
+            "field6": -21991.716875,
+            "field7": 5.09,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 2.22,
+            "field5": 0.010961538461538519,
+            "field6": -21942.15,
+            "field7": -1.0851923076923076,
+            "field8": -3.75
+        },
+        {
+            "field1": -31.43,
+            "field2": -3.69,
+            "field3": -30.1,
+            "field4": 1.16625,
+            "field5": -1.08,
+            "field6": -21991.716875,
+            "field7": 5.02,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 4.79,
+            "field5": 0.010961538461538519,
+            "field6": -21943.27,
+            "field7": -1.0851923076923076,
+            "field8": -3.64
+        },
+        {
+            "field1": -32.49,
+            "field2": -3.51,
+            "field3": -25.3,
+            "field4": 1.16625,
+            "field5": -1.11,
+            "field6": -21991.716875,
+            "field7": 4.99,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 4.45,
+            "field5": 0.010961538461538519,
+            "field6": -21947.13,
+            "field7": -1.0851923076923076,
+            "field8": -3.66
+        },
+        {
+            "field1": -33.69,
+            "field2": -3.49,
+            "field3": -44.31,
+            "field4": 1.16625,
+            "field5": -1.14,
+            "field6": -21991.716875,
+            "field7": 4.97,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 2.52,
+            "field5": 0.010961538461538519,
+            "field6": -21952.54,
+            "field7": -1.0851923076923076,
+            "field8": -3.79
+        },
+        {
+            "field1": -34.74,
+            "field2": -3.6,
+            "field3": -39.25,
+            "field4": 1.16625,
+            "field5": -1.16,
+            "field6": -21991.716875,
+            "field7": 4.94,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 3.29,
+            "field5": 0.010961538461538519,
+            "field6": -21955.38,
+            "field7": -1.0851923076923076,
+            "field8": -3.88
+        },
+        {
+            "field1": -35.87,
+            "field2": -3.48,
+            "field3": -34.63,
+            "field4": 1.16625,
+            "field5": -1.17,
+            "field6": -21991.716875,
+            "field7": 4.94,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 2.62,
+            "field5": 0.010961538461538519,
+            "field6": -21959.53,
+            "field7": -1.0851923076923076,
+            "field8": -3.89
+        },
+        {
+            "field1": -36.96,
+            "field2": -3.41,
+            "field3": -29.64,
+            "field4": 1.16625,
+            "field5": -1.14,
+            "field6": -21991.716875,
+            "field7": 4.96,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 4.86,
+            "field5": 0.010961538461538519,
+            "field6": -21960.7,
+            "field7": -1.0851923076923076,
+            "field8": -3.59
+        },
+        {
+            "field1": -38.0,
+            "field2": -3.24,
+            "field3": -48.47,
+            "field4": 1.16625,
+            "field5": -1.13,
+            "field6": -21991.716875,
+            "field7": 4.97,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 2.48,
+            "field5": 0.010961538461538519,
+            "field6": -21966.33,
+            "field7": -1.0851923076923076,
+            "field8": -3.84
+        },
+        {
+            "field1": -39.4,
+            "field2": -3.29,
+            "field3": -44.87,
+            "field4": 1.16625,
+            "field5": -1.21,
+            "field6": -21991.716875,
+            "field7": 4.89,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 4.41,
+            "field5": 0.010961538461538519,
+            "field6": -21967.69,
+            "field7": -1.0851923076923076,
+            "field8": -3.52
+        },
+        {
+            "field1": -40.53,
+            "field2": -3.14,
+            "field3": -39.14,
+            "field4": 1.16625,
+            "field5": -1.26,
+            "field6": -21991.716875,
+            "field7": 4.84,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 3.54,
+            "field5": 0.010961538461538519,
+            "field6": -21971.69,
+            "field7": -1.0851923076923076,
+            "field8": -3.3
+        },
+        {
+            "field1": -41.83,
+            "field2": -3.06,
+            "field3": -34.82,
+            "field4": 1.16625,
+            "field5": -1.31,
+            "field6": -21991.716875,
+            "field7": 4.79,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 5.72,
+            "field5": 0.010961538461538519,
+            "field6": -21972.58,
+            "field7": -1.0851923076923076,
+            "field8": -3.08
+        },
+        {
+            "field1": -43.19,
+            "field2": -2.83,
+            "field3": -53.94,
+            "field4": 1.16625,
+            "field5": -1.32,
+            "field6": -21991.716875,
+            "field7": 4.78,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 5.16,
+            "field5": 0.010961538461538519,
+            "field6": -21975.97,
+            "field7": -1.0851923076923076,
+            "field8": -2.91
+        },
+        {
+            "field1": -44.5,
+            "field2": -2.77,
+            "field3": -50.08,
+            "field4": 1.16625,
+            "field5": -1.38,
+            "field6": -21991.716875,
+            "field7": 4.72,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 3.67,
+            "field5": 0.010961538461538519,
+            "field6": -21980.23,
+            "field7": -1.0851923076923076,
+            "field8": -3.08
+        },
+        {
+            "field1": -46.37,
+            "field2": -2.67,
+            "field3": -46.64,
+            "field4": 1.16625,
+            "field5": -1.55,
+            "field6": -21991.716875,
+            "field7": 4.55,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 2.14,
+            "field5": 0.010961538461538519,
+            "field6": -21984.43,
+            "field7": -1.0851923076923076,
+            "field8": -3.11
+        },
+        {
+            "field1": -48.38,
+            "field2": -2.58,
+            "field3": -42.87,
+            "field4": 1.16625,
+            "field5": -1.82,
+            "field6": -21991.716875,
+            "field7": 4.29,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 3.56,
+            "field5": 0.010961538461538519,
+            "field6": -21985.59,
+            "field7": -1.0851923076923076,
+            "field8": -3.24
+        },
+        {
+            "field1": -50.8,
+            "field2": -2.38,
+            "field3": -63.61,
+            "field4": 1.16625,
+            "field5": -2.18,
+            "field6": -21991.716875,
+            "field7": -0.15,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 2.82,
+            "field5": 0.010961538461538519,
+            "field6": -21988.72,
+            "field7": -1.0851923076923076,
+            "field8": -3.19
+        },
+        {
+            "field1": -53.37,
+            "field2": -2.28,
+            "field3": -60.37,
+            "field4": 1.16625,
+            "field5": -2.44,
+            "field6": -21991.716875,
+            "field7": -0.41,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 2.5,
+            "field5": 0.010961538461538519,
+            "field6": -21991.31,
+            "field7": -1.0851923076923076,
+            "field8": -3.25
+        },
+        {
+            "field1": -56.12,
+            "field2": -2.28,
+            "field3": -57.64,
+            "field4": 1.16625,
+            "field5": -2.69,
+            "field6": -21991.716875,
+            "field7": -0.65,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 2.63,
+            "field5": 0.010961538461538519,
+            "field6": -21993.46,
+            "field7": -1.0851923076923076,
+            "field8": -2.94
+        },
+        {
+            "field1": -59.13,
+            "field2": -2.24,
+            "field3": -54.91,
+            "field4": 1.16625,
+            "field5": -2.89,
+            "field6": -21991.716875,
+            "field7": -0.86,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 2.18,
+            "field5": 0.010961538461538519,
+            "field6": -21996.15,
+            "field7": -1.0851923076923076,
+            "field8": -2.66
+        },
+        {
+            "field1": -58.29,
+            "field2": -2.18,
+            "field3": -60.25,
+            "field4": 1.16625,
+            "field5": -1.85,
+            "field6": -21991.716875,
+            "field7": -1.85,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 4.49,
+            "field5": 0.010961538461538519,
+            "field6": -21996.03,
+            "field7": -1.0851923076923076,
+            "field8": -2.25
+        },
+        {
+            "field1": -57.8,
+            "field2": -1.98,
+            "field3": -58.4,
+            "field4": 1.16625,
+            "field5": -0.44,
+            "field6": -21991.716875,
+            "field7": -0.44,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 3.75,
+            "field5": 0.010961538461538519,
+            "field6": -21998.74,
+            "field7": -1.0851923076923076,
+            "field8": -2.19
+        },
+        {
+            "field1": -57.53,
+            "field2": -1.86,
+            "field3": -56.59,
+            "field4": 1.16625,
+            "field5": 0.55,
+            "field6": -21991.716875,
+            "field7": 0.55,
+            "field8": -2.185
+        },
+        {
+            "field1": -57.7,
+            "field2": -1.44,
+            "field3": -55.58,
+            "field4": 1.16625,
+            "field5": 0.21,
+            "field6": -21991.716875,
+            "field7": 0.21,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 2.62,
+            "field5": 0.010961538461538519,
+            "field6": -22003.17,
+            "field7": -1.0851923076923076,
+            "field8": -1.53
+        },
+        {
+            "field1": -56.4,
+            "field2": -1.65,
+            "field3": -55.04,
+            "field4": 1.16625,
+            "field5": 0.42,
+            "field6": -21991.716875,
+            "field7": 0.42,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 3.06,
+            "field5": 0.010961538461538519,
+            "field6": -22004.38,
+            "field7": -1.0851923076923076,
+            "field8": -1.7
+        },
+        {
+            "field1": -55.42,
+            "field2": -1.56,
+            "field3": -54.48,
+            "field4": 1.16625,
+            "field5": 0.79,
+            "field6": -21991.716875,
+            "field7": 0.79,
+            "field8": -2.185
+        },
+        {
+            "field1": -54.92,
+            "field2": -1.44,
+            "field3": -54.58,
+            "field4": 1.16625,
+            "field5": 0.97,
+            "field6": -21991.716875,
+            "field7": 0.97,
+            "field8": -2.185
+        },
+        {
+            "field1": -55.14,
+            "field2": -2.5440540540540537,
+            "field3": -56.46,
+            "field4": 1.16625,
+            "field5": 0.45,
+            "field6": -21991.716875,
+            "field7": 0.45,
+            "field8": -2.185
+        },
+        {
+            "field1": -56.09,
+            "field2": -2.02,
+            "field3": -58.82,
+            "field4": 1.16625,
+            "field5": -0.23,
+            "field6": -21991.716875,
+            "field7": -4.3,
+            "field8": -2.185
+        },
+        {
+            "field1": -57.91,
+            "field2": -2.5440540540540537,
+            "field3": -61.78,
+            "field4": 1.16625,
+            "field5": -1.03,
+            "field6": -21991.716875,
+            "field7": -5.1,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 1.31,
+            "field5": 0.010961538461538519,
+            "field6": -22011.16,
+            "field7": -1.0851923076923076,
+            "field8": -1.79
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 1.2,
+            "field5": 0.010961538461538519,
+            "field6": -22011.27,
+            "field7": -1.0851923076923076,
+            "field8": -1.46
+        },
+        {
+            "field1": -60.64,
+            "field2": -1.51,
+            "field3": -65.52,
+            "field4": 1.16625,
+            "field5": -1.91,
+            "field6": -21991.716875,
+            "field7": -5.98,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 0.41,
+            "field5": 0.010961538461538519,
+            "field6": -22013.57,
+            "field7": -1.0851923076923076,
+            "field8": -1.51
+        },
+        {
+            "field1": -64.04,
+            "field2": -2.5440540540540537,
+            "field3": -70.05,
+            "field4": 1.16625,
+            "field5": -2.77,
+            "field6": -21991.716875,
+            "field7": -6.84,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 1.09,
+            "field5": 0.010961538461538519,
+            "field6": -22012.89,
+            "field7": -1.0851923076923076,
+            "field8": -1.4
+        },
+        {
+            "field1": -64.16,
+            "field2": -2.5440540540540537,
+            "field3": -59.28,
+            "field4": 1.16625,
+            "field5": -2.3,
+            "field6": -21991.716875,
+            "field7": -10.44,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": -0.47,
+            "field5": 0.010961538461538519,
+            "field6": -22014.45,
+            "field7": -1.0851923076923076,
+            "field8": -1.35
+        },
+        {
+            "field1": -64.78,
+            "field2": -2.5440540540540537,
+            "field3": -64.28,
+            "field4": 1.16625,
+            "field5": -1.3,
+            "field6": -21991.716875,
+            "field7": -9.44,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": -0.71,
+            "field5": 0.010961538461538519,
+            "field6": -22014.68,
+            "field7": -1.0851923076923076,
+            "field8": -1.27
+        },
+        {
+            "field1": -66.16,
+            "field2": -1.2,
+            "field3": -71.01,
+            "field4": 1.16625,
+            "field5": -0.73,
+            "field6": -21991.716875,
+            "field7": -8.86,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": -0.18,
+            "field5": 0.010961538461538519,
+            "field6": -22015.36,
+            "field7": -1.0851923076923076,
+            "field8": -0.8
+        },
+        {
+            "field1": -68.02,
+            "field2": -2.5440540540540537,
+            "field3": -77.49,
+            "field4": 1.16625,
+            "field5": -1.35,
+            "field6": -21991.716875,
+            "field7": -9.49,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 0.62,
+            "field5": 0.010961538461538519,
+            "field6": -22014.56,
+            "field7": -1.0851923076923076,
+            "field8": -0.57
+        },
+        {
+            "field1": -66.48,
+            "field2": -2.5440540540540537,
+            "field3": -53.16,
+            "field4": 1.16625,
+            "field5": -0.73,
+            "field6": -21991.716875,
+            "field7": -12.93,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 0.32,
+            "field5": 0.010961538461538519,
+            "field6": -22014.86,
+            "field7": -1.0851923076923076,
+            "field8": -0.3
+        },
+        {
+            "field1": -65.4,
+            "field2": -2.5440540540540537,
+            "field3": -59.93,
+            "field4": 1.16625,
+            "field5": 0.4,
+            "field6": -21991.716875,
+            "field7": -11.81,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": -2.11,
+            "field5": 0.010961538461538519,
+            "field6": -22017.29,
+            "field7": -1.0851923076923076,
+            "field8": -0.52
+        },
+        {
+            "field1": -64.37,
+            "field2": -2.5440540540540537,
+            "field3": -66.92,
+            "field4": 1.16625,
+            "field5": 1.25,
+            "field6": -21991.716875,
+            "field7": -10.96,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": -2.04,
+            "field5": 0.010961538461538519,
+            "field6": -22017.22,
+            "field7": -1.0851923076923076,
+            "field8": -0.48
+        },
+        {
+            "field1": -63.7,
+            "field2": -2.5440540540540537,
+            "field3": -74.8,
+            "field4": 1.16625,
+            "field5": 0.98,
+            "field6": -21991.716875,
+            "field7": -11.23,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": 3.83,
+            "field5": 0.010961538461538519,
+            "field6": -22011.35,
+            "field7": -1.0851923076923076,
+            "field8": 0.13
+        },
+        {
+            "field1": -59.45,
+            "field2": -2.5440540540540537,
+            "field3": -36.16,
+            "field4": 1.16625,
+            "field5": 1.93,
+            "field6": -21991.716875,
+            "field7": -10.28,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": -1.64,
+            "field5": 0.010961538461538519,
+            "field6": -22016.82,
+            "field7": -1.0851923076923076,
+            "field8": -0.01
+        },
+        {
+            "field1": -55.41,
+            "field2": -2.5440540540540537,
+            "field3": -43.78,
+            "field4": 1.16625,
+            "field5": 3.24,
+            "field6": -21991.716875,
+            "field7": -8.96,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": -4.43,
+            "field5": 0.010961538461538519,
+            "field6": -22019.61,
+            "field7": -1.0851923076923076,
+            "field8": -0.49
+        },
+        {
+            "field1": -51.2,
+            "field2": -2.5440540540540537,
+            "field3": -50.07,
+            "field4": 1.16625,
+            "field5": 4.33,
+            "field6": -21991.716875,
+            "field7": -3.81,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": -5.01,
+            "field5": 0.010961538461538519,
+            "field6": -22020.19,
+            "field7": -1.0851923076923076,
+            "field8": -0.75
+        },
+        {
+            "field1": -46.2,
+            "field2": -2.5440540540540537,
+            "field3": -54.79,
+            "field4": 1.16625,
+            "field5": 4.58,
+            "field6": -21991.716875,
+            "field7": -3.56,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": -5.91,
+            "field5": 0.010961538461538519,
+            "field6": -22021.09,
+            "field7": -1.0851923076923076,
+            "field8": -0.95
+        },
+        {
+            "field1": -44.12,
+            "field2": -1.38,
+            "field3": -27.83,
+            "field4": 1.16625,
+            "field5": 4.05,
+            "field6": -21991.716875,
+            "field7": -4.09,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": -2.36,
+            "field5": 0.010961538461538519,
+            "field6": -22018.93,
+            "field7": -1.0851923076923076,
+            "field8": -1.04
+        },
+        {
+            "field1": -40.59,
+            "field2": -2.5440540540540537,
+            "field3": -29.68,
+            "field4": 1.16625,
+            "field5": 3.54,
+            "field6": -21991.716875,
+            "field7": -4.6,
+            "field8": -2.185
+        },
+        {
+            "field1": -35.6,
+            "field2": -2.09,
+            "field3": -30.12,
+            "field4": 1.16625,
+            "field5": 3.68,
+            "field6": -21991.716875,
+            "field7": -4.46,
+            "field8": -2.185
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": -5.98,
+            "field5": 0.010961538461538519,
+            "field6": -22024.63,
+            "field7": -1.0851923076923076,
+            "field8": -1.2
+        },
+        {
+            "field1": -48.18826923076922,
+            "field2": -2.5440540540540537,
+            "field3": -47.751153846153855,
+            "field4": -6.64,
+            "field5": 0.010961538461538519,
+            "field6": -22026.73,
+            "field7": -1.0851923076923076,
+            "field8": -1.26
+        }
+    ]
+}
