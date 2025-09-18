@@ -1,40 +1,68 @@
+// src/services/datasetService.js
+
+class NotFoundError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'NotFoundError';
+    this.code = 'NOT_FOUND';
+  }
+}
+
+class ValidationError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'ValidationError';
+    this.code = 'BAD_REQUEST';
+  }
+}
+
 class DatasetService {
   constructor(datasetRepository) {
     this.datasetRepository = datasetRepository;
   }
 
+  /**
+   * Get list of all datasets
+   */
   async getAllDatasets() {
     try {
       const datasets = await this.datasetRepository.getAllDatasets();
+
       return {
         success: true,
-        items: datasets.map(r => ({
-          id: r.name,
-          name: r.name
+        data: datasets.map(r => ({
+          id: r.id,
+          name: r.name,
+          description: r.description ?? null,
+          createdAt: r.created_at ?? null
         }))
       };
     } catch (error) {
       console.error('DatasetService.getAllDatasets error:', error);
-      throw new Error('Failed to retrieve datasets');
+      return {
+        success: false,
+        error: 'Failed to retrieve datasets'
+      };
     }
   }
 
+  /**
+   * Get metadata for a dataset by name
+   * Includes: available fields + time bounds
+   */
   async getDatasetMetadata(datasetName) {
     try {
-      // Validate dataset name
       if (!datasetName || typeof datasetName !== 'string') {
-        throw new Error('Invalid dataset name provided');
+        throw new ValidationError('Invalid dataset name provided');
       }
 
-      // Find dataset
+      // Look up dataset by name
       const dataset = await this.datasetRepository.findDatasetByName(datasetName);
       if (!dataset) {
-        const error = new Error('Dataset not found');
-        error.code = 'NOT_FOUND';
-        throw error;
+        throw new NotFoundError(`Dataset "${datasetName}" not found`);
       }
 
-      // Get metadata
+      // Fetch metadata in parallel
       const [fields, timeBounds] = await Promise.all([
         this.datasetRepository.getDatasetFields(dataset.id),
         this.datasetRepository.getDatasetTimeBounds(dataset.id)
@@ -46,15 +74,19 @@ class DatasetService {
           datasetId: datasetName,
           fieldCount: fields.length,
           fields: fields.map(r => r.metric),
-          timeBounds: timeBounds
+          timeBounds
         }
       };
     } catch (error) {
-      if (error.code === 'NOT_FOUND') {
-        throw error;
+      if (error instanceof NotFoundError || error instanceof ValidationError) {
+        throw error; // handled in controller
       }
+
       console.error('DatasetService.getDatasetMetadata error:', error);
-      throw new Error('Failed to retrieve dataset metadata');
+      return {
+        success: false,
+        error: 'Failed to retrieve dataset metadata'
+      };
     }
   }
 }

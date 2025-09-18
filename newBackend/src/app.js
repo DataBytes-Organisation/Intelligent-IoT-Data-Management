@@ -1,57 +1,56 @@
+// src/app.js
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet');
+
 const requestLogger = require('./middleware/requestLogger');
 const errorHandler = require('./middleware/errorHandler');
+
 const datasetsRoutes = require('./routes/datasetsRoutes');
 const seriesRoutes = require('./routes/seriesRoutes');
+const db = require('./config/database'); // pg pool
 
 const app = express();
 
-// Middleware
+// Global Middleware
 app.use(cors());
+app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(requestLogger);
 
-// Health check endpoint
+// Health check
 app.get('/health', async (req, res) => {
   try {
-    const dbConfig = require('./config/database');
-    await dbConfig.query('SELECT 1');
-    
+    await db.query('SELECT 1');
     res.status(200).json({
-      status: 'healthy',
+      success: true,
       timestamp: new Date().toISOString(),
-      services: {
-        database: 'connected',
-        server: 'running'
-      }
+      services: { database: 'connected', server: 'running' }
     });
   } catch (error) {
     res.status(503).json({
-      status: 'unhealthy',
+      success: false,
       timestamp: new Date().toISOString(),
-      services: {
-        database: 'disconnected',
-        server: 'running'
-      }
+      services: { database: 'disconnected', server: 'running' }
     });
   }
 });
 
-// API Routes
-app.use('/api', datasetsRoutes);
-app.use('/api', seriesRoutes);
+// ✅ Only real API routes now
+app.use('/api/datasets', datasetsRoutes);
+app.use('/api/series', seriesRoutes);
 
-// Error handling middleware (must be last)
-app.use(errorHandler);
-
-// 404 handler
+// 404
 app.use('*', (req, res) => {
   res.status(404).json({
-    code: 'not_found',
+    success: false,
+    code: 'NOT_FOUND',
     message: 'Endpoint not found'
   });
 });
+
+// Error handler
+app.use(errorHandler);
 
 module.exports = app;

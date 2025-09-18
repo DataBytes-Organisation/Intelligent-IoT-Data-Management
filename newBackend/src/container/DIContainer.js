@@ -1,60 +1,49 @@
-const DatasetRepository = require('../repositories/DatasetRepository');
-const TimeSeriesRepository = require('../repositories/TimeSeriesRepository');
-const DatasetService = require('../services/DatasetService');
-const TimeSeriesService = require('../services/TimeSeriesService');
-const DatasetController = require('../controllers/DatasetController');
-const SeriesController = require('../controllers/SeriesController');
+// src/container/DIContainer.js
+
+const SeriesController = require('../controllers/seriesController');
+const DatasetController = require('../controllers/datasetController');
+
+const SeriesService = require('../services/seriesService');
+const SeriesRepository = require('../repositories/seriesRepository');
+
+const DatasetService = require('../services/datasetService');
+const DatasetRepository = require('../repositories/datasetRepository');
 
 class DIContainer {
-  constructor() {
-    this.dependencies = new Map();
-    this.setupDependencies();
-  }
-
-  setupDependencies() {
+  constructor(pool) {
     // Repositories
-    this.register('datasetRepository', () => new DatasetRepository());
-    this.register('timeSeriesRepository', () => new TimeSeriesRepository());
+    this.seriesRepository = new SeriesRepository(pool);
+    this.datasetRepository = new DatasetRepository(pool);
 
     // Services
-    this.register('datasetService', () => 
-      new DatasetService(this.resolve('datasetRepository'))
-    );
-
-    this.register('timeSeriesService', () =>
-      new TimeSeriesService(
-        this.resolve('timeSeriesRepository'),
-        this.resolve('datasetRepository')
-      )
-    );
+    this.seriesService = new SeriesService(this.seriesRepository);
+    this.datasetService = new DatasetService(this.datasetRepository);
 
     // Controllers
-    this.register('datasetController', () =>
-      new DatasetController(this.resolve('datasetService'))
-    );
-
-    this.register('seriesController', () =>
-      new SeriesController(this.resolve('timeSeriesService'))
-    );
+    this.seriesController = new SeriesController(this.seriesService);
+    this.datasetController = new DatasetController(this.datasetService);
   }
 
-  register(name, factory) {
-    this.dependencies.set(name, { factory, instance: null });
-  }
-
+  /**
+   * Resolve a dependency by name
+   */
   resolve(name) {
-    const dependency = this.dependencies.get(name);
-    if (!dependency) {
-      throw new Error(`Dependency '${name}' not found`);
+    switch (name) {
+      case 'seriesController':
+        return this.seriesController;
+      case 'datasetController':
+        return this.datasetController;
+      default:
+        throw new Error(`Dependency '${name}' not found in DIContainer`);
     }
+  }
 
-    if (!dependency.instance) {
-      dependency.instance = dependency.factory();
-    }
-
-    return dependency.instance;
+  getControllers() {
+    return {
+      seriesController: this.seriesController,
+      datasetController: this.datasetController
+    };
   }
 }
 
-const container = new DIContainer();
-module.exports = container;
+module.exports = DIContainer;
