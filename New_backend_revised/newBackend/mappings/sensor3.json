@@ -1,0 +1,8 @@
+{
+  "datasetName": "sensor3",
+  "ts_column": "created_at",
+  "entity_column": "entry_id",
+  "metrics": "auto",
+  "renames": { }   
+}
+
