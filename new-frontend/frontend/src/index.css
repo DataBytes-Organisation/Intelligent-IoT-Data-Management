@@ -1,118 +1,131 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+/* ===== Global Reset ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  background: #f9fafb;
+  color: #111827;
   line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+  color: inherit;
+  text-decoration: none;
 }
 a:hover {
-  color: #535bf2;
+  text-decoration: none;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
-
-/* Custom container for layout */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-/* Navigation bar */
-.navbar {
+/* ===== Navbar ===== */
+nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #333;
-  padding: 1rem;
-  color: white;
+  background: linear-gradient(90deg, #0b1f40, #0f3460);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 6px 6px 0 0;
+}
+nav h1 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 16px;
+}
+nav ul li {
+  font-size: 0.95rem;
+}
+nav ul li a {
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+nav ul li a:hover,
+nav ul li a.active {
+  background: rgba(255, 255, 255, 0.15);
 }
 
-/* 💡 Final Card Style */
+/* ===== Hero Section ===== */
+.hero {
+  padding: 32px 24px;
+  text-align: left;
+}
+.hero h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.hero p {
+  font-size: 1.05rem;
+  color: #475569;
+}
+
+/* ===== Section Title ===== */
+.section-title {
+  font-size: 1.3rem;
+  margin: 20px 24px 12px 24px;
+  font-weight: 600;
+}
+
+/* ===== Card Grid ===== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 18px;
+  padding: 0 24px 32px 24px;
+}
+
+/* ===== Individual Card ===== */
 .card {
-  background-color: #2e2e2e;  /* Dark grey card - matches dark theme */
-  padding: 1.5rem;
-  border-radius: 10px;
-  margin-bottom: 1rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  border-left: 4px solid #646cff; /* optional highlight */
-  transition: transform 0.2s ease;
-}
-.card:hover {
-  transform: translateY(-3px);
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+  border: 1px solid #e5e7eb;
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
 }
 
-/* Footer */
-.footer {
-  text-align: center;
-  padding: 1rem;
-  color: #aaa;
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(2, 6, 23, .08);
+  border-color: rgba(25, 146, 255, .35);
+}
+
+.card__icon {
+  color: #0b82ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card__body h4 {
+  margin: 0 0 4px 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.card__body p {
+  margin: 0;
+  color: #475569;
   font-size: 0.9rem;
 }
 
-/* Responsive tweaks */
-@media (max-width: 768px) {
-  .container {
-    padding: 1rem;
-  }
-  .navbar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+.card__cta {
+  color: #1992ff;
+  font-weight: 600;
+  font-size: 0.9rem;
 }

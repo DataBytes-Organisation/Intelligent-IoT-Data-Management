@@ -4,21 +4,29 @@ import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./auth/ProtectedRoute.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
-import LogoutPage from "./pages/LogoutPage.jsx";   // <- check name & casing
-import Dashboard from "./pages/DashboardPage.jsx"; // <- matches your file
+import LogoutPage from "./pages/LogoutPage.jsx";
+import Dashboard from "./pages/DashboardPage.jsx";
+
+import MainLayout from "./layouts/MainLayout.jsx";
 
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/logout" element={<LogoutPage />} />  {/* public */}
+      {/* Layout with Navbar */}
+      <Route element={<MainLayout />}>
+        {/* Public */}
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/logout" element={<LogoutPage />} />
 
-      <Route element={<ProtectedRoute />}>
-        <Route path="/dashboard" element={<Dashboard />} />
+        {/* Protected */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
+
+        {/* Fallback */}
+        <Route path="*" element={<HomePage />} />
       </Route>
-
-      <Route path="*" element={<HomePage />} />
     </Routes>
   );
 }
