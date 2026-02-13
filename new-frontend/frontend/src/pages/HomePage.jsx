@@ -1,22 +1,25 @@
-import { Link } from 'react-router-dom';
+import Header from "../components/Header";
+import Section from "../components/Section";
+import DatasetsGrid from "../components/DatasetsGrid";
+import Footer from "../components/Footer";
+import useDatasets from "../hooks/useDatasets";
 
-const datasets = [
-  { id: 'sensor1', name: 'Sensor 1' },
-  { id: 'sensor2', name: 'Sensor 2' },
-  { id: 'sensor3', name: 'Sensor 3' },
-];
+export default function HomePage() {
+  const { datasets, loading, error } = useDatasets();
 
-const HomePage = () => (
-  <div>
-    <h2>Available Sensor Datasets</h2>
-    <ul>
-      {datasets.map(ds => (
-        <li key={ds.id}>
-          <Link to={`/dashboard/${ds.id}`}>{ds.name}</Link>
-        </li>
-      ))}
-    </ul>
-  </div>
-);
-
-export default HomePage;
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+      <Header brand="Intelligent IoT" nav={[{href:"#datasets",label:"Datasets"}]} />
+      <Section id="hero" className="pt-10 pb-6 text-center">
+        <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
+          IoT Sensors Dashboard
+        </h1>
+        <p className="mx-auto mt-3 max-w-2xl text-slate-600">
+          Time-series data, anomaly awareness, and correlation insights — all in one place.
+        </p>
+      </Section>
+      <DatasetsGrid datasets={datasets} loading={loading} error={error} />
+      <Footer />
+    </div>
+  );
+}
