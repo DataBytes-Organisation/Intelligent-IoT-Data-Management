@@ -80,4 +80,4 @@ We welcome data scientists, developers, and IoT engineers to build upon and exte
 Questions, suggestions, or want to join the project?  
 Reach out by opening a GitHub issue or pull request. Training material and onboarding docs are available for new contributors.
 
-Good luck, and enjoy the journey! 🌟
+Good luck, and enjoy the journey! 
