@@ -12,9 +12,8 @@
 
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
 }
 
 h3 {
@@ -57,10 +56,16 @@ border-radius: 2rem;
 } */
 
 .panel {
-  background-color: #f9f9f9;
-  padding: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  background-color: #2d2d2d; /* dark card background */
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 170, 255, 0.3); /* soft blue glow */
+  color: #ffffff;
+  transition: transform 0.2s ease;
+}
+
+.panel:hover {
+  transform: translateY(-4px);
 }
 
 

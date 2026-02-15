@@ -66,3 +66,48 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+/* Custom container for layout */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Navigation bar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  padding: 1rem;
+  color: white;
+}
+
+/* Card UI component */
+.card {
+  background-color: #1e1e1e;
+  padding: 1.5rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 1rem;
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
