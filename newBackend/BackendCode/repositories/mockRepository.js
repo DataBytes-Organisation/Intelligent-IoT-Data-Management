@@ -1,9 +1,9 @@
 //handles data access for mock data, reading from local JSON file without a database yet
 
-require('dotenv').config({ path: '../.env' });
+require("dotenv").config({ path: "../.env" });
 
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 class MockRepository {
   constructor() {
@@ -12,11 +12,11 @@ class MockRepository {
 
   getMockData() {
     try {
-      const rawData = fs.readFileSync(this.filePath, 'utf8');
+      const rawData = fs.readFileSync(this.filePath, "utf8");
       return JSON.parse(rawData);
     } catch (err) {
-      console.error('Error reading mock data:', err);
-      throw new Error('Failed to read mock data');
+      console.error("Error reading mock data:", err);
+      throw new Error("Failed to read mock data");
     }
   }
 }

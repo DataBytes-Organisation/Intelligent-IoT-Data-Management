@@ -3,8 +3,8 @@
 const {
   readProcessedData,
   getAvailableStreamNames,
-  filterEntriesByStreamNames
-} = require('../services/mockService');
+  filterEntriesByStreamNames,
+} = require("../services/mockService");
 
 //GET /streams — Returns JSON file containing the stream data
 const getStreams = (req, res) => {
@@ -12,8 +12,8 @@ const getStreams = (req, res) => {
     const data = readProcessedData();
     res.json(data);
   } catch (err) {
-    console.error('Error reading stream data:', err);
-    res.status(500).json({ error: 'Failed to load stream data' });
+    console.error("Error reading stream data:", err);
+    res.status(500).json({ error: "Failed to load stream data" });
   }
 };
 
@@ -26,8 +26,8 @@ const getStreamNames = (req, res) => {
     }
     res.json(streamNames);
   } catch (err) {
-    console.error('Error getting stream names:', err);
-    res.status(500).json({ error: 'Failed to get stream names' });
+    console.error("Error getting stream names:", err);
+    res.status(500).json({ error: "Failed to get stream names" });
   }
 };
 
@@ -36,20 +36,22 @@ const postFilterStreams = (req, res) => {
   const { streamNames } = req.body;
 
   if (!Array.isArray(streamNames) || streamNames.length === 0) {
-    return res.status(400).json({ error: 'streamNames must be a non-empty array' });
+    return res
+      .status(400)
+      .json({ error: "streamNames must be a non-empty array" });
   }
 
   try {
     const filtered = filterEntriesByStreamNames(streamNames);
     res.json(filtered);
   } catch (err) {
-    console.error('Error filtering stream data:', err);
-    res.status(500).json({ error: 'Failed to filter stream data' });
+    console.error("Error filtering stream data:", err);
+    res.status(500).json({ error: "Failed to filter stream data" });
   }
 };
 
 module.exports = {
   getStreams,
   getStreamNames,
-  postFilterStreams
+  postFilterStreams,
 };
