@@ -1,0 +1,30 @@
+.homepage {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #f8fafc, #eef4ff);
+  padding: 2rem;
+  color: #0f172a;
+}
+
+.homepage__hero {
+  max-width: 1100px;
+  margin: 0 auto 2rem;
+  background: linear-gradient(135deg, #dbeafe, #eff6ff);
+  border-radius: 20px;
+  padding: 2rem;
+}
+
+.homepage__hero h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.homepage__datasets {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.homepage__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
