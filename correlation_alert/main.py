@@ -128,7 +128,7 @@ def compute_window_correlations(windows, method="pearson"):
     # 2. Compute correlation matrix for that window
     # 3. Store metadata such as window index, start time, end time
     # 4. Return list of correlation results
-    
+
     if not isinstance(windows, list):
         raise ValueError("windows must be a list of pandas DataFrames.")
 
@@ -181,7 +181,46 @@ def compare_correlation_changes(correlation_results):
     # 3. Compute delta = abs(current_corr - previous_corr)
     # 4. Return structured list of changes
 
-    pass
+    
+    if not isinstance(correlation_results, list):
+        raise ValueError("correlation_results must be a list.")
+
+    change_results = []
+
+    for i in range(1, len(correlation_results)):
+        previous_result = correlation_results[i - 1]
+        current_result = correlation_results[i]
+
+        previous_corr = previous_result["correlation_matrix"]
+        current_corr = current_result["correlation_matrix"]
+
+        # Get all unique sensor pairs from the correlation matrix columns
+        stream_pairs = combinations(previous_corr.columns, 2)
+
+        for stream_1, stream_2 in stream_pairs:
+            prev_value = previous_corr.loc[stream_1, stream_2]
+            curr_value = current_corr.loc[stream_1, stream_2]
+
+            # Skip if either value is missing
+            if pd.isna(prev_value) or pd.isna(curr_value):
+                continue
+
+            delta_r = abs(curr_value - prev_value)
+
+            change_results.append({
+                "previous_window_index": previous_result["window_index"],
+                "current_window_index": current_result["window_index"],
+                "stream_pair": (stream_1, stream_2),
+                "previous_correlation": prev_value,
+                "current_correlation": curr_value,
+                "delta_r": delta_r,
+                "previous_window_start": previous_result["start_time"],
+                "previous_window_end": previous_result["end_time"],
+                "current_window_start": current_result["start_time"],
+                "current_window_end": current_result["end_time"]
+            })
+
+    return change_results
 
 
 def generate_alerts(changes, strong_corr_threshold=0.7, weak_corr_threshold=0.4, delta_threshold=0.3):
