@@ -16,15 +16,6 @@ def preprocess_timeseries(df, timestamp_col, selected_streams):
         pd.DataFrame:
             Cleaned dataframe indexed by timestamp and containing only selected streams.
     """
-    # TODO:
-    # 1. Select required columns
-    # 2. Convert timestamp column to datetime
-    # 3. Sort by timestamp
-    # 4. Set timestamp as index
-    # 5. Handle missing values
-    # 6. Return cleaned dataframe
-
-
     # Validate inputs
     if timestamp_col not in df.columns:
         raise ValueError(f"Timestamp column '{timestamp_col}' not found in dataframe.")
@@ -75,12 +66,6 @@ def create_rolling_windows(df, window_size, step_size):
             List of windowed dataframes.
     """
 
-    # TODO:
-    # 1. Loop through dataframe using window_size and step_size
-    # 2. Create overlapping windows
-    # 3. Store each window in a list
-    # 4. Return list of windows
-    # Validate inputs
     if not isinstance(df, pd.DataFrame):
         raise ValueError("Input must be a pandas DataFrame.")
 
@@ -122,12 +107,6 @@ def compute_window_correlations(windows, method="pearson"):
                 "correlation_matrix": pd.DataFrame
             }
     """
-
-    # TODO:
-    # 1. Iterate through each window
-    # 2. Compute correlation matrix for that window
-    # 3. Store metadata such as window index, start time, end time
-    # 4. Return list of correlation results
 
     if not isinstance(windows, list):
         raise ValueError("windows must be a list of pandas DataFrames.")
@@ -174,13 +153,6 @@ def compare_correlation_changes(correlation_results):
                 "delta": float
             }
     """
-
-    # TODO:
-    # 1. Compare each window with the previous one
-    # 2. Extract pairwise correlation values
-    # 3. Compute delta = abs(current_corr - previous_corr)
-    # 4. Return structured list of changes
-
     
     if not isinstance(correlation_results, list):
         raise ValueError("correlation_results must be a list.")
@@ -223,7 +195,7 @@ def compare_correlation_changes(correlation_results):
     return change_results
 
 
-def generate_alerts(changes, strong_corr_threshold=0.7, weak_corr_threshold=0.4, delta_threshold=0.3):
+def generate_alerts(change_results, delta_threshold=0.3):
     """
     Generate alerts based on correlation changes.
 
@@ -249,15 +221,39 @@ def generate_alerts(changes, strong_corr_threshold=0.7, weak_corr_threshold=0.4,
                 "reason": str
             }
     """
+    if not isinstance(change_results, list):
+        raise ValueError("change_results must be a list.")
 
-    # TODO:
-    # 1. Check whether correlation change exceeds threshold
-    # 2. Check whether strong-to-weak drop occurred
-    # 3. Optionally check sign changes
-    # 4. Assign alert level and reason
-    # 5. Return alert list
+    alerts = []
 
-    pass
+    for change in change_results:
+        delta_r = change["delta_r"]
+
+        if delta_r >= delta_threshold:
+            # Optional severity levels
+            if delta_r >= 0.7:
+                severity = "HIGH"
+            elif delta_r >= 0.5:
+                severity = "MEDIUM"
+            else:
+                severity = "LOW"
+
+            alerts.append({
+                "alert": True,
+                "severity": severity,
+                "stream_pair": change["stream_pair"],
+                "delta_r": delta_r,
+                "previous_correlation": change["previous_correlation"],
+                "current_correlation": change["current_correlation"],
+                "previous_window_index": change["previous_window_index"],
+                "current_window_index": change["current_window_index"],
+                "previous_window_start": change["previous_window_start"],
+                "previous_window_end": change["previous_window_end"],
+                "current_window_start": change["current_window_start"],
+                "current_window_end": change["current_window_end"]
+            })
+
+    return alerts
 
 
 def detect_correlation_change_alert(
