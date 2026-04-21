@@ -128,8 +128,29 @@ def compute_window_correlations(windows, method="pearson"):
     # 2. Compute correlation matrix for that window
     # 3. Store metadata such as window index, start time, end time
     # 4. Return list of correlation results
+    
+    if not isinstance(windows, list):
+        raise ValueError("windows must be a list of pandas DataFrames.")
 
-    pass
+    correlation_results = []
+
+    for i, window_df in enumerate(windows):
+        if not isinstance(window_df, pd.DataFrame):
+            raise ValueError(f"Window at index {i} is not a pandas DataFrame.")
+
+        if window_df.empty:
+            continue
+
+        corr_matrix = window_df.corr(method="pearson")
+
+        correlation_results.append({
+            "window_index": i,
+            "start_time": window_df.index.min(),
+            "end_time": window_df.index.max(),
+            "correlation_matrix": corr_matrix
+        })
+
+    return correlation_results
 
 
 def compare_correlation_changes(correlation_results):
