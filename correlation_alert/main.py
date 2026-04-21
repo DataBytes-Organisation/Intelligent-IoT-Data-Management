@@ -2,9 +2,6 @@ import pandas as pd
 import numpy as np
 from itertools import combinations
 
-import pandas as pd
-import numpy as np
-
 
 def preprocess_timeseries(df, timestamp_col, selected_streams):
     """
@@ -19,7 +16,6 @@ def preprocess_timeseries(df, timestamp_col, selected_streams):
         pd.DataFrame:
             Cleaned dataframe indexed by timestamp and containing only selected streams.
     """
-
     # TODO:
     # 1. Select required columns
     # 2. Convert timestamp column to datetime
@@ -28,7 +24,41 @@ def preprocess_timeseries(df, timestamp_col, selected_streams):
     # 5. Handle missing values
     # 6. Return cleaned dataframe
 
-    pass
+
+    # Validate inputs
+    if timestamp_col not in df.columns:
+        raise ValueError(f"Timestamp column '{timestamp_col}' not found in dataframe.")
+
+    missing_streams = [col for col in selected_streams if col not in df.columns]
+    if missing_streams:
+        raise ValueError(f"Selected stream columns not found in dataframe: {missing_streams}")
+
+    # Select only required columns
+    required_columns = [timestamp_col] + selected_streams
+    cleaned_df = df[required_columns].copy()
+
+    # Convert timestamp column to datetime
+    cleaned_df[timestamp_col] = pd.to_datetime(cleaned_df[timestamp_col], errors="coerce")
+
+    # Drop rows with invalid timestamps
+    cleaned_df = cleaned_df.dropna(subset=[timestamp_col])
+
+    # Sort by timestamp
+    cleaned_df = cleaned_df.sort_values(by=timestamp_col)
+
+    # Set timestamp as index
+    cleaned_df = cleaned_df.set_index(timestamp_col)
+
+    # Convert selected streams to numeric if needed
+    for col in selected_streams:
+        cleaned_df[col] = pd.to_numeric(cleaned_df[col], errors="coerce")
+
+    # Handle missing values
+    cleaned_df = cleaned_df.interpolate(method="time")
+    cleaned_df = cleaned_df.ffill().bfill()
+
+    return cleaned_df
+
 
 
 def create_rolling_windows(df, window_size, step_size):
@@ -50,8 +80,28 @@ def create_rolling_windows(df, window_size, step_size):
     # 2. Create overlapping windows
     # 3. Store each window in a list
     # 4. Return list of windows
+    # Validate inputs
+    if not isinstance(df, pd.DataFrame):
+        raise ValueError("Input must be a pandas DataFrame.")
 
-    pass
+    if window_size <= 0:
+        raise ValueError("window_size must be greater than 0.")
+
+    if step_size <= 0:
+        raise ValueError("step_size must be greater than 0.")
+
+    if len(df) < window_size:
+        return []
+
+    windows = []
+
+    # Create rolling windows
+    for start_idx in range(0, len(df) - window_size + 1, step_size):
+        end_idx = start_idx + window_size
+        window_df = df.iloc[start_idx:end_idx].copy()
+        windows.append(window_df)
+
+    return windows
 
 
 def compute_window_correlations(windows, method="pearson"):
