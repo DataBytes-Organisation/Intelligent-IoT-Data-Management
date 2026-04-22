@@ -260,26 +260,20 @@ def detect_correlation_change_alert(
     df,
     timestamp_col,
     selected_streams,
-    window_size=30,
-    step_size=5,
-    method="pearson",
-    strong_corr_threshold=0.7,
-    weak_corr_threshold=0.4,
+    window_size,
+    step_size,
     delta_threshold=0.3
 ):
     """
-    Main wrapper function for the correlation change alert pipeline.
+    Run the full correlation change alert pipeline.
 
     Parameters:
-        df (pd.DataFrame): Original dataset.
+        df (pd.DataFrame): Raw input dataframe.
         timestamp_col (str): Name of the timestamp column.
-        selected_streams (list[str]): Streams selected for analysis.
+        selected_streams (list[str]): List of sensor columns to analyse.
         window_size (int): Number of rows per rolling window.
-        step_size (int): Step size between windows.
-        method (str): Correlation method.
-        strong_corr_threshold (float): Strong correlation threshold.
-        weak_corr_threshold (float): Weak correlation threshold.
-        delta_threshold (float): Significant change threshold.
+        step_size (int): Number of rows to move for each new window.
+        delta_threshold (float): Threshold for triggering correlation change alerts.
 
     Returns:
         dict:
@@ -287,23 +281,34 @@ def detect_correlation_change_alert(
                 "processed_data": pd.DataFrame,
                 "windows": list[pd.DataFrame],
                 "correlation_results": list[dict],
-                "changes": list[dict],
+                "change_results": list[dict],
                 "alerts": list[dict]
             }
     """
 
-    processed_data = preprocess_timeseries(df, timestamp_col, selected_streams)
+    # Step 1: preprocess raw time-series data
+    processed_data = preprocess_timeseries(
+        df=df,
+        timestamp_col=timestamp_col,
+        selected_streams=selected_streams
+    )
 
-    windows = create_rolling_windows(processed_data, window_size, step_size)
+    # Step 2: create rolling windows
+    windows = create_rolling_windows(
+        df=processed_data,
+        window_size=window_size,
+        step_size=step_size
+    )
 
-    correlation_results = compute_window_correlations(windows, method=method)
+    # Step 3: compute Pearson correlations for each window
+    correlation_results = compute_window_correlations(windows)
 
-    changes = compare_correlation_changes(correlation_results)
+    # Step 4: compare correlation changes between consecutive windows
+    change_results = compare_correlation_changes(correlation_results)
 
+    # Step 5: generate alerts based on threshold
     alerts = generate_alerts(
-        changes,
-        strong_corr_threshold=strong_corr_threshold,
-        weak_corr_threshold=weak_corr_threshold,
+        change_results=change_results,
         delta_threshold=delta_threshold
     )
 
@@ -311,6 +316,6 @@ def detect_correlation_change_alert(
         "processed_data": processed_data,
         "windows": windows,
         "correlation_results": correlation_results,
-        "changes": changes,
+        "change_results": change_results,
         "alerts": alerts
     }
