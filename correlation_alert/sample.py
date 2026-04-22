@@ -1,38 +1,52 @@
-from threshold import classify_delta_r
-from alerts import generate_alert
-
-mock_data = [
-    ("sensor_A", 0.25),
-    ("sensor_B", 0.45),
-    ("sensor_C", 0.65),
-    ("sensor_D", 0.85),
-]
+from alerts import generate_alerts
 
 
-def run_pipeline(data):
-    results = []
+def load_mock_data():
+    return [
+        {"sensor": "Temp-Humidity", "delta_r": 0.12},
+        {"sensor": "Pressure-Temp", "delta_r": 0.35},
+        {"sensor": "CO2-Temperature", "delta_r": 0.55},
+        {"sensor": "Vibration-Motor", "delta_r": 0.82},
+        {"sensor": "Humidity-Airflow", "delta_r": 0.15},
+    ]
 
-    for sensor, delta_r in data:
 
-        # Step 1: classification
-        level = classify_delta_r(delta_r)
+def run_alert_pipeline():
+    data = load_mock_data()
+    alerts = generate_alerts(data)
 
-        # Step 2: alert generation
-        alert = generate_alert(sensor, delta_r, level)
+    print("=" * 52)
+    print("      CORRELATION CHANGE ALERT SYSTEM")
+    print("=" * 52)
+    print("\nAnalysis Window: Last 30 Minutes")
+    print("Sensors Analysed:", len(alerts))
+    print("Threshold Δr: 0.30\n")
 
-        results.append(alert)
+    print("-" * 52)
+    print(f"{'Sensor Pair':25} {'Δr Change':12} {'Alert'}")
+    print("-" * 52)
 
-    return results
+    for item in alerts:
+        level = item["level"] if item["level"] else "NORMAL"
+        print(f"{item['sensor']:25} {item['delta_r']:<12.2f} {level}")
+
+    low = sum(1 for a in alerts if a["level"] == "LOW")
+    med = sum(1 for a in alerts if a["level"] == "MEDIUM")
+    high = sum(1 for a in alerts if a["level"] == "HIGH")
+
+    print("\n" + "-" * 52)
+    print("SUMMARY")
+    print("-" * 52)
+    print("Total Pairs Checked :", len(alerts))
+    print("Alerts Triggered    :", low + med + high)
+    print("LOW Alerts          :", low)
+    print("MEDIUM Alerts       :", med)
+    print("HIGH Alerts         :", high)
+    print("\nStatus: Monitoring Active")
+    print("=" * 52)
+
+    return alerts
 
 
 if __name__ == "__main__":
-    alerts = run_pipeline(mock_data)
-
-    print("\n--- Correlation Change Alerts ---\n")
-
-    for a in alerts:
-        print(f"Sensor: {a['sensor']}")
-        print(f"Δr: {a['delta_r']}")
-        print(f"Alert Level: {a['alert_level']}")
-        print(f"Status: {a['status']}")
-        print("-------------------------------")
+    run_alert_pipeline()
