@@ -1,0 +1,325 @@
+[
+    {
+        "alert": true,
+        "severity": "HIGH",
+        "stream_pair": [
+            "s1",
+            "s2"
+        ],
+        "delta_r": 1.6318,
+        "previous_correlation": -0.9466,
+        "current_correlation": 0.6852,
+        "previous_window_index": 14,
+        "current_window_index": 15,
+        "previous_window_start": "1970-01-01 00:00:00.000000140",
+        "previous_window_end": "1970-01-01 00:00:00.000000159",
+        "current_window_start": "1970-01-01 00:00:00.000000150",
+        "current_window_end": "1970-01-01 00:00:00.000000169"
+    },
+    {
+        "alert": true,
+        "severity": "HIGH",
+        "stream_pair": [
+            "s2",
+            "s3"
+        ],
+        "delta_r": 1.6318,
+        "previous_correlation": -0.9466,
+        "current_correlation": 0.6852,
+        "previous_window_index": 14,
+        "current_window_index": 15,
+        "previous_window_start": "1970-01-01 00:00:00.000000140",
+        "previous_window_end": "1970-01-01 00:00:00.000000159",
+        "current_window_start": "1970-01-01 00:00:00.000000150",
+        "current_window_end": "1970-01-01 00:00:00.000000169"
+    },
+    {
+        "alert": true,
+        "severity": "HIGH",
+        "stream_pair": [
+            "s1",
+            "s3"
+        ],
+        "delta_r": 1.7759,
+        "previous_correlation": 0.8752,
+        "current_correlation": -0.9007,
+        "previous_window_index": 30,
+        "current_window_index": 31,
+        "previous_window_start": "1970-01-01 00:00:00.000000300",
+        "previous_window_end": "1970-01-01 00:00:00.000000319",
+        "current_window_start": "1970-01-01 00:00:00.000000310",
+        "current_window_end": "1970-01-01 00:00:00.000000329"
+    },
+    {
+        "alert": true,
+        "severity": "HIGH",
+        "stream_pair": [
+            "s2",
+            "s3"
+        ],
+        "delta_r": 1.7759,
+        "previous_correlation": 0.8752,
+        "current_correlation": -0.9007,
+        "previous_window_index": 30,
+        "current_window_index": 31,
+        "previous_window_start": "1970-01-01 00:00:00.000000300",
+        "previous_window_end": "1970-01-01 00:00:00.000000319",
+        "current_window_start": "1970-01-01 00:00:00.000000310",
+        "current_window_end": "1970-01-01 00:00:00.000000329"
+    },
+    {
+        "alert": true,
+        "severity": "LOW",
+        "stream_pair": [
+            "s1",
+            "s2"
+        ],
+        "delta_r": 0.3323,
+        "previous_correlation": 1.0,
+        "current_correlation": 0.6677,
+        "previous_window_index": 37,
+        "current_window_index": 38,
+        "previous_window_start": "1970-01-01 00:00:00.000000370",
+        "previous_window_end": "1970-01-01 00:00:00.000000389",
+        "current_window_start": "1970-01-01 00:00:00.000000380",
+        "current_window_end": "1970-01-01 00:00:00.000000399"
+    },
+    {
+        "alert": true,
+        "severity": "HIGH",
+        "stream_pair": [
+            "s1",
+            "s2"
+        ],
+        "delta_r": 1.648,
+        "previous_correlation": 0.6677,
+        "current_correlation": -0.9803,
+        "previous_window_index": 38,
+        "current_window_index": 39,
+        "previous_window_start": "1970-01-01 00:00:00.000000380",
+        "previous_window_end": "1970-01-01 00:00:00.000000399",
+        "current_window_start": "1970-01-01 00:00:00.000000390",
+        "current_window_end": "1970-01-01 00:00:00.000000409"
+    },
+    {
+        "alert": true,
+        "severity": "HIGH",
+        "stream_pair": [
+            "s1",
+            "s3"
+        ],
+        "delta_r": 1.6763,
+        "previous_correlation": -0.6999,
+        "current_correlation": 0.9764,
+        "previous_window_index": 38,
+        "current_window_index": 39,
+        "previous_window_start": "1970-01-01 00:00:00.000000380",
+        "previous_window_end": "1970-01-01 00:00:00.000000399",
+        "current_window_start": "1970-01-01 00:00:00.000000390",
+        "current_window_end": "1970-01-01 00:00:00.000000409"
+    },
+    {
+        "alert": true,
+        "severity": "LOW",
+        "stream_pair": [
+            "s1",
+            "s2"
+        ],
+        "delta_r": 0.4163,
+        "previous_correlation": -0.9764,
+        "current_correlation": -0.5601,
+        "previous_window_index": 45,
+        "current_window_index": 46,
+        "previous_window_start": "1970-01-01 00:00:00.000000450",
+        "previous_window_end": "1970-01-01 00:00:00.000000469",
+        "current_window_start": "1970-01-01 00:00:00.000000460",
+        "current_window_end": "1970-01-01 00:00:00.000000479"
+    },
+    {
+        "alert": true,
+        "severity": "LOW",
+        "stream_pair": [
+            "s2",
+            "s3"
+        ],
+        "delta_r": 0.4163,
+        "previous_correlation": -0.9764,
+        "current_correlation": -0.5601,
+        "previous_window_index": 45,
+        "current_window_index": 46,
+        "previous_window_start": "1970-01-01 00:00:00.000000450",
+        "previous_window_end": "1970-01-01 00:00:00.000000469",
+        "current_window_start": "1970-01-01 00:00:00.000000460",
+        "current_window_end": "1970-01-01 00:00:00.000000479"
+    },
+    {
+        "alert": true,
+        "severity": "HIGH",
+        "stream_pair": [
+            "s1",
+            "s2"
+        ],
+        "delta_r": 1.5145,
+        "previous_correlation": -0.5601,
+        "current_correlation": 0.9544,
+        "previous_window_index": 46,
+        "current_window_index": 47,
+        "previous_window_start": "1970-01-01 00:00:00.000000460",
+        "previous_window_end": "1970-01-01 00:00:00.000000479",
+        "current_window_start": "1970-01-01 00:00:00.000000470",
+        "current_window_end": "1970-01-01 00:00:00.000000489"
+    },
+    {
+        "alert": true,
+        "severity": "HIGH",
+        "stream_pair": [
+            "s2",
+            "s3"
+        ],
+        "delta_r": 1.5145,
+        "previous_correlation": -0.5601,
+        "current_correlation": 0.9544,
+        "previous_window_index": 46,
+        "current_window_index": 47,
+        "previous_window_start": "1970-01-01 00:00:00.000000460",
+        "previous_window_end": "1970-01-01 00:00:00.000000479",
+        "current_window_start": "1970-01-01 00:00:00.000000470",
+        "current_window_end": "1970-01-01 00:00:00.000000489"
+    },
+    {
+        "alert": true,
+        "severity": "HIGH",
+        "stream_pair": [
+            "s1",
+            "s2"
+        ],
+        "delta_r": 1.3771,
+        "previous_correlation": 0.9596,
+        "current_correlation": -0.4175,
+        "previous_window_index": 61,
+        "current_window_index": 62,
+        "previous_window_start": "1970-01-01 00:00:00.000000610",
+        "previous_window_end": "1970-01-01 00:00:00.000000629",
+        "current_window_start": "1970-01-01 00:00:00.000000620",
+        "current_window_end": "1970-01-01 00:00:00.000000639"
+    },
+    {
+        "alert": true,
+        "severity": "HIGH",
+        "stream_pair": [
+            "s2",
+            "s3"
+        ],
+        "delta_r": 1.3771,
+        "previous_correlation": 0.9596,
+        "current_correlation": -0.4175,
+        "previous_window_index": 61,
+        "current_window_index": 62,
+        "previous_window_start": "1970-01-01 00:00:00.000000610",
+        "previous_window_end": "1970-01-01 00:00:00.000000629",
+        "current_window_start": "1970-01-01 00:00:00.000000620",
+        "current_window_end": "1970-01-01 00:00:00.000000639"
+    },
+    {
+        "alert": true,
+        "severity": "MEDIUM",
+        "stream_pair": [
+            "s1",
+            "s2"
+        ],
+        "delta_r": 0.5566,
+        "previous_correlation": -0.4175,
+        "current_correlation": -0.9741,
+        "previous_window_index": 62,
+        "current_window_index": 63,
+        "previous_window_start": "1970-01-01 00:00:00.000000620",
+        "previous_window_end": "1970-01-01 00:00:00.000000639",
+        "current_window_start": "1970-01-01 00:00:00.000000630",
+        "current_window_end": "1970-01-01 00:00:00.000000649"
+    },
+    {
+        "alert": true,
+        "severity": "MEDIUM",
+        "stream_pair": [
+            "s2",
+            "s3"
+        ],
+        "delta_r": 0.5566,
+        "previous_correlation": -0.4175,
+        "current_correlation": -0.9741,
+        "previous_window_index": 62,
+        "current_window_index": 63,
+        "previous_window_start": "1970-01-01 00:00:00.000000620",
+        "previous_window_end": "1970-01-01 00:00:00.000000639",
+        "current_window_start": "1970-01-01 00:00:00.000000630",
+        "current_window_end": "1970-01-01 00:00:00.000000649"
+    },
+    {
+        "alert": true,
+        "severity": "HIGH",
+        "stream_pair": [
+            "s1",
+            "s2"
+        ],
+        "delta_r": 1.7633,
+        "previous_correlation": -0.9163,
+        "current_correlation": 0.847,
+        "previous_window_index": 77,
+        "current_window_index": 78,
+        "previous_window_start": "1970-01-01 00:00:00.000000770",
+        "previous_window_end": "1970-01-01 00:00:00.000000789",
+        "current_window_start": "1970-01-01 00:00:00.000000780",
+        "current_window_end": "1970-01-01 00:00:00.000000799"
+    },
+    {
+        "alert": true,
+        "severity": "HIGH",
+        "stream_pair": [
+            "s2",
+            "s3"
+        ],
+        "delta_r": 1.7633,
+        "previous_correlation": -0.9163,
+        "current_correlation": 0.847,
+        "previous_window_index": 77,
+        "current_window_index": 78,
+        "previous_window_start": "1970-01-01 00:00:00.000000770",
+        "previous_window_end": "1970-01-01 00:00:00.000000789",
+        "current_window_start": "1970-01-01 00:00:00.000000780",
+        "current_window_end": "1970-01-01 00:00:00.000000799"
+    },
+    {
+        "alert": true,
+        "severity": "HIGH",
+        "stream_pair": [
+            "s1",
+            "s2"
+        ],
+        "delta_r": 1.6954,
+        "previous_correlation": 0.7567,
+        "current_correlation": -0.9387,
+        "previous_window_index": 93,
+        "current_window_index": 94,
+        "previous_window_start": "1970-01-01 00:00:00.000000930",
+        "previous_window_end": "1970-01-01 00:00:00.000000949",
+        "current_window_start": "1970-01-01 00:00:00.000000940",
+        "current_window_end": "1970-01-01 00:00:00.000000959"
+    },
+    {
+        "alert": true,
+        "severity": "HIGH",
+        "stream_pair": [
+            "s2",
+            "s3"
+        ],
+        "delta_r": 1.6954,
+        "previous_correlation": 0.7567,
+        "current_correlation": -0.9387,
+        "previous_window_index": 93,
+        "current_window_index": 94,
+        "previous_window_start": "1970-01-01 00:00:00.000000930",
+        "previous_window_end": "1970-01-01 00:00:00.000000949",
+        "current_window_start": "1970-01-01 00:00:00.000000940",
+        "current_window_end": "1970-01-01 00:00:00.000000959"
+    }
+]

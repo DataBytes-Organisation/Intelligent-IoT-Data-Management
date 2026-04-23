@@ -117,10 +117,10 @@ def compute_window_correlations(windows, method="pearson"):
         if not isinstance(window_df, pd.DataFrame):
             raise ValueError(f"Window at index {i} is not a pandas DataFrame.")
 
-        if window_df.empty:
+        if window_df.shape[1] < 2:
             continue
 
-        corr_matrix = window_df.corr(method="pearson")
+        corr_matrix = window_df.corr(method="pearson").round(4)
 
         correlation_results.append({
             "window_index": i,
@@ -177,7 +177,9 @@ def compare_correlation_changes(correlation_results):
             if pd.isna(prev_value) or pd.isna(curr_value):
                 continue
 
-            delta_r = abs(curr_value - prev_value)
+            delta_r = round(abs(curr_value - prev_value), 4)
+            prev_value = round(prev_value, 4)
+            curr_value = round(curr_value, 4)
 
             change_results.append({
                 "previous_window_index": previous_result["window_index"],
@@ -223,6 +225,9 @@ def generate_alerts(change_results, delta_threshold=0.3):
     """
     if not isinstance(change_results, list):
         raise ValueError("change_results must be a list.")
+    
+    if not change_results:
+        return []
 
     alerts = []
 
@@ -230,7 +235,6 @@ def generate_alerts(change_results, delta_threshold=0.3):
         delta_r = change["delta_r"]
 
         if delta_r >= delta_threshold:
-            # Optional severity levels
             if delta_r >= 0.7:
                 severity = "HIGH"
             elif delta_r >= 0.5:
@@ -241,16 +245,16 @@ def generate_alerts(change_results, delta_threshold=0.3):
             alerts.append({
                 "alert": True,
                 "severity": severity,
-                "stream_pair": change["stream_pair"],
-                "delta_r": delta_r,
+                "stream_pair": list(change["stream_pair"]),
+                "delta_r": change["delta_r"],
                 "previous_correlation": change["previous_correlation"],
                 "current_correlation": change["current_correlation"],
                 "previous_window_index": change["previous_window_index"],
                 "current_window_index": change["current_window_index"],
-                "previous_window_start": change["previous_window_start"],
-                "previous_window_end": change["previous_window_end"],
-                "current_window_start": change["current_window_start"],
-                "current_window_end": change["current_window_end"]
+                "previous_window_start": str(change["previous_window_start"]),
+                "previous_window_end": str(change["previous_window_end"]),
+                "current_window_start": str(change["current_window_start"]),
+                "current_window_end": str(change["current_window_end"])
             })
 
     return alerts

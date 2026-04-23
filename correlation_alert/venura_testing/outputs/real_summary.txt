@@ -1,0 +1,7 @@
+Correlation Change Alert Pipeline - Real Dataset
+==================================================
+Processed rows: 775
+Number of windows: 154
+Number of correlation results: 154
+Number of change results: 4242
+Number of alerts: 1703
