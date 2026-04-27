@@ -138,8 +138,8 @@ def detect_correlation_change_alert(
     }
 
 
-# ========================= DEMO / TEST ONLY =========================
-# Reviewer asked to keep dataset usage only for testing, not core logic
+# DEMO / TEST ONLY 
+#  Keep dataset usage only for testing, not core logic
 if __name__ == "__main__":
 
     # Use preprocessing pipeline 
