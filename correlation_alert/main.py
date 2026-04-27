@@ -1,158 +1,77 @@
 import pandas as pd
-from itertools import combinations
 
-# Import preprocessing function (THIS is what reviewer asked)
-from preprocessing import run_pipeline
+from preprocessing import (
+    fix_timestamps,
+    convert_sensor_columns_to_numeric,
+    handle_missing_values,
+    remove_outliers,
+    validate_output
+)
 
 
-def create_rolling_windows(df, window_size, step_size):
+def preprocess_timeseries(df, timestamp_col, selected_streams):
     """
-    Split the cleaned dataframe into rolling windows.
-    """
-    windows = []
-    for start in range(0, len(df) - window_size + 1, step_size):
-        window = df.iloc[start:start + window_size].copy()
-        windows.append(window)
-    return windows
+    Preprocess selected time-series sensor streams before correlation analysis.
 
+    This function is designed to plug into the main wrapper pipeline as:
 
-def compute_window_correlations(windows, method="pearson"):
-    """
-    Compute correlation matrix for each window.
-    """
-    results = []
+        preprocess_timeseries(df, timestamp_col, selected_streams)
 
-    for i, window in enumerate(windows):
-        corr_matrix = window.corr(method=method)
-
-        results.append({
-            "window_index": i,
-            "start_time": window.index.min(),
-            "end_time": window.index.max(),
-            "correlation_matrix": corr_matrix
-        })
-
-    return results
-
-
-def compare_correlation_changes(correlation_results):
-    """
-    Compare correlations between consecutive windows.
-    """
-    changes = []
-
-    for i in range(1, len(correlation_results)):
-        prev = correlation_results[i - 1]
-        curr = correlation_results[i]
-
-        prev_corr = prev["correlation_matrix"]
-        curr_corr = curr["correlation_matrix"]
-
-        for s1, s2 in combinations(curr_corr.columns, 2):
-            p = prev_corr.loc[s1, s2]
-            c = curr_corr.loc[s1, s2]
-
-            if pd.isna(p) or pd.isna(c):
-                continue
-
-            delta = abs(c - p)
-
-            changes.append({
-                "window_index": curr["window_index"],
-                "start_time": curr["start_time"],
-                "end_time": curr["end_time"],
-                "stream_1": s1,
-                "stream_2": s2,
-                "previous_corr": p,
-                "current_corr": c,
-                "delta": delta
-            })
-
-    return changes
-
-
-def generate_alerts(changes, strong_corr_threshold=0.7, weak_corr_threshold=0.4, delta_threshold=0.3):
-    """
-    Generate alerts based on correlation changes.
-    """
-    alerts = []
-
-    for ch in changes:
-        prev_corr = ch["previous_corr"]
-        curr_corr = ch["current_corr"]
-        delta = ch["delta"]
-
-        reasons = []
-        level = None
-
-        # Check for large change in correlation
-        if delta >= delta_threshold:
-            reasons.append("Significant correlation change")
-
-        # Strong to weak drop
-        if abs(prev_corr) >= strong_corr_threshold and abs(curr_corr) <= weak_corr_threshold:
-            reasons.append("Strong → Weak drop")
-            level = "high"
-
-        # Weak to strong increase
-        elif abs(prev_corr) <= weak_corr_threshold and abs(curr_corr) >= strong_corr_threshold:
-            reasons.append("Weak → Strong increase")
-            level = "medium"
-
-        if reasons:
-            alerts.append({
-                **ch,
-                "alert_level": level if level else "medium",
-                "reason": "; ".join(reasons)
-            })
-
-    return alerts
-
-
-def detect_correlation_change_alert(
-    df,
-    window_size=30,
-    step_size=5
-):
-    """
-    Main wrapper for correlation alert pipeline.
+    It only handles preprocessing and does not perform rolling windows,
+    correlation calculation, comparison, or alert generation.
     """
 
-    # Step 1: Create rolling windows
-    windows = create_rolling_windows(df, window_size, step_size)
+    # Select only required columns
+    required_cols = [timestamp_col] + selected_streams
+    processed_df = df[required_cols].copy()
 
-    # Step 2: Compute correlations
-    correlation_results = compute_window_correlations(windows)
+    # Clean and sort timestamp column
+    processed_df = fix_timestamps(processed_df, time_col=timestamp_col)
 
-    # Step 3: Compare changes
-    changes = compare_correlation_changes(correlation_results)
+    # Convert sensor columns to numeric values
+    processed_df = convert_sensor_columns_to_numeric(
+        processed_df,
+        time_col=timestamp_col
+    )
 
-    # Step 4: Generate alerts
-    alerts = generate_alerts(changes)
+    # Handle missing values
+    processed_df = handle_missing_values(
+        processed_df,
+        method="interpolate"
+    )
 
-    return {
-        "windows": windows,
-        "correlation_results": correlation_results,
-        "changes": changes,
-        "alerts": alerts
-    }
+    # Remove outliers from selected sensor streams
+    processed_df = remove_outliers(
+        processed_df,
+        sensor_cols=selected_streams,
+        iqr_factor=3.0
+    )
+
+    # Validate cleaned output
+    processed_df = validate_output(
+        processed_df,
+        time_col=timestamp_col
+    )
+
+    # Set timestamp as index for downstream rolling-window analysis
+    processed_df = processed_df.set_index(timestamp_col)
+
+    return processed_df
 
 
-# DEMO / TEST ONLY 
-#  Keep dataset usage only for testing, not core logic
+# Testing/demo only.
+# This block is not required by the reusable pipeline.
 if __name__ == "__main__":
+    df = pd.read_csv("datasets/complex.csv")
 
-    # Use preprocessing pipeline 
-    clean_df = run_pipeline("datasets/complex.csv")
+    timestamp_col = "time"
+    selected_streams = [col for col in df.columns if col != timestamp_col]
 
-    # Set index for correlation analysis
-    clean_df = clean_df.set_index("time")
+    processed_data = preprocess_timeseries(
+        df,
+        timestamp_col,
+        selected_streams
+    )
 
-    # Run detection
-    results = detect_correlation_change_alert(clean_df)
-
-    # Print summary only 
-    print("\n=== SUMMARY ===")
-    print(f"Windows: {len(results['windows'])}")
-    print(f"Changes detected: {len(results['changes'])}")
-    print(f"Alerts: {len(results['alerts'])}")
+    print(processed_data.head())
+    print(f"Processed data shape: {processed_data.shape}")
