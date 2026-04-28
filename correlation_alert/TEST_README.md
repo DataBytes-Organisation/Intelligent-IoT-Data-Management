@@ -16,12 +16,12 @@ The tests ensure that changes in correlation (Δr) are accurately interpreted an
 The test suite verifies the correct classification of alert levels based on Δr values:
 
 * LOW: 0.3 ≤ Δr < 0.5
-* MEDIUM: 0.5 ≤ Δr < 0.8
-* HIGH: Δr ≥ 0.8
+* MEDIUM: 0.5 ≤ Δr < 0.7
+* HIGH: Δr ≥ 0.7
 
 It also covers:
 
-* Boundary conditions (e.g., exactly 0.3, 0.5, 0.8)
+* Boundary conditions (e.g., exactly 0.3, 0.5, 0.7)
 * Values below thresholds
 * Negative values and zero
 * Invalid inputs such as `None` or non-numeric data
@@ -76,7 +76,7 @@ Each generated alert follows a consistent format:
 | 0.29     | None           | normal          |
 | 0.3      | LOW            | alert           |
 | 0.5      | MEDIUM         | alert           |
-| 0.8      | HIGH           | alert           |
+| 0.7      | HIGH           | alert           |
 | -0.1     | None           | normal          |
 
 ---
