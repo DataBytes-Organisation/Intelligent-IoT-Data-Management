@@ -40,7 +40,7 @@ class TestCorrelationAlertSystem(unittest.TestCase):
             0.3,    # LOW alert
             0.4,    # LOW alert
             0.5,    # MEDIUM alert
-            0.7,    # MEDIUM alert
+            0.7,    # HIGH alert
             0.8,    # HIGH alert
             1.0,    # HIGH alert
             -0.1,   # No alert (negative change)
@@ -54,7 +54,7 @@ class TestCorrelationAlertSystem(unittest.TestCase):
             'LOW',  # 0.3
             'LOW',  # 0.4
             'MEDIUM',  # 0.5
-            'MEDIUM',  # 0.7
+            'HIGH',  # 0.7
             'HIGH', # 0.8
             'HIGH', # 1.0
             None,   # -0.1
@@ -99,9 +99,9 @@ class TestCorrelationAlertSystem(unittest.TestCase):
             self.assertEqual(get_alert_level(0.5), 'MEDIUM')
             self.assertEqual(get_alert_level(0.49), 'LOW')
 
-            # Test high threshold (assuming 0.8 is the boundary)
-            self.assertEqual(get_alert_level(0.8), 'HIGH')
-            self.assertEqual(get_alert_level(0.79), 'MEDIUM')
+            # Test high threshold (assuming 0.7 is the boundary)
+            self.assertEqual(get_alert_level(0.7), 'HIGH')
+            self.assertEqual(get_alert_level(0.69), 'MEDIUM')
 
             # Test negative values
             self.assertIsNone(get_alert_level(-0.1))
