@@ -1,5 +1,6 @@
 import sys
 from preprocessor import load_and_prepare
+from detectors.levelshiftad import LevelShiftAD
 
 def run_pipeline(filepath):
     print(f"[pipeline] Loading data from: {filepath}")
@@ -10,7 +11,10 @@ def run_pipeline(filepath):
     print(f"[pipeline] preview/check\n{df.head()}\n")
 
     #  DETECTOR
-    detectors = []
+    # Requires: adtk  (pip install adtk)
+    detectors = [
+        LevelShiftAD(window=10, c=6.0),
+    ]
     # Link the detectors we implement below so others can draw on them if need be.
     # if theres any requirements for your detector maybe note it here as well.
     
