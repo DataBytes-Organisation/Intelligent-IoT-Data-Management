@@ -30,15 +30,15 @@ def run_pipeline(filepath):
     # TODO: extract this into a proper Report Output component (report.py)
     # For now, prints a basic summary so users see results when running the pipeline.
     for name, output in results.items():
-        n_anom = output['is_anomaly'].sum()
-        runtime = output['runtime'].dropna().iloc[0]
-        print(f"\n[pipeline] {name} results:")
-        print(f"  Flagged: {n_anom}/{len(output)} ({n_anom/len(output)*100:.1f}%)")
-        print(f"  Runtime: {runtime:.3f}s")
+        flags = output['anomaly_flag']
+        scores = output['score']
+        n_anom = flags.sum()
+        print(f"\n[pipeline] {output['model_name']} results:")
+        print(f"  Flagged: {n_anom}/{len(flags)} ({n_anom/len(flags)*100:.1f}%)")
+        print(f"  Runtime: {output['runtime']:.3f}s")
         print(f"  Top 5 most anomalous timestamps:")
-        print(output.nlargest(5, 'score')[['timestamp', 'score']].to_string(index=False))
-
-    return df, scaler, results
+        top5 = scores.nlargest(5)
+        print(top5.to_string())
 
 
 if __name__ == "__main__":

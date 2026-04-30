@@ -37,19 +37,19 @@ class OCSVMDetector:
         self._fitted = True
         return self
 
-    def detect(self, df: pd.DataFrame) -> pd.DataFrame:
+    def detect(self, df: pd.DataFrame) -> dict:
         """
         Flag anomalies in `df`. If not yet fitted, fits on `df` first
         (unsupervised mode - fit and predict on same data).
 
         Returns
         -------
-        DataFrame with columns:
-            - timestamp : original index
-            - is_anomaly : bool (True = anomaly)
-            - score : float (higher = more anomalous)
-            - model : str ("OCSVM")
-            - runtime : float (seconds, only in first row)
+        dict with keys:
+            - anomaly_flag : Series of bool (True = anomaly), indexed like df
+            - score        : Series of float (higher = more anomalous)
+            - model_name   : str
+            - timestamp    : Index from df
+            - runtime      : float (seconds taken by predict + scoring)
         """
         if not self._fitted:
             self.fit(df)
@@ -59,15 +59,13 @@ class OCSVMDetector:
         raw_scores = self.model.decision_function(df.values)  # higher=normal
         runtime = time.time() - start
 
-        result = pd.DataFrame({
-            "timestamp": df.index,
-            "is_anomaly": preds == -1,
-            "score": -raw_scores,   # flip so higher = more anomalous
-            "model": self.name,
-        })
-        result["runtime"] = None
-        result.loc[0, "runtime"] = runtime
-        return result
-
+        return {
+            "anomaly_flag": pd.Series(preds == -1, index=df.index),
+            "score":        pd.Series(-raw_scores, index=df.index),  # flip so higher = more anomalous
+            "model_name":   self.name,
+            "timestamp":    df.index,
+            "runtime":      runtime,
+        }
+    
     def get_name(self) -> str:
         return self.name
