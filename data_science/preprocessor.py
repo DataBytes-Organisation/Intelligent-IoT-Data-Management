@@ -10,9 +10,14 @@ def load_and_prepare(filepath):
     # Load the data with time for later if needed and because its 1 line
     df = pd.read_csv(filepath, index_col='time', parse_dates=True)
     
-    # drops values that are not relevant
+    # strips the space before " s1"
+    df.columns = df.columns.str.strip()
+
+
+    # drops rows with missing values
     df = df.dropna()
-    
+
+
     # Normalise to values between 0 and 1
     scaler = MinMaxScaler()
     df_scaled = pd.DataFrame(
