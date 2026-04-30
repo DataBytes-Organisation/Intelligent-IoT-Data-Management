@@ -1,0 +1,40 @@
+.home-page {
+  text-align: center;
+}
+
+.home-description {
+  max-width: 700px;
+  margin: 0 auto 28px;
+  color: #4b5563;
+  font-size: 1rem;
+}
+
+.dataset-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.dataset-link-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 88px;
+  background: #ffffff;
+  border: 1px solid #dbe4f0;
+  border-radius: 14px;
+  color: #1f2937;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+}
+
+.dataset-link-card:hover {
+  border-color: #2563eb;
+  color: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.12);
+}

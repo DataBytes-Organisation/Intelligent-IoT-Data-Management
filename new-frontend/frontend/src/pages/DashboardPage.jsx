@@ -3,13 +3,12 @@ import Dashboard from '../components/Dashboard';
 import DashboardLayout from '../layouts/DashboardLayout';
 
 const DashboardPage = () => {
-  const { id } = useParams(); // e.g. 'sensor1'
+  const { id } = useParams();
 
   return (
-    <div>
-      <h2>Dashboard for {id}</h2>
+    <DashboardLayout title={`Dashboard for ${id}`}>
       <Dashboard datasetId={id} />
-    </div>
+    </DashboardLayout>
   );
 };
 
