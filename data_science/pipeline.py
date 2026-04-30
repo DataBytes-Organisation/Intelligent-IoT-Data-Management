@@ -1,5 +1,6 @@
 import sys
 from preprocessor import load_and_prepare
+from detectors.ocsvm_detector import OCSVMDetector
 
 def run_pipeline(filepath):
     print(f"[pipeline] Loading data from: {filepath}")
@@ -10,7 +11,9 @@ def run_pipeline(filepath):
     print(f"[pipeline] preview/check\n{df.head()}\n")
 
     #  DETECTOR
-    detectors = []
+    detectors = [
+        OCSVMDetector(nu=0.05),
+    ]
     # Link the detectors we implement below so others can draw on them if need be.
     # if theres any requirements for your detector maybe note it here as well.
     
@@ -23,6 +26,17 @@ def run_pipeline(filepath):
 
     if not detectors:
         print("[pipeline] preprocessing works")
+
+    # TODO: extract this into a proper Report Output component (report.py)
+    # For now, prints a basic summary so users see results when running the pipeline.
+    for name, output in results.items():
+        n_anom = output['is_anomaly'].sum()
+        runtime = output['runtime'].dropna().iloc[0]
+        print(f"\n[pipeline] {name} results:")
+        print(f"  Flagged: {n_anom}/{len(output)} ({n_anom/len(output)*100:.1f}%)")
+        print(f"  Runtime: {runtime:.3f}s")
+        print(f"  Top 5 most anomalous timestamps:")
+        print(output.nlargest(5, 'score')[['timestamp', 'score']].to_string(index=False))
 
     return df, scaler, results
 
