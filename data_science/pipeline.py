@@ -10,7 +10,8 @@ def run_pipeline(filepath):
     print(f"[pipeline] preview/check\n{df.head()}\n")
 
     #  DETECTOR
-    detectors = []
+    from detectors.adtk_pcaad import PcaADDetector
+    detectors = [PcaADDetector()]
     # Link the detectors we implement below so others can draw on them if need be.
     # if theres any requirements for your detector maybe note it here as well.
     
