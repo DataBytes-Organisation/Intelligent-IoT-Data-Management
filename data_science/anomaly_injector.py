@@ -55,7 +55,7 @@ def inject_point_spikes(
 def inject_level_shifts(
     df: pd.DataFrame,
     n_anomalies: int = 5,
-    duration_range: tuple[int, int] = (20, 50),
+    duration_range: tuple[int, int] = (18, 40),
     magnitude: float = 2.0,
     random_seed: int = 42,
 ) -> tuple[pd.DataFrame, pd.Series]:
@@ -134,9 +134,9 @@ def inject_volatility_shifts(
 
 def inject_all(
     df: pd.DataFrame,
-    n_points: int = 30,
-    n_level_shifts: int = 3,
-    n_volatility_shifts: int = 3,
+    n_points: int = 20,
+    n_level_shifts: int = 1,
+    n_volatility_shifts: int = 1,
     random_seed: int = 42,
 ) -> tuple[pd.DataFrame, pd.Series]:
     """
