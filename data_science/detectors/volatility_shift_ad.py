@@ -11,9 +11,8 @@ class VolatilityShiftADDetector:
         self.side = side
 
     def detect(self, df):
-        results = []
-
         df = df.copy()
+
         if not isinstance(df.index, pd.DatetimeIndex):
             df.index = pd.date_range(
                 start="2026-01-01",
@@ -22,6 +21,9 @@ class VolatilityShiftADDetector:
             )
 
         df.columns = df.columns.str.strip()
+
+        combined_flags = pd.Series(False, index=df.index)
+        combined_score = pd.Series(0.0, index=df.index)
 
         print(f"\n[pipeline] {self.model_name} results:")
 
@@ -52,19 +54,21 @@ class VolatilityShiftADDetector:
             for ts in detected_times:
                 print(f"      - {ts}")
 
-            sensor_result = pd.DataFrame({
-                "model_name": self.model_name,
-                "sensor": sensor,
-                "timestamp": series.index,
-                "anomaly_flag": anomaly_flags.values,
-                "anomaly_score": anomaly_score.values
-            })
+            combined_flags.loc[anomaly_flags.index] = (
+                combined_flags.loc[anomaly_flags.index] | anomaly_flags
+            )
 
-            results.append(sensor_result)
+            combined_score.loc[anomaly_score.index] = pd.concat(
+                [
+                    combined_score.loc[anomaly_score.index],
+                    anomaly_score
+                ],
+                axis=1
+            ).max(axis=1)
 
-        if results:
-            return pd.concat(results, ignore_index=True)
-
-        return pd.DataFrame(
-            columns=["model_name", "sensor", "timestamp", "anomaly_flag", "anomaly_score"]
-        )
+        return {
+            "anomaly_flag": combined_flags,
+            "score": combined_score,
+            "model_name": self.model_name,
+            "timestamp": df.index
+        }

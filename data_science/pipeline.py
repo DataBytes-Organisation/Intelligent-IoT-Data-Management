@@ -28,7 +28,7 @@ def run_pipeline(filepath, benchmark_mode=False):
         PcaADDetector(),
         OCSVMDetector(nu=0.05),
         #LevelShiftAD(),
-        VolatilityshiftADDetector(),
+        VolatilityShiftADDetector(),
     ]
 
     # Link the detectors we implement below so others can draw on them if need be.
@@ -40,8 +40,11 @@ def run_pipeline(filepath, benchmark_mode=False):
         print(f"[pipeline] Running: {name}")
         results[name] = detector.detect(df)
 
-        print(results[name].head())
-        print(results[name]["anomaly_flag"].value_counts(dropna=False))
+        if isinstance(results[name], pd.DataFrame):
+            print(results[name].head())
+            print(results[name]["anomaly_flag"].value_counts(dropna=False))
+        else:
+            print(results[name])
 
 	
     if not detectors:
