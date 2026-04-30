@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useSensorData } from '../hooks/useSensorData.js';
 import { useFilteredData } from '../hooks/useFilteredData.js';
 import { useStreamNames } from '../hooks/useStreamNames.js';
@@ -11,180 +11,243 @@ import './Dashboard.css';
 import Chart from './Chart.jsx';
 import MostCorrelatedPair from './MostCorrelatedPair.jsx';
 import ScatterPlot from './ScatterPlot.jsx';
-
-
-
+import { calculateCorrelation } from '../utils/correlationUtils.js';
 
 const Dashboard = () => {
-  const { data, loading, error } = useSensorData(true); // mock mode
+  const { data, loading, error } = useSensorData(true);
   const streamNames = useStreamNames(data);
   const [startTime, endTime] = useTimeRange(data);
   const timeOptions = useTimeRange(data);
+
   const [selectedTimeStart, setSelectedTimeStart] = useState('');
   const [selectedTimeEnd, setSelectedTimeEnd] = useState('');
-  //const correlation = useCorrelationMatrix(data, streamNames, startTime, endTime);
   const [selectedStreams, setSelectedStreams] = useState([]);
 
   const intervals = ['5min', '15min', '1h', '6h'];
-
   const [selectedInterval, setSelectedInterval] = useState(intervals[0]);
-
-  
-
 
   const filteredData = useFilteredData(data, {
     startTime: selectedTimeStart,
     endTime: selectedTimeEnd,
     selectedStreams,
-    interval: selectedInterval
+    interval: selectedInterval,
   });
 
   const streamCount = selectedStreams.length;
 
+  const correlationSummary = useMemo(() => {
+    if (selectedStreams.length !== 2 || filteredData.length === 0) return null;
+
+    const [streamA, streamB] = selectedStreams;
+
+    const x = filteredData
+      .map((d) => parseFloat(d[streamA]))
+      .filter((v) => !isNaN(v));
+
+    const y = filteredData
+      .map((d) => parseFloat(d[streamB]))
+      .filter((v) => !isNaN(v));
+
+    if (x.length === 0 || y.length === 0 || x.length !== y.length) return null;
+
+    const correlation = calculateCorrelation(x, y);
+
+    if (Number.isNaN(correlation) || !Number.isFinite(correlation)) return null;
+
+    let strengthLabel = 'Weak relationship';
+
+    if (correlation >= 0.7) strengthLabel = 'Strong positive relationship';
+    else if (correlation >= 0.3) strengthLabel = 'Moderate positive relationship';
+    else if (correlation <= -0.7) strengthLabel = 'Strong negative relationship';
+    else if (correlation <= -0.3) strengthLabel = 'Moderate negative relationship';
+
+    return {
+      streams: `${streamA} vs ${streamB}`,
+      value: correlation.toFixed(2),
+      label: strengthLabel,
+    };
+  }, [selectedStreams, filteredData]);
+
   const handleSubmit = () => {
-  console.log('Selected Time Range:', selectedTimeStart, '→', selectedTimeEnd);
-
-  
-  console.log('selectedInterval:', selectedInterval);
-  // You can filter data, send to backend, or trigger chart updates
-
-  console.log('Filtered Data:', filteredData);
-  
- 
-};
+    console.log('Selected Time Range:', selectedTimeStart, '→', selectedTimeEnd);
+    console.log('selectedInterval:', selectedInterval);
+    console.log('Filtered Data:', filteredData);
+  };
 
   if (loading) return <p>Loading dataset...</p>;
   if (error) return <p>Error loading data</p>;
 
   return (
-<div >
+    <div className="dashboard-page">
+      <section className="dashboard-section info-panel">
+        <h3 className="section-title">Dashboard Notes</h3>
+        <ol className="note-list">
+          <li>Select at least one stream to view the line chart.</li>
+          <li>
+            Select two streams to view their scatter plot, correlation coefficient,
+            and rolling correlation using the selected time window.
+          </li>
+          <li>
+            Select at least three streams to identify the most correlated pair in
+            the selected time range.
+          </li>
+          <li>
+            If no scatter plot is shown, the selected data may not have enough
+            variance.
+          </li>
+          <li>
+            If no rolling correlation line is shown, the selected data may not have
+            enough variance.
+          </li>
+          <li>
+            If no meaningful scatter plot is available for the most correlated pair,
+            one or both streams may lack variance.
+          </li>
+          <li>If no time range is selected, the entire dataset is used.</li>
+        </ol>
 
-  <div className='info-plate'>
-    <h3>Note: </h3>
-      <ol>
-        <li>Select at least one stream to view the line chart.</li>
-        <li>Select two streams to see their scatter plot with a trendline, their correlation coefficient, and a rolling correlation line plot in the time interval using the selected time-window.</li>
-        <li>Select at least three streams and a time range, to see which two streams are the most correlated in the selected time range, their scatter plot with a trendline.</li>
-        
-        <li>If no scatter plot is shown, it means there is not enough variance in the data during the selected time range.</li>
-        <li>If no rolling correlation line is shown, it means there is not enough variance in the data during the selected time range.</li>
-        <li>If no meaningful scatter plot is available for the most correlated pair, it means one or both streams lack variance in the selected time range.</li>
-        <li>If no time range is selected, the entire dataset is used.</li>
-      </ol>
-    
-    <h3> Total Data Points in Dataset: {data.length} | 
-      
-      Data Points in Selected Range: {filteredData.length} 
-    </h3>
-  </div>
-  <div className='dashboard-container'>
-    <div className='label-plate'>Streams: {streamNames.map(s => s.name).join(', ')}   
+        <div className="dataset-summary">
+          <div className="summary-pill">
+            <span>Total Data Points</span>
+            <strong>{data.length}</strong>
+          </div>
+          <div className="summary-pill">
+            <span>Selected Range Points</span>
+            <strong>{filteredData.length}</strong>
+          </div>
+        </div>
+      </section>
+
+      <section className="dashboard-section stream-panel">
+        <h3 className="section-title">Available Streams</h3>
+        <p className="stream-list">{streamNames.map((s) => s.name).join(', ')}</p>
+      </section>
+
+      <section className="dashboard-section controls-panel">
+        <h3 className="section-title">Controls</h3>
+
+        <div className="selector-grid">
+          <div className="selector-card">
+            <StreamSelector
+              data={data}
+              selectedStreams={selectedStreams}
+              setSelectedStreams={setSelectedStreams}
+            />
+          </div>
+
+          <div className="selector-card">
+            <IntervalSelector
+              intervals={intervals}
+              selectedInterval={selectedInterval}
+              setSelectedInterval={setSelectedInterval}
+            />
+          </div>
+
+          <div className="selector-card selector-card-wide">
+            <h4 className="subsection-title">Time Range Selection</h4>
+
+            <div className="time-grid">
+              <div>
+                <TimeSelector
+                  label="Start Time"
+                  timeOptions={timeOptions}
+                  selectedTime={selectedTimeStart}
+                  setSelectedTime={setSelectedTimeStart}
+                />
+              </div>
+
+              <div>
+                <TimeSelector
+                  label="End Time"
+                  timeOptions={timeOptions}
+                  selectedTime={selectedTimeEnd}
+                  setSelectedTime={setSelectedTimeEnd}
+                />
+              </div>
+
+              <div className="action-wrap">
+                <button className="primary-btn" onClick={handleSubmit}>
+                  Analyse Time Range
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="dashboard-section insights-panel">
+        <h3 className="section-title">Insight Cards</h3>
+
+        {streamCount === 0 && (
+          <div className="empty-state">
+            Please select one or more streams to view summary insights and charts.
+          </div>
+        )}
+
+        {streamCount > 0 && (
+          <div className="stream-stats">
+            {selectedStreams.map((stream) => (
+              <StreamStats key={stream} data={filteredData} stream={stream} />
+            ))}
+
+            {correlationSummary && (
+              <div className="insight-card correlation-card">
+                <div className="insight-card-header">
+                  <span className="insight-label">Correlation</span>
+                  <h3 className="insight-stream-name">{correlationSummary.streams}</h3>
+                </div>
+
+                <div className="correlation-value">{correlationSummary.value}</div>
+                <p className="correlation-text">{correlationSummary.label}</p>
+              </div>
+            )}
+          </div>
+        )}
+      </section>
+
+      <section className="dashboard-section analysis-panel">
+        <h3 className="section-title">Analysis Summary</h3>
+
+        {streamCount === 1 && (
+          <div className="status-message">
+            One stream selected. Add another stream to view correlation analysis.
+          </div>
+        )}
+
+        {streamCount === 2 && (
+          <div className="pair-stream-block">
+            <div className="status-message">
+              Two streams selected. Scatter plot and rolling correlation analysis are
+              now available.
+            </div>
+
+            <ScatterPlot
+              data={filteredData}
+              streams={selectedStreams}
+              title="Scatter Plot of Selected Streams"
+            />
+          </div>
+        )}
+
+        {streamCount > 2 && (
+          <div className="multi-stream-block">
+            <div className="status-message">
+              {streamCount} streams selected. Showing the most correlated pair from
+              the chosen streams.
+            </div>
+
+            <MostCorrelatedPair data={filteredData} streams={selectedStreams} />
+          </div>
+        )}
+      </section>
+
+      <section className="dashboard-section chart-panel">
+        <h3 className="section-title">Chart View</h3>
+        <div className="chart-container">
+          <Chart data={filteredData} selectedStreams={selectedStreams} />
+        </div>
+      </section>
     </div>
-
-
-    <div className='selector-grid '>      
-      <div className='selector-group card'>
-
-        <StreamSelector 
-        data={data}
-        // streams={streamNames}
-        selectedStreams={selectedStreams}
-        setSelectedStreams={setSelectedStreams}
-        />
-      </div>
-      <div className='selector-group card'> 
-      <IntervalSelector
-      intervals={intervals}
-      selectedInterval={selectedInterval}
-      setSelectedInterval={setSelectedInterval}
-      />
-      </div>
-                  
-
-      <div className='selector-group card'>
-      
-      <h3>Time Range Selection</h3>
-
-        <div className='card-content'>
-          <div>
-            <TimeSelector
-              label="Start Time"
-              timeOptions={timeOptions}
-              selectedTime={selectedTimeStart}
-              setSelectedTime={setSelectedTimeStart}
-            />
-          </div>
-          <div>
-            <TimeSelector
-              label="End Time"
-              timeOptions={timeOptions}
-              selectedTime={selectedTimeEnd}
-              setSelectedTime={setSelectedTimeEnd}
-            />
-          </div>
-            {/* this button for future use */}
-          <div className='button'>
-          <button onClick={handleSubmit}>Analyse Time Range</button>
-          </div>           
-        </div>
-      </div>
-    </div> 
-{/* add some space here */}
-<p></p>
-    {streamCount === 0 && (
-      <div className='empty-state'>
-        <h3>Please select one or more streams to view statistics and charts.</h3>
-      </div>
-    )}
-    {streamCount === 1 && (
-      <div className='single-stream-block'>
-        <h3>Selected one stream to see their scatter plot. Select another stream to explore correlations.</h3>
-        
-      </div>
-    )}
-      {streamCount === 2 && (
-      <div className='pair-stream-block'>
-        <h4>Selected two streams to see their scatter plot and rolling correlation. Select one more stream to see the most correlated pair among the selected streams.</h4>
-        {/* <p>Note: If no scatter plot is shown, it means there is not enough data to display it.</p> */}
-
-        
-        <ScatterPlot data={filteredData}
-      streams={selectedStreams}
-      title={`Scatter Plot of selected two streams: `}
-       />
-      
-      </div>
-    )}
-
-      {streamCount > 2 && (
-        <div className='multi-stream-block'>
-          <h3>Selected {streamCount} streams.</h3>
-          <MostCorrelatedPair data={filteredData} streams={selectedStreams}  />
-          <p>Note: If no scatter plot is shown, it means there is not enough variance in the data during the selected time range.</p>
-          
-        </div>
-      )}
-
-      
-    <div>         
-      <div className='stream-stats'>
-      {selectedStreams.map(stream => (
-      <StreamStats key={stream} data={filteredData} stream={stream} />
-      ))}
-      </div>
-
-      
-       
-      
-
-    </div>    
-  </div> 
-     
-  <div className="chart-container">
-    <Chart data={filteredData} selectedStreams={selectedStreams} />
-  </div>
-
-</div>           
   );
 };
 
