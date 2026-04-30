@@ -1,5 +1,10 @@
 import sys
+import pandas as pd
 from preprocessor import load_and_prepare
+from anomaly_injector import inject_point_spikes
+from evaluator import evaluate
+
+
 
 def run_pipeline(filepath):
     print(f"[pipeline] Loading data from: {filepath}")
