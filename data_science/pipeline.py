@@ -1,5 +1,6 @@
 import sys
 from preprocessor import load_and_prepare
+from detectors.volatility_shift_ad import VolatilityShiftADDetector
 
 def run_pipeline(filepath):
     print(f"[pipeline] Loading data from: {filepath}")
@@ -10,7 +11,9 @@ def run_pipeline(filepath):
     print(f"[pipeline] preview/check\n{df.head()}\n")
 
     #  DETECTOR
-    detectors = []
+    detectors = [
+		VolatilityShiftADDetector()
+	]
     # Link the detectors we implement below so others can draw on them if need be.
     # if theres any requirements for your detector maybe note it here as well.
     
@@ -21,6 +24,10 @@ def run_pipeline(filepath):
         print(f"[pipeline] Running: {name}")
         results[name] = detector.detect(df)
 
+        print(results[name].head())
+        print(results[name]["anomaly_flag"].value_counts(dropna=False))
+
+	
     if not detectors:
         print("[pipeline] preprocessing works")
 
