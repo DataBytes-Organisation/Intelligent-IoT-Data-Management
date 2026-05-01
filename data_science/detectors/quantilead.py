@@ -1,5 +1,4 @@
 import time
-import pandas as pd
 from adtk.detector import QuantileAD
 from adtk.data import validate_series
 
@@ -18,20 +17,29 @@ class QuantileADDetector:
     def detect(self, df):
         start_time = time.time()
 
+        # NOTE:
+        # Currently using only the first feature (s1) for anomaly detection.
+        # This is a simplified v1 approach.
+        # Future improvement: apply QuantileAD across all columns
+        # and combine results (e.g., OR condition across features).
+        if df is None or df.shape[1] == 0:
+            raise ValueError("Input DataFrame must contain at least one column.")
+
         # Use first sensor column
         series = validate_series(df.iloc[:, 0])
 
         # Detect anomalies
         anomalies = self.model.fit_detect(series)
 
-        # Convert to 0/1
-        anomaly_flag = anomalies.fillna(0).astype(int)
+        # Convert to binary flags (ADTK returns True/False/NaN)
+        anomaly_flag = anomalies.fillna(False).astype(int)
 
         runtime = time.time() - start_time
 
         return {
             "model_name": "QuantileAD",
             "anomaly_flag": anomaly_flag,
-            "score": anomaly_flag,  # binary score (no continuous score available)
+            # Binary score since QuantileAD does not provide continuous scores
+            "score": anomaly_flag,
             "runtime": runtime
         }

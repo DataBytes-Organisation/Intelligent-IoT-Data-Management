@@ -5,9 +5,8 @@ from preprocessor import load_and_prepare
 from detectors.adtk_pcaad import PcaADDetector
 from detectors.ocsvm_detector import OCSVMDetector
 from detectors.quantilead import QuantileADDetector
-from anomaly_injector import inject_point_spikes
 # from detectors.levelshiftad import LevelShiftAD
-from anomaly_injector import inject_point_spikes, inject_all
+from anomaly_injector import inject_all
 from evaluator import evaluate
 
 
@@ -39,9 +38,10 @@ def run_pipeline(filepath, benchmark_mode=False):
 
     # Run detectors
     for detector in detectors:
-        print(f"[pipeline] Running: {type(detector).__name__}")
+        name = type(detector).__name__
+        print(f"[pipeline] Running: {name}")
         output = detector.detect(df)
-        results[output["model_name"]] = output
+        results[name] = output
 
     # Print summary
     for name, output in results.items():
@@ -54,7 +54,7 @@ def run_pipeline(filepath, benchmark_mode=False):
         if "runtime" in output:
             print(f"  Runtime: {output['runtime']:.3f}s")
 
-        if "score" in output:
+        if "score" in output and hasattr(output["score"], "nunique") and output["score"].nunique() > 2:
             print("  Top 5 most anomalous timestamps:")
             try:
                 top5 = output["score"].nlargest(5)
