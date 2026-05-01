@@ -3,7 +3,7 @@ import pandas as pd
 from preprocessor import load_and_prepare
 from detectors.adtk_pcaad import PcaADDetector
 from detectors.ocsvm_detector import OCSVMDetector
-from anomaly_injector import inject_point_spikes
+from anomaly_injector import inject_point_spikes, inject_all
 from evaluator import evaluate
 
 def run_pipeline(filepath, benchmark_mode=False):
@@ -17,7 +17,9 @@ def run_pipeline(filepath, benchmark_mode=False):
     labels = None
     if benchmark_mode:
         print("[pipeline] Benchmark mode ON — injecting synthetic anomalies")
-        df, labels = inject_point_spikes(df, n_anomalies=50)
+
+        # inject all kind of tests
+        df, labels = inject_all(df)
         print(f"[pipeline] Injected {labels.sum()} anomalies")
 
 
