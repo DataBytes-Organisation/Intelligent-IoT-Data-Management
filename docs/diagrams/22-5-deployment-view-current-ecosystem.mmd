@@ -1,0 +1,22 @@
+flowchart LR
+  subgraph Client
+    BR[Browser]
+  end
+
+  subgraph PrimaryPath[Primary Converged Path]
+    FE[React Vite App]
+    API[Node Express API]
+    DS[(Local Processed Data)]
+    FE --> API --> DS
+  end
+
+  subgraph ExtensionPath[Optional Extension Path]
+    DJ[DJango DRF]
+    PG[(PostgreSQL)]
+    FL[Flask Analytics]
+    DJ --> PG
+    DJ --> FL
+  end
+
+  BR --> FE
+  API -. future migration .-> DJ

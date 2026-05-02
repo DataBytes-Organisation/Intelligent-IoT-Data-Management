@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900">
+  <rect width="1400" height="900" fill="#f8fafc"/>
+  <text x="60" y="70" font-family="Arial" font-size="34" font-weight="700" fill="#111827">Integrated Controls: Data Science + Cybersecurity</text>
+
+  <rect x="60" y="110" width="620" height="700" fill="#ffffff" stroke="#cbd5e1" rx="12"/>
+  <text x="90" y="160" font-family="Arial" font-size="26" font-weight="700" fill="#1d4ed8">Data Science Controls</text>
+  <text x="90" y="205" font-family="Arial" font-size="18" fill="#334155">1. Pearson correlation implementation traced and documented.</text>
+  <text x="90" y="235" font-family="Arial" font-size="16" fill="#475569">Ref: new-frontend/frontend/src/utils/correlationUtils.js</text>
+
+  <text x="90" y="280" font-family="Arial" font-size="18" fill="#334155">2. Variance guard prevents misleading pair visualizations.</text>
+  <text x="90" y="310" font-family="Arial" font-size="16" fill="#475569">Ref: new-frontend/frontend/src/utils/varianceUtils.js</text>
+
+  <text x="90" y="355" font-family="Arial" font-size="18" fill="#334155">3. Frontend analytics path separated from Python algorithm path.</text>
+  <text x="90" y="385" font-family="Arial" font-size="16" fill="#475569">Ref: data_science/algorithms/correlation_based.py</text>
+
+  <text x="90" y="430" font-family="Arial" font-size="18" fill="#334155">4. LLD captures algorithm complexity and behavior notes.</text>
+  <text x="90" y="460" font-family="Arial" font-size="16" fill="#475569">Ref: docs/LLD.md</text>
+
+  <rect x="720" y="110" width="620" height="700" fill="#ffffff" stroke="#cbd5e1" rx="12"/>
+  <text x="750" y="160" font-family="Arial" font-size="26" font-weight="700" fill="#b91c1c">Cybersecurity Controls</text>
+  <text x="750" y="205" font-family="Arial" font-size="18" fill="#334155">1. Service health endpoint for observability.</text>
+  <text x="750" y="235" font-family="Arial" font-size="16" fill="#475569">Ref: newBackend/BackendCode/app.js</text>
+
+  <text x="750" y="280" font-family="Arial" font-size="18" fill="#334155">2. Input validation test case for invalid filter payload.</text>
+  <text x="750" y="310" font-family="Arial" font-size="16" fill="#475569">Ref: newBackend/tests/api.smoke.test.js</text>
+
+  <text x="750" y="355" font-family="Arial" font-size="18" fill="#334155">3. Evidence governance and traceability index.</text>
+  <text x="750" y="385" font-family="Arial" font-size="16" fill="#475569">Ref: docs/evidence/evidence_index.md</text>
+
+  <text x="750" y="430" font-family="Arial" font-size="18" fill="#334155">4. SFIA skill mapping for professional capability evidence.</text>
+  <text x="750" y="460" font-family="Arial" font-size="16" fill="#475569">Ref: docs/sfia/sfia_skill_mapping.md</text>
+
+  <text x="90" y="760" font-family="Arial" font-size="16" fill="#6b7280">This infographic summarizes implemented and documented controls aligned to capstone evidence expectations.</text>
+</svg>

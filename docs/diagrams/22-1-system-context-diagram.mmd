@@ -1,0 +1,9 @@
+flowchart LR
+  U[Analyst or Operator] --> B[Web Browser]
+  B --> FE[React Dashboard\nnew-frontend/frontend]
+  FE --> API[Node Express API\nnewBackend/BackendCode]
+  API --> DATA[(Processed JSON or CSV)]
+  API --> ANA[Analytics Module\nCorrelation and anomaly logic]
+  API -. optional extension .-> DJ[DJango DRF API\nbackend/iot_backend]
+  ANA --> FE
+  API --> FE

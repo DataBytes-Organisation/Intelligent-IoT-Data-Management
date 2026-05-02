@@ -1,0 +1,8 @@
+flowchart LR
+  A[Raw or Curated CSV] --> B[Preprocessing\nSort, parse timestamp, interpolate]
+  B --> C[Canonical Record Contract]
+  C --> D[Stream Discovery]
+  C --> E[Stream Filtering]
+  E --> F[Correlation Computation]
+  F --> G[Insight Label\nstrong or moderate or weak]
+  G --> H[Dashboard Insight Card and Plots]

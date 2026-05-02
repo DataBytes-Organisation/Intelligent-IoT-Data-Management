@@ -1,0 +1,42 @@
+{\rtf1\ansi\deff0
+{\fonttbl{\f0 Calibri;}}
+\fs24
+\b High Level Design (HLD) - Lightweight Capstone Architecture\b0\par
+\par
+\b 1. Purpose\b0\par
+Define a clear and practical target architecture for capstone delivery, prioritizing reliability and demonstrable data science value over enterprise complexity.\par
+\par
+\b 2. Selected Target Path\b0\par
+Presentation Layer: new-frontend/frontend\par
+Integration/API Layer: newBackend/BackendCode\par
+Analytics Layer: reusable modules from data_science/algorithms\par
+Data Layer: curated JSON/CSV dataset with canonical schema\par
+\par
+\b 3. Architecture View\b0\par
+User -> React Dashboard -> Node/Express API -> Data Repository + Analytics Utilities -> JSON Response -> Visual Insights\par
+\par
+\b 4. Core Components\b0\par
+- Dashboard UI: stream selection, charts, summary cards\par
+- API Gateway (lightweight): route validation and response shaping\par
+- Data access repository: file-based sensor records\par
+- Analytics module: correlation/anomaly helper functions\par
+- Reliability endpoint: /health for service availability checks\par
+\par
+\b 5. Scope Boundary\b0\par
+In scope: one integrated path, aligned API contracts, canonical data model, health endpoint, demo-grade test evidence.\par
+Out of scope: enterprise IAM, full MLOps pipeline, high-availability distributed deployment.\par
+\par
+\b 6. Non-Functional Targets (Capstone)\b0\par
+- Setup simplicity: minimal startup steps\par
+- Demo reliability: consistent end-to-end run\par
+- Maintainability: modular folders and clear responsibilities\par
+- Reproducibility: same dataset and same outputs for assessors\par
+\par
+\b 7. Risks\b0\par
+- Data schema variance across files\par
+- Route mismatch between UI and API\par
+- Confusion from parallel prototype folders\par
+\par
+\b 8. Governance Note\b0\par
+This HLD intentionally reuses existing project components and avoids unnecessary re-architecture.\par
+}

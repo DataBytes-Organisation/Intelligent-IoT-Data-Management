@@ -1,0 +1,80 @@
+{\rtf1\ansi\deff0
+{\fonttbl{\f0 Calibri;}}
+\fs24
+\b Low Level Design (LLD) - Capstone Delivery\b0\par
+\par
+\b 1. Objective\b0\par
+Translate the approved HLD into a concrete implementation blueprint for fast and reliable capstone delivery.\par
+\par
+\b 2. Frontend Design (new-frontend/frontend)\b0\par
+Folders:\par
+- src/pages: route-level views\par
+- src/components: dashboard widgets/charts\par
+- src/hooks: fetch/filter state logic\par
+- src/utils: correlation/trendline/stat utilities\par
+- src/services: centralized API client\par
+\par
+Required behavior:\par
+- Default data mode uses live API\par
+- Mock mode remains available via explicit flag\par
+- Unified API wrapper used by hooks/components\par
+\par
+\b 3. Backend Design (newBackend/BackendCode)\b0\par
+Layers:\par
+- routes/mock.js: endpoint mapping\par
+- controllers/mockController.js: request and response control\par
+- services/mockService.js: filtering and stream logic\par
+- repositories/mockRepository.js: file access\par
+\par
+Endpoints:\par
+- GET /health\par
+- GET /api/streams\par
+- GET /api/stream-names\par
+- POST /api/filter-streams\par
+\par
+\b 4. Canonical Data Contract\b0\par
+Mandatory keys: created_at, entry_id\par
+Dynamic keys: sensor stream names (numeric where present)\par
+Missing values: null\par
+\par
+Response model:\par
+status: ok|error\par
+data: payload list or object\par
+message: optional details\par
+\par
+\b 5. Sequence Flows\b0\par
+Flow A - Initial Dashboard Load\par
+1) UI requests /api/stream-names\par
+2) Backend reads first record schema\par
+3) UI populates selectors\par
+\par
+Flow B - Stream Filter Request\par
+1) UI posts selected stream list\par
+2) Backend validates and filters data\par
+3) UI renders updated charts\par
+\par
+Flow C - Service Health\par
+1) Client calls /health\par
+2) Service returns status and timestamp\par
+\par
+\b 6. Testing Minimum\b0\par
+Backend:\par
+- /health returns 200\par
+- /api/stream-names returns non-empty array\par
+- /api/filter-streams handles invalid payload with 400\par
+\par
+Frontend:\par
+- stream names loaded from API\par
+- selected streams update chart\par
+- API failure path displays message\par
+\par
+\b 7. Delivery Milestones\b0\par
+M1 (1-2 days): contract alignment + health endpoint\par
+M2 (2-3 days): canonical payload normalization + analytics integration\par
+M3 (1 day): test evidence + demo runbook\par
+\par
+\b 8. Exit Criteria\b0\par
+- One command startup per service\par
+- Successful end-to-end dashboard interaction\par
+- Test output attached to capstone appendix\par
+}

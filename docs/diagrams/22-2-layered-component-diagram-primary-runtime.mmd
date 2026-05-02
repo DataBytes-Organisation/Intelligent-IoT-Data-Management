@@ -1,0 +1,22 @@
+flowchart TB
+  subgraph L1[Presentation Layer]
+    FE1[Dashboard Page]
+    FE2[Hooks\nuseSensorData\nuseFilteredData\nuseStreamNames]
+    FE3[Charts and Insight Components]
+    FE1 --> FE2 --> FE3
+  end
+
+  subgraph L2[Application API Layer]
+    R[Routes]
+    C[Controllers]
+    S[Services]
+    R --> C --> S
+  end
+
+  subgraph L3[Data and Analytics Layer]
+    REP[Repository\nmockRepository.js]
+    ALG[Analytics Functions\ncorrelation_based.py or equivalent]
+    REP --> ALG
+  end
+
+  L1 --> L2 --> L3

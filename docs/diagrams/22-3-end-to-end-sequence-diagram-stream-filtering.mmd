@@ -1,0 +1,19 @@
+sequenceDiagram
+  autonumber
+  participant User
+  participant UI as React Dashboard
+  participant API as Node API
+  participant Service as Mock Service
+  participant Repo as Mock Repository
+  participant File as Processed Data File
+
+  User->>UI: Select stream names and apply filter
+  UI->>API: POST /api/filter-streams {streamNames}
+  API->>Service: Validate and process request
+  Service->>Repo: getMockData()
+  Repo->>File: Read JSON content
+  File-->>Repo: Dataset rows
+  Repo-->>Service: Parsed records
+  Service-->>API: Filtered records
+  API-->>UI: 200 OK + filtered payload
+  UI-->>User: Update charts and stats

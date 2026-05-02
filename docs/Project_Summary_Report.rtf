@@ -1,0 +1,82 @@
+{\rtf1\ansi\deff0
+{\fonttbl{\f0 Calibri;}}
+\fs24
+\b Project Summary Report (As-Is)\b0\par
+\par
+\b 1. README.md\b0\par
+- High-level vision: Intelligent IoT Data Management Platform for sensor analytics, anomaly detection, and visualization.\par
+- Describes broad goals and stack, but implementation in repo is split across multiple parallel prototypes.\par
+\par
+\b 2. algorithms/\b0\par
+- Lightweight Python algorithm module(s), mainly correlation-focused utilities.\par
+- Functions appear reusable but not fully wired as a single production runtime service.\par
+\par
+\b 3. backend/iot_backend/ (Django + DRF)\b0\par
+- Structured backend with models, serializers, viewsets, URL routing, migrations, and import commands.\par
+- Exposes REST endpoints for time-series/processed data under /api/.\par
+- Acts like the most formal backend implementation in repo.\par
+\par
+\b 4. backend/iot_backend/timeseries/\b0\par
+- Core domain app for sensor records and processed records.\par
+- Contains model definitions, DRF serializers/viewsets, admin, migrations, and import management commands.\par
+- Test file exists but currently minimal.\par
+\par
+\b 5. backend/iot_backend/Database/\b0\par
+- SQL and DTO-style artifacts, likely from earlier DB experimentation/transition work.\par
+- Not fully unified with current DRF model flow.\par
+\par
+\b 6. data_science/\b0\par
+- Mixed section: algorithms, development APIs/scripts, visualizations, datasets, notebooks, research artifacts.\par
+- Includes Flask-style service scripts (development/server.py etc.) and many exploratory notebooks.\par
+- Strong DS experimentation footprint; limited packaging boundary for app runtime.\par
+\par
+\b 7. data_science/algorithms/\b0\par
+- Algorithm implementations (correlation/mean/volatility-type logic).\par
+- Candidate source for reusable analytics functions in application flow.\par
+\par
+\b 8. data_science/development/\b0\par
+- Script-style service/orchestration utilities (server.py, server_corr.py, API callers, selector helpers).\par
+- More prototype/development utilities than hardened service modules.\par
+\par
+\b 9. data_science/visualizations/\b0\par
+- Python scripts for plotting (scatter, histogram, grouped bar, autocorrelation, filtered tables).\par
+- Useful for analysis/reporting outputs, less for direct frontend runtime.\par
+\par
+\b 10. correlation_study/\b0\par
+- Research-heavy area with notebooks, CSV/JSON samples, generated results images, and documentation PDF.\par
+- Appears to be exploratory/academic correlation work supporting methodology.\par
+\par
+\b 11. frontend/ (React app - older/parallel track)\b0\par
+- UI with routes for home/login/register/analyze and chart components.\par
+- Uses MUI and chart libraries; includes theme context and multiple utility placeholders.\par
+- Contains some integration attempts but also signs of partial/unfinished feature wiring.\par
+\par
+\b 12. new-frontend/frontend/ (React app - newer dashboard track)\b0\par
+- More modular dashboard-oriented frontend (components/hooks/utils/pages/layouts).\par
+- Includes stream selection, charts, and client-side analytics helpers.\par
+- Designed cleaner for dashboard flow, with mock/live data toggle behavior.\par
+\par
+\b 13. newBackend/BackendCode/ (Node/Express prototype backend)\b0\par
+- Layered structure: routes -> controllers -> services -> repository.\par
+- Reads processed mock data JSON from file path and serves stream/filter APIs.\par
+- Good lightweight API prototype for frontend integration demos.\par
+\par
+\b 14. datasets/ and data_science/storage/\b0\par
+- Input/output data artifacts (CSV/JSON), including correlated stream outputs.\par
+- Serves as experimental and demo data source bank.\par
+\par
+\b 15. Docker/\b0\par
+- Compose and Dockerfiles for multi-service setup (DB, backend, frontend, monitoring stack).\par
+- Includes Prometheus/Grafana/cAdvisor intent and architecture documentation artifact.\par
+- Represents deployment intent, though repo also has standalone service runs.\par
+\par
+\b 16. docs/\b0\par
+- Documentation area includes requirement/user-story PDFs and placeholder/working architecture docs.\par
+- Intended home for HLD/LLD/release-oriented documentation.\par
+\par
+\b 17. Root config/artifacts\b0\par
+- Mixed Python and Node dependency signals at root and subprojects.\par
+- Confirms multi-stack, multi-phase evolution of the capstone codebase.\par
+\par
+\b End of Report\b0\par
+}

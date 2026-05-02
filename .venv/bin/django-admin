@@ -1,0 +1,8 @@
+#!/bin/sh
+'''exec' "/mnt/c/Users/HP/Documents/Arjun Assignment/T3/SIT374_764_AI/DB_IIOT/Intelligent-IoT-Data-Management/.venv/bin/python3" "$0" "$@"
+' '''
+import sys
+from django.core.management import execute_from_command_line
+if __name__ == '__main__':
+    sys.argv[0] = sys.argv[0].removesuffix('.exe')
+    sys.exit(execute_from_command_line())

@@ -1,0 +1,59 @@
+{\rtf1\ansi\deff0
+{\fonttbl{\f0 Calibri;}}
+\fs24
+\b Gap Register (As-Is) - Capstone Project\b0\par
+\par
+\b Purpose\b0\par
+This document records current architecture and implementation gaps observed in the repository. It is solution-neutral and intended for product owner review before implementation starts.\par
+\par
+\b GR-01: Multi-stack fragmentation\b0\par
+Description: Two frontend codebases and multiple backend/service paths are active in parallel.\par
+Evidence: frontend/, new-frontend/frontend/, backend/iot_backend/, newBackend/BackendCode/, data_science/development/server.py\par
+Impact: Confusion during demo and unclear ownership of final runtime path.\par
+Severity: High\par
+\par
+\b GR-02: API endpoint contract mismatch\b0\par
+Description: Frontend calls and backend exposed routes are not consistently aligned across stacks.\par
+Evidence: frontend/src/AnalyzePanel.jsx, new-frontend/frontend/src/hooks/useSensorData.js, newBackend/BackendCode/routes/mock.js, data_science/development/server.py\par
+Impact: Integration failures and unstable demo behavior.\par
+Severity: High\par
+\par
+\b GR-03: Mock-first runtime in newer dashboard\b0\par
+Description: New dashboard path defaults to mock data, limiting evidence of backend integration.\par
+Evidence: new-frontend/frontend/src/components/Dashboard.jsx, new-frontend/frontend/src/hooks/useSensorData.js\par
+Impact: Backend value is not visible in end-to-end assessment.\par
+Severity: Medium\par
+\par
+\b GR-04: Deployment configuration drift\b0\par
+Description: Docker compose paths, health checks, and referenced files are not fully consistent with repository layout and service routes.\par
+Evidence: Docker/docker-compose.yaml, frontend/Dockerfile, backend/iot_backend/Dockerfile, Docker/Prometheus Configuration.yaml\par
+Impact: End-to-end stack may fail to start reliably.\par
+Severity: High\par
+\par
+\b GR-05: Data layer inconsistency across services\b0\par
+Description: Different payload schemas/field conventions are used in JSON datasets and service responses.\par
+Evidence: new-frontend/frontend/src/data/sensorData1.json, newBackend/BackendCode/mock_data/processed_data.json, backend/iot_backend/processed_data.json\par
+Impact: Frontend transformations become fragile and error-prone.\par
+Severity: High\par
+\par
+\b GR-06: Runtime dependencies and feature wiring mismatch\b0\par
+Description: Some frontend modules reference libraries or flows that are partially wired.\par
+Evidence: frontend/src/AnalyzePanel.jsx, frontend/src/useSocket.js, frontend/src/components/alertpanel.jsx, frontend/package.json\par
+Impact: Potential runtime errors and incomplete feature confidence.\par
+Severity: Medium\par
+\par
+\b GR-07: Limited automated quality gates\b0\par
+Description: Basic tests and CI gating are minimal in current structure.\par
+Evidence: backend/iot_backend/timeseries/tests.py, newBackend/package.json\par
+Impact: Regression risk during quick capstone changes.\par
+Severity: Medium\par
+\par
+\b GR-08: Prototype and production narratives are mixed\b0\par
+Description: Research notebooks, scripts, and app runtime artifacts coexist without explicit boundary in delivery narrative.\par
+Evidence: correlation_study/, data_science/, backend/, frontend/, new-frontend/\par
+Impact: Evaluation panel may perceive architecture as unfocused.\par
+Severity: Medium\par
+\par
+\b Review Note\b0\par
+After product owner approval, each gap can be mapped to a lightweight corrective action and included in HLD, LLD, and technical contribution backlog.\par
+}

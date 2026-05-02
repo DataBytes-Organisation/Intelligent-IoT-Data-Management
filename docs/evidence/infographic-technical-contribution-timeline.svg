@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900">
+  <rect width="1400" height="900" fill="#f7f8fa"/>
+  <text x="60" y="70" font-family="Arial" font-size="34" font-weight="700" fill="#1f2937">Technical Contribution Timeline (120 Hours)</text>
+  <text x="60" y="110" font-family="Arial" font-size="18" fill="#4b5563">Split: 40h technical contribution + 80h understanding/architecture/documentation</text>
+
+  <g font-family="Arial" font-size="18" fill="#111827">
+    <text x="60" y="185">WS1 Repository understanding (24h)</text>
+    <rect x="500" y="165" width="480" height="28" fill="#2563eb" rx="6"/>
+
+    <text x="60" y="235">WS2 HLD + diagram visualization (22h)</text>
+    <rect x="500" y="215" width="440" height="28" fill="#16a34a" rx="6"/>
+
+    <text x="60" y="285">WS3 LLD expansion (20h)</text>
+    <rect x="500" y="265" width="400" height="28" fill="#f59e0b" rx="6"/>
+
+    <text x="60" y="335">WS4 Reliability contribution (18h)</text>
+    <rect x="500" y="315" width="360" height="28" fill="#dc2626" rx="6"/>
+
+    <text x="60" y="385">WS5 Correlation analysis (16h)</text>
+    <rect x="500" y="365" width="320" height="28" fill="#7c3aed" rx="6"/>
+
+    <text x="60" y="435">WS6 Cybersecurity governance alignment (12h)</text>
+    <rect x="500" y="415" width="240" height="28" fill="#0f766e" rx="6"/>
+
+    <text x="60" y="485">WS7 Research + SFIA evidence packaging (8h)</text>
+    <rect x="500" y="465" width="160" height="28" fill="#475569" rx="6"/>
+  </g>
+
+  <rect x="60" y="550" width="1280" height="280" fill="#ffffff" stroke="#d1d5db" rx="12"/>
+  <text x="90" y="595" font-family="Arial" font-size="24" font-weight="700" fill="#111827">Evidence Anchors</text>
+  <text x="90" y="635" font-family="Arial" font-size="18" fill="#374151">- Worklog: docs/evidence/worklog.md</text>
+  <text x="90" y="665" font-family="Arial" font-size="18" fill="#374151">- Evidence index: docs/evidence/evidence_index.md</text>
+  <text x="90" y="695" font-family="Arial" font-size="18" fill="#374151">- LLD/HLD outputs: docs/LLD.md, docs/LLD.docx, docs/HLD_visual.docx</text>
+  <text x="90" y="725" font-family="Arial" font-size="18" fill="#374151">- Reliability tests: newBackend/tests/api.smoke.test.js (4/4 pass)</text>
+  <text x="90" y="755" font-family="Arial" font-size="18" fill="#374151">- SFIA mapping: docs/sfia/sfia_skill_mapping.md</text>
+</svg>

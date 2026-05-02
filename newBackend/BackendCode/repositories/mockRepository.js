@@ -1,13 +1,21 @@
 //handles data access for mock data, reading from local JSON file without a database yet
 
-require('dotenv').config({ path: '../.env' });
-
 const fs = require('fs');
 const path = require('path');
+const dotenv = require('dotenv');
+
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 class MockRepository {
   constructor() {
-    this.filePath = path.resolve(process.env.PROCESSED_DATA_PATH);
+    const configuredPath = process.env.PROCESSED_DATA_PATH;
+    if (!configuredPath) {
+      throw new Error('PROCESSED_DATA_PATH is not configured');
+    }
+
+    this.filePath = path.isAbsolute(configuredPath)
+      ? configuredPath
+      : path.resolve(__dirname, '..', configuredPath);
   }
 
   getMockData() {

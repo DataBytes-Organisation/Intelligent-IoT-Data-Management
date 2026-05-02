@@ -1,0 +1,13 @@
+flowchart TB
+  FE[Frontend]
+  API[Backend API]
+  H[Health Endpoint\nGET /health]
+  M[Metrics Export Layer]
+  P[Prometheus]
+  G[Grafana]
+  O[Operator]
+
+  FE --> API
+  API --> H
+  API --> M --> P --> G --> O
+  O --> H

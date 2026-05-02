@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900">
+  <rect width="1400" height="900" fill="#f8fafc"/>
+  <text x="60" y="70" font-family="Arial" font-size="34" font-weight="700" fill="#0f172a">Reliability Engineering Evidence Snapshot</text>
+
+  <rect x="60" y="110" width="620" height="320" fill="#ffffff" stroke="#cbd5e1" rx="12"/>
+  <text x="90" y="155" font-family="Arial" font-size="24" font-weight="700" fill="#111827">Implemented Controls</text>
+  <text x="90" y="195" font-family="Arial" font-size="18" fill="#334155">- GET /health endpoint</text>
+  <text x="90" y="225" font-family="Arial" font-size="18" fill="#334155">- app.js + server.js split for testability</text>
+  <text x="90" y="255" font-family="Arial" font-size="18" fill="#334155">- Repository path resolution hardening</text>
+  <text x="90" y="285" font-family="Arial" font-size="18" fill="#334155">- npm start / npm test scripts</text>
+  <text x="90" y="335" font-family="Arial" font-size="16" fill="#475569">Files:</text>
+  <text x="90" y="360" font-family="Arial" font-size="16" fill="#475569">newBackend/BackendCode/app.js</text>
+  <text x="90" y="385" font-family="Arial" font-size="16" fill="#475569">newBackend/BackendCode/repositories/mockRepository.js</text>
+
+  <rect x="720" y="110" width="620" height="320" fill="#ffffff" stroke="#cbd5e1" rx="12"/>
+  <text x="750" y="155" font-family="Arial" font-size="24" font-weight="700" fill="#111827">Smoke Test Results</text>
+  <text x="750" y="195" font-family="Arial" font-size="18" fill="#334155">Test suite: newBackend/tests/api.smoke.test.js</text>
+  <text x="750" y="230" font-family="Arial" font-size="18" fill="#15803d">PASS 1: GET /</text>
+  <text x="750" y="260" font-family="Arial" font-size="18" fill="#15803d">PASS 2: GET /health</text>
+  <text x="750" y="290" font-family="Arial" font-size="18" fill="#15803d">PASS 3: GET /api/stream-names</text>
+  <text x="750" y="320" font-family="Arial" font-size="18" fill="#15803d">PASS 4: POST /api/filter-streams invalid payload</text>
+  <text x="750" y="360" font-family="Arial" font-size="20" font-weight="700" fill="#166534">Overall: 4 / 4 passed</text>
+
+  <rect x="60" y="470" width="1280" height="350" fill="#ffffff" stroke="#cbd5e1" rx="12"/>
+  <text x="90" y="520" font-family="Arial" font-size="24" font-weight="700" fill="#111827">Why This Is Non-Disruptive</text>
+  <text x="90" y="560" font-family="Arial" font-size="18" fill="#334155">- Existing API contracts are preserved.</text>
+  <text x="90" y="590" font-family="Arial" font-size="18" fill="#334155">- Health endpoint is additive and does not change business logic routes.</text>
+  <text x="90" y="620" font-family="Arial" font-size="18" fill="#334155">- Test coverage adds validation evidence without runtime behavior changes.</text>
+  <text x="90" y="650" font-family="Arial" font-size="18" fill="#334155">- Path hardening improves startup reliability under WSL/dev contexts.</text>
+  <text x="90" y="700" font-family="Arial" font-size="16" fill="#475569">Proof links: docs/evidence/worklog.md, docs/evidence/evidence_index.md</text>
+</svg>
