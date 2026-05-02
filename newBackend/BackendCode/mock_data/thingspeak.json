@@ -1,0 +1,24 @@
+{
+  "channel": {
+    "id": 123456,
+    "name": "Mock Sensor Channel"
+  },
+"feeds": [
+  {
+    "entryId": 1,
+    "timestamp": "2026-04-18T08:00:00Z",
+    "temperature": 24.5,
+    "humidity": 61.2,
+    "pressure": 1012.8,
+    "anomaly": false
+  },
+  {
+    "entryId": 2,
+    "timestamp": "2026-04-18T08:05:00Z",
+    "temperature": 31.4,
+    "humidity": 58.1,
+    "pressure": 1011.9,
+    "anomaly": true
+  }
+]
+}

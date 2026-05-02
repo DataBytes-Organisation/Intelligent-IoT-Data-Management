@@ -6,7 +6,7 @@ const express = require('express');
 const cors = require('cors');
 
 const mockRoutes = require('./routes/mock');
-
+const thingSpeakRoutes = require('./routes/thingspeak');
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
 
 //Mount mock routes
 app.use('/api', mockRoutes);
-
+app.use('/api', thingSpeakRoutes);
 //Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
