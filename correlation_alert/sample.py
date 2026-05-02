@@ -1,11 +1,7 @@
-from correlation_alert.alerts import generate_alerts
+from alerts import generate_alerts
 
 
 def load_mock_data():
-    """
-    Temporary mock dataset for demo/testing.
-    NOTE: This will be replaced by real correlation pipeline output.
-    """
     return [
         {"sensor": "Temp-Humidity", "delta_r": 0.12},
         {"sensor": "Pressure-Temp", "delta_r": 0.35},
@@ -15,22 +11,9 @@ def load_mock_data():
     ]
 
 
-def run_alert_pipeline(data=None):
-    """
-    Wrapper pipeline for alert generation.
-
-    - If data is provided → use it (future integration with correlation pipeline)
-    - If not → fall back to mock data (demo mode)
-    """
-    if data is None:
-        data = load_mock_data()
-
+def run_alert_pipeline():
+    data = load_mock_data()
     alerts = generate_alerts(data)
-    return alerts
-
-
-if __name__ == "__main__":
-    alerts = run_alert_pipeline()
 
     print("=" * 52)
     print("      CORRELATION CHANGE ALERT SYSTEM")
@@ -61,3 +44,9 @@ if __name__ == "__main__":
     print("HIGH Alerts         :", high)
     print("\nStatus: Monitoring Active")
     print("=" * 52)
+
+    return alerts
+
+
+if __name__ == "__main__":
+    run_alert_pipeline()
