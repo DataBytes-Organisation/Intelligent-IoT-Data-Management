@@ -13,6 +13,7 @@ from evaluator import evaluate
 
 def run_pipeline(filepath, benchmark_mode=False):
     print(f"[pipeline] Loading data from: {filepath}")
+
     df, scaler = load_and_prepare(filepath)
 
     print(f"[pipeline] Shape following preprocessor acting: {df.shape}")
@@ -26,7 +27,7 @@ def run_pipeline(filepath, benchmark_mode=False):
         df, labels = inject_all(df)
         print(f"[pipeline] Injected {labels.sum()} anomalies")
 
-    # FINAL DETECTORS
+    # FINAL DETECTORS 
     detectors = [
         PcaADDetector(),
         OCSVMDetector(nu=0.05),
@@ -67,7 +68,7 @@ def run_pipeline(filepath, benchmark_mode=False):
                 print("  Top 5 most anomalous timestamps:")
                 print(score.nlargest(5).to_string())
             except Exception:
-                print(f"  [pipeline] Could not compute top 5 for {name}")
+                print(f"  Could not compute top 5 for {name}")
 
     # Evaluation
     if benchmark_mode and labels is not None:
