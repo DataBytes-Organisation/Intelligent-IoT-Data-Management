@@ -3,7 +3,6 @@ import pandas as pd
 from preprocessor import load_and_prepare
 from detectors.adtk_pcaad import PcaADDetector
 from detectors.ocsvm_detector import OCSVMDetector
-# from detectors.levelshiftad import LevelShiftAD
 from anomaly_injector import inject_point_spikes, inject_all
 from evaluator import evaluate
 
@@ -25,10 +24,11 @@ def run_pipeline(filepath, benchmark_mode=False):
 
 
     # DETECTOR
+    from detectors.levelshiftad import LevelShiftADDetector  # requires: adtk (pip install adtk)
     detectors = [
         PcaADDetector(),
         OCSVMDetector(nu=0.05),
-        #LevelShiftAD(),
+        LevelShiftADDetector(window=10, c=6.0),
     ]
     # Link the detectors we implement below so others can draw on them if need be.
     # if theres any requirements for your detector maybe note it here as well.
