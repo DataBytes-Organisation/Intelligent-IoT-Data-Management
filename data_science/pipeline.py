@@ -17,17 +17,17 @@ def run_pipeline(filepath, benchmark_mode=False):
     df, scaler = load_and_prepare(filepath)
 
     print(f"[pipeline] Shape following preprocessor acting: {df.shape}")
-    print(f"[pipeline] Columns {list(df.columns)}")
-    print(f"[pipeline] preview/check\n{df.head()}\n")
+    print(f"[pipeline] Columns: {list(df.columns)}")
+    print(f"[pipeline] Preview:\n{df.head()}\n")
 
-    # Inject anomalies
+    # Inject anomalies (for evaluation)
     labels = None
     if benchmark_mode:
         print("[pipeline] Benchmark mode ON — injecting synthetic anomalies")
         df, labels = inject_all(df)
         print(f"[pipeline] Injected {labels.sum()} anomalies")
 
-    # FINAL DETECTORS 
+    # Final detectors (keep all + QuantileAD)
     detectors = [
         PcaADDetector(),
         OCSVMDetector(nu=0.05),
@@ -54,10 +54,12 @@ def run_pipeline(filepath, benchmark_mode=False):
             print(f"\n[pipeline] Skipping {name} (no anomaly_flag)")
             continue
 
-        n_anom = flags.sum()
+        n_anom = int(flags.sum())
+        total = len(flags)
+        pct = (n_anom / total * 100) if total > 0 else 0
 
         print(f"\n[pipeline] {name} results:")
-        print(f"  Flagged: {n_anom}/{len(flags)} ({n_anom/len(flags)*100:.1f}%)")
+        print(f"  Flagged: {n_anom}/{total} ({pct:.1f}%)")
 
         if "runtime" in output:
             print(f"  Runtime: {output['runtime']:.3f}s")
@@ -70,7 +72,7 @@ def run_pipeline(filepath, benchmark_mode=False):
             except Exception:
                 print(f"  Could not compute top 5 for {name}")
 
-    # Evaluation
+    # Evaluation (only in benchmark mode)
     if benchmark_mode and labels is not None:
         eval_rows = []
 
