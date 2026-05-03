@@ -26,12 +26,12 @@ def run_pipeline(filepath, benchmark_mode=False):
         df, labels = inject_all(df)
         print(f"[pipeline] Injected {labels.sum()} anomalies")
 
-    # FINAL DETECTORS 
+    # FINAL DETECTORS (do not remove existing ones)
     detectors = [
         PcaADDetector(),
         OCSVMDetector(nu=0.05),
         LevelShiftADDetector(window=10, c=6.0),
-        QuantileADDetector(),    
+        QuantileADDetector(),
     ]
 
     results = {}
@@ -40,13 +40,16 @@ def run_pipeline(filepath, benchmark_mode=False):
     for detector in detectors:
         name = type(detector).__name__
         print(f"[pipeline] Running: {name}")
-        results[name] = detector.detect(df)
+        try:
+            results[name] = detector.detect(df)
+        except Exception as e:
+            print(f"[pipeline] ERROR in {name}: {e}")
 
     # Print summary
     for name, output in results.items():
         flags = output.get("anomaly_flag")
 
-        # skip incompatible detectors
+        # Skip incompatible detectors
         if flags is None:
             print(f"\n[pipeline] Skipping {name} (no anomaly_flag)")
             continue
@@ -59,13 +62,14 @@ def run_pipeline(filepath, benchmark_mode=False):
         if "runtime" in output:
             print(f"  Runtime: {output['runtime']:.3f}s")
 
-        if "score" in output:
+        # Safe score handling
+        score = output.get("score")
+        if score is not None and hasattr(score, "nlargest"):
             try:
                 print("  Top 5 most anomalous timestamps:")
-                top5 = output["score"].nlargest(5)
-                print(top5.to_string())
-            except:
-                pass
+                print(score.nlargest(5).to_string())
+            except Exception:
+                print(f"  [pipeline] Could not compute top 5 for {name}")
 
     # Evaluation
     if benchmark_mode and labels is not None:
