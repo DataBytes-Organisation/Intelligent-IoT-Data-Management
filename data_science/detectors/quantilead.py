@@ -40,13 +40,11 @@ class QuantileADDetector:
         # Select first column and convert to ADTK-compatible series
         series = validate_series(df.iloc[:, 0])
 
-        # Ensure index alignment with original dataframe
-        series.index = df.index
-
         # Detect anomalies using QuantileAD
         anomalies = self.model.fit_detect(series)
 
         # Convert output to boolean flags (True = anomaly)
+        anomalies = anomalies.reindex(df.index)
         anomaly_flag = anomalies.fillna(False).astype(bool)
 
         # Measure runtime
