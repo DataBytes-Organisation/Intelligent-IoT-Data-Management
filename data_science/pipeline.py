@@ -4,6 +4,7 @@ import pandas as pd
 from preprocessor import load_and_prepare
 from detectors.adtk_pcaad import PcaADDetector
 from detectors.ocsvm_detector import OCSVMDetector
+<<<<<<< HEAD
 from detectors.quantilead import QuantileADDetector
 <<<<<<< HEAD
 # from detectors.levelshiftad import LevelShiftAD
@@ -12,6 +13,9 @@ from detectors.levelshiftad import LevelShiftADDetector
 
 >>>>>>> main
 from anomaly_injector import inject_all
+=======
+from anomaly_injector import inject_point_spikes, inject_all
+>>>>>>> upstream/main
 from evaluator import evaluate
 
 
@@ -36,6 +40,7 @@ def run_pipeline(filepath, benchmark_mode=False):
         print(f"[pipeline] Injected {labels.sum()} anomalies")
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     # Detectors
     detectors = [
         PcaADDetector(),
@@ -49,6 +54,15 @@ def run_pipeline(filepath, benchmark_mode=False):
         LevelShiftADDetector(window=10, c=6.0),
         QuantileADDetector(),    
 >>>>>>> main
+=======
+
+    # DETECTOR
+    from detectors.levelshiftad import LevelShiftADDetector  # requires: adtk (pip install adtk)
+    detectors = [
+        PcaADDetector(),
+        OCSVMDetector(nu=0.05),
+        LevelShiftADDetector(window=10, c=6.0),
+>>>>>>> upstream/main
     ]
 
     results = {}
@@ -126,5 +140,9 @@ def run_pipeline(filepath, benchmark_mode=False):
 if __name__ == "__main__":
     filepath = sys.argv[1] if len(sys.argv) > 1 else "datasets/complex.csv"
     benchmark = "--benchmark" in sys.argv
+<<<<<<< HEAD
 
     run_pipeline(filepath, benchmark_mode=benchmark)
+=======
+    run_pipeline(filepath, benchmark_mode=benchmark)
+>>>>>>> upstream/main
