@@ -31,22 +31,14 @@ class QuantileADDetector:
         # Detect anomalies
         anomalies = self.model.fit_detect(series)
 
-<<<<<<< HEAD
-        # Convert to binary flags (ADTK returns True/False/NaN)
-        anomaly_flag = anomalies.fillna(False).astype(int)
-=======
         # Ensure boolean output (True/False)
         anomaly_flag = anomalies.fillna(False).astype(bool)
->>>>>>> main
 
         runtime = time.time() - start_time
 
         return {
             "model_name": "QuantileAD",
-<<<<<<< HEAD
-=======
             "timestamp": df.index,  
->>>>>>> main
             "anomaly_flag": anomaly_flag,
             # Binary score since QuantileAD does not provide continuous scores
             "score": anomaly_flag,

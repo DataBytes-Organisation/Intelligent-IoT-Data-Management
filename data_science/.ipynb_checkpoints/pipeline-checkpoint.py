@@ -5,50 +5,33 @@ from preprocessor import load_and_prepare
 from detectors.adtk_pcaad import PcaADDetector
 from detectors.ocsvm_detector import OCSVMDetector
 from detectors.quantilead import QuantileADDetector
-<<<<<<< HEAD
-# from detectors.levelshiftad import LevelShiftAD
-=======
 from detectors.levelshiftad import LevelShiftADDetector
 
->>>>>>> main
 from anomaly_injector import inject_all
 from evaluator import evaluate
 
 
 def run_pipeline(filepath, benchmark_mode=False):
     print(f"[pipeline] Loading data from: {filepath}")
-
     df, scaler = load_and_prepare(filepath)
 
     print(f"[pipeline] Shape following preprocessor acting: {df.shape}")
     print(f"[pipeline] Columns {list(df.columns)}")
     print(f"[pipeline] preview/check\n{df.head()}\n")
 
-<<<<<<< HEAD
-    # Inject anomalies for benchmarking
-=======
     # Inject anomalies
->>>>>>> main
     labels = None
     if benchmark_mode:
         print("[pipeline] Benchmark mode ON — injecting synthetic anomalies")
         df, labels = inject_all(df)
         print(f"[pipeline] Injected {labels.sum()} anomalies")
 
-<<<<<<< HEAD
-    # Detectors
-    detectors = [
-        PcaADDetector(),
-        OCSVMDetector(nu=0.05),
-        QuantileADDetector(),
-=======
     # FINAL DETECTORS 
     detectors = [
         PcaADDetector(),
         OCSVMDetector(nu=0.05),
         LevelShiftADDetector(window=10, c=6.0),
         QuantileADDetector(),    
->>>>>>> main
     ]
 
     results = {}
@@ -57,14 +40,10 @@ def run_pipeline(filepath, benchmark_mode=False):
     for detector in detectors:
         name = type(detector).__name__
         print(f"[pipeline] Running: {name}")
-        output = detector.detect(df)
-        results[name] = output
+        results[name] = detector.detect(df)
 
     # Print summary
     for name, output in results.items():
-<<<<<<< HEAD
-        flags = output["anomaly_flag"]
-=======
         flags = output.get("anomaly_flag")
 
         # skip incompatible detectors
@@ -72,7 +51,6 @@ def run_pipeline(filepath, benchmark_mode=False):
             print(f"\n[pipeline] Skipping {name} (no anomaly_flag)")
             continue
 
->>>>>>> main
         n_anom = flags.sum()
 
         print(f"\n[pipeline] {name} results:")
@@ -81,23 +59,6 @@ def run_pipeline(filepath, benchmark_mode=False):
         if "runtime" in output:
             print(f"  Runtime: {output['runtime']:.3f}s")
 
-<<<<<<< HEAD
-        if "score" in output and hasattr(output["score"], "nunique") and output["score"].nunique() > 2:
-            print("  Top 5 most anomalous timestamps:")
-            try:
-                top5 = output["score"].nlargest(5)
-                print(top5.to_string())
-            except Exception:
-                print("  Score not suitable for ranking")
-
-    # Evaluate
-    if benchmark_mode and labels is not None:
-        eval_rows = [evaluate(output, labels) for output in results.values()]
-        eval_df = pd.DataFrame(eval_rows)
-
-        print("\n[pipeline] Benchmark Results (Precision / Recall / F1):")
-        print(eval_df.to_string(index=False))
-=======
         if "score" in output:
             try:
                 print("  Top 5 most anomalous timestamps:")
@@ -118,7 +79,6 @@ def run_pipeline(filepath, benchmark_mode=False):
             eval_df = pd.DataFrame(eval_rows)
             print("\n[pipeline] Benchmark Results (Precision / Recall / F1):")
             print(eval_df.to_string(index=False))
->>>>>>> main
 
     return df, scaler, results
 
