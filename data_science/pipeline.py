@@ -39,13 +39,6 @@ def run_pipeline(filepath, benchmark_mode=False):
         name = type(detector).__name__
         print(f"[pipeline] Running: {name}")
         results[name] = detector.detect(df)
-
-        if isinstance(results[name], pd.DataFrame):
-            print(results[name].head())
-            print(results[name]["anomaly_flag"].value_counts(dropna=False))
-        else:
-            print(results[name])
-
 	
     if not detectors:
         print("[pipeline] preprocessing works")

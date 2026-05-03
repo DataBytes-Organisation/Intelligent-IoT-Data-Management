@@ -4,34 +4,55 @@ from adtk.detector import VolatilityShiftAD
 
 
 class VolatilityShiftADDetector:
+    """
+    Detects volatility/variance changes in time-series sensor data using ADTK's
+    VolatilityShiftAD detector.
+
+    This detector is useful for identifying jitter, instability, or sudden changes
+    in signal variation rather than only detecting value spikes.
+    """
+
     def __init__(self, c=6.0, window=10, side="both"):
+        """
+        Initialise the VolatilityShiftAD detector.
+
+        Parameters:
+            c (float): Sensitivity threshold. Higher values make detection stricter.
+            window (int): Rolling window size used to calculate volatility.
+            side (str): Direction of volatility change to detect. Options include
+                        "both", "positive", or "negative".
+        """
+
         self.model_name = "VolatilityShiftAD"
         self.c = c
         self.window = window
         self.side = side
 
     def detect(self, df):
+        """
+        Detect volatility shifts across all numeric sensor columns.
+
+        Parameters:
+            df (pd.DataFrame): Preprocessed time-series dataframe with a DatetimeIndex
+                               and numeric sensor columns.
+
+        Returns:
+            dict: Dictionary containing:
+                - anomaly_flag: Boolean Series showing detected anomaly timestamps.
+                - score: Series containing combined volatility scores.
+                - model_name: Name of the detector.
+                - timestamp: DataFrame index used for detected timestamps.
+        """
+
         df = df.copy()
-
-        if not isinstance(df.index, pd.DatetimeIndex):
-            df.index = pd.date_range(
-                start="2026-01-01",
-                periods=len(df),
-                freq="s"
-            )
-
-        df.columns = df.columns.str.strip()
 
         combined_flags = pd.Series(False, index=df.index)
         combined_score = pd.Series(0.0, index=df.index)
-
-        print(f"\n[pipeline] {self.model_name} results:")
 
         for sensor in df.select_dtypes(include="number").columns:
             series = df[sensor].dropna()
 
             if series.empty:
-                print(f"  [{sensor}]: 0 volatility shift(s) detected")
                 continue
 
             series = validate_series(series)
@@ -47,22 +68,12 @@ class VolatilityShiftADDetector:
 
             anomaly_score = series.rolling(window=self.window).std().fillna(0)
 
-            detected_times = anomaly_flags[anomaly_flags == True].index
-
-            print(f"  [{sensor}]: {len(detected_times)} volatility shift(s) detected")
-
-            for ts in detected_times:
-                print(f"      - {ts}")
-
             combined_flags.loc[anomaly_flags.index] = (
                 combined_flags.loc[anomaly_flags.index] | anomaly_flags
             )
 
-            combined_score.loc[anomaly_score.index] = pd.concat(
-                [
-                    combined_score.loc[anomaly_score.index],
-                    anomaly_score
-                ],
+            combined_score = pd.concat(
+                [combined_score, anomaly_score],
                 axis=1
             ).max(axis=1)
 
