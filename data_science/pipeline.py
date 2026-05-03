@@ -26,7 +26,7 @@ def run_pipeline(filepath, benchmark_mode=False):
         df, labels = inject_all(df)
         print(f"[pipeline] Injected {labels.sum()} anomalies")
 
-    # FINAL DETECTORS (do not remove existing ones)
+    # FINAL DETECTORS
     detectors = [
         PcaADDetector(),
         OCSVMDetector(nu=0.05),
@@ -36,7 +36,7 @@ def run_pipeline(filepath, benchmark_mode=False):
 
     results = {}
 
-    # Run detectors
+    # Run detectors safely
     for detector in detectors:
         name = type(detector).__name__
         print(f"[pipeline] Running: {name}")
@@ -49,7 +49,6 @@ def run_pipeline(filepath, benchmark_mode=False):
     for name, output in results.items():
         flags = output.get("anomaly_flag")
 
-        # Skip incompatible detectors
         if flags is None:
             print(f"\n[pipeline] Skipping {name} (no anomaly_flag)")
             continue
@@ -62,7 +61,6 @@ def run_pipeline(filepath, benchmark_mode=False):
         if "runtime" in output:
             print(f"  Runtime: {output['runtime']:.3f}s")
 
-        # Safe score handling
         score = output.get("score")
         if score is not None and hasattr(score, "nlargest"):
             try:
