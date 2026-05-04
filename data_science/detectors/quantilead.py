@@ -1,4 +1,5 @@
 import time
+import pandas as pd
 from adtk.detector import QuantileAD
 from adtk.data import validate_series
 
@@ -7,54 +8,56 @@ class QuantileADDetector:
     """
     Quantile-based anomaly detector using ADTK.
 
-    Flags values that fall outside the specified lower and upper quantile range.
+    Detects anomalies based on upper and lower quantile thresholds
+    and computes a numeric anomaly score based on distance from these thresholds.
     """
 
     def __init__(self, high=0.95, low=0.05):
-        # Upper and lower quantile thresholds
         self.high = high
         self.low = low
-
-        # Initialize ADTK QuantileAD model
         self.model = QuantileAD(high=high, low=low)
-
-        # Model name for reporting
         self.name = "QuantileADDetector"
 
-    def detect(self, df):
+    def detect(self, df: pd.DataFrame) -> dict:
         start_time = time.time()
 
-        # Validate input DataFrame
         if df is None or df.shape[1] == 0:
             raise ValueError("Input DataFrame must contain at least one column.")
 
-        # NOTE:
-        # Currently using only the first feature (s1) for anomaly detection.
-        # This is a simplified v1 approach to keep behaviour interpretable
-        # and avoid confusion during evaluation.
-        #
-        # Future improvement:
-        # Apply QuantileAD across all features and combine results
-        # (e.g., OR condition across multiple columns).
-        
-        # Select first column and convert to ADTK-compatible series
-        series = validate_series(df.iloc[:, 0])
+        # Use numeric columns only
+        df_numeric = df.select_dtypes(include=["number"])
+        if df_numeric.shape[1] == 0:
+            raise ValueError("No numeric columns available for QuantileAD.")
 
-        # Detect anomalies using QuantileAD
+        # Use first numeric column
+        series = validate_series(df_numeric.iloc[:, 0])
+
+        # Handle missing values
+        series = series.ffill().bfill()
+
+        # Detect anomalies
         anomalies = self.model.fit_detect(series)
 
-        # Convert output to boolean flags (True = anomaly)
-        anomalies = anomalies.reindex(df.index)
+        # Align properly to series index
+        anomalies = anomalies.reindex(series.index)
         anomaly_flag = anomalies.fillna(False).astype(bool)
 
-        # Measure runtime
+        # Compute quantile thresholds
+        lower = series.quantile(self.low)
+        upper = series.quantile(self.high)
+
+        # Distance-based score
+        scores = (
+            (series - upper).clip(lower=0) +
+            (lower - series).clip(lower=0)
+        ).fillna(0)
+
         runtime = time.time() - start_time
 
-        # Return results following shared detector contract
         return {
             "model_name": self.name,
-            "timestamp": df.index,
+            "timestamp": series.index,
             "anomaly_flag": anomaly_flag,
-            "score": anomaly_flag,  # Binary score 
+            "score": scores,
             "runtime": runtime
         }
