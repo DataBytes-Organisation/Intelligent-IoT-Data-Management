@@ -7,8 +7,8 @@ class ECODDetector:
     """
     ECOD (Empirical Cumulative Distribution Outlier Detection)
 
-    Detects anomalies based on tail probabilities of feature distributions.
-    Works well for high-dimensional data and requires no training phase.
+    Detects anomalies using tail probability estimation.
+    Suitable for high-dimensional data and requires no training phase.
     """
 
     def __init__(self, contamination=0.05):
@@ -19,36 +19,52 @@ class ECODDetector:
         """
         Run ECOD anomaly detection.
 
-        Returns a dict compatible with the pipeline/evaluator:
-        {
-            "anomaly_flag": pd.Series (bool),
-            "score": pd.Series (float),
-            "timestamp": pd.Index,
-            "runtime": float,
-            "model_name": str
-        }
+        Parameters:
+            df (pd.DataFrame): Preprocessed input data
+
+        Returns:
+            dict:
+            {
+                "anomaly_flag": pd.Series (bool),
+                "score": pd.Series (float),
+                "timestamp": pd.Index,
+                "runtime": float,
+                "model_name": str
+            }
         """
+
+        if df is None or len(df) == 0:
+            raise ValueError("Input dataframe is empty")
 
         start_time = time.time()
 
-        # Fit model
-        self.model.fit(df)
+        # Ensure numeric-only input (ECOD requirement)
+        df_numeric = df.select_dtypes(include=["number"])
+
+        if df_numeric.shape[1] == 0:
+            raise ValueError("No numeric columns available for ECOD")
+
+        # Fit ECOD model
+        self.model.fit(df_numeric)
 
         # Labels: 0 = normal, 1 = anomaly
         labels = self.model.labels_
 
-        # Ensure boolean Series aligned with df index
-        anomaly_flag = pd.Series(labels.astype(bool), index=df.index)
+        if len(labels) != len(df_numeric):
+            raise ValueError("Mismatch between input data and ECOD output length")
 
-        # Scores: higher = more anomalous
-        scores = pd.Series(self.model.decision_scores_, index=df.index)
+        # Convert to boolean Series aligned with original index
+        anomaly_flag = pd.Series(labels.astype(bool), index=df_numeric.index)
+
+        # Anomaly scores (higher = more anomalous)
+        scores = pd.Series(self.model.decision_scores_, index=df_numeric.index)
 
         runtime = time.time() - start_time
 
         return {
             "anomaly_flag": anomaly_flag,
             "score": scores,
-            "timestamp": df.index,
+            "timestamp": df_numeric.index,
             "runtime": runtime,
-            "model_name": "ECODDetector",  
+            "model_name": "ECODDetector",
         }
