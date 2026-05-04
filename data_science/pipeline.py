@@ -6,6 +6,7 @@ from detectors.adtk_pcaad import PcaADDetector
 from detectors.ocsvm_detector import OCSVMDetector
 from detectors.quantilead import QuantileADDetector
 from detectors.levelshiftad import LevelShiftADDetector
+from detectors.ecod_detector import ECODDetector
 
 from anomaly_injector import inject_all
 from evaluator import evaluate
@@ -25,26 +26,40 @@ def run_pipeline(filepath, benchmark_mode=False):
     if benchmark_mode:
         print("[pipeline] Benchmark mode ON — injecting synthetic anomalies")
         df, labels = inject_all(df)
-        print(f"[pipeline] Injected {labels.sum()} anomalies")
+        print(f"[pipeline] Injected {int(labels.sum())} anomalies")
 
-    # Final detectors (keep all + QuantileAD)
+    # Detectors
     detectors = [
         PcaADDetector(),
         OCSVMDetector(nu=0.05),
         LevelShiftADDetector(window=10, c=6.0),
         QuantileADDetector(),
+        ECODDetector(),
     ]
 
     results = {}
 
-    # Run detectors safely
+    # Run detectors
     for detector in detectors:
         name = type(detector).__name__
         print(f"[pipeline] Running: {name}")
+
         try:
-            results[name] = detector.detect(df)
+            output = detector.detect(df)
+
+            # Basic validation
+            if not isinstance(output, dict):
+                raise ValueError(f"{name} did not return dict")
+
+            results[name] = output
+
         except Exception as e:
             print(f"[pipeline] ERROR in {name}: {e}")
+
+            if benchmark_mode:
+                raise RuntimeError(
+                    f"[pipeline] Detector {name} failed during benchmark — fix required"
+                )
 
     # Print summary
     for name, output in results.items():
@@ -54,31 +69,47 @@ def run_pipeline(filepath, benchmark_mode=False):
             print(f"\n[pipeline] Skipping {name} (no anomaly_flag)")
             continue
 
-        n_anom = int(flags.sum())
-        total = len(flags)
-        pct = (n_anom / total * 100) if total > 0 else 0
+        try:
+            flags_series = pd.Series(flags)
+            n_anom = int(flags_series.sum())
+            total = len(flags_series)
+            pct = (n_anom / total * 100) if total > 0 else 0
+        except Exception:
+            print(f"[pipeline] Invalid anomaly_flag format for {name}")
+            continue
 
         print(f"\n[pipeline] {name} results:")
         print(f"  Flagged: {n_anom}/{total} ({pct:.1f}%)")
 
+        # Runtime
         if "runtime" in output:
-            print(f"  Runtime: {output['runtime']:.3f}s")
-
-        score = output.get("score")
-        if score is not None and hasattr(score, "nlargest"):
             try:
+                print(f"  Runtime: {float(output['runtime']):.3f}s")
+            except Exception:
+                print("  Runtime: unavailable")
+
+        # Top anomalies
+        score = output.get("score")
+        if score is not None:
+            try:
+                score_series = pd.Series(score)
                 print("  Top 5 most anomalous timestamps:")
-                print(score.nlargest(5).to_string())
+                print(score_series.nlargest(5).to_string())
             except Exception:
                 print(f"  Could not compute top 5 for {name}")
 
-    # Evaluation (only in benchmark mode)
+    # Evaluation
     if benchmark_mode and labels is not None:
         eval_rows = []
 
-        for output in results.values():
+        for name, output in results.items():
             if "anomaly_flag" in output:
-                eval_rows.append(evaluate(output, labels))
+                try:
+                    row = evaluate(output, labels)
+                    row["detector"] = name
+                    eval_rows.append(row)
+                except Exception as e:
+                    print(f"[pipeline] Evaluation failed for {name}: {e}")
 
         if eval_rows:
             eval_df = pd.DataFrame(eval_rows)
