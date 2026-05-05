@@ -5,30 +5,63 @@ from itertools import combinations
 import pandas as pd
 import numpy as np
 
+from correlation_alert.preprocessing import (
+    fix_timestamps,
+    convert_sensor_columns_to_numeric,
+    handle_missing_values,
+    remove_outliers,
+    validate_output
+)
+
 
 def preprocess_timeseries(df, timestamp_col, selected_streams):
     """
-    Prepare and clean time-series data before correlation analysis.
+    Preprocess selected time-series sensor streams before correlation analysis.
 
-    Parameters:
-        df (pd.DataFrame): Original dataset.
-        timestamp_col (str): Name of the timestamp column.
-        selected_streams (list[str]): List of sensor/stream columns to analyse.
+    This function is designed to plug into the main wrapper pipeline as:
 
-    Returns:
-        pd.DataFrame:
-            Cleaned dataframe indexed by timestamp and containing only selected streams.
+        preprocess_timeseries(df, timestamp_col, selected_streams)
+
+    It only handles preprocessing and does not perform rolling windows,
+    correlation calculation, comparison, or alert generation.
     """
 
-    # TODO:
-    # 1. Select required columns
-    # 2. Convert timestamp column to datetime
-    # 3. Sort by timestamp
-    # 4. Set timestamp as index
-    # 5. Handle missing values
-    # 6. Return cleaned dataframe
+    # Select only required columns
+    required_cols = [timestamp_col] + selected_streams
+    processed_df = df[required_cols].copy()
 
-    pass
+    # Clean and sort timestamp column
+    processed_df = fix_timestamps(processed_df, time_col=timestamp_col)
+
+    # Convert sensor columns to numeric values
+    processed_df = convert_sensor_columns_to_numeric(
+        processed_df,
+        time_col=timestamp_col
+    )
+
+    # Handle missing values
+    processed_df = handle_missing_values(
+        processed_df,
+        method="interpolate"
+    )
+
+    # Remove outliers from selected sensor streams
+    processed_df = remove_outliers(
+        processed_df,
+        sensor_cols=selected_streams,
+        iqr_factor=3.0
+    )
+
+    # Validate cleaned output
+    processed_df = validate_output(
+        processed_df,
+        time_col=timestamp_col
+    )
+
+    # Set timestamp as index for downstream rolling-window analysis
+    processed_df = processed_df.set_index(timestamp_col)
+
+    return processed_df
 
 
 def create_rolling_windows(df, window_size, step_size):
