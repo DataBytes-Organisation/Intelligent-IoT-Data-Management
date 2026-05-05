@@ -6,7 +6,7 @@ from detectors.adtk_pcaad import PcaADDetector
 from detectors.ocsvm_detector import OCSVMDetector
 from detectors.quantilead import QuantileADDetector
 from detectors.levelshiftad import LevelShiftADDetector
-from detectors.ecod_detector import ECODDetector
+
 
 from anomaly_injector import inject_all
 from evaluator import evaluate
@@ -15,6 +15,7 @@ from evaluator import evaluate
 def run_pipeline(filepath, benchmark_mode=False):
     print(f"[pipeline] Loading data from: {filepath}")
 
+    # Load data
     df, scaler = load_and_prepare(filepath)
 
     print(f"[pipeline] Shape following preprocessor acting: {df.shape}")
@@ -28,28 +29,30 @@ def run_pipeline(filepath, benchmark_mode=False):
         df, labels = inject_all(df)
         print(f"[pipeline] Injected {int(labels.sum())} anomalies")
 
-    # Detectors
+    # Detectors (NO ECOD HERE)
     detectors = [
         PcaADDetector(),
         OCSVMDetector(nu=0.05),
         LevelShiftADDetector(window=10, c=6.0),
         QuantileADDetector(),
-        ECODDetector(),
     ]
 
     results = {}
 
     # Run detectors
     for detector in detectors:
-        name = type(detector).__name__
+        name = getattr(detector, "model_name", type(detector).__name__)
         print(f"[pipeline] Running: {name}")
 
         try:
             output = detector.detect(df)
 
-            # Basic validation
+            # Validate output
             if not isinstance(output, dict):
                 raise ValueError(f"{name} did not return dict")
+
+            if "anomaly_flag" not in output:
+                raise ValueError(f"{name} missing anomaly_flag")
 
             results[name] = output
 
@@ -64,13 +67,14 @@ def run_pipeline(filepath, benchmark_mode=False):
     # Print summary
     for name, output in results.items():
         flags = output.get("anomaly_flag")
+        timestamp = output.get("timestamp")
 
         if flags is None:
             print(f"\n[pipeline] Skipping {name} (no anomaly_flag)")
             continue
 
         try:
-            flags_series = pd.Series(flags)
+            flags_series = pd.Series(flags, index=timestamp)
             n_anom = int(flags_series.sum())
             total = len(flags_series)
             pct = (n_anom / total * 100) if total > 0 else 0
@@ -92,9 +96,9 @@ def run_pipeline(filepath, benchmark_mode=False):
         score = output.get("score")
         if score is not None:
             try:
-                score_series = pd.Series(score)
+                score_series = pd.Series(score, index=timestamp)
                 print("  Top 5 most anomalous timestamps:")
-                print(score_series.nlargest(5).to_string())
+                print(score_series.nlargest(5))
             except Exception:
                 print(f"  Could not compute top 5 for {name}")
 
