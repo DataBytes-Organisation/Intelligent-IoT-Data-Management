@@ -2,6 +2,7 @@ import sys
 import pandas as pd
 
 from preprocessor import load_and_prepare
+from detectors.volatility_shift_ad import VolatilityShiftADDetector
 from detectors.adtk_pcaad import PcaADDetector
 from detectors.ocsvm_detector import OCSVMDetector
 from detectors.quantilead import QuantileADDetector
@@ -34,6 +35,7 @@ def run_pipeline(filepath, benchmark_mode=False):
         PcaADDetector(),
         OCSVMDetector(nu=0.05),
         LevelShiftADDetector(window=10, c=6.0),
+        VolatilityShiftADDetector(),
         QuantileADDetector(),
         ECODDetector(),
     ]
@@ -74,12 +76,20 @@ def run_pipeline(filepath, benchmark_mode=False):
             print(f"\n[pipeline] Skipping {name} (no anomaly_flag)")
             continue
 
+        # safer handling
+        if timestamp is None:
+            timestamp = df.index
+
         try:
-            # Maintain correct index alignment
-            flags_series = pd.Series(flags, index=timestamp)
+            if isinstance(flags, pd.Series):
+                flags_series = flags
+            else:
+                flags_series = pd.Series(flags, index=timestamp)
+
             n_anom = int(flags_series.sum())
             total = len(flags_series)
             pct = (n_anom / total * 100) if total > 0 else 0
+
         except Exception:
             print(f"[pipeline] Invalid anomaly_flag format for {name}")
             continue
@@ -98,9 +108,14 @@ def run_pipeline(filepath, benchmark_mode=False):
         score = output.get("score")
         if score is not None:
             try:
-                score_series = pd.Series(score, index=timestamp)
+                if isinstance(score, pd.Series):
+                    score_series = score
+                else:
+                    score_series = pd.Series(score, index=timestamp)
+
                 print("  Top 5 most anomalous timestamps:")
                 print(score_series.nlargest(5))
+
             except Exception:
                 print(f"  Could not compute top 5 for {name}")
 
