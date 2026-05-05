@@ -2,6 +2,7 @@ import sys
 import pandas as pd
 
 from preprocessor import load_and_prepare
+from detectors.volatility_shift_ad import VolatilityShiftADDetector
 from detectors.adtk_pcaad import PcaADDetector
 from detectors.ocsvm_detector import OCSVMDetector
 from detectors.quantilead import QuantileADDetector
@@ -27,11 +28,13 @@ def run_pipeline(filepath, benchmark_mode=False):
         df, labels = inject_all(df)
         print(f"[pipeline] Injected {labels.sum()} anomalies")
 
-    # Final detectors (keep all + QuantileAD)
+
+    from detectors.levelshiftad import LevelShiftADDetector  # requires: adtk (pip install adtk)
     detectors = [
         PcaADDetector(),
         OCSVMDetector(nu=0.05),
         LevelShiftADDetector(window=10, c=6.0),
+        VolatilityShiftADDetector(),
         QuantileADDetector(),
     ]
 
