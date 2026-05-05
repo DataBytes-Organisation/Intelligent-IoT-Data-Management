@@ -7,13 +7,13 @@ from detectors.ocsvm_detector import OCSVMDetector
 from detectors.quantilead import QuantileADDetector
 from detectors.levelshiftad import LevelShiftADDetector
 
-
 from anomaly_injector import inject_all
 from evaluator import evaluate
 
 
 def run_pipeline(filepath, benchmark_mode=False):
     print(f"[pipeline] Loading data from: {filepath}")
+
 
     # Load data
     df, scaler = load_and_prepare(filepath)
@@ -22,14 +22,16 @@ def run_pipeline(filepath, benchmark_mode=False):
     print(f"[pipeline] Columns: {list(df.columns)}")
     print(f"[pipeline] Preview:\n{df.head()}\n")
 
-    # Inject anomalies (for evaluation)
+
+    # Inject anomalies 
     labels = None
     if benchmark_mode:
         print("[pipeline] Benchmark mode ON — injecting synthetic anomalies")
         df, labels = inject_all(df)
         print(f"[pipeline] Injected {int(labels.sum())} anomalies")
 
-    # Detectors (NO ECOD HERE)
+
+    # Detectors 
     detectors = [
         PcaADDetector(),
         OCSVMDetector(nu=0.05),
@@ -72,6 +74,10 @@ def run_pipeline(filepath, benchmark_mode=False):
         if flags is None:
             print(f"\n[pipeline] Skipping {name} (no anomaly_flag)")
             continue
+
+        # Fallback safety (should not trigger if detectors are correct)
+        if timestamp is None:
+            timestamp = df.index
 
         try:
             flags_series = pd.Series(flags, index=timestamp)
