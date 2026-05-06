@@ -1,4 +1,4 @@
-from correlation_alert.alerts import generate_alerts
+from main import generate_alerts
 
 
 def load_mock_data():
