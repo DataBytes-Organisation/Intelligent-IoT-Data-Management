@@ -13,6 +13,7 @@ from correlation_alert.preprocessing import (
     validate_output
 )
 
+from typing import List
 
 def preprocess_timeseries(df, timestamp_col, selected_streams):
     """
@@ -64,27 +65,32 @@ def preprocess_timeseries(df, timestamp_col, selected_streams):
     return processed_df
 
 
-def create_rolling_windows(df, window_size, step_size):
+def create_rolling_windows(
+    df: pd.DataFrame,
+    window_size: int,
+    step_size: int
+) -> List[pd.DataFrame]:
     """
-    Split the cleaned dataframe into rolling/sliding windows.
+    Creates rolling windows from a preprocessed time-series DataFrame.
 
     Parameters:
-        df (pd.DataFrame): Preprocessed dataframe.
-        window_size (int): Number of rows per window.
-        step_size (int): Step size between consecutive windows.
+        df (pd.DataFrame): Preprocessed DataFrame indexed by timestamp.
+        window_size (int): Number of rows/timestamps in each window.
+        step_size (int): Step size between windows.
 
     Returns:
-        list[pd.DataFrame]:
-            List of windowed dataframes.
+        List[pd.DataFrame]: List of windowed DataFrames.
     """
 
-    # TODO:
-    # 1. Loop through dataframe using window_size and step_size
-    # 2. Create overlapping windows
-    # 3. Store each window in a list
-    # 4. Return list of windows
+    windows = []
+    n = len(df)
 
-    pass
+    for start in range(0, n - window_size + 1, step_size):
+        end = start + window_size
+        window = df.iloc[start:end].copy()
+        windows.append(window)
+
+    return windows
 
 
 def compute_window_correlations(windows, method="pearson"):
