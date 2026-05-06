@@ -13,7 +13,7 @@ from correlation_alert.preprocessing import (
     validate_output
 )
 
-from typing import List
+from typing import List, Dict, Any, Optional
 
 def preprocess_timeseries(df, timestamp_col, selected_streams):
     """
@@ -93,33 +93,58 @@ def create_rolling_windows(
     return windows
 
 
-def compute_window_correlations(windows, method="pearson"):
+def compute_window_correlations(
+    windows: List[pd.DataFrame],
+    method: str = "pearson",
+    min_periods: Optional[int] = None
+) -> List[Dict[str, Any]]:
     """
-    Compute correlation matrix for each rolling window.
-
+    Computes Pearson (or other) correlation matrix for each pre-created window.
+    
+    This is a general-purpose function that works with ANY dataset.
+    
     Parameters:
-        windows (list[pd.DataFrame]): List of rolling windows.
-        method (str): Correlation method to use (default: 'pearson').
-
+    -----------
+    windows : List[pd.DataFrame]
+        List of DataFrames (each is one sliding window)
+    method : str
+        Correlation method: 'pearson', 'kendall', 'spearman'
+    min_periods : int
+        Minimum number of observations required per pair
+    
     Returns:
-        list[dict]:
-            Each item should contain:
-            {
-                "window_index": int,
-                "start_time": timestamp,
-                "end_time": timestamp,
-                "correlation_matrix": pd.DataFrame
-            }
+    --------
+    List[Dict] where each dict contains:
+        - window_index
+        - start_time
+        - end_time
+        - window_size
+        - correlation_matrix (pandas DataFrame)
     """
-
-    # TODO:
-    # 1. Iterate through each window
-    # 2. Compute correlation matrix for that window
-    # 3. Store metadata such as window index, start time, end time
-    # 4. Return list of correlation results
-
-    pass
-
+    
+    results = []
+    
+    for idx, window_df in enumerate(windows):
+        if len(window_df) < 2:
+            continue
+            
+        # Compute correlation
+        corr_matrix = window_df.corr(
+            method=method, 
+            min_periods=min_periods
+        )
+        
+        result = {
+            "window_index": idx,
+            "start_time": window_df.index[0] if hasattr(window_df.index, '__len__') and len(window_df.index) > 0 else None,
+            "end_time": window_df.index[-1] if hasattr(window_df.index, '__len__') and len(window_df.index) > 0 else None,
+            "window_size": len(window_df),
+            "correlation_matrix": corr_matrix
+        }
+        
+        results.append(result)
+    
+    return results
 
 def compare_correlation_changes(correlation_results):
     """
