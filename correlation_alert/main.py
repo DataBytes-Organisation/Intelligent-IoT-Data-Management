@@ -176,6 +176,27 @@ def compare_correlation_changes(correlation_results):
 
     pass
 
+def get_alert_level(delta_r):
+    """
+    Classify correlation change magnitude into alert severity.
+    """
+
+    if delta_r is None:
+        return None
+
+    try:
+        delta_r = float(delta_r)
+    except (TypeError, ValueError):
+        return None
+
+    if delta_r < 0.3:
+        return None
+    elif delta_r < 0.5:
+        return "LOW"
+    elif delta_r < 0.7:
+        return "MEDIUM"
+    else:
+        return "HIGH"
 
 def generate_alerts(changes, strong_corr_threshold=0.7, weak_corr_threshold=0.4, delta_threshold=0.3):
     """
