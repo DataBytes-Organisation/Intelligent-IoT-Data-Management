@@ -7,7 +7,6 @@ from detectors.adtk_pcaad import PcaADDetector
 from detectors.ocsvm_detector import OCSVMDetector
 from detectors.quantilead import QuantileADDetector
 from detectors.levelshiftad import LevelShiftADDetector
-from detectors.ecod_detector import ECODDetector
 
 from anomaly_injector import inject_all
 from evaluator import evaluate
@@ -23,7 +22,7 @@ def run_pipeline(filepath, benchmark_mode=False):
     print(f"[pipeline] Columns: {list(df.columns)}")
     print(f"[pipeline] Preview:\n{df.head()}\n")
 
-    # Inject anomalies (for evaluation)
+    # Inject anomalies
     labels = None
     if benchmark_mode:
         print("[pipeline] Benchmark mode ON — injecting synthetic anomalies")
@@ -37,7 +36,6 @@ def run_pipeline(filepath, benchmark_mode=False):
         LevelShiftADDetector(window=10, c=6.0),
         VolatilityShiftADDetector(),
         QuantileADDetector(),
-        ECODDetector(),
     ]
 
     results = {}
@@ -76,7 +74,7 @@ def run_pipeline(filepath, benchmark_mode=False):
             print(f"\n[pipeline] Skipping {name} (no anomaly_flag)")
             continue
 
-        # safer handling
+        # Safer handling
         if timestamp is None:
             timestamp = df.index
 
@@ -106,6 +104,7 @@ def run_pipeline(filepath, benchmark_mode=False):
 
         # Top anomalies
         score = output.get("score")
+
         if score is not None:
             try:
                 if isinstance(score, pd.Series):
@@ -129,11 +128,13 @@ def run_pipeline(filepath, benchmark_mode=False):
                     row = evaluate(output, labels)
                     row["detector"] = name
                     eval_rows.append(row)
+
                 except Exception as e:
                     print(f"[pipeline] Evaluation failed for {name}: {e}")
 
         if eval_rows:
             eval_df = pd.DataFrame(eval_rows)
+
             print("\n[pipeline] Benchmark Results (Precision / Recall / F1):")
             print(eval_df.to_string(index=False))
 
