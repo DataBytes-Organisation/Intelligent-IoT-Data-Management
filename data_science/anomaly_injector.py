@@ -128,6 +128,10 @@ def inject_all(
     n_volatility_shifts: int = 1,
     random_seed: int = 42,
 ) -> tuple[pd.DataFrame, pd.Series]:
+    """
+    Inject all three anomaly types into the same dataset.
+    Useful for benchmarking detectors against a realistic mix.
+    """
     _validate_df(df)
 
     df_out, labels_pt = inject_point_spikes(

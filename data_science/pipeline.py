@@ -1,18 +1,10 @@
 import sys
-<<<<<<< Updated upstream
-=======
 import pandas as pd
 
->>>>>>> Stashed changes
 from preprocessor import load_and_prepare
 from detectors.volatility_shift_ad import VolatilityShiftADDetector
 from detectors.adtk_pcaad import PcaADDetector
 from detectors.ocsvm_detector import OCSVMDetector
-<<<<<<< Updated upstream
-from detectors.levelshiftad import LevelShiftAD
-
-def run_pipeline(filepath):
-=======
 from detectors.quantilead import QuantileADDetector
 from detectors.levelshiftad import LevelShiftADDetector
 
@@ -21,16 +13,8 @@ from evaluator import evaluate
 
 
 def run_pipeline(filepath, benchmark_mode=False):
->>>>>>> Stashed changes
     print(f"[pipeline] Loading data from: {filepath}")
 
-<<<<<<< Updated upstream
-    # DETECTOR
-    detectors = [
-        PcaADDetector(),
-        OCSVMDetector(nu=0.05),
-        LevelShiftAD(),
-=======
     df, scaler = load_and_prepare(filepath)
 
     print(f"[pipeline] Shape following preprocessor acting: {df.shape}")
@@ -49,7 +33,6 @@ def run_pipeline(filepath, benchmark_mode=False):
         LevelShiftADDetector(window=10, c=6.0),
         VolatilityShiftADDetector(),
         QuantileADDetector(),
->>>>>>> Stashed changes
     ]
 
     results = {}
@@ -81,8 +64,6 @@ def run_pipeline(filepath, benchmark_mode=False):
         flags = output.get("anomaly_flag")
         timestamp = output.get("timestamp")
 
-<<<<<<< Updated upstream
-=======
         if flags is None:
             print(f"\n[pipeline] Skipping {name} (no anomaly_flag)")
             continue
@@ -136,10 +117,10 @@ def run_pipeline(filepath, benchmark_mode=False):
         eval_df.to_csv("generalisation_results.csv", index=False)
         print("[pipeline] Results saved to generalisation_results.csv")
 
->>>>>>> Stashed changes
     return df, scaler, results
 
 
 if __name__ == "__main__":
-    filepath = sys.argv[1] if len(sys.argv) > 1 else "datasets/complex.csv"
-    run_pipeline(filepath)
+    filepath = sys.argv[1] if len(sys.argv) > 1 and not sys.argv[1].startswith('--') else "datasets/complex.csv"
+    benchmark = "--benchmark" in sys.argv
+    run_pipeline(filepath, benchmark_mode=benchmark)
