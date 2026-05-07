@@ -3,12 +3,13 @@ import pandas as pd
 from pathlib import Path
 
 from preprocessor import load_and_prepare
-from detectors.volatility_shift_ad import VolatilityShiftADDetector
+# from detectors.volatility_shift_ad import VolatilityShiftADDetector
 from detectors.adtk_pcaad import PcaADDetector
 from detectors.ocsvm_detector import OCSVMDetector
 from detectors.quantilead import QuantileADDetector
 from detectors.levelshiftad import LevelShiftADDetector
 from detectors.ecod_detector import ECODDetector
+
 from anomaly_injector import inject_all
 from evaluator import evaluate
 
@@ -42,33 +43,29 @@ def save_benchmark_outputs(eval_df, output_dir="outputs"):
 def run_pipeline(filepath, benchmark_mode=False):
     print(f"[pipeline] Loading data from: {filepath}")
 
-    # Load data
     df, scaler = load_and_prepare(filepath)
 
     print(f"[pipeline] Shape following preprocessor acting: {df.shape}")
     print(f"[pipeline] Columns: {list(df.columns)}")
     print(f"[pipeline] Preview:\n{df.head()}\n")
 
-    # Inject anomalies
     labels = None
     if benchmark_mode:
         print("[pipeline] Benchmark mode ON — injecting synthetic anomalies")
         df, labels = inject_all(df)
-        print(f"[pipeline] Injected {int(labels.sum())} anomalies")
+        print(f"[pipeline] Injected {int((labels != 'normal').sum())} anomalies")
 
-    # Detectors
     detectors = [
         PcaADDetector(),
         OCSVMDetector(nu=0.05),
         LevelShiftADDetector(window=10, c=6.0),
-        VolatilityShiftADDetector(),
+        # VolatilityShiftADDetector(),
         QuantileADDetector(),
         ECODDetector(),
     ]
 
     results = {}
 
-    # Run detectors
     for detector in detectors:
         name = getattr(detector, "model_name", type(detector).__name__)
         print(f"[pipeline] Running: {name}")
@@ -76,7 +73,6 @@ def run_pipeline(filepath, benchmark_mode=False):
         try:
             output = detector.detect(df)
 
-            # Validate output
             if not isinstance(output, dict):
                 raise ValueError(f"{name} did not return dict")
 
@@ -93,7 +89,6 @@ def run_pipeline(filepath, benchmark_mode=False):
                     f"[pipeline] Detector {name} failed during benchmark — fix required"
                 )
 
-    # Print summary
     for name, output in results.items():
         flags = output.get("anomaly_flag")
         timestamp = output.get("timestamp")
@@ -102,7 +97,6 @@ def run_pipeline(filepath, benchmark_mode=False):
             print(f"\n[pipeline] Skipping {name} (no anomaly_flag)")
             continue
 
-        # Safer handling
         if timestamp is None:
             timestamp = df.index
 
@@ -123,14 +117,12 @@ def run_pipeline(filepath, benchmark_mode=False):
         print(f"\n[pipeline] {name} results:")
         print(f"  Flagged: {n_anom}/{total} ({pct:.1f}%)")
 
-        # Runtime
         if "runtime" in output:
             try:
                 print(f"  Runtime: {float(output['runtime']):.3f}s")
             except Exception:
                 print("  Runtime: unavailable")
 
-        # Top anomalies
         score = output.get("score")
 
         if score is not None:
@@ -146,24 +138,27 @@ def run_pipeline(filepath, benchmark_mode=False):
             except Exception:
                 print(f"  Could not compute top 5 for {name}")
 
-    # Evaluation
     if benchmark_mode and labels is not None:
-        eval_rows = []
+if benchmark_mode and labels is not None:
+    eval_rows = []
 
-        for name, output in results.items():
-            if "anomaly_flag" in output:
-                try:
-                    row = evaluate(output, labels)
-                    row["model"] = name
-                    eval_rows.append(row)
+    for name, output in results.items():
+        if "anomaly_flag" in output:
+            try:
+                row = evaluate(output, labels)
+                row["detector"] = name
+                eval_rows.append(row)
 
-                except Exception as e:
-                    print(f"[pipeline] Evaluation failed for {name}: {e}")
+            except Exception as e:
+                print(f"[pipeline] Evaluation failed for {name}: {e}")
 
-        if eval_rows:
-            eval_df = pd.DataFrame(eval_rows)
-            print("\n[pipeline] Benchmark Results (Precision / Recall / F1):")
-            print(eval_df.to_string(index=False))
+    if eval_rows:
+        eval_df = pd.DataFrame(eval_rows)
+
+        print("\n[pipeline] Benchmark Results (Precision / Recall / F1):")
+        print(eval_df.to_string(index=False))
+
+        save_benchmark_outputs(eval_df)
 
             save_benchmark_outputs(eval_df)
 
@@ -171,7 +166,6 @@ def run_pipeline(filepath, benchmark_mode=False):
 
 
 if __name__ == "__main__":
-    filepath = sys.argv[1] if len(sys.argv) > 1 else "datasets/complex.csv"
+    filepath = sys.argv[1] if len(sys.argv) > 1 and not sys.argv[1].startswith('--') else "datasets/complex.csv"
     benchmark = "--benchmark" in sys.argv
-
     run_pipeline(filepath, benchmark_mode=benchmark)
