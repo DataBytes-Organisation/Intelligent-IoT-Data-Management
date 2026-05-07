@@ -3,3 +3,5 @@ numpy
 matplotlib
 seaborn
 adtk
+pyod
+scikit-learn
