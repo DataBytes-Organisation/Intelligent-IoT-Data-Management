@@ -47,7 +47,8 @@ class LevelShiftADDetector:
                 # dropna required: ADTK inserts NaN at window boundaries which
                 # breaks boolean indexing on newer pandas versions
                 clean = anomalies.reindex(df.index, fill_value=False)
-                clean = clean.fillna(False).astype(bool)
+                clean = clean.where(clean.notna(), False)
+                clean = clean.astype(bool)
                 col_flags[col] = clean
             except Exception:
                 col_flags[col] = pd.Series(False, index=df.index)
