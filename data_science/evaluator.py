@@ -24,15 +24,15 @@ def evaluate(detector_output: dict, labels: pd.Series) -> dict:
     -------
     dict with keys: model, precision, recall, f1, n_predicted, n_actual.
     """
-    # Align predictions to label index
     preds = detector_output['anomaly_flag']
     preds = preds.reindex(labels.index, fill_value=False)
+    labels_bool = labels != "normal"
 
     return {
         "model":       detector_output['model_name'],
-        "precision":   precision_score(labels, preds, zero_division=0),
-        "recall":      recall_score(labels, preds, zero_division=0),
-        "f1":          f1_score(labels, preds, zero_division=0),
+        "precision":   precision_score(labels_bool, preds, zero_division=0),
+        "recall":      recall_score(labels_bool, preds, zero_division=0),
+        "f1":          f1_score(labels_bool, preds, zero_division=0),
         "n_predicted": int(preds.sum()),
-        "n_actual":    int(labels.sum()),
+        "n_actual":    int(labels_bool.sum()),
     }
