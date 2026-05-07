@@ -1,5 +1,9 @@
+import argparse
+import json
+import os
 import sys
 import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
 
 from preprocessor import load_and_prepare
 from detectors.volatility_shift_ad import VolatilityShiftADDetector
@@ -10,6 +14,92 @@ from detectors.levelshiftad import LevelShiftADDetector
 from detectors.ecod_detector import ECODDetector
 from anomaly_injector import inject_all
 from evaluator import evaluate
+
+
+def build_detectors():
+    return [
+        PcaADDetector(),
+        OCSVMDetector(nu=0.05),
+        LevelShiftADDetector(window=10, c=6.0),
+        VolatilityShiftADDetector(),
+        QuantileADDetector(),
+        ECODDetector(),
+    ]
+
+
+def time_train_test_split(df, train_ratio=0.7):
+    if df.empty:
+        raise ValueError("Cannot split an empty dataframe.")
+
+    if not 0 < train_ratio < 1:
+        raise ValueError("train_ratio must be between 0 and 1.")
+
+    split_idx = int(len(df) * train_ratio)
+
+    if split_idx == 0 or split_idx == len(df):
+        raise ValueError("Train/test split produced an empty train or test set.")
+
+    train_df = df.iloc[:split_idx].copy()
+    test_df = df.iloc[split_idx:].copy()
+
+    return train_df, test_df
+
+
+def scale_train_test(train_df, test_df):
+    numeric_cols = train_df.select_dtypes(include="number").columns.tolist()
+
+    if not numeric_cols:
+        raise ValueError("No numeric columns found for scaling.")
+
+    scaler = MinMaxScaler()
+
+    train_scaled = pd.DataFrame(
+        scaler.fit_transform(train_df[numeric_cols]),
+        columns=numeric_cols,
+        index=train_df.index,
+    )
+
+    test_scaled = pd.DataFrame(
+        scaler.transform(test_df[numeric_cols]),
+        columns=numeric_cols,
+        index=test_df.index,
+    )
+
+    return train_scaled, test_scaled, scaler
+
+
+def fit_trainable_detectors(detectors, train_df):
+    for detector in detectors:
+        fit_attr = getattr(detector, "fit", None)
+        if callable(fit_attr):
+            print(f"[pipeline] Fitting {detector.__class__.__name__} on training data...")
+            fit_attr(train_df)
+
+    return detectors
+
+
+def split_features_and_labels(df, label_col="is_anomaly"):
+    if label_col not in df.columns:
+        raise ValueError(f"Expected label column '{label_col}' not found in dataframe.")
+
+    labels = df[label_col].astype(bool)
+    features = df.drop(columns=[label_col])
+
+    return features, labels
+
+
+def save_benchmark_outputs(eval_df, out_dir="outputs"):
+    os.makedirs(out_dir, exist_ok=True)
+
+    csv_path = os.path.join(out_dir, "benchmark_results.csv")
+    json_path = os.path.join(out_dir, "benchmark_results.json")
+
+    eval_df.to_csv(csv_path, index=False)
+
+    with open(json_path, "w") as f:
+        json.dump(eval_df.to_dict(orient="records"), f, indent=2, default=str)
+
+    print(f"[pipeline] Saved benchmark results to {csv_path} and {json_path}")
 
 
 def run_pipeline(filepath, benchmark_mode=False):
@@ -25,19 +115,12 @@ def run_pipeline(filepath, benchmark_mode=False):
     # Inject anomalies
     labels = None
     if benchmark_mode:
-        print("[pipeline] Benchmark mode ON — injecting synthetic anomalies")
+        print("[pipeline] Benchmark mode ON - injecting synthetic anomalies")
         df, labels = inject_all(df)
         print(f"[pipeline] Injected {int(labels.sum())} anomalies")
 
     # Detectors
-    detectors = [
-        PcaADDetector(),
-        OCSVMDetector(nu=0.05),
-        LevelShiftADDetector(window=10, c=6.0),
-        VolatilityShiftADDetector(),
-        QuantileADDetector(),
-        ECODDetector(),
-    ]
+    detectors = build_detectors()
 
     results = {}
 
@@ -139,11 +222,114 @@ def run_pipeline(filepath, benchmark_mode=False):
             print("\n[pipeline] Benchmark Results (Precision / Recall / F1):")
             print(eval_df.to_string(index=False))
 
+            save_benchmark_outputs(eval_df)
+
     return df, scaler, results
 
 
-if __name__ == "__main__":
-    filepath = sys.argv[1] if len(sys.argv) > 1 else "datasets/complex.csv"
-    benchmark = "--benchmark" in sys.argv
+def run_train_test_benchmark(csv_path, detectors, train_ratio=0.7):
+    print("[pipeline] Running train/test benchmark mode...")
 
-    run_pipeline(filepath, benchmark_mode=benchmark)
+    df = pd.read_csv(csv_path)
+    df.columns = df.columns.str.strip()
+
+    # Match preprocessor.load_and_prepare timestamp handling so adtk-based
+    # detectors receive a DatetimeIndex with a freq (required for detect()).
+    if "time" in df.columns:
+        df = df.drop(columns=["time"])
+    df.index = pd.date_range(start="2024-01-01", periods=len(df), freq="s")
+    df = df.dropna()
+
+    print(f"[pipeline] Loaded dataset from: {csv_path}")
+    print(f"[pipeline] Loaded shape: {df.shape}")
+
+    train_df, test_df = time_train_test_split(df, train_ratio=train_ratio)
+
+    print(f"[pipeline] Train shape: {train_df.shape}")
+    print(f"[pipeline] Test shape: {test_df.shape}")
+
+    train_scaled, test_scaled, _ = scale_train_test(train_df, test_df)
+
+    detectors = fit_trainable_detectors(detectors, train_scaled)
+
+    test_injected, label_series = inject_all(test_scaled)
+    print(f"[pipeline] Injected {int(label_series.sum())} anomalies into test split")
+
+    # Bridge the tuple-returning injector to the column-based splitter.
+    test_with_labels = test_injected.copy()
+    test_with_labels["is_anomaly"] = label_series
+
+    test_features, true_labels = split_features_and_labels(
+        test_with_labels, label_col="is_anomaly"
+    )
+
+    eval_rows = []
+
+    for detector in detectors:
+        name = getattr(detector, "model_name", type(detector).__name__)
+        print(f"[pipeline] Running: {name}")
+
+        try:
+            output = detector.detect(test_features)
+
+            if not isinstance(output, dict):
+                raise ValueError(f"{name} did not return dict")
+
+            if "anomaly_flag" not in output:
+                raise ValueError(f"{name} missing anomaly_flag")
+
+            row = evaluate(output, true_labels)
+            row["detector"] = name
+            eval_rows.append(row)
+
+        except Exception as e:
+            print(f"[pipeline] ERROR in {name}: {e}")
+            raise RuntimeError(
+                f"[pipeline] Detector {name} failed during train/test benchmark — fix required"
+            )
+
+    eval_df = pd.DataFrame(eval_rows)
+
+    print("\n[pipeline] Train/Test Benchmark Results (Precision / Recall / F1):")
+    print(eval_df.to_string(index=False))
+
+    save_benchmark_outputs(eval_df)
+
+    print("[pipeline] Train/test benchmark complete.")
+
+    return eval_df
+
+
+def parse_args(argv):
+    parser = argparse.ArgumentParser(description="IoT anomaly detection pipeline")
+    parser.add_argument(
+        "csv_path",
+        nargs="?",
+        default="datasets/complex.csv",
+        help="Path to the input CSV file.",
+    )
+    parser.add_argument(
+        "--benchmark",
+        action="store_true",
+        help="Run benchmark mode with injected synthetic anomalies.",
+    )
+    parser.add_argument(
+        "--train-test",
+        dest="train_test",
+        action="store_true",
+        help="Run train/test benchmark mode (requires --benchmark).",
+    )
+    return parser.parse_args(argv)
+
+
+if __name__ == "__main__":
+    args = parse_args(sys.argv[1:])
+
+    if args.train_test and not args.benchmark:
+        print("[pipeline] ERROR: --train-test must be used together with --benchmark.")
+        sys.exit(1)
+
+    if args.benchmark and args.train_test:
+        run_train_test_benchmark(args.csv_path, build_detectors())
+    else:
+        run_pipeline(args.csv_path, benchmark_mode=args.benchmark)
