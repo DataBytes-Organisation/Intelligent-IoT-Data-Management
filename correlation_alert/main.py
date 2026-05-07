@@ -120,7 +120,7 @@ def compute_window_correlations(windows, method="pearson"):
         if window_df.shape[1] < 2:
             continue
 
-        corr_matrix = window_df.corr(method="pearson").round(4)
+        corr_matrix = window_df.corr(method=method).round(4)
 
         correlation_results.append({
             "window_index": i,
@@ -197,32 +197,36 @@ def compare_correlation_changes(correlation_results):
     return change_results
 
 
-def generate_alerts(change_results, delta_threshold=0.3):
+def generate_alerts(
+    change_results,
+    delta_threshold=0.3,
+    strong_corr_threshold=0.7,
+    weak_corr_threshold=0.4
+):
     """
-    Generate alerts based on correlation changes.
 
+    Generate alerts for significant correlation changes.
     Parameters:
-        changes (list[dict]): Output from compare_correlation_changes().
-        strong_corr_threshold (float): Threshold to define strong correlation.
-        weak_corr_threshold (float): Threshold to define weak correlation.
-        delta_threshold (float): Threshold for significant change.
-
+        change_results (list[dict]):
+            Output from compare_correlation_changes().
+        delta_threshold (float):
+            Minimum delta_r value required to trigger an alert.
+        strong_corr_threshold (float):
+            Threshold used to classify HIGH severity alerts.
+        weak_corr_threshold (float):
+            Threshold used to classify MEDIUM severity alerts.
     Returns:
         list[dict]:
-            Each alert item may contain:
-            {
-                "window_index": int,
-                "start_time": timestamp,
-                "end_time": timestamp,
-                "stream_1": str,
-                "stream_2": str,
-                "previous_corr": float,
-                "current_corr": float,
-                "delta": float,
-                "alert_level": str,
-                "reason": str
-            }
+            A list of generated alert records containing:
+            - severity
+            - stream_pair
+            - delta_r
+            - previous_correlation
+            - current_correlation
+            - window metadata
+            
     """
+
     if not isinstance(change_results, list):
         raise ValueError("change_results must be a list.")
     
@@ -235,9 +239,9 @@ def generate_alerts(change_results, delta_threshold=0.3):
         delta_r = change["delta_r"]
 
         if delta_r >= delta_threshold:
-            if delta_r >= 0.7:
+            if delta_r >= strong_corr_threshold:
                 severity = "HIGH"
-            elif delta_r >= 0.5:
+            elif delta_r >= weak_corr_threshold:
                 severity = "MEDIUM"
             else:
                 severity = "LOW"
@@ -266,6 +270,9 @@ def detect_correlation_change_alert(
     selected_streams,
     window_size,
     step_size,
+    method="pearson",
+    strong_corr_threshold=0.7,
+    weak_corr_threshold=0.4,
     delta_threshold=0.3
 ):
     """
@@ -305,7 +312,10 @@ def detect_correlation_change_alert(
     )
 
     # Step 3: compute Pearson correlations for each window
-    correlation_results = compute_window_correlations(windows)
+    correlation_results = compute_window_correlations(
+        windows,
+        method=method
+    )
 
     # Step 4: compare correlation changes between consecutive windows
     change_results = compare_correlation_changes(correlation_results)
@@ -313,7 +323,9 @@ def detect_correlation_change_alert(
     # Step 5: generate alerts based on threshold
     alerts = generate_alerts(
         change_results=change_results,
-        delta_threshold=delta_threshold
+        delta_threshold=delta_threshold,
+        strong_corr_threshold=strong_corr_threshold,
+        weak_corr_threshold=weak_corr_threshold
     )
 
     return {
