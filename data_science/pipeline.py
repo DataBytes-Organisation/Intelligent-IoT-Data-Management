@@ -1,5 +1,6 @@
 import sys
 import pandas as pd
+from pathlib import Path
 
 from preprocessor import load_and_prepare
 from detectors.volatility_shift_ad import VolatilityShiftADDetector
@@ -10,6 +11,32 @@ from detectors.levelshiftad import LevelShiftADDetector
 from detectors.ecod_detector import ECODDetector
 from anomaly_injector import inject_all
 from evaluator import evaluate
+
+
+
+def save_benchmark_outputs(eval_df, output_dir="outputs"):
+    """
+    Save benchmark evaluation results to CSV and JSON files.
+
+    Parameters
+    ----------
+    eval_df : pd.DataFrame
+        DataFrame containing benchmark metrics for each detector.
+    output_dir : str
+        Directory where output files should be saved.
+    """
+    output_path = Path(output_dir)
+    output_path.mkdir(parents=True, exist_ok=True)
+
+    csv_path = output_path / "benchmark_results.csv"
+    json_path = output_path / "benchmark_results.json"
+
+    eval_df.to_csv(csv_path, index=False)
+    eval_df.to_json(json_path, orient="records", indent=2)
+
+    print(f"[pipeline] Saved benchmark CSV to: {csv_path}")
+    print(f"[pipeline] Saved benchmark JSON to: {json_path}")
+
 
 
 def run_pipeline(filepath, benchmark_mode=False):
@@ -127,7 +154,7 @@ def run_pipeline(filepath, benchmark_mode=False):
             if "anomaly_flag" in output:
                 try:
                     row = evaluate(output, labels)
-                    row["detector"] = name
+                    row["model"] = name
                     eval_rows.append(row)
 
                 except Exception as e:
@@ -135,9 +162,10 @@ def run_pipeline(filepath, benchmark_mode=False):
 
         if eval_rows:
             eval_df = pd.DataFrame(eval_rows)
-
             print("\n[pipeline] Benchmark Results (Precision / Recall / F1):")
             print(eval_df.to_string(index=False))
+
+            save_benchmark_outputs(eval_df)
 
     return df, scaler, results
 

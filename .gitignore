@@ -28,3 +28,8 @@ __pycache__/
 *.njsproj
 *.sln
 *.sw?
+
+# Generated benchmark outputs (data_science/outputs/)
+data_science/outputs/*.csv
+data_science/outputs/*.json
+!data_science/outputs/.gitkeep
