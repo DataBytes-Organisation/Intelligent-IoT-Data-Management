@@ -64,7 +64,8 @@ class VolatilityShiftADDetector:
             )
 
             anomaly_flags = detector.fit_detect(series)
-            anomaly_flags = anomaly_flags.where(anomaly_flags.notna(), False).astype(bool)
+            anomaly_flags = anomaly_flags.where(anomaly_flags.notna(), False)
+            anomaly_flags = anomaly_flags.astype(bool)
 
             anomaly_score = series.rolling(window=self.window).std().fillna(0)
 
