@@ -7,6 +7,7 @@ from detectors.adtk_pcaad import PcaADDetector
 from detectors.ocsvm_detector import OCSVMDetector
 from detectors.quantilead import QuantileADDetector
 from detectors.levelshiftad import LevelShiftADDetector
+from detectors.interquartile_range_ad import InterQuartileRangeADDetector
 
 from anomaly_injector import inject_all
 from evaluator import evaluate
@@ -36,6 +37,7 @@ def run_pipeline(filepath, benchmark_mode=False):
         LevelShiftADDetector(window=10, c=6.0),
         VolatilityShiftADDetector(),
         QuantileADDetector(),
+        InterQuartileRangeADDetector(),
     ]
 
     results = {}
