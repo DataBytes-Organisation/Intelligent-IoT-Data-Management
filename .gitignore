@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+correlation_alert/__pycache__/main.cpython-311.pyc
+.gitignore
+.gitignore
