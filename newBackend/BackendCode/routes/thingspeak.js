@@ -1,8 +1,13 @@
-const express = require('express');
-const { fetchThingSpeakData } = require('../controllers/thingspeakController');
+const express = require("express");
 
 const router = express.Router();
 
-router.get('/thingspeak/feeds', fetchThingSpeakData);
+const authMiddleware = require("../middleware/authMiddleware");
+
+const {
+  fetchThingSpeakData,
+} = require("../controllers/thingspeakController");
+
+router.get("/feeds", authMiddleware, fetchThingSpeakData);
 
 module.exports = router;
