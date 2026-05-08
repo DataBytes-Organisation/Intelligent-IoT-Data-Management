@@ -17,6 +17,7 @@ from detectors.copod_detector import COPODDetector
 from anomaly_injector import inject_all
 from evaluator import evaluate
 from roc_plotter import plot_roc_curves
+from nab_loader import load_nab_labels
 
 def build_detectors():
     return [
@@ -121,7 +122,13 @@ def split_features_and_labels(df, label_col="is_anomaly"):
     return features, labels
 
 
-def run_pipeline(filepath, benchmark_mode=False):
+def run_pipeline(
+    filepath,
+    benchmark_mode=False,
+    label_source="synthetic",
+    nab_label_file=None,
+    nab_dataset_key=None,
+):
 
     print(f"[pipeline] Loading data from: {filepath}")
 
@@ -134,15 +141,39 @@ def run_pipeline(filepath, benchmark_mode=False):
     labels = None
 
     if benchmark_mode:
-        print("[pipeline] Benchmark mode ON - injecting synthetic anomalies")
-        df, labels = inject_all(df)
+        if label_source == "synthetic":
+            print("[pipeline] Benchmark mode ON - injecting synthetic anomalies")
+            df, labels = inject_all(df)
 
-        try:
-            n_injected = int((labels != "normal").sum())
-        except Exception:
-            n_injected = int(labels.sum())
+            try:
+                n_injected = int((labels != "normal").sum())
+            except Exception:
+                n_injected = int(labels.sum())
 
-        print(f"[pipeline] Injected {n_injected} anomalies")
+            print(f"[pipeline] Injected {n_injected} anomalies")
+
+        elif label_source == "nab":
+            if not nab_label_file or not nab_dataset_key:
+                raise ValueError(
+                    "NAB benchmark requires both --nab-label-file and --nab-dataset-key."
+                )
+
+            print(
+                f"[pipeline] Benchmark mode ON - loading NAB labels from {nab_label_file} "
+                f"(key={nab_dataset_key})"
+            )
+            labels = load_nab_labels(
+                data_index=df.index,
+                labels_file=nab_label_file,
+                dataset_key=nab_dataset_key,
+            )
+            n_anomaly_rows = int(labels.sum())
+            print(f"[pipeline] Loaded {n_anomaly_rows} NAB anomaly rows")
+
+        else:
+            raise ValueError(
+                f"Unknown label_source '{label_source}'. Expected 'synthetic' or 'nab'."
+            )
 
     detectors = build_detectors()
     results = {}
@@ -412,13 +443,32 @@ def parse_args(argv):
     parser.add_argument(
         "--benchmark",
         action="store_true",
-        help="Run benchmark mode with injected synthetic anomalies.",
+        help="Run benchmark mode using synthetic or NAB labels.",
     )
     parser.add_argument(
         "--train-test",
         dest="train_test",
         action="store_true",
         help="Run train/test benchmark mode, requires --benchmark.",
+    )
+    parser.add_argument(
+        "--label-source",
+        dest="label_source",
+        choices=["synthetic", "nab"],
+        default="synthetic",
+        help="Source of benchmark labels. 'synthetic' injects anomalies; 'nab' loads NAB windows.",
+    )
+    parser.add_argument(
+        "--nab-label-file",
+        dest="nab_label_file",
+        default=None,
+        help="Path to NAB combined_windows.json (required when --label-source nab).",
+    )
+    parser.add_argument(
+        "--nab-dataset-key",
+        dest="nab_dataset_key",
+        default=None,
+        help="Dataset key inside NAB combined_windows.json (e.g. realKnownCause/example.csv).",
     )
     return parser.parse_args(argv)
 
@@ -430,7 +480,30 @@ if __name__ == "__main__":
         print("[pipeline] ERROR: --train-test must be used together with --benchmark.")
         sys.exit(1)
 
+    if args.train_test and args.label_source == "nab":
+        print(
+            "[pipeline] ERROR: NAB labels are not supported with --train-test yet. "
+            "Use --benchmark without --train-test for NAB."
+        )
+        sys.exit(1)
+
+    if args.label_source == "nab" and not args.benchmark:
+        print("[pipeline] ERROR: --label-source nab must be used with --benchmark.")
+        sys.exit(1)
+
+    if args.label_source == "nab" and (not args.nab_label_file or not args.nab_dataset_key):
+        print(
+            "[pipeline] ERROR: NAB benchmark requires both --nab-label-file and --nab-dataset-key."
+        )
+        sys.exit(1)
+
     if args.benchmark and args.train_test:
         run_train_test_benchmark(args.csv_path, build_detectors())
     else:
-        run_pipeline(args.csv_path, benchmark_mode=args.benchmark)
+        run_pipeline(
+            args.csv_path,
+            benchmark_mode=args.benchmark,
+            label_source=args.label_source,
+            nab_label_file=args.nab_label_file,
+            nab_dataset_key=args.nab_dataset_key,
+        )
