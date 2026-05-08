@@ -2,9 +2,6 @@ import pandas as pd
 import numpy as np
 from itertools import combinations
 
-import pandas as pd
-import numpy as np
-
 from correlation_alert.preprocessing import (
     fix_timestamps,
     convert_sensor_columns_to_numeric,
