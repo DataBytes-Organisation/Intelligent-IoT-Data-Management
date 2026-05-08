@@ -11,6 +11,7 @@ from detectors.ocsvm_detector import OCSVMDetector
 from detectors.quantilead import QuantileADDetector
 from detectors.levelshiftad import LevelShiftADDetector
 from detectors.ecod_detector import ECODDetector
+from detectors.interquartile_range_ad import InterQuartileRangeADDetector
 from detectors.copod_detector import COPODDetector
 
 from anomaly_injector import inject_all
@@ -26,6 +27,7 @@ def build_detectors():
         QuantileADDetector(),
         ECODDetector(),
         COPODDetector(),
+        InterQuartileRangeADDetector(),
     ]
 
 
@@ -268,11 +270,6 @@ def run_pipeline(filepath, benchmark_mode=False):
 
                 print(f"  Could not compute top 5 for {name}")
 
-                print(
-                    f"  Could not compute "
-                    f"top 5 for {name}"
-                )
-
     # Benchmark evaluation
     if benchmark_mode and labels is not None:
         eval_rows = []
@@ -290,20 +287,6 @@ def run_pipeline(filepath, benchmark_mode=False):
         if eval_rows:
             eval_df = pd.DataFrame(eval_rows)
 
-            print("\n[pipeline] Benchmark Results (Precision / Recall / F1):")
-            print(eval_df.to_string(index=False))
-
-                except Exception as e:
-
-                    print(
-                        f"[pipeline] Evaluation failed "
-                        f"for {name}: {e}"
-                    )
-
-        if eval_rows:
-
-            eval_df = pd.DataFrame(eval_rows)
-
             # Reorder columns
             eval_df = eval_df[
                 [
@@ -317,11 +300,7 @@ def run_pipeline(filepath, benchmark_mode=False):
                 ]
             ]
 
-            print(
-                "\n[pipeline] Benchmark Results "
-                "(Precision / Recall / F1 / ROC-AUC):"
-            )
-
+            print("\n[pipeline] Benchmark Results (Precision / Recall / F1 / ROC-AUC):")
             print(eval_df.to_string(index=False))
 
             # Save benchmark outputs
@@ -336,17 +315,10 @@ def run_pipeline(filepath, benchmark_mode=False):
 
             # Generate ROC curves
             if scored_results:
-
-                plot_roc_curves(
-                    scored_results,
-                    labels
-                )
-
+                plot_roc_curves(scored_results, labels)
             else:
-
                 print(
-                    "[pipeline] No detectors "
-                    "with continuous scores "
+                    "[pipeline] No detectors with continuous scores "
                     "available for ROC plotting"
                 )
 
