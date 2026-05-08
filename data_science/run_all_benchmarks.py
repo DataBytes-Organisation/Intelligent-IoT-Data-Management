@@ -16,6 +16,7 @@ from pipeline import (
     run_pipeline,
     run_train_test_benchmark,
 )
+from final_report import generate_final_outputs
 
 
 SYNTHETIC_CSV = "datasets/complex.csv"
@@ -98,6 +99,14 @@ def main(argv):
             print(f"\n[run_all] ERROR while running {name}: {e}")
             traceback.print_exc()
             return 1
+
+    _header("Generating final cross-benchmark summary")
+    try:
+        generate_final_outputs("outputs")
+    except Exception as e:
+        print(f"\n[run_all] ERROR while generating final report: {e}")
+        traceback.print_exc()
+        return 1
 
     _header("Benchmark suite complete")
     return 0
