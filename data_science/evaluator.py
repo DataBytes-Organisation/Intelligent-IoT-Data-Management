@@ -57,6 +57,13 @@ def evaluate(detector_output: dict, labels: pd.Series) -> dict:
     recall = recall_score(labels_bool, preds, zero_division=0)
     f1 = f1_score(labels_bool, preds, zero_division=0)
 
+    tp = int(((preds) & (labels_bool)).sum())
+    fp = int(((preds) & (~labels_bool)).sum())
+    tn = int(((~preds) & (~labels_bool)).sum())
+    fn = int(((~preds) & (labels_bool)).sum())
+    fpr = (fp / (fp + tn)) if (fp + tn) > 0 else 0.0
+    fnr = (fn / (fn + tp)) if (fn + tp) > 0 else 0.0
+
     auc_roc = None
 
     scores = detector_output.get("score")
@@ -87,4 +94,10 @@ def evaluate(detector_output: dict, labels: pd.Series) -> dict:
         "auc_roc": round(float(auc_roc), 6) if auc_roc is not None else None,
         "n_predicted": int(preds.sum()),
         "n_actual": int(labels_bool.sum()),
+        "true_positives": tp,
+        "false_positives": fp,
+        "true_negatives": tn,
+        "false_negatives": fn,
+        "false_positive_rate": round(float(fpr), 6),
+        "false_negative_rate": round(float(fnr), 6),
     }

@@ -18,6 +18,7 @@ from anomaly_injector import inject_all
 from evaluator import evaluate
 from roc_plotter import plot_roc_curves
 from nab_loader import load_nab_labels
+from report_output import generate_benchmark_report
 
 def build_detectors():
     return [
@@ -122,15 +123,27 @@ def split_features_and_labels(df, label_col="is_anomaly"):
     return features, labels
 
 
+def _default_output_dir(benchmark_mode, label_source):
+    if not benchmark_mode:
+        return "outputs"
+    if label_source == "nab":
+        return "outputs/nab_benchmark"
+    return "outputs/synthetic_benchmark"
+
+
 def run_pipeline(
     filepath,
     benchmark_mode=False,
     label_source="synthetic",
     nab_label_file=None,
     nab_dataset_key=None,
+    output_dir=None,
 ):
+    if output_dir is None:
+        output_dir = _default_output_dir(benchmark_mode, label_source)
 
     print(f"[pipeline] Loading data from: {filepath}")
+    print(f"[pipeline] Output directory: {output_dir}")
 
     df, scaler = load_and_prepare(filepath)
 
@@ -318,24 +331,35 @@ def run_pipeline(
         if eval_rows:
             eval_df = pd.DataFrame(eval_rows)
 
-            # Reorder columns
-            eval_df = eval_df[
-                [
-                    "detector",
-                    "precision",
-                    "recall",
-                    "f1",
-                    "auc_roc",
-                    "n_predicted",
-                    "n_actual",
-                ]
+            preferred_order = [
+                "detector",
+                "precision",
+                "recall",
+                "f1",
+                "auc_roc",
+                "n_predicted",
+                "n_actual",
+                "true_positives",
+                "false_positives",
+                "true_negatives",
+                "false_negatives",
+                "false_positive_rate",
+                "false_negative_rate",
             ]
+            ordered = [c for c in preferred_order if c in eval_df.columns]
+            extras = [c for c in eval_df.columns if c not in ordered]
+            eval_df = eval_df[ordered + extras]
 
             print("\n[pipeline] Benchmark Results (Precision / Recall / F1 / ROC-AUC):")
-            print(eval_df.to_string(index=False))
+            display_cols = [
+                c for c in
+                ["detector", "precision", "recall", "f1", "auc_roc", "n_predicted", "n_actual"]
+                if c in eval_df.columns
+            ]
+            print(eval_df[display_cols].to_string(index=False))
 
             # Save benchmark outputs
-            save_benchmark_outputs(eval_df)
+            save_benchmark_outputs(eval_df, output_dir=output_dir)
 
             # Keep only detectors with scores
             scored_results = {
@@ -346,18 +370,27 @@ def run_pipeline(
 
             # Generate ROC curves
             if scored_results:
-                plot_roc_curves(scored_results, labels)
+                plot_roc_curves(scored_results, labels, output_dir=output_dir)
             else:
                 print(
                     "[pipeline] No detectors with continuous scores "
                     "available for ROC plotting"
                 )
 
+            # Extra benchmark report outputs
+            generate_benchmark_report(eval_df, results, labels, output_dir=output_dir)
+
     return df, scaler, results
 
 
-def run_train_test_benchmark(csv_path, detectors, train_ratio=0.7):
+def run_train_test_benchmark(
+    csv_path,
+    detectors,
+    train_ratio=0.7,
+    output_dir="outputs/train_test_benchmark",
+):
     print("[pipeline] Running train/test benchmark mode...")
+    print(f"[pipeline] Output directory: {output_dir}")
 
     df = pd.read_csv(csv_path)
     df.columns = df.columns.str.strip()
@@ -396,6 +429,7 @@ def run_train_test_benchmark(csv_path, detectors, train_ratio=0.7):
     )
 
     eval_rows = []
+    results = {}
 
     for detector in detectors:
         name = getattr(detector, "model_name", type(detector).__name__)
@@ -409,6 +443,8 @@ def run_train_test_benchmark(csv_path, detectors, train_ratio=0.7):
 
             if "anomaly_flag" not in output:
                 raise ValueError(f"{name} missing anomaly_flag")
+
+            results[name] = output
 
             row = evaluate(output, true_labels)
             row["detector"] = name
@@ -425,7 +461,9 @@ def run_train_test_benchmark(csv_path, detectors, train_ratio=0.7):
     print("\n[pipeline] Train/Test Benchmark Results (Precision / Recall / F1):")
     print(eval_df.to_string(index=False))
 
-    save_benchmark_outputs(eval_df)
+    save_benchmark_outputs(eval_df, output_dir=output_dir)
+
+    generate_benchmark_report(eval_df, results, true_labels, output_dir=output_dir)
 
     print("[pipeline] Train/test benchmark complete.")
 
@@ -470,6 +508,16 @@ def parse_args(argv):
         default=None,
         help="Dataset key inside NAB combined_windows.json (e.g. realKnownCause/example.csv).",
     )
+    parser.add_argument(
+        "--output-dir",
+        dest="output_dir",
+        default=None,
+        help=(
+            "Directory to save benchmark outputs into. "
+            "Defaults: outputs/synthetic_benchmark, outputs/train_test_benchmark, "
+            "or outputs/nab_benchmark depending on the benchmark mode."
+        ),
+    )
     return parser.parse_args(argv)
 
 
@@ -498,7 +546,12 @@ if __name__ == "__main__":
         sys.exit(1)
 
     if args.benchmark and args.train_test:
-        run_train_test_benchmark(args.csv_path, build_detectors())
+        tt_output_dir = args.output_dir or "outputs/train_test_benchmark"
+        run_train_test_benchmark(
+            args.csv_path,
+            build_detectors(),
+            output_dir=tt_output_dir,
+        )
     else:
         run_pipeline(
             args.csv_path,
@@ -506,4 +559,5 @@ if __name__ == "__main__":
             label_source=args.label_source,
             nab_label_file=args.nab_label_file,
             nab_dataset_key=args.nab_dataset_key,
+            output_dir=args.output_dir,
         )
