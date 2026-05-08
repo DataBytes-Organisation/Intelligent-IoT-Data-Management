@@ -1,0 +1,10 @@
+Benchmark report summary
+========================================
+Best F1:                          InterQuartileRangeAD (F1=0.5844)
+Best AUC-ROC (NaN ignored):       COPODDetector (AUC=0.8109)
+Most conservative (fewest flags): PcaADDetector (n_predicted=145)
+Most sensitive (highest recall):  InterQuartileRangeAD (recall=0.5877)
+Fastest detector:                 QuantileADDetector (0.0060s)
+
+Note: metrics depend on the benchmark type (synthetic, train/test, or NAB). 
+NAB labels are wide windows around real failure events, so pointwise precision/recall under-rewards detectors that fire only at the moment of regime change.

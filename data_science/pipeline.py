@@ -18,6 +18,7 @@ from anomaly_injector import inject_all
 from evaluator import evaluate
 from roc_plotter import plot_roc_curves
 from nab_loader import load_nab_labels
+from report_output import generate_benchmark_report
 
 def build_detectors():
     return [
@@ -318,21 +319,32 @@ def run_pipeline(
         if eval_rows:
             eval_df = pd.DataFrame(eval_rows)
 
-            # Reorder columns
-            eval_df = eval_df[
-                [
-                    "detector",
-                    "precision",
-                    "recall",
-                    "f1",
-                    "auc_roc",
-                    "n_predicted",
-                    "n_actual",
-                ]
+            preferred_order = [
+                "detector",
+                "precision",
+                "recall",
+                "f1",
+                "auc_roc",
+                "n_predicted",
+                "n_actual",
+                "true_positives",
+                "false_positives",
+                "true_negatives",
+                "false_negatives",
+                "false_positive_rate",
+                "false_negative_rate",
             ]
+            ordered = [c for c in preferred_order if c in eval_df.columns]
+            extras = [c for c in eval_df.columns if c not in ordered]
+            eval_df = eval_df[ordered + extras]
 
             print("\n[pipeline] Benchmark Results (Precision / Recall / F1 / ROC-AUC):")
-            print(eval_df.to_string(index=False))
+            display_cols = [
+                c for c in
+                ["detector", "precision", "recall", "f1", "auc_roc", "n_predicted", "n_actual"]
+                if c in eval_df.columns
+            ]
+            print(eval_df[display_cols].to_string(index=False))
 
             # Save benchmark outputs
             save_benchmark_outputs(eval_df)
@@ -352,6 +364,9 @@ def run_pipeline(
                     "[pipeline] No detectors with continuous scores "
                     "available for ROC plotting"
                 )
+
+            # Extra benchmark report outputs
+            generate_benchmark_report(eval_df, results, labels)
 
     return df, scaler, results
 
@@ -396,6 +411,7 @@ def run_train_test_benchmark(csv_path, detectors, train_ratio=0.7):
     )
 
     eval_rows = []
+    results = {}
 
     for detector in detectors:
         name = getattr(detector, "model_name", type(detector).__name__)
@@ -409,6 +425,8 @@ def run_train_test_benchmark(csv_path, detectors, train_ratio=0.7):
 
             if "anomaly_flag" not in output:
                 raise ValueError(f"{name} missing anomaly_flag")
+
+            results[name] = output
 
             row = evaluate(output, true_labels)
             row["detector"] = name
@@ -426,6 +444,8 @@ def run_train_test_benchmark(csv_path, detectors, train_ratio=0.7):
     print(eval_df.to_string(index=False))
 
     save_benchmark_outputs(eval_df)
+
+    generate_benchmark_report(eval_df, results, true_labels)
 
     print("[pipeline] Train/test benchmark complete.")
 
