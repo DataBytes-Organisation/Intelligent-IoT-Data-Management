@@ -47,6 +47,14 @@ def evaluate(detector_output: dict, labels: pd.Series) -> dict:
         - n_predicted
         - n_actual
     """
+    preds = detector_output['anomaly_flag']
+    preds = preds.reindex(labels.index, fill_value=False)
+    labels = pd.Series(labels)
+
+    if labels.dtype == bool:
+        labels_bool = labels
+    else:
+        labels_bool = labels != "normal"
 
     # Validate detector output
     if "anomaly_flag" not in detector_output:
