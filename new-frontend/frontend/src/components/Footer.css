@@ -1,0 +1,31 @@
+.footer {
+  width: 100%;
+  margin-top: 3rem;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+}
+
+.footer__container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #475569;
+  font-size: 0.9rem;
+}
+
+.footer__left {
+  display: flex;
+  gap: 1.5rem;
+  font-weight: 600;
+}
+
+.footer__left span {
+  cursor: pointer;
+}
+
+.footer__left span:hover {
+  color: #2563eb;
+}

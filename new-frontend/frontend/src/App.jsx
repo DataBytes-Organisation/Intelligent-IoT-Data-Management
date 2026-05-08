@@ -1,19 +1,42 @@
 import React from "react";
-import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import "chartjs-adapter-date-fns";
+
+import Layout from "./components/Layout";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 import HomePage from "./pages/HomePage";
 import DashboardPage from "./pages/DashboardPage";
-import FetchData from "./components/FetchData";
+import RegistrationPage from "./pages/RegistrationPage";
+import ForgotPassword from "./pages/ForgotPassword";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/sensorData1" element={<FetchData />} />
-        <Route path="/" element={<HomePage />} />
-        <Route path="/dashboard/:id" element={<DashboardPage />} />
+        <Route path="/register" element={<RegistrationPage />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <HomePage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard/:id"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <DashboardPage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

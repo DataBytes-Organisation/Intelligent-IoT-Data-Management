@@ -6,18 +6,18 @@ const DashboardPage = () => {
   const { id } = useParams();
 
   return (
-    <div className="dashboard-page">
-      {/* Header */}
-      <div className="dashboard-header">
+    <main className="dashboard-page-shell">
+      <section className="dashboard-page-hero">
+        <div className="dashboard-page-badge">Sensor Dashboard</div>
         <h1>{id} Dashboard</h1>
-        <p>Explore time-series data, correlations and insights</p>
-      </div>
+        <p>
+          Explore time-series data, stream behaviour, correlations and summary
+          insights in one structured view.
+        </p>
+      </section>
 
-      {/* Main Content */}
-      <div className="dashboard-content">
-        <Dashboard datasetId={id} />
-      </div>
-    </div>
+      <Dashboard datasetId={id} />
+    </main>
   );
 };
 
