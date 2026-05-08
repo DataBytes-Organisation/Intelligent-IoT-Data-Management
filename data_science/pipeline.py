@@ -11,6 +11,7 @@ from detectors.ocsvm_detector import OCSVMDetector
 from detectors.quantilead import QuantileADDetector
 from detectors.levelshiftad import LevelShiftADDetector
 from detectors.ecod_detector import ECODDetector
+from detectors.copod_detector import COPODDetector
 
 from anomaly_injector import inject_all
 from evaluator import evaluate
@@ -24,10 +25,15 @@ def build_detectors():
         VolatilityShiftADDetector(),
         QuantileADDetector(),
         ECODDetector(),
+        COPODDetector(),
     ]
 
 
 def save_benchmark_outputs(eval_df, output_dir="outputs"):
+    """
+    Save benchmark evaluation results to CSV and JSON files.
+    """
+
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
 
@@ -96,7 +102,13 @@ def split_features_and_labels(df, label_col="is_anomaly"):
     if label_col not in df.columns:
         raise ValueError(f"Expected label column '{label_col}' not found in dataframe.")
 
-    labels = df[label_col].astype(bool)
+    raw_labels = df[label_col]
+
+    if raw_labels.dtype == bool:
+        labels = raw_labels
+    else:
+        labels = raw_labels != "normal"
+
     features = df.drop(columns=[label_col])
 
     return features, labels
@@ -112,16 +124,26 @@ def run_pipeline(filepath, benchmark_mode=False):
     print(f"[pipeline] Preview:\n{df.head()}\n")
 
     labels = None
+
     if benchmark_mode:
         print("[pipeline] Benchmark mode ON - injecting synthetic anomalies")
         df, labels = inject_all(df)
-        print(f"[pipeline] Injected {int(labels.sum())} anomalies")
+
+        try:
+            n_injected = int((labels != "normal").sum())
+        except Exception:
+            n_injected = int(labels.sum())
+
+        print(f"[pipeline] Injected {n_injected} anomalies")
 
     detectors = build_detectors()
     results = {}
 
+    # Run detectors
     for detector in detectors:
+
         name = getattr(detector, "model_name", type(detector).__name__)
+
         print(f"[pipeline] Running: {name}")
 
         try:
@@ -136,6 +158,7 @@ def run_pipeline(filepath, benchmark_mode=False):
             results[name] = output
 
         except Exception as e:
+
             print(f"[pipeline] ERROR in {name}: {e}")
 
             if benchmark_mode:
@@ -143,7 +166,9 @@ def run_pipeline(filepath, benchmark_mode=False):
                     f"[pipeline] Detector {name} failed during benchmark - fix required"
                 )
 
+    # Print detector summaries
     for name, output in results.items():
+
         flags = output.get("anomaly_flag")
         timestamp = output.get("timestamp")
 
@@ -155,34 +180,45 @@ def run_pipeline(filepath, benchmark_mode=False):
             timestamp = df.index
 
         try:
+
             if isinstance(flags, pd.Series):
                 flags_series = flags
+
             else:
                 flags_series = pd.Series(flags, index=timestamp)
 
             n_anom = int(flags_series.sum())
             total = len(flags_series)
+
             pct = (n_anom / total * 100) if total > 0 else 0
 
         except Exception:
+
             print(f"[pipeline] Invalid anomaly_flag format for {name}")
             continue
 
         print(f"\n[pipeline] {name} results:")
         print(f"  Flagged: {n_anom}/{total} ({pct:.1f}%)")
 
+        # Runtime
         if "runtime" in output:
+
             try:
                 print(f"  Runtime: {float(output['runtime']):.3f}s")
+
             except Exception:
                 print("  Runtime: unavailable")
 
+        # Scores
         score = output.get("score")
 
         if score is not None:
+
             try:
+
                 if isinstance(score, pd.Series):
                     score_series = score
+
                 else:
                     score_series = pd.Series(score, index=timestamp)
 
@@ -190,6 +226,7 @@ def run_pipeline(filepath, benchmark_mode=False):
                 print(score_series.nlargest(5))
 
             except Exception:
+
                 print(f"  Could not compute top 5 for {name}")
 
     if benchmark_mode and labels is not None:
@@ -241,7 +278,12 @@ def run_train_test_benchmark(csv_path, detectors, train_ratio=0.7):
     detectors = fit_trainable_detectors(detectors, train_scaled)
 
     test_injected, label_series = inject_all(test_scaled)
-    print(f"[pipeline] Injected {int(label_series.sum())} anomalies into test split")
+    try:
+        n_injected = int((label_series != "normal").sum())
+    except Exception:
+        n_injected = int(label_series.sum())
+
+    print(f"[pipeline] Injected {n_injected} anomalies into test split")
 
     test_with_labels = test_injected.copy()
     test_with_labels["is_anomaly"] = label_series
