@@ -149,32 +149,45 @@ def compute_window_correlations(
 def compare_correlation_changes(correlation_results):
     """
     Compare correlation matrices between consecutive windows.
-
-    Parameters:
-        correlation_results (list[dict]): Output from compute_window_correlations().
-
-    Returns:
-        list[dict]:
-            Each item should contain:
-            {
-                "window_index": int,
-                "start_time": timestamp,
-                "end_time": timestamp,
-                "stream_1": str,
-                "stream_2": str,
-                "previous_corr": float,
-                "current_corr": float,
-                "delta": float
-            }
     """
 
-    # TODO:
-    # 1. Compare each window with the previous one
-    # 2. Extract pairwise correlation values
-    # 3. Compute delta = abs(current_corr - previous_corr)
-    # 4. Return structured list of changes
+    if not isinstance(correlation_results, list):
+        raise ValueError("correlation_results must be a list.")
 
-    pass
+    change_results = []
+
+    for i in range(1, len(correlation_results)):
+        previous_result = correlation_results[i - 1]
+        current_result = correlation_results[i]
+
+        previous_corr = previous_result["correlation_matrix"]
+        current_corr = current_result["correlation_matrix"]
+
+        stream_pairs = combinations(previous_corr.columns, 2)
+
+        for stream_1, stream_2 in stream_pairs:
+            prev_value = previous_corr.loc[stream_1, stream_2]
+            curr_value = current_corr.loc[stream_1, stream_2]
+
+            if pd.isna(prev_value) or pd.isna(curr_value):
+                continue
+
+            delta = round(abs(curr_value - prev_value), 4)
+            prev_value = round(prev_value, 4)
+            curr_value = round(curr_value, 4)
+
+            change_results.append({
+                "window_index": current_result["window_index"],
+                "start_time": current_result["start_time"],
+                "end_time": current_result["end_time"],
+                "stream_1": stream_1,
+                "stream_2": stream_2,
+                "previous_corr": prev_value,
+                "current_corr": curr_value,
+                "delta": delta
+            })
+
+    return change_results
 
 def get_alert_level(delta_r):
     """
