@@ -56,8 +56,14 @@ def preprocess_timeseries(df, timestamp_col, selected_streams):
         time_col=timestamp_col
     )
 
+    # Ensure timestamp stays as readable datetime before setting index
+    processed_df[timestamp_col] = pd.to_datetime(processed_df[timestamp_col])
+
     # Set timestamp as index for downstream rolling-window analysis
     processed_df = processed_df.set_index(timestamp_col)
+
+    # Ensure index remains datetime format
+    processed_df.index = pd.to_datetime(processed_df.index)
 
     return processed_df
 
