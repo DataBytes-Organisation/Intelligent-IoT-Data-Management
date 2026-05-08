@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from itertools import combinations
 
-from correlation_alert.preprocessing import (
+from preprocessing import (
     fix_timestamps,
     convert_sensor_columns_to_numeric,
     handle_missing_values,
