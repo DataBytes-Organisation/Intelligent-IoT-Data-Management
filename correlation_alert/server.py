@@ -9,7 +9,7 @@ CORS(app)
 
 
 @app.route("/service-status", methods=["GET"])
-def health():
+def service_status():
     return jsonify({
         "status": "running",
         "message": "Correlation Alert Service is running.",
