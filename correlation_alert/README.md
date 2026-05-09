@@ -48,6 +48,8 @@ correlation_alert/
 ├── correlation/
 ├── alert_generation/
 ├── datasets/
+├── postman/
+│   └── IIoDT.postman_collection.json
 └── README.md
 ```
 
@@ -63,7 +65,7 @@ A Flask API service was implemented to expose the correlation alert pipeline thr
 
 | Endpoint | Method | Description |
 |---|---|---|
-| `/api/status` | GET | Checks whether the API service is running |
+| `/service-status` | GET | Checks whether the API service is running |
 | `/detect-correlation-alert` | POST | Runs the full correlation alert pipeline |
 
 ---
@@ -73,7 +75,7 @@ A Flask API service was implemented to expose the correlation alert pipeline thr
 ## Endpoint
 
 ```http
-GET /api/status
+GET /service-status
 ```
 
 ## Purpose
@@ -106,12 +108,9 @@ Runs the full correlation alert detection pipeline on uploaded sensor data.
 
 ---
 
-# Input Methods
+# Input Method
 
-The API currently supports:
-
-- JSON sensor records
-- CSV file upload
+The API currently accepts sensor datasets through CSV file upload using multipart/form-data.
 
 ---
 
@@ -392,6 +391,8 @@ Alerts are generated when correlation changes exceed predefined thresholds.
 
 # API Response Structure
 
+The API response includes summary statistics, detected alerts, correlation change comparisons, and rolling-window correlation values.
+
 ## Example Response
 
 ```json
@@ -406,7 +407,14 @@ Alerts are generated when correlation changes exceed predefined thresholds.
   },
   "alerts": [],
   "changes": [],
-  "correlations": []
+  "correlations": [
+    {
+      "window_index": 1,
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "correlation": 0.94
+    }
+  ]
 }
 ```
 
@@ -428,7 +436,7 @@ Main orchestration function for the entire pipeline.
 
 ---
 
-# `api_status()`
+# `service_status()`
 
 Returns the running status of the API.
 
@@ -507,6 +515,7 @@ The implemented system can currently:
 - Preprocess IoT sensor data
 - Create rolling windows
 - Calculate correlations
+- Return rolling-window correlation results
 - Detect correlation changes
 - Generate alerts
 - Return structured JSON responses
@@ -556,5 +565,6 @@ This request uses `multipart/form-data` to upload a CSV dataset and send pipelin
 
 ## Notes
 
-The collection also includes a Postman visualizer script for displaying correlation matrix values as a heatmap-style output from the API response.
+The Postman collection also includes a visualizer script that renders correlation matrix values as a heatmap-style chart directly inside Postman.
 
+---
