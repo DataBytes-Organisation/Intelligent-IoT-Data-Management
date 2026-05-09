@@ -8,7 +8,7 @@ app = Flask(__name__)
 CORS(app)
 
 
-@app.route("/health", methods=["GET"])
+@app.route("/service-status", methods=["GET"])
 def health():
     return jsonify({
         "status": "running",
