@@ -514,18 +514,47 @@ The implemented system can currently:
 
 ---
 
-# Future Improvements
+# Postman Collection
 
-Potential future enhancements include:
+A Postman collection is included to test and demonstrate the Correlation Alert API.
 
-- Real-time streaming support
-- Kafka integration
-- Dashboard visualisation
-- Machine learning anomaly detection
-- Dynamic threshold tuning
-- Database integration
-- Docker deployment
-- Kubernetes deployment
-- Authentication and API security
+## Collection File
 
----
+```text
+postman/IIoDT.postman_collection.json
+```
+
+## Included Requests
+
+| Request | Method | Endpoint | Purpose |
+|---|---|---|---|
+| Detect Correlation Alert | POST | `/detect-correlation-alert` | Uploads a CSV dataset and runs the correlation alert pipeline |
+| Check Service Status | GET | `/service-status` | Checks whether the Flask API service is running |
+
+## Detect Correlation Alert Request
+
+This request uses `multipart/form-data` to upload a CSV dataset and send pipeline parameters.
+
+### Form Data Fields
+
+| Key | Type | Example |
+|---|---|---|
+| `file` | File | `complex.csv` |
+| `timestamp_col` | Text | `time` |
+| `selected_streams` | Text | `s1,s2,s3` |
+| `window_size` | Text | `20` |
+| `step_size` | Text | `10` |
+| `method` | Text | `pearson` |
+
+## Importing the Collection
+
+1. Open Postman
+2. Click Import
+3. Select `IIoDT.postman_collection.json`
+4. Run `Check Service Status` to verify the API is running
+5. Run `Detect Correlation Alert` after selecting the CSV file
+
+## Notes
+
+The collection also includes a Postman visualizer script for displaying correlation matrix values as a heatmap-style output from the API response.
+
