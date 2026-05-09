@@ -23,7 +23,7 @@ class VolatilityShiftADDetector:
                         "both", "positive", or "negative".
         """
 
-        self.model_name = "VolatilityShiftAD"
+        self.model_name = "VolatilityShiftADDetector"
         self.c = c
         self.window = window
         self.side = side

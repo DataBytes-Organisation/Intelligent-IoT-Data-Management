@@ -1,21 +1,27 @@
 Final benchmark report
 ============================================================
-Benchmarks not available: nab
-Benchmarks included:      synthetic, train_test
+Benchmarks included:      synthetic, train_test, nab
 
 --- synthetic ---
 Best F1:                          OCSVMDetector (F1=0.5735)
 Best AUC-ROC (NaN ignored):       ECODDetector (AUC=0.9341)
-Fastest detector:                 COPODDetector (0.0020s)
+Fastest detector:                 COPODDetector (0.0040s)
 Most conservative (fewest flags): PcaADDetector (n_predicted=10)
 Most sensitive (highest recall):  OCSVMDetector (recall=0.5132)
 
 --- train_test ---
 Best F1:                          OCSVMDetector (F1=0.6419)
 Best AUC-ROC (NaN ignored):       OCSVMDetector (AUC=0.9718)
-Fastest detector:                 COPODDetector (0.0020s)
+Fastest detector:                 COPODDetector (0.0030s)
 Most conservative (fewest flags): PcaADDetector (n_predicted=3)
 Most sensitive (highest recall):  OCSVMDetector (recall=0.9718)
+
+--- nab ---
+Best F1:                          InterQuartileRangeAD (F1=0.5844)
+Best AUC-ROC (NaN ignored):       COPODDetector (AUC=0.8109)
+Fastest detector:                 COPODDetector (0.0095s)
+Most conservative (fewest flags): PcaADDetector (n_predicted=145)
+Most sensitive (highest recall):  InterQuartileRangeAD (recall=0.5877)
 
 Overall conclusion
 ------------------------------------------------------------

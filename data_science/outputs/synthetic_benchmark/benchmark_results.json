@@ -48,7 +48,7 @@
     "model":"LevelShiftADDetector"
   },
   {
-    "detector":"VolatilityShiftAD",
+    "detector":"VolatilityShiftADDetector",
     "precision":0.134259,
     "recall":0.381579,
     "f1":0.19863,
@@ -61,7 +61,7 @@
     "false_negatives":47,
     "false_positive_rate":0.200644,
     "false_negative_rate":0.618421,
-    "model":"VolatilityShiftAD"
+    "model":"VolatilityShiftADDetector"
   },
   {
     "detector":"QuantileADDetector",
