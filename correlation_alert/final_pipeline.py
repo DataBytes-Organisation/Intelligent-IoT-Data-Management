@@ -1,29 +1,49 @@
 import pandas as pd
-from main import detect_correlation_change_alert
+import requests
 
-# df = pd.DataFrame({
-#     "timestamp": pd.date_range(start="2026-01-01", periods=100, freq="min"),
-#     "sensor_1": list(range(100)),
-#     "sensor_2": list(range(0, 200, 2)),
-#     "sensor_3": list(range(50)) + list(range(50, 0, -1))
-# })
-# df = pd.read_csv("datasets/2881821.csv")
 df = pd.read_csv("../datasets/complex.csv")
 df.columns = df.columns.str.strip()
 
-result = detect_correlation_change_alert(
-    df=df,
-    timestamp_col="time",
-    selected_streams=["s1", "s2", "s3"],
-    window_size=20,
-    step_size=10
+payload = {
+    "data": df.to_dict(orient="records"),
+    "timestamp_col": "time",
+    "selected_streams": ["s1", "s2", "s3"],
+    "window_size": 20,
+    "step_size": 10,
+    "method": "pearson"
+}
+
+response = requests.post(
+    "http://127.0.0.1:5001/detect-correlation-alert",
+    json=payload
 )
 
-print("Processed data:", result["processed_data"].shape)
-print("Windows:", len(result["windows"]))
-print("Correlation results:", len(result["correlation_results"]))
-print("Changes:", len(result["changes"]))
-print("Alerts:", len(result["alerts"]))
+result = response.json()
 
-print("\nSample alert:")
-print(result["alerts"][:3])
+print("\n========== API RESPONSE SUMMARY ==========")
+print("Status:", result.get("status"))
+
+summary = result.get("summary", {})
+print("\nSummary:")
+print(f"Processed rows       : {summary.get('processed_rows')}")
+print(f"Rolling windows      : {summary.get('windows')}")
+print(f"Correlation results  : {summary.get('correlation_results')}")
+print(f"Change comparisons   : {summary.get('changes')}")
+print(f"Alerts generated     : {summary.get('alerts')}")
+
+print("\n========== SAMPLE ALERTS ==========")
+
+alerts = result.get("alerts", [])
+
+if not alerts:
+    print("No alerts generated.")
+else:
+    for i, alert in enumerate(alerts[:5], start=1):
+        print(f"\nAlert {i}")
+        print(f"Severity       : {alert.get('alert_level')}")
+        print(f"Sensor Pair    : {alert.get('stream_1')} - {alert.get('stream_2')}")
+        print(f"Previous Corr  : {alert.get('previous_corr')}")
+        print(f"Current Corr   : {alert.get('current_corr')}")
+        print(f"Delta          : {alert.get('delta')}")
+        print(f"Window Index   : {alert.get('window_index')}")
+        print(f"Reason         : {alert.get('reason')}")
