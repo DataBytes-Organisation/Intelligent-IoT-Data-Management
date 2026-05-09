@@ -8,8 +8,13 @@ def load_and_prepare(filepath):
     """
     df = pd.read_csv(filepath)
     df.columns = df.columns.str.strip()
-    df['time'] = pd.date_range(start='2024-01-01', periods=len(df), freq='s')
-    df = df.set_index('time')
+    if 'timestamp' in df.columns:
+        df['timestamp'] = pd.to_datetime(df['timestamp'])
+        df = df.set_index('timestamp')
+        df = df[~df.index.duplicated(keep='first')].sort_index()
+    else:
+        df['time'] = pd.date_range(start='2024-01-01', periods=len(df), freq='s')
+        df = df.set_index('time')
     df = df.dropna()
     scaler = MinMaxScaler()
     df_scaled = pd.DataFrame(

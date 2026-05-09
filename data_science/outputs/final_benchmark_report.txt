@@ -1,0 +1,31 @@
+Final benchmark report
+============================================================
+Benchmarks included:      synthetic, train_test, nab
+
+--- synthetic ---
+Best F1:                          OCSVMDetector (F1=0.5735)
+Best AUC-ROC (NaN ignored):       ECODDetector (AUC=0.9341)
+Fastest detector:                 COPODDetector (0.0040s)
+Most conservative (fewest flags): PcaADDetector (n_predicted=10)
+Most sensitive (highest recall):  OCSVMDetector (recall=0.5132)
+
+--- train_test ---
+Best F1:                          OCSVMDetector (F1=0.6419)
+Best AUC-ROC (NaN ignored):       OCSVMDetector (AUC=0.9718)
+Fastest detector:                 COPODDetector (0.0030s)
+Most conservative (fewest flags): PcaADDetector (n_predicted=3)
+Most sensitive (highest recall):  OCSVMDetector (recall=0.9718)
+
+--- nab ---
+Best F1:                          InterQuartileRangeAD (F1=0.5844)
+Best AUC-ROC (NaN ignored):       COPODDetector (AUC=0.8109)
+Fastest detector:                 COPODDetector (0.0095s)
+Most conservative (fewest flags): PcaADDetector (n_predicted=145)
+Most sensitive (highest recall):  InterQuartileRangeAD (recall=0.5877)
+
+Overall conclusion
+------------------------------------------------------------
+The synthetic benchmark checks detector behaviour against injected anomalies in clean data, so it is most useful as a controlled sanity check rather than a measure of real-world performance.
+The train/test benchmark splits the dataset and fits each trainable detector on the training portion before injecting anomalies into the test portion, giving a cleaner separation between fitting and evaluation than the synthetic mode.
+The NAB benchmark uses real labelled anomaly windows from the Numenta Anomaly Benchmark, so it is the most realistic of the three. Note that NAB labels are wide windows around real failure events; pointwise precision/recall under-rewards detectors that fire only at the moment of regime change.
+Limitation: the official NAB scoring system (application-profile / sigmoid window weighting) is not implemented yet — these numbers are pointwise comparisons only.
