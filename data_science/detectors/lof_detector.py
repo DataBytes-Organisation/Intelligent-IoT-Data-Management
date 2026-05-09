@@ -41,6 +41,9 @@ class LOFDetector:
         if df_numeric.shape[1] == 0:
             raise ValueError("No numeric columns available for LOF")
 
+        if len(df_numeric) < 2:
+            raise ValueError("LOF requires at least 2 samples")
+
         # n_neighbors must be < n_samples; clamp for small datasets
         n_neighbors = min(self.n_neighbors, len(df_numeric) - 1)
         model = LOF(contamination=self.contamination, n_neighbors=n_neighbors)
