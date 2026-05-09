@@ -13,6 +13,7 @@ from detectors.levelshiftad import LevelShiftADDetector
 from detectors.ecod_detector import ECODDetector
 from detectors.interquartile_range_ad import InterQuartileRangeADDetector
 from detectors.copod_detector import COPODDetector
+from detectors.lof_detector import LOFDetector
 
 from anomaly_injector import inject_all
 from evaluator import evaluate
@@ -30,6 +31,7 @@ def build_detectors():
         ECODDetector(),
         COPODDetector(),
         InterQuartileRangeADDetector(),
+        LOFDetector(),
     ]
 
 
