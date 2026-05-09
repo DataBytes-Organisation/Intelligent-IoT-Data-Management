@@ -33,3 +33,5 @@ __pycache__/
 data_science/outputs/*.csv
 data_science/outputs/*.json
 !data_science/outputs/.gitkeep
+data_science/outputs/*.txt
+data_science/outputs/*.png
