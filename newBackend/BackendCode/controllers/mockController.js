@@ -3,7 +3,9 @@
 const {
   readProcessedData,
   getAvailableStreamNames,
-  filterEntriesByStreamNames
+  filterEntriesByStreamNames,
+  getDataProfile,
+  getTopCorrelatedPair
 } = require('../services/mockService');
 
 //GET /streams — Returns JSON file containing the stream data
@@ -48,8 +50,42 @@ const postFilterStreams = (req, res) => {
   }
 };
 
+const getDataProfileSummary = (req, res) => {
+  try {
+    const profile = getDataProfile();
+    res.json(profile);
+  } catch (err) {
+    console.error('Error profiling stream data:', err);
+    res.status(500).json({ error: 'Failed to profile stream data' });
+  }
+};
+
+const postTopCorrelatedPair = (req, res) => {
+  const { streamNames } = req.body;
+
+  if (!Array.isArray(streamNames) || streamNames.length < 2) {
+    return res.status(400).json({ error: 'streamNames must be an array with at least two items' });
+  }
+
+  try {
+    const result = getTopCorrelatedPair(streamNames);
+    if (result.pair.length === 0) {
+      return res.status(422).json({ error: 'Unable to compute correlation for selected streams' });
+    }
+    res.json(result);
+  } catch (err) {
+    console.error('Error computing top correlated pair:', err);
+    if (/valid stream names/i.test(err.message)) {
+      return res.status(400).json({ error: err.message });
+    }
+    res.status(500).json({ error: 'Failed to compute top correlated pair' });
+  }
+};
+
 module.exports = {
   getStreams,
   getStreamNames,
-  postFilterStreams
+  postFilterStreams,
+  getDataProfileSummary,
+  postTopCorrelatedPair
 };

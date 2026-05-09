@@ -4,7 +4,9 @@ const express = require('express');
 const {
   getStreams,
   getStreamNames,
-  postFilterStreams
+  postFilterStreams,
+  getDataProfileSummary,
+  postTopCorrelatedPair
 } = require('../controllers/mockController');
 
 const router = express.Router();
@@ -74,5 +76,25 @@ router.get("/stream-names", getStreamNames);
  * ] 
  */
 router.post('/filter-streams', postFilterStreams);
+
+/*
+ * GET /data-profile
+ *
+ * Description:
+ * Returns dataset-level and per-stream quality summary (counts, missing rate, min/max/mean).
+ */
+router.get('/data-profile', getDataProfileSummary);
+
+/*
+ * POST /top-correlated-pair
+ * Request Body:
+ * {
+ *   streamNames: [ "Temperature", "Voltage Charge", "Humidity" ]
+ * }
+ *
+ * Description:
+ * Returns top correlated pair within provided stream names.
+ */
+router.post('/top-correlated-pair', postTopCorrelatedPair);
 
 module.exports = router;

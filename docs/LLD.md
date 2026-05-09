@@ -84,6 +84,21 @@ Note: backend should be started from `newBackend/BackendCode` so this relative p
 
 Base: `/api`
 
+#### `GET /health` (service-level)
+
+- Purpose: backend readiness/liveness signal for operational checks
+- Location: app-level route in `newBackend/BackendCode/app.js`
+- Status: implemented and covered by smoke test `GET /health returns service health payload`
+- Success: `200` with JSON payload
+
+```json
+{
+  "status": "ok",
+  "timestamp": "2026-01-01T00:00:00.000Z",
+  "uptimeSeconds": 123.45
+}
+```
+
 #### `GET /api/streams`
 
 - Purpose: return all processed entries
@@ -119,6 +134,40 @@ Base: `/api`
 - Success: `200` with filtered record array
 - Failure: `500` with `{ "error": "Failed to filter stream data" }`
 
+#### `GET /api/data-profile`
+
+- Purpose: lightweight dataset quality/profile summary for analytics readiness
+- Controller: `getDataProfileSummary`
+- Service: `getDataProfile`
+- Success: `200` with profile payload containing:
+  - `rowCount`
+  - `streamCount`
+  - `streams[]` with `missingPercent`, `min`, `max`, `mean`
+  - `timeRange.start`, `timeRange.end`
+- Failure: `500` with `{ "error": "Failed to profile stream data" }`
+
+#### `POST /api/top-correlated-pair`
+
+- Purpose: return strongest correlated pair among provided stream names
+- Request body:
+
+```json
+{
+  "streamNames": ["Temperature", "Humidity", "Voltage Charge"]
+}
+```
+
+- Validation:
+  - `streamNames` must be an array with at least two items
+  - invalid payload returns `400`
+- Success: `200` with:
+  - `pair` (2 stream names)
+  - `correlation`
+  - `sampleSize`
+  - `label` (`strong`, `moderate`, `weak`, `insufficient-data`)
+- Compute failure (no usable pair): `422`
+- Internal error: `500`
+
 ### 4.4 Layer logic details
 
 #### Repository: `mockRepository.js`
@@ -138,11 +187,18 @@ Base: `/api`
 - `filterEntriesByStreamNames(streamNames)`:
   - keeps `created_at` and `entry_id`
   - conditionally adds each requested stream if key exists
+- `getDataProfile()`:
+  - computes dataset-level summary and per-stream quality metrics
+  - outputs counts, missing rates, and basic descriptive statistics
+- `getTopCorrelatedPair(streamNames)`:
+  - computes pairwise Pearson correlation for selected valid streams
+  - returns highest absolute correlation pair and interpretation label
 
 #### Controller: `mockController.js`
 
 - wraps service calls in `try/catch`
 - performs payload validation for `POST /filter-streams`
+- performs payload validation for `POST /api/top-correlated-pair`
 - returns HTTP-safe error messages
 
 ---
@@ -353,9 +409,13 @@ This repo includes two additional service paths:
   - stream discovery excludes metadata keys
   - filtering returns requested stream subset only
 - route test:
-  - `GET /api/streams` -> `200` and non-empty array
-  - `GET /api/stream-names` -> `200` or `404` on empty data
+  - `GET /` -> `200` and status text
+  - `GET /health` -> `200` and health payload
+  - `GET /api/stream-names` -> `200` and non-empty stream array
   - `POST /api/filter-streams` with invalid body -> `400`
+  - `GET /api/data-profile` -> `200` and profile payload
+  - `POST /api/top-correlated-pair` valid payload -> `200`
+  - `POST /api/top-correlated-pair` short list payload -> `400`
 
 ### 10.2 Frontend tests
 
@@ -419,7 +479,6 @@ python data_science/development/server.py
 
 ## 13. Technical Debt and Next Iteration Backlog
 
-- add `/health` endpoint for backend operational checks
 - standardize response envelope across all endpoints
 - align frontend live endpoint path with backend (`/api/streams` or `/api/sensor-data` alias)
 - unify correlation logic in one service contract (frontend util vs Python analytics)

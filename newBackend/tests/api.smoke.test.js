@@ -54,3 +54,46 @@ test('POST /api/filter-streams rejects invalid payload', async () => {
   assert.equal(response.status, 400);
   assert.match(body.error, /non-empty array/i);
 });
+
+test('GET /api/data-profile returns profiling payload', async () => {
+  const response = await fetch(`${baseUrl}/api/data-profile`);
+  const body = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.equal(typeof body.rowCount, 'number');
+  assert.ok(Array.isArray(body.streams));
+  assert.equal(typeof body.streamCount, 'number');
+  assert.equal(typeof body.timeRange, 'object');
+});
+
+test('POST /api/top-correlated-pair returns top pair insight', async () => {
+  const namesResponse = await fetch(`${baseUrl}/api/stream-names`);
+  const streamNames = await namesResponse.json();
+  const selected = streamNames.slice(0, 3);
+
+  const response = await fetch(`${baseUrl}/api/top-correlated-pair`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ streamNames: selected })
+  });
+  const body = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.ok(Array.isArray(body.pair));
+  assert.equal(body.pair.length, 2);
+  assert.equal(typeof body.correlation, 'number');
+  assert.equal(typeof body.sampleSize, 'number');
+  assert.ok(['strong', 'moderate', 'weak', 'insufficient-data'].includes(body.label));
+});
+
+test('POST /api/top-correlated-pair rejects short stream list', async () => {
+  const response = await fetch(`${baseUrl}/api/top-correlated-pair`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ streamNames: ['Temperature'] })
+  });
+  const body = await response.json();
+
+  assert.equal(response.status, 400);
+  assert.match(body.error, /at least two items/i);
+});

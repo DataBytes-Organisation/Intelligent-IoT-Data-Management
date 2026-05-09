@@ -302,6 +302,7 @@ Benefits of this structure:
 Required enhancement:
 
 - Add `GET /health` and optionally `GET /api/sensor-data` alias for compatibility.
+- Status: `GET /health` is implemented in `newBackend/BackendCode/app.js` and used for operational verification.
 
 ## 8.3 Optional Data Service Layer: Django + DRF Path
 
