@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 from adtk.data import validate_series
 from adtk.detector import VolatilityShiftAD
 
@@ -47,45 +46,41 @@ class VolatilityShiftADDetector:
 
         df = df.copy()
 
-        combined_flags_arr = np.zeros(len(df), dtype=bool)
-        combined_score_arr = np.zeros(len(df), dtype=float)
+        combined_flags = pd.Series(False, index=df.index)
+        combined_score = pd.Series(0.0, index=df.index)
 
         for sensor in df.select_dtypes(include="number").columns:
-            series = df[sensor]
-            
+            series = df[sensor].dropna()
+
             if series.empty:
                 continue
 
-            try:
-                # ADTK usually requires valid time-series index
-                series = validate_series(series)
+            series = validate_series(series)
 
-                detector = VolatilityShiftAD(
-                    c=self.c,
-                    window=self.window,
-                    side=self.side
-                )
+            detector = VolatilityShiftAD(
+                c=self.c,
+                window=self.window,
+                side=self.side
+            )
 
-                # adtk returns a Series with NaNs at the beginning
-                anomaly_flags = detector.fit_detect(series)
-                # Fill NaNs and ensure it's bool
-                anomaly_flags = anomaly_flags.fillna(False).astype(bool)
-                # Align with original df index
-                anomaly_flags = anomaly_flags.reindex(df.index, fill_value=False)
-                
-                combined_flags_arr = combined_flags_arr | anomaly_flags.values
-                
-                # Score: rolling standard deviation is a good proxy for volatility
-                anomaly_score = series.rolling(window=self.window).std().fillna(0).reindex(df.index, fill_value=0.0)
-                combined_score_arr = np.maximum(combined_score_arr, anomaly_score.values)
-                
-            except Exception as e:
-                # If one sensor fails, log it but continue with others
-                print(f"[VolatilityShiftADDetector] Warning: failed on {sensor}: {e}")
+            anomaly_flags = detector.fit_detect(series)
+            anomaly_flags = anomaly_flags.where(anomaly_flags.notna(), False)
+            anomaly_flags = anomaly_flags.astype(bool)
+
+            anomaly_score = series.rolling(window=self.window).std().fillna(0)
+
+            combined_flags.loc[anomaly_flags.index] = (
+                combined_flags.loc[anomaly_flags.index] | anomaly_flags
+            )
+
+            combined_score = pd.concat(
+                [combined_score, anomaly_score],
+                axis=1
+            ).max(axis=1)
 
         return {
-            "anomaly_flag": pd.Series(combined_flags_arr, index=df.index),
-            "score": pd.Series(combined_score_arr, index=df.index),
+            "anomaly_flag": combined_flags,
+            "score": combined_score,
             "model_name": self.model_name,
             "timestamp": df.index
         }

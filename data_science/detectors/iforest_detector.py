@@ -96,7 +96,11 @@ if __name__ == "__main__":
     print(f"[IsolationForest] Loading data from: {filepath}")
     df, scaler = load_and_prepare(filepath)
     df, labels = inject_all(df)
-    y_true = labels.astype(int)
+    labels_series = pd.Series(labels)
+    if labels_series.dtype == bool:
+        y_true = labels_series.astype(int)
+    else:
+        y_true = (labels_series != "normal").astype(int)
     print(f"[IsolationForest] Data shape: {df.shape}  |  Injected anomalies: {y_true.sum()}")
 
     # ---------- Run detector ----------

@@ -391,7 +391,11 @@ def run_pipeline(
         for name, output in results.items():
             if output['model_name'] == "IsolationForest":
                 preds = output['anomaly_flag'].reindex(labels.index, fill_value=False).astype(int)
-                y_true = (labels != "normal").astype(int)
+                labels_series = pd.Series(labels)
+                if labels_series.dtype == bool:
+                    y_true = labels_series.astype(int)
+                else:
+                    y_true = (labels_series != "normal").astype(int)
 
                 cm = confusion_matrix(y_true, preds, labels=[0, 1])
                 tn, fp, fn, tp = cm.ravel()
