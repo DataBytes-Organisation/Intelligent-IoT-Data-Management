@@ -11,12 +11,26 @@
 //   }, [data]);
 // };
 
-// hooks/useTimeRange.js
 import { useMemo } from 'react';
 
 export const useTimeRange = (data) => {
   return useMemo(() => {
-    if (!data || data.length === 0) return [];
-    return data.map(entry => entry.created_at); // or format as needed
+    if (!data || data.length === 0) {
+      return {
+        timeOptions: [],
+        minTime: null,
+        maxTime: null,
+      };
+    }
+
+    const timeOptions = Array.from(
+      new Set(data.map((entry) => entry.created_at).filter(Boolean))
+    ).sort();
+
+    return {
+      timeOptions,
+      minTime: timeOptions[0] ?? null,
+      maxTime: timeOptions[timeOptions.length - 1] ?? null,
+    };
   }, [data]);
 };

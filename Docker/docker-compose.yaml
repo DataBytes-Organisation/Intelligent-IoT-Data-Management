@@ -20,32 +20,36 @@ services:
 
   # Backend service (Django)
   backend:
-    build: ./backend
+    build:
+      context: ../backend/iot_backend
+      dockerfile: Dockerfile
     depends_on:
       db:
         condition: service_healthy
     environment:
-      DATABASE_URL: postgres://postgres:secret@db:5432/postgres
+      DATABASE_URL: postgres://postgres:123456@db:5432/postgres
     networks:
       - app-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/"]
       interval: 30s
       timeout: 10s
       retries: 3
 
   # Frontend service (Node.js)
   frontend:
-    build: ./frontend
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
     ports:
-      - "80:3000"
+      - "80:80"
     depends_on:
       backend:
         condition: service_healthy
     networks:
       - app-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -72,7 +76,7 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - "../Docker/Prometheus Configuration.yaml:/etc/prometheus/prometheus.yml"
     restart: always
     networks:
       - app-network
