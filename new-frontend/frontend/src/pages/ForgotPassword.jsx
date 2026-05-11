@@ -160,8 +160,8 @@ const ForgotPassword = () => {
 
         {message && <p className="forgot-error">{message}</p>}
 
-        <Link to="/register" className="forgot-back-link">
-          Back to registration
+        <Link to="/" className="forgot-back-link">
+          Back to Login
         </Link>
       </section>
     </main>

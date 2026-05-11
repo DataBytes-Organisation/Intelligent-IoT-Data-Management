@@ -42,14 +42,13 @@ const RegistrationPage = () => {
     }
 
     localStorage.setItem(
-      "iotUser",
+      "registeredUser",
       JSON.stringify({
         fullName: formData.fullName,
         email: formData.email,
+        password: formData.password,
       })
     );
-
-    localStorage.setItem("isAuthenticated", "true");
 
     setError("");
     navigate("/");
@@ -124,7 +123,9 @@ const RegistrationPage = () => {
 
         <p className="auth-footer-text">
           Already have an account?{" "}
-          <span>Login page coming soon</span>
+          <Link to="/" className="auth-footer-link">
+            Login
+          </Link>
         </p>
 
         <Link to="/forgot-password" className="auth-link">

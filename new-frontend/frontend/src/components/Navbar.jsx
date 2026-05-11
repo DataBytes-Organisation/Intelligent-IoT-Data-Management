@@ -1,29 +1,45 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 
 const Navbar = () => {
   const navigate = useNavigate();
 
+  const handleLogout = () => {
+    localStorage.removeItem("isAuthenticated");
+    sessionStorage.removeItem("iot_auth");
+
+    navigate("/");
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar__container">
-        <div
-          className="navbar__brand"
-          onClick={() => navigate("/")}
-          role="button"
-          tabIndex={0}
-        >
-          <div className="navbar__logo">●</div>
-          <span className="navbar__title">IoT Dashboard</span>
+
+        {/* LEFT SIDE */}
+        <Link to="/home" className="navbar__brand">
+          <div className="navbar__logo">
+            <span>IoT</span>
+          </div>
+
+          <span className="navbar__title">
+            IoT Sensors Dashboard
+          </span>
+        </Link>
+
+        {/* RIGHT SIDE */}
+        <div className="navbar__actions">
+          <Link to="/home" className="navbar__link">
+            Home
+          </Link>
+
+          <button
+            className="navbar__logout-btn"
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
         </div>
 
-        <button
-          className="navbar__login-btn"
-          type="button"
-          onClick={() => navigate("/")}
-        >
-          Home
-        </button>
       </div>
     </nav>
   );
