@@ -90,6 +90,8 @@ ECODDetector(contamination=0.05)
 | Synthetic | 0.4314 | 0.2895 | 0.3465 | 0.9341 | 0.0311 |
 | Train/test | 0.6250 | 0.1408 | 0.2299 | 0.7736 | 0.0259 |
 | NAB | 0.4921 | 0.2460 | 0.3280 | 0.7925 | 0.0282 |
+  
+ECOD produced a strong AUC-ROC score in the synthetic benchmark, but the latest benchmark run shows ThresholdAD achieving the highest synthetic AUC-ROC.
 
 ## Known Limitations
 

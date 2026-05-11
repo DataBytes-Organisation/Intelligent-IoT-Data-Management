@@ -89,11 +89,11 @@ LOFDetector(contamination=0.05, n_neighbors=20)
 
 ## Benchmark Snapshot
 
-| Benchmark | Precision | Recall | F1 Score | AUC-ROC | FPR |
-|---|---:|---:|---:|---:|---:|
-| Synthetic | 0.8824 | 0.5921 | 0.7087 | 0.8445 | 0.0054 |
-| Train/test | 1.0000 | 0.2254 | 0.3678 | 0.7954 | 0.0000 |
-| NAB | 0.1269 | 0.0635 | 0.0846 | 0.5061 | not supplied |
+| Benchmark | Precision | Recall | F1 Score | AUC-ROC |
+|---|---:|---:|---:|---:|
+| Synthetic | 0.8824 | 0.5921 | 0.7087 | 0.8445 |
+| Train/test | 1.0000 | 0.2254 | 0.3678 | 0.7954 |
+| NAB | 0.1269 | 0.0635 | 0.0846 | 0.5061 |
 
 ## Known Limitations
 

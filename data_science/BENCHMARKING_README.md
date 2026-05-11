@@ -790,24 +790,24 @@ Based on the latest provided benchmark outputs:
 
 ### Synthetic benchmark
 
-- Best F1: `OCSVMDetector`
-- Best AUC-ROC: `ECODDetector`
-- Most sensitive: `OCSVMDetector`
-- Fastest: `COPODDetector`
+- Best F1: `LOFDetector`
+- Best AUC-ROC: `ThresholdADDetector`
+- Most sensitive: `LOFDetector`
+- Fastest: `COPODDetector` / `ThresholdADDetector` depending on exact runtime rounding
 
 ### Train/test benchmark
 
 - Best F1: `OCSVMDetector`
 - Best AUC-ROC: `OCSVMDetector`
 - Most sensitive: `OCSVMDetector`
-- Fastest: `COPODDetector`
+- Fastest: likely `COPODDetector` / `ThresholdADDetector` depending on exact runtime
 
 ### NAB benchmark
 
 - Best F1: `InterQuartileRangeAD`
-- Best AUC-ROC: `COPODDetector`
+- Best AUC-ROC: `ThresholdADDetector`
 - Most sensitive: `InterQuartileRangeAD`
-- Fastest: `COPODDetector`
+- Fastest: `ThresholdADDetector` based on the latest printed runtime
 
 Important interpretation:
 

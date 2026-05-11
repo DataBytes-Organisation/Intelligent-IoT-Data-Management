@@ -89,7 +89,9 @@ COPODDetector(contamination=0.05)
 |---|---:|---:|---:|---:|---:|
 | Synthetic | 0.4706 | 0.3158 | 0.3780 | 0.9145 | 0.0290 |
 | Train/test | 0.5000 | 0.1127 | 0.1839 | 0.5323 | 0.0345 |
-| NAB | 0.7815 | 0.3911 | 0.5213 | 0.8109 | 0.0121 |
+| NAB | 0.7815 | 0.3911 | 0.5213 | 0.8109 | 0.0121 |  
+  
+COPOD remained one of the strongest NAB detectors, with high precision and strong AUC-ROC, but the latest run shows ThresholdAD with the highest NAB AUC-ROC.
 
 ## Known Limitations
 

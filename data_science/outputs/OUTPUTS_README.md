@@ -494,29 +494,31 @@ Based on the latest benchmark evidence used for handover:
 
 ### Synthetic benchmark
 
-- `OCSVMDetector` achieved the best F1.
-- `ECODDetector` achieved the best AUC-ROC.
-- `OCSVMDetector` was the most sensitive by recall.
-- `COPODDetector` was the fastest detector.
+- `LOFDetector` achieved the best F1.
+- `ThresholdADDetector` achieved the best AUC-ROC.
+- `LOFDetector` was the most sensitive by recall.
+- `COPODDetector` and `ThresholdADDetector` were among the fastest detectors.
 
 ### Train/test benchmark
 
 - `OCSVMDetector` achieved the best F1.
 - `OCSVMDetector` achieved the best AUC-ROC.
-- `OCSVMDetector` had very high recall.
-- `COPODDetector` was the fastest detector.
+- `OCSVMDetector` was the most sensitive by recall.
+- `COPODDetector` and `ThresholdADDetector` were among the fastest detectors.
 
 ### NAB benchmark
 
 - `InterQuartileRangeAD` achieved the best F1.
-- `COPODDetector` achieved the best AUC-ROC.
+- `ThresholdADDetector` achieved the best AUC-ROC.
 - `InterQuartileRangeAD` was the most sensitive by recall.
-- `COPODDetector` was the fastest detector.
+- `ThresholdADDetector` and `COPODDetector` were among the fastest detectors.
 
 Overall:
 
-- OCSVM performed strongly in controlled benchmark modes.
-- COPOD and InterQuartileRangeAD performed strongly on NAB.
+- `OCSVMDetector` performed strongly in controlled benchmark modes, especially in train/test evaluation.
+- `LOFDetector` achieved the strongest synthetic F1 score after being included in the benchmark comparison.
+- `ThresholdADDetector` showed very strong AUC-ROC and precision, but its recall was lower, meaning it behaved as a conservative detector.
+- `COPODDetector` and `InterQuartileRangeAD` performed strongly on NAB-style real anomaly windows.
 - NAB results should be interpreted carefully because the current evaluation is pointwise, not official NAB scoring.
 - No detector is best across every benchmark mode.
 

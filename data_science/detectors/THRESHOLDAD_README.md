@@ -88,6 +88,12 @@ ThresholdADDetector(threshold=3.0)
 
 ## Benchmark Snapshot
 
+| Benchmark | Precision | Recall | F1 Score | AUC-ROC | FPR |
+|---|---:|---:|---:|---:|---:|
+| Synthetic | 1.0000 | 0.2632 | 0.4167 | 0.9658 | 0.0000 |
+| Train/test | 1.0000 | 0.1690 | 0.2892 | 0.8096 | 0.0000 |
+| NAB | 0.9913 | 0.2019 | 0.3355 | 0.8322 | not checked |
+
 The supplied handover documentation reports that the default 3.0 sigma threshold had low recall on the synthetic benchmark, catching roughly 26 percent of injected anomalies. Exact cross-benchmark values were not supplied in the detector handover material.
 
 ## Known Limitations

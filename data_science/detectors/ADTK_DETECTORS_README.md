@@ -1,15 +1,17 @@
 # ADTK Detectors
 
-This README documents the detectors in the pipeline that use the ADTK library directly.
+This README documents the detectors in the pipeline that directly use the ADTK library.
 
-| Detector | File | ADTK component |
-|---|---|---|
-| `PcaADDetector` | `adtk_pcaad.py` | `PcaAD` |
-| `LevelShiftADDetector` | `levelshiftad.py` | `LevelShiftAD` |
-| `VolatilityShiftADDetector` | `volatility_shift_ad.py` | `VolatilityShiftAD` |
-| `QuantileADDetector` | `quantilead.py` | `QuantileAD` |
+Current ADTK-backed detectors:
 
-Note: `InterQuartileRangeADDetector` is in the wider detector list, but the latest implementation is custom pandas/IQR logic rather than a direct ADTK wrapper. It therefore has its own dedicated README.
+| Detector | File | ADTK component | Main purpose |
+|---|---|---|---|
+| `PcaADDetector` | `adtk_pcaad.py` | `PcaAD` | PCA-based multivariate pattern deviation |
+| `LevelShiftADDetector` | `levelshiftad.py` | `LevelShiftAD` | Sustained baseline shifts |
+| `VolatilityShiftADDetector` | `volatility_shift_ad.py` | `VolatilityShiftAD` | Changes in variance or signal instability |
+| `QuantileADDetector` | `quantilead.py` | `QuantileAD` | Values outside quantile thresholds |
+
+Note: `InterQuartileRangeADDetector` is not included in this README because the current implementation is custom pandas/IQR logic, not a direct ADTK wrapper.
 
 ## Shared Purpose
 
@@ -125,6 +127,20 @@ NAB benchmark:
 ```bash
 python pipeline.py "https://raw.githubusercontent.com/numenta/NAB/master/data/realKnownCause/machine_temperature_system_failure.csv" --benchmark --label-source nab --nab-label-file "https://raw.githubusercontent.com/numenta/NAB/master/labels/combined_windows.json" --nab-dataset-key "realKnownCause/machine_temperature_system_failure.csv"
 ```
+
+## Benchmark Role
+
+The ADTK detectors are useful as specialist time-series detectors. They are not always the strongest overall benchmark performers, but they help cover anomaly patterns that general-purpose outlier detectors may miss.
+
+- `LevelShiftADDetector` is useful for sustained baseline changes.
+- `VolatilityShiftADDetector` is useful for noisy or unstable sensor behaviour.
+- `QuantileADDetector` is useful as a simple threshold-style baseline.
+- `PcaADDetector` is useful for multivariate pattern deviation, although the current implementation has limited score output support.
+
+For exact latest benchmark results, see:
+
+- `../BENCHMARKING_README.md`
+- `../outputs/README.md`
 
 ## Recommended Use
 

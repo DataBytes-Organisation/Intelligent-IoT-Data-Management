@@ -126,5 +126,37 @@
     "false_positive_rate":0.0,
     "false_negative_rate":0.802632,
     "model":"InterQuartileRangeAD"
+  },
+  {
+    "detector":"LOFDetector",
+    "precision":0.882353,
+    "recall":0.592105,
+    "f1":0.708661,
+    "auc_roc":0.844519,
+    "n_predicted":51,
+    "n_actual":76,
+    "true_positives":45,
+    "false_positives":6,
+    "true_negatives":926,
+    "false_negatives":31,
+    "false_positive_rate":0.006438,
+    "false_negative_rate":0.407895,
+    "model":"LOFDetector"
+  },
+  {
+    "detector":"ThresholdADDetector",
+    "precision":1.0,
+    "recall":0.263158,
+    "f1":0.416667,
+    "auc_roc":0.965764,
+    "n_predicted":20,
+    "n_actual":76,
+    "true_positives":20,
+    "false_positives":0,
+    "true_negatives":932,
+    "false_negatives":56,
+    "false_positive_rate":0.0,
+    "false_negative_rate":0.736842,
+    "model":"ThresholdADDetector"
   }
 ]
