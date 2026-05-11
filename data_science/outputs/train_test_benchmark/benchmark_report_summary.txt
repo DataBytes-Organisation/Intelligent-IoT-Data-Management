@@ -1,10 +1,10 @@
 Benchmark report summary
 ========================================
-Best F1:                          OCSVMDetector (F1=0.6419)
-Best AUC-ROC (NaN ignored):       OCSVMDetector (AUC=0.9718)
+Best F1:                          OCSVMDetector (F1=0.6667)
+Best AUC-ROC (NaN ignored):       OCSVMDetector (AUC=0.9859)
 Most conservative (fewest flags): PcaADDetector (n_predicted=3)
-Most sensitive (highest recall):  OCSVMDetector (recall=0.9718)
-Fastest detector:                 COPODDetector (0.0030s)
+Most sensitive (highest recall):  OCSVMDetector (recall=0.9859)
+Fastest detector:                 ThresholdADDetector (0.0020s)
 
 Note: metrics depend on the benchmark type (synthetic, train/test, or NAB). 
 NAB labels are wide windows around real failure events, so pointwise precision/recall under-rewards detectors that fire only at the moment of regime change.

@@ -1,7 +1,12 @@
 import pandas as pd
 import numpy as np
 import pytest
-from anomaly_injector import inject_point_spikes, inject_level_shifts, inject_volatility_shifts, inject_all
+from data_science.anomaly_injector import (
+    inject_point_spikes,
+    inject_level_shifts,
+    inject_volatility_shifts,
+    inject_all,
+)
 
 
 def make_df(rows=100):
