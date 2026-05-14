@@ -9,6 +9,8 @@ This document defines code-level behavior for the current converged runtime path
 - Optional analytics assets: `data_science/algorithms`
 - Optional extension backend: `backend/iot_backend` (Django DRF)
 
+Repository sync note (2026-05-14): this LLD reflects latest merged team contributions currently present in the monorepo, including the parallel `frontend` app and Dockerized Django stack assets.
+
 The goal is to provide implementation-ready detail for API contracts, module responsibilities, runtime flow, algorithms, testing, and operational behavior.
 
 ---
@@ -34,11 +36,12 @@ The goal is to provide implementation-ready detail for API contracts, module res
 
 ## 3.1 Frontend module ownership (`new-frontend/frontend/src`)
 
-- `pages/`: top-level route pages (`HomePage`, `DashboardPage`)
-- `components/`: rendering and interaction units (selectors, charts, stats, correlation cards)
+- `pages/`: route pages (`Login`, `RegistrationPage`, `ForgotPassword`, `HomePage`, `DashboardPage`)
+- `components/`: rendering and interaction units (selectors, charts, stats, correlation cards, shared layout/navbar/footer, dataset card, route guard)
 - `hooks/`: data loading and filtering logic
 - `utils/`: math and helper logic (correlation, variance, trendline)
 - `data/`: mock datasets for offline mode
+- `services/`: auth integration seam (`authClient.js`)
 
 ### 3.2 Backend module ownership (`newBackend/BackendCode`)
 
@@ -47,6 +50,9 @@ The goal is to provide implementation-ready detail for API contracts, module res
 - `controllers/mockController.js`: request validation and HTTP response shaping
 - `services/mockService.js`: business logic for stream discovery and filtering
 - `repositories/mockRepository.js`: file-based data access
+- `middleware/`: request guards (JWT verification middleware from PR #70)
+- `utils/`: helper utilities for token and hashing workflows (PR #70)
+- `config/`: auth-related configuration seam (PR #70)
 
 ---
 
@@ -54,16 +60,16 @@ The goal is to provide implementation-ready detail for API contracts, module res
 
 ### 4.1 Boot sequence
 
-File: `newBackend/BackendCode/server.js`
+Files: `newBackend/BackendCode/app.js`, `newBackend/BackendCode/server.js`
 
-1. Load env from `../.env`
-2. Create Express app
-3. Register middleware:
+1. `app.js` loads env from `../.env`
+2. `app.js` creates Express app
+3. `app.js` registers middleware:
    - `cors()`
    - `express.json()`
-4. Register health/root route (`GET /`)
-5. Mount API routes under `/api`
-6. Bind server to `PORT` (default `3000`)
+4. `app.js` registers root and health routes (`GET /`, `GET /health`)
+5. `app.js` mounts API routes under `/api`
+6. `server.js` imports app and binds server to `PORT` (default `3000`)
 
 ### 4.2 Environment contract
 
@@ -207,8 +213,16 @@ Base: `/api`
 
 ### 5.1 Route/page composition
 
-- `DashboardPage` renders `Dashboard` feature composition
-- Dashboard contains selection controls, charting, stats, and correlation insights
+- Public routes:
+  - `/` -> `Login`
+  - `/register` -> `RegistrationPage`
+  - `/forgot-password` -> `ForgotPassword`
+- Protected routes:
+  - `/home` -> `ProtectedRoute` -> `Layout` -> `HomePage`
+  - `/dashboard/:id` -> `ProtectedRoute` -> `Layout` -> `DashboardPage`
+- `Layout` composes shared `Navbar` and `Footer` around protected content.
+- `DashboardPage` renders `Dashboard` feature composition.
+- Dashboard contains selection controls, charting, stats, and correlation insights.
 
 ### 5.2 Hook contracts
 
@@ -298,6 +312,7 @@ File: `new-frontend/frontend/src/utils/trendlineUtils.js`
 
 - Current dashboard runs in mock mode: `useSensorData(true)`
 - UI text mentions rolling correlation, but active code currently renders static pairwise correlation and trendline only
+- Auth flow and protected-route shell are now implemented at router level (PR #71), but final token/session contract must be aligned with backend APIs.
 
 ---
 
@@ -363,6 +378,8 @@ File: `new-frontend/frontend/src/utils/trendlineUtils.js`
 - repository exceptions are translated to `500`
 - invalid filtering payload produces `400`
 - empty stream catalog returns `404`
+- auth middleware path returns `401` when token is missing
+- auth middleware path returns `403` when token is invalid/verification fails
 
 ### 8.2 Frontend
 
@@ -390,11 +407,52 @@ This repo includes two additional service paths:
 - Django path targets REST resource modeling and persistence-ready APIs
 - primary Node path is lightweight demo API over local processed JSON
 
+### 9.1.1 DB implementation stream (fork reference)
+
+- External fork commit history (`FarrisBaboo/main`) shows a DB-first implementation stream with ingestion and endpoint updates:
+  - `5e04d8e` ingestion logic + models
+  - `89e7d28` DB controllers/service/repository + ingest fix
+  - `bffcaba` mock-to-DB connection fix
+  - `c92a28f` ingestion pipeline and dataset/series endpoint update
+
+Low-level implication:
+
+- LLD should model two repository strategies:
+  - `FileRepository` (current local runtime in this workspace)
+  - `DbRepository` (integration path demonstrated in DB stream)
+- Controller/service contracts should remain stable so repository implementation can be swapped without route-level refactor.
+
+### 9.4 Backend auth stream note (PR #70)
+
+- Merged backend PR adds lightweight authentication primitives (bcrypt, JWT, middleware) to the Node codebase lineage.
+- LLD implication: endpoint contracts should now classify routes as `public` vs `protected` and enforce `Authorization: Bearer <token>` on protected operations.
+- Integration step pending: align frontend auth client calls with backend token issuance/verification endpoints and standardized error payloads.
+
+### 9.5 Data science stream note (fork reference)
+
+- External DS fork reference: `https://github.com/Yashdeep22/Intelligent-IoT-Data-Management`
+- Commit trail indicates a richer detector and benchmarking pipeline, including:
+  - ThresholdAD (`2ead71a`)
+  - LOF detector + edge guard (`2707a31`, `a67ac40`)
+  - benchmark label handling and NAB support (`6d21e24`, `f31fad3`)
+  - combined benchmark reporting (`7ab182b`)
+
+Low-level implication:
+
+- Keep analytics adapters behind a stable detector interface (fit/score/predict contract) so detector substitution does not affect API shape.
+- Treat benchmark/report scripts as offline evaluation modules and avoid coupling them to request/response critical path.
+
 ### 9.2 Contract mismatch to note
 
 - `frontend/src/AnalyzePanel.jsx` calls `POST http://localhost:5000/api/analyze`
 - Flask server currently exposes `POST /analyze` (no `/api` prefix)
 - Flask expects multipart form-data with file upload, while frontend currently sends JSON
+
+### 9.3 Additional frontend track note
+
+- `frontend/src/App.jsx` includes `Login`, `Register`, and `AnalyzePanel` routes and MUI-based theme switching.
+- `new-frontend/frontend` now also includes a full auth + protected-layout route structure after PR #71.
+- For convergence, keep `new-frontend/frontend` as primary runtime UI path and treat `frontend` as adjacent/legacy path unless team explicitly consolidates.
 
 ---
 
@@ -433,6 +491,7 @@ This repo includes two additional service paths:
 
 - Backend: `jest` + `supertest`
 - Frontend: `vitest` + `@testing-library/react`
+- Data science: `pytest` + fixture-based benchmark regression checks
 
 ---
 
@@ -484,6 +543,10 @@ python data_science/development/server.py
 - unify correlation logic in one service contract (frontend util vs Python analytics)
 - implement rolling correlation backend or frontend utility to match dashboard text
 - add structured logging and request IDs for traceability
+- complete upstream merge of DB ingestion stream and document concrete DB schema/ORM model map
+- add migration/runbook steps for bootstrapping DB data from canonical processed datasets
+- define a single source of truth for dataset/series endpoint naming across file-backed and DB-backed modes
+- align DS detector output schema (scores, labels, metadata) with API response contracts for frontend consumption
 
 ---
 

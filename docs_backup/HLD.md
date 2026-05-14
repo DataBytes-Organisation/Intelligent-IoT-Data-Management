@@ -2,9 +2,9 @@
 
 ## Intelligent IoT Data Management Platform
 
-Version: 2.0 (Expanded)
+Version: 2.1 (Repository Sync Update)
 
-Date: 2026-03-31
+Date: 2026-05-14
 
 ---
 
@@ -161,9 +161,9 @@ Without architectural convergence, prototype-heavy repositories often suffer fro
 
 ## 6. Current Landscape and Repository Reality
 
-The repository contains multiple parallel prototypes and service variants:
+The repository now reflects merged contributions from multiple teams and contains parallel prototypes and service variants:
 
-- Frontend prototype A: `frontend` (React/Vite baseline template lineage).
+- Frontend prototype A: `frontend` (React/Vite app with auth screens, analyze panel, export flow, and MUI theme toggling).
 - Frontend prototype B: `new-frontend/frontend` (dashboard-focused implementation).
 - Backend prototype A: `backend/iot_backend` (Django + DRF + model-backed API).
 - Backend prototype B: `newBackend/BackendCode` (Node/Express file-backed API).
@@ -247,13 +247,20 @@ Secondary/extension path:
 
 Primary codebase: `new-frontend/frontend`
 
-Key component groups:
+Key component groups (updated with PR #71 frontend integration):
 
 - Pages and routing
   - `src/pages/HomePage.jsx`
   - `src/pages/DashboardPage.jsx`
+  - `src/pages/Login.jsx`
+  - `src/pages/RegistrationPage.jsx`
+  - `src/pages/ForgotPassword.jsx`
 - Dashboard orchestration
   - `src/components/Dashboard.jsx`
+  - `src/components/Layout.jsx` (shared shell)
+  - `src/components/ProtectedRoute.jsx` (route guard)
+  - `src/components/Navbar.jsx`, `src/components/Footer.jsx`
+  - `src/components/DatasetCard.jsx`
 - Input controls
   - stream selector, interval selector, time selectors
 - Visual output
@@ -266,6 +273,7 @@ Responsibilities:
 - Collect user intent (streams, window, interval).
 - Render progressively richer visualization as selection depth increases.
 - Avoid direct filesystem assumptions in final architecture.
+- Support authenticated UX flow before entering protected Home/Dashboard routes.
 
 Current gap observed:
 
@@ -288,6 +296,12 @@ Current exposed API (through `/api` mount):
 - `GET /api/streams`
 - `GET /api/stream-names`
 - `POST /api/filter-streams`
+- `GET /api/data-profile`
+- `POST /api/top-correlated-pair`
+
+Service-level endpoint:
+
+- `GET /health`
 
 Repository behavior:
 
@@ -299,10 +313,16 @@ Benefits of this structure:
 - Good separation between transport logic and data access.
 - Easy replacement of repository (file -> DB) without rewriting controller contracts.
 
-Required enhancement:
+Backend security integration update (PR #70):
 
-- Add `GET /health` and optionally `GET /api/sensor-data` alias for compatibility.
-- Status: `GET /health` is implemented in `newBackend/BackendCode/app.js` and used for operational verification.
+- Upstream merged lightweight authentication support using bcrypt + JWT + middleware.
+- Architecture intent is to protect selected routes with bearer-token validation while keeping read-only/open demo routes configurable.
+- Supporting backend modules introduced in that stream include `middleware/authMiddleware.js` and token/hash utility helpers.
+
+Current convergence notes:
+
+- `GET /health` is implemented in `newBackend/BackendCode/app.js` and used for operational verification.
+- `useSensorData` live-mode path (`/api/sensor-data`) is still not aligned with Node route naming (`/api/streams`), so contract normalization or an alias remains required.
 
 ## 8.3 Optional Data Service Layer: Django + DRF Path
 
@@ -324,6 +344,20 @@ Role in HLD:
 - Not primary runtime for current converged demo.
 - Strategic evolution path for persistent, model-backed data serving.
 
+DB stream update reference (external fork activity):
+
+- Repository: `https://github.com/FarrisBaboo/Intelligent-IoT-Data-Management`
+- DB-related commit trail indicates ongoing ingestion and endpoint hardening work:
+  - `5e04d8e` Implement ingestion logic and models
+  - `89e7d28` Add controllers/service/repo for DB and ingest fixes
+  - `bffcaba` Fix mock connection to DB
+  - `c92a28f` Fix DB ingestion pipeline and update dataset/series endpoints
+
+Architecture interpretation:
+
+- The project now has a clearer persistence-evolution stream (file-backed -> DB-backed).
+- Canonical runtime still documents file-backed Node path as primary, while DB-backed path is treated as integration-ready extension pending full upstream convergence.
+
 ## 8.4 Analytics Service/Module Layer
 
 Available analytics assets:
@@ -335,6 +369,23 @@ Role in target architecture:
 
 - Extract deterministic algorithmic functions and integrate in a stable runtime contract.
 - Keep notebooks and exploratory scripts as research assets, not runtime dependencies.
+
+### 8.5 Frontend Integration Update (PR #71)
+
+PR reference: `https://github.com/DataBytes-Organisation/Intelligent-IoT-Data-Management/pull/71`
+
+Key architecture-facing updates from this frontend stream:
+
+- Route model expanded to include login/registration/forgot-password pages.
+- Protected route pattern introduced for `/home` and `/dashboard/:id`.
+- Shared layout introduced for consistent navbar/footer wrapping.
+- Homepage redesign and dataset card presentation added to improve discoverability of dataset entry points.
+- New auth service client (`src/services/authClient.js`) introduced as a seam for backend auth integration.
+
+HLD implication:
+
+- The platform now has an explicit presentation-layer split between public auth routes and authenticated analytical routes.
+- This strengthens separation of concerns and improves readiness for future backend-auth convergence.
 
 ---
 
@@ -468,12 +519,25 @@ Provide interpretable, deterministic analytics that can be explained to non-ML u
 
 - Correlation-based outlier identification (`algorithms/correlation_based.py`).
 - Flask-driven analysis endpoints (`/analyze`, `/analyze-corr`, `/analyze-csv`) for exploratory and export workflows.
+- Expanded detector portfolio from DS stream (`Yashdeep22` fork), including threshold, LOF, IQR, COPOD, and volatility/level-shift variants under a common benchmarking workflow.
+
+Data science stream reference:
+
+- Repository: `https://github.com/Yashdeep22/Intelligent-IoT-Data-Management`
+- Representative commits:
+  - `2ead71a` clean ThresholdAD detector integration
+  - `2707a31` LOF detector integration
+  - `a67ac40` LOF single-sample guard
+  - `f31fad3` NAB label support for benchmark evaluation
+  - `7ab182b` combined benchmark summary report
 
 ### 12.3 Productionization Strategy
 
 - Keep algorithm inputs explicit: selected streams, time range, threshold/window.
 - Return compact summary results for UI consumption.
 - Isolate notebook-only logic from runtime modules.
+- Preserve detector interface consistency so detector swaps do not require API contract rewrites.
+- Maintain benchmark artifact generation as a separate evaluation pipeline, not a runtime dependency.
 
 ### 12.4 Candidate Insight Contract
 
@@ -529,6 +593,18 @@ Provide interpretable, deterministic analytics that can be explained to non-ML u
 
 ## 14. Security, Privacy, and Governance
 
+### 14.1 Authentication baseline (merged backend stream)
+
+PR reference: `https://github.com/DataBytes-Organisation/Intelligent-IoT-Data-Management/pull/70`
+
+- Authentication capability has been introduced via lightweight JWT flow and password hashing.
+- Middleware-based authorization checks are intended to gate protected API routes.
+- This establishes a practical baseline security posture for student-team delivery without full IAM/RBAC rollout.
+
+### 14.2 Security convergence note
+
+- Frontend auth route flow (PR #71) and backend JWT middleware (PR #70) should be connected through a single token issuance/refresh contract in the next integration increment.
+
 ### 14.1 Current Security Posture
 
 - CORS enabled for development.
@@ -574,13 +650,18 @@ Provide interpretable, deterministic analytics that can be explained to non-ML u
 - React frontend via Nginx (`frontend`)
 - cAdvisor, Prometheus, Grafana for monitoring stack
 
-This compose stack reflects the broader prototype ecosystem and can be used as a reference architecture for operations concepts, though it is not identical to the primary converged Node runtime path.
+This compose stack reflects the broader prototype ecosystem and can be used as a reference architecture for operations concepts. It currently aligns more closely to the Django-centric path than the primary converged Node runtime path.
 
 ### 15.3 Environment Segmentation
 
 - Development: rapid iteration and dataset experimentation.
 - Demo/Staging: fixed dataset and pinned configuration.
 - Future production: hardened contracts, auth, persistence, and observability.
+
+### 15.4 Persistence Evolution Note
+
+- Recent DB-focused stream work demonstrates transition readiness toward persistent storage and ingestion pipelines.
+- Production-oriented deployment should prioritize the DB-backed endpoint family once schema, ingestion jobs, and route contracts are unified in upstream main.
 
 ---
 
@@ -632,6 +713,8 @@ Minimum smoke checks:
 - deterministic test fixtures for known correlation behavior,
 - edge cases for low-variance and missing-value windows,
 - threshold classification consistency checks.
+- detector-specific guards (for example single-sample handling and label-shape handling),
+- benchmark reproducibility checks across supported detectors using the same labeled datasets.
 
 ### 17.4 Quality Gate Recommendation
 
