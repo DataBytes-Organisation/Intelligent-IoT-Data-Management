@@ -1,12 +1,12 @@
 # Backend Overview
 Intelligent IoT Data Management – Backend
 
-Overview
+## Overview
 The backend is a Node.js + Express server designed to ingest, store, analyse, and serve IoT sensor data.
 It follows a clean Controller → Service → Repository architecture and integrates with a PostgreSQL database for persistent storage.
 The backend supports real‑time ingestion from ThingSpeak, CSV ingestion, JWT authentication, and dataset‑based API endpoints used by the frontend dashboard. For onboarding, see the Backend Onboarding Document in 'Backend/docs'.
 
-Backend Architecture
+## Backend Architecture
 - The backend is structured into modular layers to ensure maintainability and scalability:
 - Routes – define API endpoints
 - Controllers – handle HTTP requests/responses
@@ -17,7 +17,7 @@ Backend Architecture
 - Database Layer – PostgreSQL schema + queries
 - This structure ensures each layer has a single responsibility and can be extended independently
 
-Key Features Implemented
+## Key Features Implemented
 1. Authentication
 - JWT‑based login and registration
 - Bcrypt password hashing
@@ -39,7 +39,8 @@ Key Features Implemented
 
 4. API Endpoints. View 'Backend/docs'.
 
-Project Structure
+## Project Structure
+```
 backend/
 │
 ├── src/
@@ -60,5 +61,6 @@ backend/
 ├── server.js
 ├── package.json
 └── schema.sql
+```
 
-How to Run the Backend Locally. View 'Backend/docs/' Backend Onboarding Document pdf.
+To Run the Backend Locally, view 'Backend/docs/' Backend Onboarding Document pdf.
