@@ -1,6 +1,7 @@
 //handles routing for mock data endpoints
-const authMiddleware = require("../middleware/authMiddleware");
 const express = require("express");
+const authMiddleware = require("../middleware/authMiddleware");
+
 const {
   getStreams,
   getStreamNames,
@@ -48,7 +49,7 @@ router.get("/streams", authMiddleware, getStreams);
  *   "Current Draw"
  * ]
  */
-router.get("/stream-names", getStreamNames);
+router.get("/stream-names", authMiddleware, getStreamNames);
 
 /*
  * POST /filter-streams
