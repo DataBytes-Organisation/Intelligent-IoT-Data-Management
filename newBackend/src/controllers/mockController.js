@@ -6,6 +6,7 @@ const {
   filterEntriesByStreamNames
 } = require('../services/mockService');
 
+//GET /streams — Returns JSON file containing the stream data
 const getStreams = async (req, res) => {
   try {
     const data = await readProcessedData();
@@ -17,6 +18,7 @@ const getStreams = async (req, res) => {
   }
 };
 
+//GET /stream-names — Returns an array of available stream names
 const getStreamNames = async (req, res) => {
   try {
     const streamNames = await getAvailableStreamNames();
@@ -30,6 +32,7 @@ const getStreamNames = async (req, res) => {
   }
 };
 
+//POST /filter-streams — Returns JSON file by filtering entries by stream names (without time window)
 const postFilterStreams = async (req, res) => {
   const { streamNames } = req.body;
 

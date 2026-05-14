@@ -3,6 +3,7 @@
 const pool = require('../db/pool');
 
 class MockRepository {
+  // Fetches mock data from PostgreSQL instead of JSON
   async getMockData() {
     const result = await pool.query('SELECT * FROM timeseries_long');
     return result.rows;
@@ -12,26 +13,28 @@ class MockRepository {
 module.exports = MockRepository;
 
 /*
-require('dotenv').config({ path: '../.env' });
+  BELOW IS THE OLD JSON-BASED IMPLEMENTATION (kept for reference only)
 
-const fs = require('fs');
-const path = require('path');
+  require('dotenv').config({ path: '../.env' });
 
-class MockRepository {
-  constructor() {
-    this.filePath = path.resolve(process.env.PROCESSED_DATA_PATH);
-  }
+  const fs = require('fs');
+  const path = require('path');
 
-  getMockData() {
-    try {
-      const rawData = fs.readFileSync(this.filePath, 'utf8');
-      return JSON.parse(rawData);
-    } catch (err) {
-      console.error('Error reading mock data:', err);
-      throw new Error('Failed to read mock data');
+  class MockRepository {
+    constructor() {
+      this.filePath = path.resolve(process.env.PROCESSED_DATA_PATH);
+    }
+
+    getMockData() {
+      try {
+        const rawData = fs.readFileSync(this.filePath, 'utf8');
+        return JSON.parse(rawData);
+      } catch (err) {
+        console.error('Error reading mock data:', err);
+        throw new Error('Failed to read mock data');
+      }
     }
   }
-}
 
-module.exports = MockRepository;
+  module.exports = MockRepository;
 */

@@ -1,6 +1,8 @@
 //handles routing for mock data endpoints
 
 const express = require('express');
+const authMiddleware = require('../middleware/authMiddleware');
+
 const {
   getStreams,
   getStreamNames,
@@ -8,6 +10,11 @@ const {
 } = require('../controllers/mockController');
 
 const router = express.Router();
+
+// Upstream test route (kept)
+router.get('/mock', (req, res) => {
+  res.json({ message: 'Mock route is working' });
+});
 
 /*
  * GET /streams
@@ -28,7 +35,7 @@ const router = express.Router();
  *   ...
  * ]
  */
-router.get('/streams', getStreams);
+router.get('/streams', authMiddleware, getStreams);
 
 /*
  * GET /stream-names
@@ -44,7 +51,7 @@ router.get('/streams', getStreams);
  *   "Current Draw"
  * ]
  */
-router.get("/stream-names", getStreamNames);
+router.get('/stream-names', authMiddleware, getStreamNames);
 
 /*
  * POST /filter-streams
@@ -73,6 +80,6 @@ router.get("/stream-names", getStreamNames);
  *    }
  * ] 
  */
-router.post('/filter-streams', postFilterStreams);
+router.post('/filter-streams', authMiddleware, postFilterStreams);
 
 module.exports = router;
