@@ -1,14 +1,12 @@
-const jwt = require("jsonwebtoken");
-
-const JWT_SECRET = process.env.JWT_SECRET || "dev_secret_key";
+const { verifyToken } = require("../utils/tokenUtils");
 
 const authMiddleware = (req, res, next) => {
-  const authHeader = req.headers.authorization;
+  const authHeader = req.headers["authorization"];
 
   if (!authHeader) {
     return res.status(401).json({
       success: false,
-      message: "Access denied. No token provided.",
+      message: "No token provided",
     });
   }
 
@@ -17,18 +15,18 @@ const authMiddleware = (req, res, next) => {
   if (!token) {
     return res.status(401).json({
       success: false,
-      message: "Access denied. Invalid token format.",
+      message: "Invalid token format",
     });
   }
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = verifyToken(token);
     req.user = decoded;
     next();
-  } catch (error) {
+  } catch (err) {
     return res.status(403).json({
       success: false,
-      message: "Invalid or expired token.",
+      message: "Invalid or expired token",
     });
   }
 };
