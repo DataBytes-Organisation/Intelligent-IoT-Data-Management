@@ -1,30 +1,25 @@
 /**
  * TIMESERIES SERVICE
  * -------------------
- * Responsible for all time‑series data operations.
- *
- * This service:
- *   - Loads long‑format rows from the database
- *   - Pivots long → wide (grouping by timestamp + entity)
- *   - Extracts available metrics for a dataset
- *   - Filters wide‑format entries by metric names
- *   - Resolves dataset names → dataset IDs
- *
- * It is used by:
- *   - seriesController
- *   - timestampsController
- *
+ * Now supports BOTH:
+ *   - long‑format (CSV ingestion)
+ *   - wide‑format (ThingSpeak ingestion)
  */
 
 const TimeseriesRepository = require('../repositories/timeseriesRepository');
-
 const repo = new TimeseriesRepository();
 
+/* -----------------------------
+ * Helpers
+ * ----------------------------- */
 function tsToIso(ts) {
   if (ts instanceof Date) return ts.toISOString();
   return String(ts);
 }
 
+/* -----------------------------
+ * Long → Wide Pivot (CSV only)
+ * ----------------------------- */
 function pivotLongToWide(rows) {
   const groups = new Map();
 
@@ -56,40 +51,65 @@ function pivotLongToWide(rows) {
   }
 
   return Array.from(groups.values()).sort(
-    (a, b) => new Date(a.created_at) - new Date(b.created_at),
+    (a, b) => new Date(a.created_at) - new Date(b.created_at)
   );
 }
 
+/* -----------------------------
+ * MD‑02: Wide-format support
+ * ----------------------------- */
 async function getWideEntriesForDatasetName(datasetName) {
   if (!datasetName) return null;
 
   const datasetId = await repo.getDatasetIdByName(datasetName);
   if (datasetId == null) return null;
 
-  const n = await repo.countRowsByDatasetId(datasetId);
-  if (n === 0) return null;
+  // 1. Try ThingSpeak wide-format first
+  const wideRows = await repo.findAllWideByDatasetId(datasetId);
+  if (wideRows.length > 0) {
+    console.log(`Service: returning ${wideRows.length} wide-format rows`);
+    return wideRows;
+  }
+
+  // 2. Fallback to CSV long-format
+  const longCount = await repo.countRowsByDatasetId(datasetId);
+  if (longCount === 0) return null;
 
   const longRows = await repo.findAllLongByDatasetId(datasetId);
   return pivotLongToWide(longRows);
 }
 
+/* -----------------------------
+ * MD‑02: Dynamic metric extraction
+ * ----------------------------- */
 async function getAvailableMetricsForDatasetName(datasetName) {
   if (!datasetName) return null;
 
   const datasetId = await repo.getDatasetIdByName(datasetName);
   if (datasetId == null) return null;
 
-  const n = await repo.countRowsByDatasetId(datasetId);
-  if (n === 0) return null;
+  // Prefer wide-format metrics
+  const wideRows = await repo.findAllWideByDatasetId(datasetId);
+  if (wideRows.length > 0) {
+    const sample = wideRows[0];
+    return Object.keys(sample).filter(k => k.startsWith("field"));
+  }
+
+  // Fallback to long-format metrics
+  const longCount = await repo.countRowsByDatasetId(datasetId);
+  if (longCount === 0) return null;
 
   return repo.findDistinctMetricsByDatasetId(datasetId);
 }
 
+/* -----------------------------
+ * Filtering (works for both formats)
+ * ----------------------------- */
 async function filterWideEntriesByMetrics(datasetName, streamNames) {
   const entries = await getWideEntriesForDatasetName(datasetName);
   if (!entries) return null;
 
-  return entries.map((entry) => {
+  return entries.map(entry => {
     const filtered = {
       created_at: entry.created_at,
       entry_id: entry.entry_id,
