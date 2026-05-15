@@ -1,0 +1,7 @@
+{
+  "datasetName": "sensor1",
+  "timestamp": "created_at",
+  "entity": "entry_id",
+  "metrics": "auto",
+  "renames": {}
+}
