@@ -5,78 +5,53 @@ This module takes the output from compare_correlation_changes()
 and generates alerts for significant changes in correlation between sensor streams.
 """
 
-def generate_alerts(changes, strong_corr_threshold=0.7, weak_corr_threshold=0.4, delta_threshold=0.3):
+def generate_alerts(changes, delta_threshold_low=0.3, delta_threshold_medium=0.5, delta_threshold_high=0.7):
     """
     Generate alerts based on correlation changes between windows.
 
+    Alert levels:
+        - No alert: delta < 0.3
+        - LOW: 0.3 <= delta < 0.5
+        - MEDIUM: 0.5 <= delta < 0.7
+        - HIGH: delta >= 0.7
+
     Parameters:
         changes (list[dict]): Output from compare_correlation_changes().
-            Each item contains:
-            {
-                "window_index": int,
-                "start_time": timestamp,
-                "end_time": timestamp,
-                "stream_1": str,
-                "stream_2": str,
-                "previous_corr": float,
-                "current_corr": float,
-                "delta": float
-            }
-        strong_corr_threshold (float): Threshold to define strong correlation (default: 0.7).
-        weak_corr_threshold (float): Threshold to define weak correlation (default: 0.4).
-        delta_threshold (float): Threshold for significant change (default: 0.3).
+        delta_threshold_low (float): Threshold for LOW alert (default: 0.3).
+        delta_threshold_medium (float): Threshold for MEDIUM alert (default: 0.5).
+        delta_threshold_high (float): Threshold for HIGH alert (default: 0.7).
 
     Returns:
-        list[dict]: List of alerts. Each alert contains:
-            {
-                "window_index": int,
-                "start_time": timestamp,
-                "end_time": timestamp,
-                "stream_1": str,
-                "stream_2": str,
-                "previous_corr": float,
-                "current_corr": float,
-                "delta": float,
-                "alert_level": str,
-                "reason": str
-            }
+        list[dict]: List of alerts.
     """
     alerts = []
     
     for change in changes:
         delta = change["delta"]
-        prev_corr = change["previous_corr"]
-        current_corr = change["current_corr"]
         
         alert_level = None
         reason = None
         
-        # CHECK 1: Did strong correlation become weak? (Most important)
-        if prev_corr >= strong_corr_threshold and current_corr <= weak_corr_threshold:
-            alert_level = "MEDIUM"
-            reason = f"Strong-to-weak drop: correlation went from {prev_corr:.2f} to {current_corr:.2f}"
-            alerts.append(create_alert(change, alert_level, reason))
-            continue
+        # Check 1: No alert for small changes
+        if delta < delta_threshold_low:
+            continue  # skip this change, no alert
         
-        # CHECK 2: Did weak correlation become strong? (Also important)
-        if prev_corr <= weak_corr_threshold and current_corr >= strong_corr_threshold:
-            alert_level = "MEDIUM"
-            reason = f"Weak-to-strong rise: correlation went from {prev_corr:.2f} to {current_corr:.2f}"
-            alerts.append(create_alert(change, alert_level, reason))
-            continue
-        
-        # CHECK 3: Is the change big enough? (HIGH alert)
-        if delta >= delta_threshold:
-            alert_level = "HIGH"
-            reason = f"Correlation changed by {delta:.2f}, which is above threshold {delta_threshold}"
-            alerts.append(create_alert(change, alert_level, reason))
-            continue
-        
-        # CHECK 4: Small change but still worth noting (LOW alert)
-        if 0.1 <= delta < delta_threshold:
+        # Check 2: LOW alert
+        elif delta_threshold_low <= delta < delta_threshold_medium:
             alert_level = "LOW"
-            reason = f"Small but noticeable change of {delta:.2f}"
-            alerts.append(create_alert(change, alert_level, reason))
+            reason = f"Correlation changed by {delta:.2f} (LOW range: {delta_threshold_low} to {delta_threshold_medium})"
+        
+        # Check 3: MEDIUM alert
+        elif delta_threshold_medium <= delta < delta_threshold_high:
+            alert_level = "MEDIUM"
+            reason = f"Correlation changed by {delta:.2f} (MEDIUM range: {delta_threshold_medium} to {delta_threshold_high})"
+        
+        # Check 4: HIGH alert
+        else:  # delta >= delta_threshold_high
+            alert_level = "HIGH"
+            reason = f"Correlation changed by {delta:.2f} (HIGH range: >= {delta_threshold_high})"
+        
+        alerts.append(create_alert(change, alert_level, reason))
     
     return alerts
 
@@ -84,14 +59,6 @@ def generate_alerts(changes, strong_corr_threshold=0.7, weak_corr_threshold=0.4,
 def create_alert(change, alert_level, reason):
     """
     Helper function to create a single alert dictionary.
-    
-    Args:
-        change (dict): A single change item from compare_correlation_changes()
-        alert_level (str): LOW, MEDIUM, or HIGH
-        reason (str): Description of why the alert was triggered
-    
-    Returns:
-        dict: Formatted alert
     """
     return {
         "window_index": change["window_index"],
@@ -107,22 +74,10 @@ def create_alert(change, alert_level, reason):
     }
 
 
-# Keep my original simple function for single sensor use if needed
+# Keep your original simple function for single sensor use if needed
 def generate_alert(sensor, delta_r):
     """
     Simple alert for a single sensor (kept for backwards compatibility).
-
-    Args:
-        sensor (str): Identifier of the sensor.
-        delta_r (float): Change in correlation value.
-
-    Returns:
-        dict: {
-            'sensor': str,
-            'delta_r': float,
-            'alert_level': str or None,
-            'status': str
-        }
     """
     if delta_r < 0.3:
         alert_level = None
