@@ -12,6 +12,12 @@ dist
 dist-ssr
 *.local
 
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -22,3 +28,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Generated benchmark outputs (data_science/outputs/)
+data_science/outputs/*.csv
+data_science/outputs/*.json
+!data_science/outputs/.gitkeep
+data_science/outputs/*.txt
+data_science/outputs/*.png
