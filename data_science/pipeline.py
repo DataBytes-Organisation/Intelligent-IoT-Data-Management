@@ -8,6 +8,9 @@ from preprocessor import load_and_prepare
 from detectors.volatility_shift_ad import VolatilityShiftADDetector
 from detectors.adtk_pcaad import PcaADDetector
 from detectors.ocsvm_detector import OCSVMDetector
+from detectors.iforest_detector import IsolationForestDetector
+# from detectors.levelshiftad import LevelShiftAD
+from anomaly_injector import inject_point_spikes, inject_all
 from detectors.quantilead import QuantileADDetector
 from detectors.levelshiftad import LevelShiftADDetector
 from detectors.ecod_detector import ECODDetector
@@ -16,16 +19,18 @@ from detectors.copod_detector import COPODDetector
 from detectors.lof_detector import LOFDetector
 from detectors.thresholdad import ThresholdADDetector
 
-from anomaly_injector import inject_all
 from evaluator import evaluate
 from roc_plotter import plot_roc_curves
 from nab_loader import load_nab_labels
 from report_output import generate_benchmark_report
+from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
 
 def build_detectors():
     return [
         PcaADDetector(),
         OCSVMDetector(nu=0.05),
+        IsolationForestDetector(contamination=0.05),
+        #LevelShiftAD(),
         LevelShiftADDetector(window=10, c=6.0),
         VolatilityShiftADDetector(),
         QuantileADDetector(),
@@ -383,6 +388,31 @@ def run_pipeline(
 
             # Extra benchmark report outputs
             generate_benchmark_report(eval_df, results, labels, output_dir=output_dir)
+
+        # Per-detector detailed report (Isolation Forest Only)
+        for name, output in results.items():
+            if output['model_name'] == "IsolationForest":
+                preds = output['anomaly_flag'].reindex(labels.index, fill_value=False).astype(int)
+                labels_series = pd.Series(labels)
+                if labels_series.dtype == bool:
+                    y_true = labels_series.astype(int)
+                else:
+                    y_true = (labels_series != "normal").astype(int)
+
+                cm = confusion_matrix(y_true, preds, labels=[0, 1])
+                tn, fp, fn, tp = cm.ravel()
+
+                print(f"\n{'='*55}")
+                print(f"   {output['model_name']} — Detailed Anomaly Report")
+                print(f"{'='*55}")
+                print(f"   Confusion Matrix:")
+                print(f"                    Predicted")
+                print(f"                 Normal  Anomaly")
+                print(f"  Actual Normal  {tn:>6}   {fp:>6}")
+                print(f"  Actual Anomaly {fn:>6}   {tp:>6}")
+                print(f"  TN={tn}  FP={fp}  FN={fn}  TP={tp}")
+                print(f"\n   Classification Report:")
+                print(classification_report(y_true, preds, target_names=["Normal", "Anomaly"], zero_division=0))
 
     return df, scaler, results
 
