@@ -1,0 +1,242 @@
+.homepage {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(59, 130, 246, 0.18), transparent 32rem),
+    linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%);
+  padding: 3rem 1.5rem 4rem;
+  color: #0f172a;
+}
+
+.homepage__hero {
+  max-width: 1180px;
+  margin: 0 auto 4rem;
+  display: grid;
+  grid-template-columns: 1.35fr 0.9fr;
+  gap: 2rem;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(219, 231, 245, 0.9);
+  border-radius: 32px;
+  padding: 3rem;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.homepage__hero-badge,
+.homepage__section-label {
+  display: inline-block;
+  background: rgba(37, 99, 235, 0.12);
+  color: #1d4ed8;
+  font-weight: 800;
+  font-size: 0.82rem;
+  padding: 0.48rem 0.85rem;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.homepage__hero-title {
+  margin: 1rem 0 1rem;
+  max-width: 740px;
+  font-size: clamp(2.4rem, 5vw, 4.4rem);
+  line-height: 1.02;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  color: #0f172a;
+}
+
+.homepage__hero-subtitle {
+  max-width: 700px;
+  margin: 0;
+  font-size: 1.08rem;
+  line-height: 1.8;
+  color: #475569;
+}
+
+.homepage__hero-actions {
+  margin-top: 2rem;
+  display: flex;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+}
+
+.homepage__primary-btn,
+.homepage__secondary-btn {
+  border-radius: 14px;
+  padding: 0.9rem 1.25rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.homepage__primary-btn {
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  color: white;
+  text-decoration: none;
+  box-shadow: 0 14px 28px rgba(37, 99, 235, 0.22);
+}
+
+.homepage__secondary-btn {
+  border: 1px solid #bfdbfe;
+  background: white;
+  color: #1d4ed8;
+}
+
+.homepage__hero-panel {
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  border: 1px solid #dbe7f5;
+  border-radius: 26px;
+  padding: 1.4rem;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.1);
+}
+
+.homepage__panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #334155;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.homepage__live-dot {
+  font-size: 0.78rem;
+  background: #dcfce7;
+  color: #166534;
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+}
+
+.homepage__stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.homepage__stat-card {
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  border-radius: 18px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.homepage__stat-card strong {
+  display: block;
+  font-size: 1.6rem;
+  color: #1d4ed8;
+}
+
+.homepage__stat-card span {
+  font-size: 0.82rem;
+  color: #475569;
+}
+
+.homepage__mini-chart {
+  height: 155px;
+  border-radius: 20px;
+  padding: 1rem;
+  background: #0f172a;
+  display: flex;
+  align-items: end;
+  gap: 0.65rem;
+}
+
+.homepage__mini-chart span {
+  flex: 1;
+  border-radius: 999px 999px 0 0;
+  background: linear-gradient(180deg, #60a5fa, #2563eb);
+}
+
+.homepage__datasets {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.homepage__section-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.homepage__section-header h2 {
+  margin: 0.9rem 0 0.65rem;
+  font-size: 2.2rem;
+  color: #0f172a;
+  letter-spacing: -0.03em;
+}
+
+.homepage__section-header p {
+  max-width: 700px;
+  margin: 0 auto;
+  color: #64748b;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.homepage__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.6rem;
+}
+
+.homepage__features {
+  max-width: 1180px;
+  margin: 2rem auto 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.2rem;
+}
+
+.homepage__feature-card {
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid #dbe7f5;
+  border-radius: 22px;
+  padding: 1.4rem;
+}
+
+.homepage__feature-card h3 {
+  margin: 0 0 0.55rem;
+  color: #0f172a;
+}
+
+.homepage__feature-card p {
+  margin: 0;
+  color: #64748b;
+  line-height: 1.65;
+}
+
+.homepage__secondary-btn {
+  text-decoration: none;
+  display: inline-block;
+}
+
+@media (max-width: 992px) {
+  .homepage__hero {
+    grid-template-columns: 1fr;
+  }
+
+  .homepage__grid,
+  .homepage__features {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .homepage {
+    padding: 1rem;
+  }
+
+  .homepage__hero {
+    padding: 1.5rem;
+    border-radius: 24px;
+  }
+
+  .homepage__grid,
+  .homepage__features {
+    grid-template-columns: 1fr;
+  }
+
+  .homepage__stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
