@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import 'chartjs-adapter-date-fns';
 import HomePage from './pages/HomePage';
 import DashboardPage from './pages/DashboardPage';
+import RegistrationPage from './pages/RegistrationPage';
 
 // import DashboardLearn from './components/DashboardLearn'; //for learning 
 
@@ -23,6 +24,7 @@ function App() {
           <Route path="/sensorData1" element={<FetchData />} /> 
           <Route path="/" element={<HomePage />} /> 
           <Route path="/dashboard/:id" element={<DashboardPage />} />
+          <Route path="/register" element={<RegistrationPage />} />
 
                   
         </Routes>

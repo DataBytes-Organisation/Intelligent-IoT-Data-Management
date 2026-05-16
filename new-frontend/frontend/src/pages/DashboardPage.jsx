@@ -1,14 +1,24 @@
 import { useParams } from 'react-router-dom';
 import Dashboard from '../components/Dashboard';
-import DashboardLayout from '../layouts/DashboardLayout';
 
 const DashboardPage = () => {
-  const { id } = useParams(); // e.g. 'sensor1'
+  const { id } = useParams();
 
   return (
-    <div>
-      <h2>Dashboard for {id}</h2>
-      <Dashboard datasetId={id} />
+    <div className="dashboard-page-wrapper">
+      <div className="dashboard-header">
+        <h1>Correlation Analysis Dashboard</h1>
+        <p>
+          Analyse IoT sensor streams using time-series trends, scatter plots,
+          and correlation insights.
+        </p>
+
+        <div className="dataset-badge">
+          Dataset: {id}
+        </div>
+      </div>
+
+      <Dashboard />
     </div>
   );
 };
