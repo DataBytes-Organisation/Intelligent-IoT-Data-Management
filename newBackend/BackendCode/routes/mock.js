@@ -1,13 +1,18 @@
 //handles routing for mock data endpoints
+const express = require("express");
+const authMiddleware = require("../middleware/authMiddleware");
 
-const express = require('express');
 const {
   getStreams,
   getStreamNames,
-  postFilterStreams
-} = require('../controllers/mockController');
+  postFilterStreams,
+} = require("../controllers/mockController");
 
 const router = express.Router();
+
+router.get("/mock", (req, res) => {
+  res.json({ message: "Mock route is working" });
+});
 
 /*
  * GET /streams
@@ -28,7 +33,7 @@ const router = express.Router();
  *   ...
  * ]
  */
-router.get('/streams', getStreams);
+router.get("/streams", authMiddleware, getStreams);
 
 /*
  * GET /stream-names
@@ -44,7 +49,7 @@ router.get('/streams', getStreams);
  *   "Current Draw"
  * ]
  */
-router.get("/stream-names", getStreamNames);
+router.get("/stream-names", authMiddleware, getStreamNames);
 
 /*
  * POST /filter-streams
@@ -56,7 +61,7 @@ router.get("/stream-names", getStreamNames);
  * Description:
  * Returns the specified stream names and timestamp,
  * with the entries in original format.
- * 
+ *
  * Example Response:
  * [
  *    {
@@ -71,8 +76,8 @@ router.get("/stream-names", getStreamNames);
  *      "Temperature": 22,
  *      "Voltage Charge": 12.61
  *    }
- * ] 
+ * ]
  */
-router.post('/filter-streams', postFilterStreams);
+router.post("/filter-streams", authMiddleware, postFilterStreams);
 
 module.exports = router;

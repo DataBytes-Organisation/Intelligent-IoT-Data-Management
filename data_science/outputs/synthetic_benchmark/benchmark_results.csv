@@ -1,0 +1,11 @@
+detector,precision,recall,f1,auc_roc,n_predicted,n_actual,true_positives,false_positives,true_negatives,false_negatives,false_positive_rate,false_negative_rate,model
+PcaADDetector,1.0,0.131579,0.232558,,10,76,10,0,932,66,0.0,0.868421,PcaAD
+OCSVMDetector,0.65,0.513158,0.573529,0.785154,60,76,39,21,911,37,0.022532,0.486842,OCSVM
+LevelShiftADDetector,0.490566,0.342105,0.403101,0.656568,53,76,26,27,905,50,0.02897,0.657895,LevelShiftADDetector
+VolatilityShiftADDetector,0.134259,0.381579,0.19863,0.690775,216,76,29,187,745,47,0.200644,0.618421,VolatilityShiftADDetector
+QuantileADDetector,0.068627,0.092105,0.078652,0.499781,102,76,7,95,837,69,0.101931,0.907895,QuantileADDetector
+ECODDetector,0.431373,0.289474,0.346457,0.934098,51,76,22,29,903,54,0.031116,0.710526,ECODDetector
+COPODDetector,0.470588,0.315789,0.377953,0.91453,51,76,24,27,905,52,0.02897,0.684211,COPODDetector
+InterQuartileRangeAD,1.0,0.197368,0.32967,0.598684,15,76,15,0,932,61,0.0,0.802632,InterQuartileRangeAD
+LOFDetector,0.882353,0.592105,0.708661,0.844519,51,76,45,6,926,31,0.006438,0.407895,LOFDetector
+ThresholdADDetector,1.0,0.263158,0.416667,0.965764,20,76,20,0,932,56,0.0,0.736842,ThresholdADDetector
