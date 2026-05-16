@@ -5,6 +5,7 @@ import 'chartjs-adapter-date-fns';
 import HomePage from './pages/HomePage';
 import DashboardPage from './pages/DashboardPage';
 import RegistrationPage from './pages/RegistrationPage';
+import UserProfileSettings from './pages/UserProfileSettings';
 
 // import DashboardLearn from './components/DashboardLearn'; //for learning 
 
@@ -25,6 +26,7 @@ function App() {
           <Route path="/" element={<HomePage />} /> 
           <Route path="/dashboard/:id" element={<DashboardPage />} />
           <Route path="/register" element={<RegistrationPage />} />
+          <Route path="/profile-settings" element={<UserProfileSettings />} />
 
                   
         </Routes>

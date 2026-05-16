@@ -517,3 +517,30 @@ ul {
     width: 100%;
   }
 }
+
+.dashboard-top-profile {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 8px 14px 8px;
+}
+
+.dashboard-profile-link {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid #dbe3ef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #111827;
+  text-decoration: none;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+  transition: 0.2s ease;
+}
+
+.dashboard-profile-link:hover {
+  background: #eef4ff;
+  color: #1d4ed8;
+  transform: translateY(-1px);
+}

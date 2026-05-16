@@ -11,6 +11,8 @@ import './Dashboard.css';
 import Chart from './Chart.jsx';
 import MostCorrelatedPair from './MostCorrelatedPair.jsx';
 import ScatterPlot from './ScatterPlot.jsx';
+import { Link } from 'react-router-dom';
+import { User } from 'lucide-react';
 
 const Dashboard = () => {
   const { data, loading, error } = useSensorData(true);
@@ -45,6 +47,11 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-page">
+      <div className="dashboard-top-profile">
+        <Link to="/profile-settings" className="dashboard-profile-link">
+        <User size={26} />
+        </Link>
+      </div>
       
 
       <div className="info-plate">
