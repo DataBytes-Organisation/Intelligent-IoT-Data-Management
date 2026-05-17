@@ -49,6 +49,43 @@ const getThingSpeakFeeds = async () => {
   };
 };
 
+const THINGSPEAK_POLL_INTERVAL_MS =
+  Number(process.env.THINGSPEAK_POLL_INTERVAL_MS) || 60000;
+
+let latestThingSpeakData = null;
+let isThingSpeakPollingStarted = false;
+
+const pollThingSpeakData = async () => {
+  try {
+    latestThingSpeakData = await getThingSpeakFeeds();
+
+    console.log(
+      "ThingSpeak poll successful. Feeds loaded:",
+      latestThingSpeakData.feeds.length
+    );
+  } catch (error) {
+    console.error("ThingSpeak poll failed:", error.message);
+  }
+};
+
+const startThingSpeakPolling = () => {
+  if (isThingSpeakPollingStarted) {
+    return;
+  }
+
+  isThingSpeakPollingStarted = true;
+
+  console.log(
+    "ThingSpeak polling started. Interval:",
+    THINGSPEAK_POLL_INTERVAL_MS,
+    "ms"
+  );
+
+  pollThingSpeakData();
+  setInterval(pollThingSpeakData, THINGSPEAK_POLL_INTERVAL_MS);
+};
+
 module.exports = {
   getThingSpeakFeeds,
+  startThingSpeakPolling,
 };
