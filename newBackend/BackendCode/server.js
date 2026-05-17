@@ -7,6 +7,7 @@ const cors = require("cors");
 // Route imports (CSR routing structure)
 const mockRoutes = require("./routes/mock");
 const thingSpeakRoutes = require("./routes/thingspeak");
+const { startThingSpeakPolling } = require("./services/thingspeakService");
 const authRoutes = require("./routes/auth");
 
 // Debug-only imports (commented out for production)
@@ -112,4 +113,5 @@ const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
+  startThingSpeakPolling();
 });

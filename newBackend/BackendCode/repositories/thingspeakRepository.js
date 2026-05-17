@@ -14,6 +14,16 @@ class ThingSpeakRepository {
     }
   }
 
+  async saveThingSpeakData(data) {
+    try {
+      const filePath = path.join(__dirname, "../mock_data/thingspeak.json");
+      fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+      return data;
+    } catch (error) {
+      throw new Error("Failed to save ThingSpeak data: " + error.message);
+    }
+  }
+
   // Fetches live data from ThingSpeak API (kept for future use)
   async fetchChannelFeed() {
     const channelId = process.env.THINGSPEAK_CHANNEL_ID;
