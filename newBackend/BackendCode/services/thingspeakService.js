@@ -55,9 +55,41 @@ const THINGSPEAK_POLL_INTERVAL_MS =
 let latestThingSpeakData = null;
 let isThingSpeakPollingStarted = false;
 
+const THINGSPEAK_MAX_RETRIES =
+  Number(process.env.THINGSPEAK_MAX_RETRIES) || 3;
+
+const THINGSPEAK_RETRY_DELAY_MS =
+  Number(process.env.THINGSPEAK_RETRY_DELAY_MS) || 2000;
+
+const wait = (milliseconds) =>
+  new Promise((resolve) => setTimeout(resolve, milliseconds));
+
+const fetchThingSpeakWithRetry = async () => {
+  let lastError;
+
+  for (let attempt = 1; attempt <= THINGSPEAK_MAX_RETRIES; attempt += 1) {
+    try {
+      return await getThingSpeakFeeds();
+    } catch (error) {
+      lastError = error;
+
+      console.warn(
+        `ThingSpeak fetch attempt ${attempt} failed:`,
+        error.message
+      );
+
+      if (attempt < THINGSPEAK_MAX_RETRIES) {
+        await wait(THINGSPEAK_RETRY_DELAY_MS);
+      }
+    }
+  }
+
+  throw lastError;
+};
+
 const pollThingSpeakData = async () => {
   try {
-    latestThingSpeakData = await getThingSpeakFeeds();
+    latestThingSpeakData = await fetchThingSpeakWithRetry();
 
     console.log(
       "ThingSpeak poll successful. Feeds loaded:",
@@ -88,4 +120,5 @@ const startThingSpeakPolling = () => {
 module.exports = {
   getThingSpeakFeeds,
   startThingSpeakPolling,
+  fetchThingSpeakWithRetry,
 };
