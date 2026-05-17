@@ -1,0 +1,10 @@
+Benchmark report summary
+========================================
+Best F1:                          LOFDetector (F1=0.7087)
+Best AUC-ROC (NaN ignored):       ThresholdADDetector (AUC=0.9658)
+Most conservative (fewest flags): PcaADDetector (n_predicted=10)
+Most sensitive (highest recall):  LOFDetector (recall=0.5921)
+Fastest detector:                 COPODDetector (0.0030s)
+
+Note: metrics depend on the benchmark type (synthetic, train/test, or NAB). 
+NAB labels are wide windows around real failure events, so pointwise precision/recall under-rewards detectors that fire only at the moment of regime change.
