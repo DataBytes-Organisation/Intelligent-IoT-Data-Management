@@ -90,7 +90,7 @@ const fetchThingSpeakWithRetry = async () => {
 const pollThingSpeakData = async () => {
   try {
     latestThingSpeakData = await fetchThingSpeakWithRetry();
-
+    await thingspeakRepository.saveThingSpeakData(latestThingSpeakData);
     console.log(
       "ThingSpeak poll successful. Feeds loaded:",
       latestThingSpeakData.feeds.length
