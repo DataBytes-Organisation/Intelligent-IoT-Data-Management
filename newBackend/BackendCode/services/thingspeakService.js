@@ -91,12 +91,20 @@ const pollThingSpeakData = async () => {
   try {
     latestThingSpeakData = await fetchThingSpeakWithRetry();
     await thingspeakRepository.saveThingSpeakData(latestThingSpeakData);
-    console.log(
-      "ThingSpeak poll successful. Feeds loaded:",
-      latestThingSpeakData.feeds.length
-    );
+    const latestFeed =
+      latestThingSpeakData.feeds[latestThingSpeakData.feeds.length - 1];
+
+    console.log("ThingSpeak poll successful:", {
+      checkedAt: new Date().toISOString(),
+      channelId: latestThingSpeakData.channel.id,
+      feedCount: latestThingSpeakData.feeds.length,
+      latestEntryId: latestFeed ? latestFeed.entryId : null,
+    });
   } catch (error) {
-    console.error("ThingSpeak poll failed:", error.message);
+    console.error("ThingSpeak poll failed:", {
+      checkedAt: new Date().toISOString(),
+      message: error.message,
+    });
   }
 };
 
