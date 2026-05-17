@@ -1,0 +1,128 @@
+.dashboard-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f5f7fb;
+  color: #1f2937;
+}
+
+.dashboard-header {
+  background: #eef4fb;
+  border-bottom: 1px solid #d9e3f0;
+  padding: 24px 20px 18px;
+}
+
+.dashboard-header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.dashboard-brand {
+  display: inline-block;
+  font-size: 2.7rem;
+  font-weight: 800;
+  color: #1f2937;
+  text-decoration: none;
+  margin-bottom: 10px;
+}
+
+.dashboard-brand:hover {
+  color: #2563eb;
+}
+
+.dashboard-subtitle {
+  margin: 0;
+  font-size: 1.05rem;
+  color: #4b5563;
+}
+
+.dashboard-page-title {
+  margin: 14px 0 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.dashboard-main {
+  flex: 1;
+  padding: 28px 20px 40px;
+}
+
+.dashboard-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.dashboard-layout {
+  min-height: 100vh;
+  background: #f5f7fb;
+  color: #1f2937;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-header {
+  background: #eef4fb;
+  border-bottom: 1px solid #d9e3f0;
+  padding: 24px 20px 18px;
+}
+
+.dashboard-header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.dashboard-brand {
+  display: inline-block;
+  font-size: 2.7rem;
+  font-weight: 800;
+  color: #1f2937;
+  text-decoration: none;
+  margin-bottom: 10px;
+}
+
+.dashboard-brand:hover {
+  color: #2563eb;
+}
+
+.dashboard-subtitle {
+  margin: 0;
+  font-size: 1.05rem;
+  color: #4b5563;
+}
+
+.dashboard-page-title {
+  margin: 14px 0 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.dashboard-main {
+  flex: 1;
+  padding: 28px 20px 40px;
+}
+
+.dashboard-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard-footer {
+  background: #eaf1f9;
+  border-top: 1px solid #d9e3f0;
+  padding: 16px 20px;
+}
+
+.dashboard-footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.dashboard-footer-inner p {
+  margin: 4px 0;
+  color: #4b5563;
+  font-size: 0.95rem;
+}
