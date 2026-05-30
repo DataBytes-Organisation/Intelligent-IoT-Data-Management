@@ -1,25 +1,21 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import "./RegistrationPage.css";
+import React, { useState } from 'react';
 
 const RegistrationPage = () => {
-  const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    fullName: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
   });
 
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: value
     });
   };
 
@@ -32,107 +28,97 @@ const RegistrationPage = () => {
       !formData.password ||
       !formData.confirmPassword
     ) {
-      setError("Please fill in all fields.");
+      setError('Please fill in all fields.');
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match.");
+      setError('Passwords do not match.');
       return;
     }
 
-    localStorage.setItem(
-      "registeredUser",
-      JSON.stringify({
-        fullName: formData.fullName,
-        email: formData.email,
-        password: formData.password,
-      })
-    );
-
-    setError("");
-    navigate("/");
+    setError('');
+    console.log('Registration form data:', formData);
   };
 
   return (
-    <main className="auth-page">
-      <section className="auth-card">
-        <div className="auth-badge">Intelligent IoT Platform</div>
+    <div className="registration-page">
+      <div className="registration-card">
+        <h2 className="registration-title">Create Account</h2>
 
-        <h1 className="auth-title">Create Account</h1>
-
-        <p className="auth-subtitle">
-          Sign up to access the IoT sensor dashboard and analytics platform.
+        <p className="registration-subtitle">
+          Sign up to access your dashboard
         </p>
 
-        <form className="auth-form" onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="fullName"
-            placeholder="Full Name"
-            value={formData.fullName}
-            onChange={handleChange}
-            className="auth-input"
-          />
+        <form className="registration-form" onSubmit={handleSubmit}>
+          <div className="registration-input-group">
+            <input
+              type="text"
+              name="fullName"
+              placeholder="Full Name"
+              value={formData.fullName}
+              onChange={handleChange}
+              className="registration-input"
+            />
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Email Address"
-            value={formData.email}
-            onChange={handleChange}
-            className="auth-input"
-          />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleChange}
+              className="registration-input"
+            />
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            className="auth-input"
-          />
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              className="registration-input"
+            />
 
-          <input
-            type="password"
-            name="confirmPassword"
-            placeholder="Confirm Password"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            className="auth-input"
-          />
+            <input
+              type="password"
+              name="confirmPassword"
+              placeholder="Confirm Password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              className="registration-input"
+            />
+          </div>
 
-          {error && <p className="auth-error">{error}</p>}
+          {error && <p className="registration-error">{error}</p>}
 
-          <button type="submit" className="auth-primary-btn">
-            Sign Up
-          </button>
+          <div className="registration-submit-wrapper">
+            <button type="submit" className="registration-submit-button">
+              Sign Up
+            </button>
+          </div>
+
+          <div className="registration-divider">
+            <div className="registration-divider-line"></div>
+            <span className="registration-divider-text">Or</span>
+            <div className="registration-divider-line"></div>
+          </div>
+
+          <div className="registration-social-grid">
+            <button type="button" className="registration-social-button">
+              Google
+            </button>
+
+            <button type="button" className="registration-social-button">
+              Microsoft
+            </button>
+
+            <button type="button" className="registration-social-button">
+              Apple
+            </button>
+          </div>
         </form>
-
-        <div className="auth-divider">
-          <span></span>
-          <p>Or continue with</p>
-          <span></span>
-        </div>
-
-        <div className="auth-social-grid">
-          <button type="button">Google</button>
-          <button type="button">Microsoft</button>
-          <button type="button">Apple</button>
-        </div>
-
-        <p className="auth-footer-text">
-          Already have an account?{" "}
-          <Link to="/" className="auth-footer-link">
-            Login
-          </Link>
-        </p>
-
-        <Link to="/forgot-password" className="auth-link">
-          Forgot password?
-        </Link>
-      </section>
-    </main>
+      </div>
+    </div>
   );
 };
 

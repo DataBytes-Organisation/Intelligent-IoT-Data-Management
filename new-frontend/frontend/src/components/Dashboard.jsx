@@ -1,28 +1,34 @@
-import React, { useMemo, useState } from 'react';
-import { useSensorData } from '../hooks/useSensorData.js';
-import { useFilteredData } from '../hooks/useFilteredData.js';
-import { useStreamNames } from '../hooks/useStreamNames.js';
-import { useTimeRange } from '../hooks/useTimeRange.js';
-import TimeSelector from './TimeSelector.jsx';
-import StreamSelector from './StreamSelector.jsx';
-import IntervalSelector from './IntervalSelector.jsx';
-import StreamStats from './StreamStats.jsx';
-import './Dashboard.css';
-import Chart from './Chart.jsx';
-import MostCorrelatedPair from './MostCorrelatedPair.jsx';
-import ScatterPlot from './ScatterPlot.jsx';
-import { calculateCorrelation } from '../utils/correlationUtils.js';
+import React, { useMemo, useState } from "react";
+import { useSensorData } from "../hooks/useSensorData.js";
+import { useFilteredData } from "../hooks/useFilteredData.js";
+import { useStreamNames } from "../hooks/useStreamNames.js";
+import { useTimeRange } from "../hooks/useTimeRange.js";
+
+import TimeSelector from "./TimeSelector.jsx";
+import StreamSelector from "./StreamSelector.jsx";
+import IntervalSelector from "./IntervalSelector.jsx";
+import StreamStats from "./StreamStats.jsx";
+import Chart from "./Chart.jsx";
+import MostCorrelatedPair from "./MostCorrelatedPair.jsx";
+import ScatterPlot from "./ScatterPlot.jsx";
+
+import { calculateCorrelation } from "../utils/correlationUtils.js";
+import "./Dashboard.css";
 
 const Dashboard = () => {
   const { data, loading, error } = useSensorData(true);
   const streamNames = useStreamNames(data);
-  const { timeOptions, minTime, maxTime } = useTimeRange(data);
 
-  const [selectedTimeStart, setSelectedTimeStart] = useState('');
-  const [selectedTimeEnd, setSelectedTimeEnd] = useState('');
+  const timeRangeResult = useTimeRange(data);
+  const timeOptions = Array.isArray(timeRangeResult)
+    ? timeRangeResult
+    : timeRangeResult?.timeOptions || [];
+
+  const [selectedTimeStart, setSelectedTimeStart] = useState("");
+  const [selectedTimeEnd, setSelectedTimeEnd] = useState("");
   const [selectedStreams, setSelectedStreams] = useState([]);
 
-  const intervals = ['5min', '15min', '1h', '6h'];
+  const intervals = ["5min", "15min", "1h", "6h"];
   const [selectedInterval, setSelectedInterval] = useState(intervals[0]);
 
   const filteredData = useFilteredData(data, {
@@ -39,26 +45,28 @@ const Dashboard = () => {
 
     const [streamA, streamB] = selectedStreams;
 
-    const x = filteredData
-      .map((d) => parseFloat(d[streamA]))
-      .filter((v) => !isNaN(v));
+    const pairedValues = filteredData
+      .map((d) => ({
+        x: parseFloat(d[streamA]),
+        y: parseFloat(d[streamB]),
+      }))
+      .filter((point) => !Number.isNaN(point.x) && !Number.isNaN(point.y));
 
-    const y = filteredData
-      .map((d) => parseFloat(d[streamB]))
-      .filter((v) => !isNaN(v));
+    if (pairedValues.length < 2) return null;
 
-    if (x.length === 0 || y.length === 0 || x.length !== y.length) return null;
+    const x = pairedValues.map((point) => point.x);
+    const y = pairedValues.map((point) => point.y);
 
     const correlation = calculateCorrelation(x, y);
 
     if (Number.isNaN(correlation) || !Number.isFinite(correlation)) return null;
 
-    let strengthLabel = 'Weak relationship';
+    let strengthLabel = "Weak relationship";
 
-    if (correlation >= 0.7) strengthLabel = 'Strong positive relationship';
-    else if (correlation >= 0.3) strengthLabel = 'Moderate positive relationship';
-    else if (correlation <= -0.7) strengthLabel = 'Strong negative relationship';
-    else if (correlation <= -0.3) strengthLabel = 'Moderate negative relationship';
+    if (correlation >= 0.7) strengthLabel = "Strong positive relationship";
+    else if (correlation >= 0.3) strengthLabel = "Moderate positive relationship";
+    else if (correlation <= -0.7) strengthLabel = "Strong negative relationship";
+    else if (correlation <= -0.3) strengthLabel = "Moderate negative relationship";
 
     return {
       streams: `${streamA} vs ${streamB}`,
@@ -68,9 +76,9 @@ const Dashboard = () => {
   }, [selectedStreams, filteredData]);
 
   const handleSubmit = () => {
-    console.log('Selected Time Range:', selectedTimeStart, '→', selectedTimeEnd);
-    console.log('selectedInterval:', selectedInterval);
-    console.log('Filtered Data:', filteredData);
+    console.log("Selected Time Range:", selectedTimeStart, "→", selectedTimeEnd);
+    console.log("Selected Interval:", selectedInterval);
+    console.log("Filtered Data:", filteredData);
   };
 
   if (loading) return <p>Loading dataset...</p>;
@@ -80,6 +88,7 @@ const Dashboard = () => {
     <div className="dashboard-page">
       <section className="dashboard-section info-panel">
         <h3 className="section-title">Dashboard Notes</h3>
+
         <ol className="note-list">
           <li>Select at least one stream to view the line chart.</li>
           <li>
@@ -94,14 +103,6 @@ const Dashboard = () => {
             If no scatter plot is shown, the selected data may not have enough
             variance.
           </li>
-          <li>
-            If no rolling correlation line is shown, the selected data may not have
-            enough variance.
-          </li>
-          <li>
-            If no meaningful scatter plot is available for the most correlated pair,
-            one or both streams may lack variance.
-          </li>
           <li>If no time range is selected, the entire dataset is used.</li>
         </ol>
 
@@ -110,6 +111,7 @@ const Dashboard = () => {
             <span>Total Data Points</span>
             <strong>{data.length}</strong>
           </div>
+
           <div className="summary-pill">
             <span>Selected Range Points</span>
             <strong>{filteredData.length}</strong>
@@ -119,7 +121,9 @@ const Dashboard = () => {
 
       <section className="dashboard-section stream-panel">
         <h3 className="section-title">Available Streams</h3>
-        <p className="stream-list">{streamNames.map((s) => s.name).join(', ')}</p>
+        <p className="stream-list">
+          {streamNames.map((s) => s.name).join(", ")}
+        </p>
       </section>
 
       <section className="dashboard-section controls-panel">
@@ -146,23 +150,19 @@ const Dashboard = () => {
             <h4 className="subsection-title">Time Range Selection</h4>
 
             <div className="time-grid">
-              <div>
-                <TimeSelector
-                  label="Start Time"
-                  timeOptions={timeOptions}
-                  selectedTime={selectedTimeStart}
-                  setSelectedTime={setSelectedTimeStart}
-                />
-              </div>
+              <TimeSelector
+                label="Start Time"
+                timeOptions={timeOptions}
+                selectedTime={selectedTimeStart}
+                setSelectedTime={setSelectedTimeStart}
+              />
 
-              <div>
-                <TimeSelector
-                  label="End Time"
-                  timeOptions={timeOptions}
-                  selectedTime={selectedTimeEnd}
-                  setSelectedTime={setSelectedTimeEnd}
-                />
-              </div>
+              <TimeSelector
+                label="End Time"
+                timeOptions={timeOptions}
+                selectedTime={selectedTimeEnd}
+                setSelectedTime={setSelectedTimeEnd}
+              />
 
               <div className="action-wrap">
                 <button className="primary-btn" onClick={handleSubmit}>
@@ -193,10 +193,14 @@ const Dashboard = () => {
               <div className="insight-card correlation-card">
                 <div className="insight-card-header">
                   <span className="insight-label">Correlation</span>
-                  <h3 className="insight-stream-name">{correlationSummary.streams}</h3>
+                  <h3 className="insight-stream-name">
+                    {correlationSummary.streams}
+                  </h3>
                 </div>
 
-                <div className="correlation-value">{correlationSummary.value}</div>
+                <div className="correlation-value">
+                  {correlationSummary.value}
+                </div>
                 <p className="correlation-text">{correlationSummary.label}</p>
               </div>
             )}
@@ -216,8 +220,8 @@ const Dashboard = () => {
         {streamCount === 2 && (
           <div className="pair-stream-block">
             <div className="status-message">
-              Two streams selected. Scatter plot and rolling correlation analysis are
-              now available.
+              Two streams selected. Scatter plot and correlation analysis are now
+              available.
             </div>
 
             <ScatterPlot
@@ -242,6 +246,7 @@ const Dashboard = () => {
 
       <section className="dashboard-section chart-panel">
         <h3 className="section-title">Chart View</h3>
+
         <div className="chart-container">
           <Chart data={filteredData} selectedStreams={selectedStreams} />
         </div>

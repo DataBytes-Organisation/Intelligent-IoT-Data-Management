@@ -1,8 +1,11 @@
 import React from "react";
+import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "chartjs-adapter-date-fns";
 
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
+import FetchData from "./components/FetchData";
 
 import Login from "./pages/Login";
 import HomePage from "./pages/HomePage";
@@ -17,6 +20,7 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<RegistrationPage />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/sensorData1" element={<FetchData />} />
 
         <Route
           path="/home"
