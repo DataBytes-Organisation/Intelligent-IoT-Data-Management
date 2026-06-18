@@ -9,6 +9,7 @@ import HomePage from "./pages/HomePage";
 import DashboardPage from "./pages/DashboardPage";
 import RegistrationPage from "./pages/RegistrationPage";
 import ForgotPassword from "./pages/ForgotPassword";
+import UserProfileSettings from "./pages/UserProfileSettings";
 
 function App() {
   return (
@@ -24,6 +25,17 @@ function App() {
             <ProtectedRoute>
               <Layout>
                 <HomePage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/profile-settings"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <UserProfileSettings />
               </Layout>
             </ProtectedRoute>
           }
