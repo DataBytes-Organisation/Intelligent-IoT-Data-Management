@@ -1,0 +1,31 @@
+{
+  "source": "thingspeak",
+  "channel_id": 12397,
+  "dataset": "thingspeak-live",
+  "samples": [
+    {
+      "entry_id": 5688164,
+      "recorded_at": "2026-08-03T01:31:20Z",
+      "wind_direction_degrees": 0,
+      "wind_speed_mph": 5.3,
+      "humidity_percent": 10,
+      "temperature_f": 78.1,
+      "rain_inches_per_minute": 0,
+      "pressure_hg": 29.71,
+      "power_level_v": 0,
+      "light_intensity": 0
+    },
+    {
+      "entry_id": 5688165,
+      "recorded_at": "2026-08-03T01:32:20Z",
+      "wind_direction_degrees": null,
+      "wind_speed_mph": 4.8,
+      "humidity_percent": 11,
+      "temperature_f": 77.9,
+      "rain_inches_per_minute": 0,
+      "pressure_hg": 29.70,
+      "power_level_v": 0,
+      "light_intensity": 0
+    }
+  ]
+}
