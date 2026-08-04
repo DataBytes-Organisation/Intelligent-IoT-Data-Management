@@ -55,3 +55,28 @@ Should backend proceed building the anomaly-service connector without a document
 - Correlation input assessed: Yes, structurally compatible with a required DB-to-CSV transformation step
 - Anomaly input assessed: Yes, assessment complete; finding is that no contract currently exists
 - Mismatches logged: Yes, 9 findings recorded above
+
+
+## Ingestion Path Decision
+
+I compared the two ways we pull ThingSpeak data into the database.
+
+**Service poller** (`src/services/thingspeakService.js`)
+- Starts by itself when the server starts
+- Runs every 15 seconds automatically
+- Tries again if a request fails (has retry logic)
+- Already tested and working, real data confirmed saved
+
+**Manual script** (`src/dataIngestion/thingSpeakInjest.js`)
+- Has to be run by hand
+- No retry if something fails
+- You have to type the full web address in yourself
+- Had a missing dependency bug we found and fixed earlier
+
+**Decision: the service poller is the approved path for MVP.**
+
+I marked the manual script as testing-only with a comment at the top of the file. It is not removed, since it's still useful for quick manual checks, but it should not be used for the real MVP demo or production.
+
+**Known issue found while testing**: the poller reports `savedCount: 10` on every run, even when the same entry_ids repeat across polls. Since duplicates should be silently skipped by the database, this number looks like it is counting attempts, not new rows actually saved. Worth fixing later, not blocking for now.
+
+**Evidence**: see `evidence/ingestion.log`, four real polls captured, showing the service poller running and saving data successfully.

@@ -1,2 +1,4 @@
-node_modules/.env
+node_modules/
+.env
 .Rhistory
+!docs/mvp/evidence/ingestion.log

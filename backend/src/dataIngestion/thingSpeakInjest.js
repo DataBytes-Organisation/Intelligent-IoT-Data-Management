@@ -1,3 +1,16 @@
+/**
+ 
+ * NOT THE MVP PATH
+ 
+ * This script is for manual testing only.
+ *
+ * The real, supported way to pull ThingSpeak data is the
+ * automatic service poller, which starts by itself when the
+ * backend server runs (see src/services/thingspeakService.js,
+ * started from src/server.js).
+ *
+ * Do not use this script in production or for the MVP demo.
+ */
 // src/dataIngestion/thingSpeakInjest.js
 const fetch = require("node-fetch");
 const pool = require("../db/pool");
