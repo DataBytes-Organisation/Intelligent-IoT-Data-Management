@@ -1,0 +1,38 @@
+{
+  "description": "Before/after example showing a real stored database row transformed into the shape expected by the correlation service's selected_streams input.",
+  "source": "timeseries table, dataset_id=1, entry_id=5683301, ThingSpeak channel 12397 (public test channel)",
+  "before_raw_db_row": {
+    "dataset_id": 1,
+    "created_at": "2026-07-30T21:36:15+10:00",
+    "entry_id": 5683301,
+    "field1": 170,
+    "field2": 3.9,
+    "field3": 0,
+    "field4": 0.1,
+    "field5": 0,
+    "field6": 29.52,
+    "field7": 0,
+    "field8": 0
+  },
+  "after_correlation_service_input": {
+    "timestamp_col": "created_at",
+    "selected_streams": ["field1", "field2", "field3", "field4", "field5", "field6", "field7", "field8"],
+    "window_size": 10,
+    "step_size": 1,
+    "method": "pearson",
+    "note": "Correlation service accepts generic field labels directly, confirmed via correlation_alert/testing/run_real_dataset.py. No renaming is strictly required for the service to run, though output remains unlabeled as a result."
+  },
+  "after_human_readable_optional_mapping": {
+    "timestamp": "2026-07-30T21:36:15+10:00",
+    "wind_direction_deg": 170,
+    "wind_speed_mph": 3.9,
+    "humidity_pct": 0,
+    "temperature_f": 0.1,
+    "rain_in_per_min": 0,
+    "pressure_inHg": 29.52,
+    "power_v": 0,
+    "light_intensity": 0,
+    "note": "Derived from ThingSpeak channel 12397's own metadata (fetched directly from the channel info endpoint). Not currently applied anywhere in persistent storage; exists only as hardcoded logic in thingSpeakService.js, and only for 3 of these 8 fields."
+  },
+  "caveat": "All values were captured from the public ThingSpeak test channel 12397, used as a placeholder until the official project channel is available. Every reading captured during this testing session was identical, suggesting the test channel may currently be returning stale data. Structural findings remain valid regardless."
+}

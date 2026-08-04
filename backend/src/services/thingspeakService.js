@@ -189,7 +189,7 @@ const startThingSpeakPolling = () => {
   isThingSpeakPollingStarted = true;
 
   console.log(
-    "ThingSpeak polling started. Interval:",
+    "[MVP INGESTION PATH] Service poller started. This is the approved production path. Interval:",
     THINGSPEAK_POLL_INTERVAL_MS,
     "ms"
   );

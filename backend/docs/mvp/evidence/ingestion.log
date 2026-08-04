@@ -1,0 +1,80 @@
+
+> backendprototype@1.0.0 start
+> node src/server.js
+
+◇ injected env (0) from ../.env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (12) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+Server running on http://localhost:3000
+[MVP INGESTION PATH] Service poller started. This is the approved production path. Interval: 15000 ms
+Repository: inserting wide row entry_id=5689514
+Repository: inserting wide row entry_id=5689515
+Repository: inserting wide row entry_id=5689516
+Repository: inserting wide row entry_id=5689517
+Repository: inserting wide row entry_id=5689518
+Repository: inserting wide row entry_id=5689519
+Repository: inserting wide row entry_id=5689520
+Repository: inserting wide row entry_id=5689521
+Repository: inserting wide row entry_id=5689522
+Repository: inserting wide row entry_id=5689523
+ThingSpeak poll successful: {
+  checkedAt: '2026-08-04T01:33:37.499Z',
+  channelId: 12397,
+  feedCount: 10,
+  savedCount: 10,
+  datasetName: 'thingspeak-live',
+  latestEntryId: 5689523
+}
+Repository: inserting wide row entry_id=5689514
+Repository: inserting wide row entry_id=5689515
+Repository: inserting wide row entry_id=5689516
+Repository: inserting wide row entry_id=5689517
+Repository: inserting wide row entry_id=5689518
+Repository: inserting wide row entry_id=5689519
+Repository: inserting wide row entry_id=5689520
+Repository: inserting wide row entry_id=5689521
+Repository: inserting wide row entry_id=5689522
+Repository: inserting wide row entry_id=5689523
+ThingSpeak poll successful: {
+  checkedAt: '2026-08-04T01:33:52.318Z',
+  channelId: 12397,
+  feedCount: 10,
+  savedCount: 10,
+  datasetName: 'thingspeak-live',
+  latestEntryId: 5689523
+}
+Repository: inserting wide row entry_id=5689514
+Repository: inserting wide row entry_id=5689515
+Repository: inserting wide row entry_id=5689516
+Repository: inserting wide row entry_id=5689517
+Repository: inserting wide row entry_id=5689518
+Repository: inserting wide row entry_id=5689519
+Repository: inserting wide row entry_id=5689520
+Repository: inserting wide row entry_id=5689521
+Repository: inserting wide row entry_id=5689522
+Repository: inserting wide row entry_id=5689523
+ThingSpeak poll successful: {
+  checkedAt: '2026-08-04T01:34:07.283Z',
+  channelId: 12397,
+  feedCount: 10,
+  savedCount: 10,
+  datasetName: 'thingspeak-live',
+  latestEntryId: 5689523
+}
+Repository: inserting wide row entry_id=5689515
+Repository: inserting wide row entry_id=5689516
+Repository: inserting wide row entry_id=5689517
+Repository: inserting wide row entry_id=5689518
+Repository: inserting wide row entry_id=5689519
+Repository: inserting wide row entry_id=5689520
+Repository: inserting wide row entry_id=5689521
+Repository: inserting wide row entry_id=5689522
+Repository: inserting wide row entry_id=5689523
+Repository: inserting wide row entry_id=5689524
+ThingSpeak poll successful: {
+  checkedAt: '2026-08-04T01:34:22.429Z',
+  channelId: 12397,
+  feedCount: 10,
+  savedCount: 10,
+  datasetName: 'thingspeak-live',
+  latestEntryId: 5689524
+}
