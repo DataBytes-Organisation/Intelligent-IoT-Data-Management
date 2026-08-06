@@ -1,0 +1,9 @@
+{
+  "timestamp": "invalid-date",
+  "alert_type": "correlation",
+  "method": "pearson",
+  "score": "0.87",
+  "severity": "extreme",
+  "message": 123,
+  "supporting_values": "sensor_01,sensor_02"
+}

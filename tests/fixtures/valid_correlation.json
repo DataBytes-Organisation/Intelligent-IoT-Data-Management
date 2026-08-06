@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-08-02T12:35:00Z",
+  "alert_type": "correlation",
+  "target": "sensor_01,sensor_02",
+  "method": "pearson",
+  "score": 0.87,
+  "severity": "medium",
+  "message": "Strong correlation detected between sensor streams",
+  "supporting_values": {
+    "sensor_1": "sensor_01",
+    "sensor_2": "sensor_02",
+    "window_size": 30
+  }
+}

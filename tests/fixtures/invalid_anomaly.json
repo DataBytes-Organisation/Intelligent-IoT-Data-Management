@@ -1,0 +1,10 @@
+{
+  "timestamp": "02-08-2026 12:30",
+  "alert_type": "fault",
+  "target": 101,
+  "method": "isolation_forest",
+  "score": "high",
+  "severity": "urgent",
+  "message": "Invalid anomaly example",
+  "supporting_values": []
+}
