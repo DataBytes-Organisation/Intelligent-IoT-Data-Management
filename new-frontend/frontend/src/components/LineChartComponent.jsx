@@ -19,7 +19,7 @@ const multiStreamData = [
 
 
 
-const LineChartComponent = ({ data }) => {
+onst LineChartComponent = ({ data = multiStreamData }) => {
   return (
     <div style={{ width: '100%', height: 350 }}>
       <ResponsiveContainer>

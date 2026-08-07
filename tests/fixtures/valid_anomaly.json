@@ -1,0 +1,13 @@
+{
+  "timestamp": "2026-08-02T12:30:00Z",
+  "alert_type": "anomaly",
+  "target": "sensor_01",
+  "method": "isolation_forest",
+  "score": 0.91,
+  "severity": "high",
+  "message": "Anomalous temperature reading detected",
+  "supporting_values": {
+    "observed_value": 37.5,
+    "expected_range": "18-30"
+  }
+}
