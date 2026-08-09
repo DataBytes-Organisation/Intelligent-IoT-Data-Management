@@ -1,31 +1,40 @@
 {
-  "source": "thingspeak",
-  "channel_id": 12397,
-  "dataset": "thingspeak-live",
-  "samples": [
-    {
-      "entry_id": 5688164,
-      "recorded_at": "2026-08-03T01:31:20Z",
-      "wind_direction_degrees": 0,
-      "wind_speed_mph": 5.3,
-      "humidity_percent": 10,
-      "temperature_f": 78.1,
+  "channel_12397": {
+    "channel_id": 12397,
+    "dataset": "thingspeak-live",
+    "sample": {
+      "entry_id": 5696876,
+      "recorded_at": "2026-08-09T08:57:28.000Z",
+      "wind_direction_degrees": 113,
+      "wind_speed_mph": 3.5,
+      "humidity_percent": 0,
+      "temperature_f": 0.1,
       "rain_inches_per_minute": 0,
-      "pressure_hg": 29.71,
-      "power_level_v": 0,
-      "light_intensity": 0
-    },
-    {
-      "entry_id": 5688165,
-      "recorded_at": "2026-08-03T01:32:20Z",
-      "wind_direction_degrees": null,
-      "wind_speed_mph": 4.8,
-      "humidity_percent": 11,
-      "temperature_f": 77.9,
-      "rain_inches_per_minute": 0,
-      "pressure_hg": 29.70,
+      "pressure_hg": 29.7,
       "power_level_v": 0,
       "light_intensity": 0
     }
-  ]
+  },
+  "channel_1350261": {
+    "channel_id": 1350261,
+    "dataset": "thingspeak-co2",
+    "sample": {
+      "entry_id": 276956,
+      "recorded_at": "2026-08-09T08:55:05.000Z",
+      "eco2_ppm": 625.9,
+      "etvoc_ppb": 54,
+      "temperature_c": 25.62,
+      "air_pressure_hpa": 983.19,
+      "humidity_percent": 46.58,
+      "temperature_secondary_c": 24.69,
+      "controller_temperature_c": 52.96,
+      "conductance_us": 1.13
+    }
+  },
+  "normalization_rules": {
+    "timestamps": "ISO 8601 UTC",
+    "missing_values": "null",
+    "invalid_numeric_values": "null",
+    "zero_values": "preserved as 0"
+  }
 }
