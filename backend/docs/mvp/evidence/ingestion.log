@@ -1,80 +1,45 @@
-
-> backendprototype@1.0.0 start
-> node src/server.js
-
-◇ injected env (0) from ../.env // tip: ⌘ enable debugging { debug: true }
-◇ injected env (12) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
-Server running on http://localhost:3000
-[MVP INGESTION PATH] Service poller started. This is the approved production path. Interval: 15000 ms
-Repository: inserting wide row entry_id=5689514
-Repository: inserting wide row entry_id=5689515
-Repository: inserting wide row entry_id=5689516
-Repository: inserting wide row entry_id=5689517
-Repository: inserting wide row entry_id=5689518
-Repository: inserting wide row entry_id=5689519
-Repository: inserting wide row entry_id=5689520
-Repository: inserting wide row entry_id=5689521
-Repository: inserting wide row entry_id=5689522
-Repository: inserting wide row entry_id=5689523
-ThingSpeak poll successful: {
-  checkedAt: '2026-08-04T01:33:37.499Z',
-  channelId: 12397,
-  feedCount: 10,
-  savedCount: 10,
-  datasetName: 'thingspeak-live',
-  latestEntryId: 5689523
-}
-Repository: inserting wide row entry_id=5689514
-Repository: inserting wide row entry_id=5689515
-Repository: inserting wide row entry_id=5689516
-Repository: inserting wide row entry_id=5689517
-Repository: inserting wide row entry_id=5689518
-Repository: inserting wide row entry_id=5689519
-Repository: inserting wide row entry_id=5689520
-Repository: inserting wide row entry_id=5689521
-Repository: inserting wide row entry_id=5689522
-Repository: inserting wide row entry_id=5689523
-ThingSpeak poll successful: {
-  checkedAt: '2026-08-04T01:33:52.318Z',
-  channelId: 12397,
-  feedCount: 10,
-  savedCount: 10,
-  datasetName: 'thingspeak-live',
-  latestEntryId: 5689523
-}
-Repository: inserting wide row entry_id=5689514
-Repository: inserting wide row entry_id=5689515
-Repository: inserting wide row entry_id=5689516
-Repository: inserting wide row entry_id=5689517
-Repository: inserting wide row entry_id=5689518
-Repository: inserting wide row entry_id=5689519
-Repository: inserting wide row entry_id=5689520
-Repository: inserting wide row entry_id=5689521
-Repository: inserting wide row entry_id=5689522
-Repository: inserting wide row entry_id=5689523
-ThingSpeak poll successful: {
-  checkedAt: '2026-08-04T01:34:07.283Z',
-  channelId: 12397,
-  feedCount: 10,
-  savedCount: 10,
-  datasetName: 'thingspeak-live',
-  latestEntryId: 5689523
-}
-Repository: inserting wide row entry_id=5689515
-Repository: inserting wide row entry_id=5689516
-Repository: inserting wide row entry_id=5689517
-Repository: inserting wide row entry_id=5689518
-Repository: inserting wide row entry_id=5689519
-Repository: inserting wide row entry_id=5689520
-Repository: inserting wide row entry_id=5689521
-Repository: inserting wide row entry_id=5689522
-Repository: inserting wide row entry_id=5689523
-Repository: inserting wide row entry_id=5689524
-ThingSpeak poll successful: {
-  checkedAt: '2026-08-04T01:34:22.429Z',
-  channelId: 12397,
-  feedCount: 10,
-  savedCount: 10,
-  datasetName: 'thingspeak-live',
-  latestEntryId: 5689524
-}
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+--------------------------------------------------
+ThingSpeak Ingestion Started
+Dataset: channel-1350261
+URL: https://api.thingspeak.com/channels/1350261/feeds.json?results=10
+Start Time: 2026-08-18T06:54:46.330Z
+--------------------------------------------------
+Detected ThingSpeak metrics: [
+  'field1', 'field2',
+  'field3', 'field4',
+  'field5', 'field6',
+  'field7', 'field8'
+]
+Repository: inserting wide row entry_id=278781
+Inserted entry_id=278781
+Repository: inserting wide row entry_id=278782
+Inserted entry_id=278782
+Repository: inserting wide row entry_id=278783
+Inserted entry_id=278783
+Repository: inserting wide row entry_id=278784
+Inserted entry_id=278784
+Repository: inserting wide row entry_id=278785
+Inserted entry_id=278785
+Repository: inserting wide row entry_id=278786
+Inserted entry_id=278786
+Repository: inserting wide row entry_id=278787
+Inserted entry_id=278787
+Repository: inserting wide row entry_id=278788
+Inserted entry_id=278788
+Repository: inserting wide row entry_id=278789
+Inserted entry_id=278789
+Repository: inserting wide row entry_id=278790
+Inserted entry_id=278790
+--------------------------------------------------
+ThingSpeak Ingestion Finished
+Total Rows Inserted: 10
+End Time: 2026-08-18T06:54:47.269Z
+--------------------------------------------------
+◇ injected env (12) from .env // tip: ⌘ override existing { override: true }
+--------------------------------------------------
+ThingSpeak Ingestion Started
+Dataset: channel-1350261
+URL: https://api.thingspeak.com/channels/9999999999/feeds.json?results=10
+Start Time: 2026-08-18T06:55:54.000Z
+--------------------------------------------------

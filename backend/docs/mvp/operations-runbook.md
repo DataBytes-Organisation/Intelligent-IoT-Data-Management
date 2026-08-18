@@ -56,3 +56,20 @@ savedCount in the logs currently shows 10 even when the same rows are being re-f
 ## Evidence
 
 Real runtime proof is saved in evidence/ingestion.log.
+## Testing a Second Channel (Multi-Dataset Support)
+
+To ingest a second, independent channel:
+
+node src/dataIngestion/thingSpeakInjest.js <dataset-name> "https://api.thingspeak.com/channels/<channel-id>/feeds.json?results=10"
+
+Example used for testing: channel-1350261, channel ID 1350261.
+
+To verify datasets are stored separately:
+
+psql -U postgres -d IoTDatabase -c "SELECT d.name, COUNT(t.entry_id) FROM datasets d JOIN timeseries t ON d.id = t.dataset_id GROUP BY d.name;"
+
+## Automated Tests
+
+Run: npm test
+
+Covers: missing channel ID error handling, successful data fetch, repeat-run duplicate prevention, and failure behaviour without data loss.
