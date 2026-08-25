@@ -1,0 +1,71 @@
+{
+  "correlation_request_success": {
+    "dataset_id": 1,
+    "timestamp_col": "created_at",
+    "selected_streams": ["field1", "field2"],
+    "window_size": 20,
+    "step_size": 10,
+    "method": "pearson",
+    "data": [
+      { "created_at": "2026-08-04T10:00:00Z", "field1": 411.9, "field2": 7.7 },
+      { "created_at": "2026-08-04T10:01:00Z", "field1": 412.3, "field2": 7.8 }
+    ]
+  }, 
+  "correlation_response_success": {
+    "status": "success",
+    "summary": {
+      "processed_rows": 2,
+      "windows": 1,
+      "correlation_results": 1,
+      "changes": 0,
+      "alerts_count": 0
+    },
+    "alerts": [],
+    "analytics_results": [
+      {
+        "dataset_id": 1,
+        "metric_type": "pearson_correlation",
+        "calculated_value": 0.94,
+        "stream_1": "field1",
+        "stream_2": "field2",
+        "window_start": "2026-08-04T10:00:00Z",
+        "window_end": "2026-08-04T10:01:00Z"
+      }
+    ]
+  },
+  "anomaly_request_success": {
+    "dataset_id": 1,
+    "metric": "field1",
+    "model_name": "PcaADDetector",
+    "timestamps": ["2026-08-04T10:00:00Z", "2026-08-04T10:01:00Z"],
+    "values": [411.9, 412.3]
+  },
+  "anomaly_response_success": {
+    "status": "success",
+    "model_name": "PcaADDetector",
+    "runtime_ms": 45,
+    "anomalies": [
+      {
+        "timestamp": "2026-08-04T10:01:00Z",
+        "score": 0.95,
+        "anomaly_flag": 1
+      }
+    ]
+  },
+  "error_empty_data": {
+    "status": "NO_DATA",
+    "message": "No timeseries records available for analysis in the specified window",
+    "alerts": [],
+    "analytics_results": []
+  },
+  "error_invalid_metric": {
+    "status": "ERROR",
+    "code": "INVALID_METRIC",
+    "message": "Requested stream 'field9' does not exist in dataset schema"
+  },
+  "error_upstream_timeout": {
+    "status": "ERROR",
+    "code": "UPSTREAM_TIMEOUT",
+    "message": "Correlation service request timed out after 10000ms"
+  }
+}
