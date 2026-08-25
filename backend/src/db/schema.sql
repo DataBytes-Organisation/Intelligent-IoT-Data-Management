@@ -1,13 +1,15 @@
 -- ============================================================
 --  Database Schema for Time-Series Backend
---  Tables: datasets, timeseries_long, timeseries
---  Author: Farris (Backend Lead)
+--  Tables: datasets, timeseries_long, timeseries, alerts, analytics_results
+--  Author: Farris (Backend Lead), Akruti 
 -- ============================================================
 
 -- Drop tables if they exist (optional for development)
 DROP TABLE IF EXISTS timeseries;
 DROP TABLE IF EXISTS timeseries_long;
 DROP TABLE IF EXISTS datasets;
+DROP TABLE IF EXISTS alerts;
+DROP TABLE IF EXISTS analytics_results;
 
 -- ============================================================
 --  DATASETS TABLE
@@ -75,3 +77,54 @@ CREATE TABLE timeseries (
 
     PRIMARY KEY (dataset_id, entry_id)
 );
+
+-- ============================================================
+--  ALERTS TABLE
+-- Stores alert instances and severity levels
+-- One row per triggered alert event
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS alerts (
+    id SERIAL PRIMARY KEY,
+    dataset_id INTEGER NOT NULL REFERENCES datasets(id) ON DELETE CASCADE,
+    entity VARCHAR(255) NOT NULL,
+    rule_name VARCHAR(255) NOT NULL,
+    severity VARCHAR(50) NOT NULL CHECK (severity IN ('LOW', 'MEDIUM', 'HIGH', 'CRITICAL')),
+    previous_corr DOUBLE PRECISION,
+    current_corr DOUBLE PRECISION,
+    delta DOUBLE PRECISION,
+    reason TEXT,
+    triggered_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    resolved_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================================
+--  ANALYTICS_RESULTS TABLE
+--  Stores computational metrics
+-- One row per analytical window calculation
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS analytics_results (
+    id SERIAL PRIMARY KEY,
+    dataset_id INTEGER NOT NULL REFERENCES datasets(id) ON DELETE CASCADE,
+    metric_type VARCHAR(255) NOT NULL,
+    calculated_value DOUBLE PRECISION NOT NULL,
+    window_start TIMESTAMPTZ,
+    window_end TIMESTAMPTZ,
+    metadata JSONB DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================================
+--  INDEXES FOR ALERTS & ANALYTICS
+-- ============================================================
+
+CREATE INDEX IF NOT EXISTS idx_alerts_dataset_triggered 
+    ON alerts(dataset_id, triggered_at DESC);
+
+CREATE INDEX IF NOT EXISTS idx_alerts_severity 
+    ON alerts(severity);
+
+CREATE INDEX IF NOT EXISTS idx_analytics_results_dataset_created 
+    ON analytics_results(dataset_id, created_at DESC);

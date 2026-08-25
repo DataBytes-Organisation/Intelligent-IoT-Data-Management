@@ -12,6 +12,7 @@ const apiRouter = require('./routes'); // loads index.js inside /routes
 const mockRoutes = require('./routes/mock');
 const thingSpeakRoutes = require('./routes/thingspeak');
 const authRoutes = require('./routes/auth');
+const alertRoutes = require('./routes/alertRoutes');
 
 
 const { startThingSpeakPolling } = require('./services/thingspeakService');
@@ -30,6 +31,7 @@ app.use(express.json());
 app.get('/', (req, res) => {
   res.send('Backend is running');
 });
+
 
 /* ---------------------------------------------------------
    DEBUG ROUTES (COMMENTED OUT FOR PRODUCTION)
@@ -80,6 +82,7 @@ app.use('/api', apiRouter);
 app.use('/api', authRoutes);
 app.use('/api', mockRoutes);
 app.use('/api', thingSpeakRoutes);
+app.use('/api/alerts', alertRoutes);
 
 // Start server
 const PORT = process.env.PORT || 3000;
