@@ -14,8 +14,11 @@ import ScatterPlot from './ScatterPlot.jsx';
 import { calculateCorrelation } from '../utils/correlationUtils.js';
 import TimeRangePanel from './TimeRangePanel.jsx';
 
-const Dashboard = () => {
-  const { data, loading, error } = useSensorData(true);
+const Dashboard = ({ datasetName }) => {
+  const { data, loading, error } = useSensorData(
+  false,
+  `/api/datasets/${encodeURIComponent(datasetName)}/series`
+);
   const streamNames = useStreamNames(data);
   const { timeOptions, minTime, maxTime } = useTimeRange(data);
 

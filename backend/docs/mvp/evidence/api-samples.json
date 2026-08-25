@@ -1,0 +1,51 @@
+{
+  "seriesResponse": {
+    "success": true,
+    "data": [
+      {
+        "created_at": "2026-07-30T10:00:00Z",
+        "entry_id": 1,
+        "field1": 25.4,
+        "field2": 60.2
+      }
+    ],
+    "message": "Series data loaded successfully"
+  },
+
+  "analyticsResponse": {
+    "success": true,
+    "data": {
+      "analysis": {
+        "highestCorrelation": {
+          "stream1": "field1",
+          "stream2": "field2",
+          "score": 0.94
+        }
+      }
+    },
+    "message": "Analysis completed successfully"
+  },
+
+  "alertResponse": {
+  "success": true,
+  "data": {
+    "alerts": [
+      {
+        "id": 1,
+        "severity": "High",
+        "message": "Temperature exceeded threshold",
+        "created_at": "2026-07-30T10:00:00Z"
+      }
+    ]
+  },
+  "message": "Alerts loaded successfully"
+},
+
+  "errorResponse": {
+    "success": false,
+    "error": {
+      "code": 404,
+      "message": "Requested resource was not found"
+    }
+  }
+}
