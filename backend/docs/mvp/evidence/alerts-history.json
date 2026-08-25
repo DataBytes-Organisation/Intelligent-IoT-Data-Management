@@ -1,0 +1,40 @@
+{
+  "status": "success",
+  "count": 2,
+  "filters": {
+    "datasetId": 1,
+    "severity": null,
+    "limit": 50,
+    "offset": 0
+  },
+  "data": [
+    {
+      "id": 2,
+      "dataset_id": 1,
+      "entity": "field1_vs_field2",
+      "rule_name": "Correlation_Change",
+      "severity": "HIGH",
+      "previous_corr": 0.92,
+      "current_corr": 0.15,
+      "delta": -0.77,
+      "reason": "Correlation dropped below tolerance threshold (0.30)",
+      "triggered_at": "2026-08-05T12:15:00.000Z",
+      "resolved_at": null,
+      "created_at": "2026-08-05T12:15:01.000Z"
+    },
+    {
+      "id": 1,
+      "dataset_id": 1,
+      "entity": "field1_vs_field3",
+      "rule_name": "Correlation_Change",
+      "severity": "MEDIUM",
+      "previous_corr": 0.85,
+      "current_corr": 0.45,
+      "delta": -0.40,
+      "reason": "Moderate correlation shift detected",
+      "triggered_at": "2026-08-05T11:45:00.000Z",
+      "resolved_at": null,
+      "created_at": "2026-08-05T11:45:01.000Z"
+    }
+  ]
+}
