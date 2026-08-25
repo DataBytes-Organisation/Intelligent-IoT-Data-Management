@@ -1,34 +1,57 @@
-# Schema Gap Analysis
-### Identified Persistence Gaps
-While telemetry and dataset tables (`datasets`, `timeseries_long`, `timeseries`) exist in `backend/src/db/schema.sql`, persistence structures for alert triggers and analytical computations are currently missing:
+# MVP Tracker: Backend-to-Analytics Mismatch Log
 
-1. **Alert Persistence Table (`alerts`)**:
-   * Status: Missing
-   * Requirement: Needed to record threshold breaches and correlation alert events.
-   * Proposed Structure: `id` (SERIAL PK), `dataset_id` (FK), `entity` (TEXT), `rule_name` (TEXT), `severity` (TEXT), `triggered_at` (TIMESTAMPTZ), `resolved_at` (TIMESTAMPTZ).
+**Investigated by:** Bramuel Korofia Bukhuni (Junior Lead, Backend / API Integration)
+**Related ticket:** Check whether current stored data can already be transformed into correlation and anomaly service inputs
 
-2. **Analytics Results Table (`analytics_results`)**:
-   * Status: Missing
-   * Requirement: Needed to store pre-aggregated metrics, trend computations, and output models from data science algorithms.
-   * Proposed Structure: `id` (SERIAL PK), `dataset_id` (FK), `metric_type` (TEXT), `calculated_value` (DOUBLE PRECISION), `window_start` (TIMESTAMP), `window_end` (TIMESTAMP), `created_at` (TIMESTAMPTZ).
+## Method
 
----
+Investigation was done by reading the actual backend and correlation_alert source code directly, rather than relying only on documentation, and by running real ingestion against ThingSpeak channel 12397 to confirm findings against live data.
 
-### Mapping Notes
-* **Contract Specification**: `backend/docs/mvp/analytics-contract.md`
-* **API Sample Evidence**: `backend/docs/mvp/evidence/api-samples.json`
-* **Transformation Mappers**: `backend/src/services/analyticsMapper.js`
-* **Unit Tests**: `backend/test/analyticsMapper.test.js`
+## Findings
 
-#### Implemented Transformation Assumptions & Rules
-1. **Payload Generation**:
-   * Pure functions map PostgreSQL `timeseries` rows directly into request payloads for Correlation (`/detect-correlation-alert`) and Anomaly services.
-   * Handles numeric conversion and missing values gracefully before passing data downstream.
+### 1. /api/analyse is a non-functional stub
 
-2. **Response Normalization**:
-   * Upstream Python service outputs are standardized into normalized JSON structures ready for database insertion into the planned `alerts` and `analytics_results` tables, as well as frontend rendering.
+backend/src/controllers/analyseController.js and backend/src/services/analyseService.js show the endpoint currently just echoes back whatever payload it receives ("Analysis completed (placeholder)"). It does not call the correlation_alert service or perform any real analysis, despite documentation implying it already returns correlation/variance results.
 
-3. **Edge Case & Error Handling**:
-   * **Empty Data (`[]`)**: Returns a standardized `{ status: "NO_DATA", alerts: [], analytics_results: [] }` response without throwing runtime exceptions.
-   * **Validation Errors**: Fails early with HTTP 400 structures if `dataset_id` or requested metrics are invalid/missing.
-   * **Upstream Timeout / Service Failures**: Wraps external service failures cleanly into standardized error codes (`UPSTREAM_TIMEOUT`, `ANALYTICS_SERVICE_FAILED`).
+### 2. Two inconsistent storage formats exist
+
+Wide-format ThingSpeak data (timeseries table) uses generic field1-field8 columns. Long-format CSV data (timeseries_long table) already stores a real metric name per row. These are structurally different and would need to be handled differently by any downstream consumer.
+
+### 3. Field-name mapping system exists but is unused
+
+backend/datasetsMapping/*.json contains a renames field intended to map generic names to real ones, but all three existing files (sensor1, sensor2, sensor3) have empty renames: {}. No mapping file exists for thingspeak-live, the dataset actually used by live ingestion.
+
+### 4. A second, separate field mapping exists, hardcoded and partial
+
+backend/src/services/thingSpeakService.js contains working hardcoded logic mapping field4 to temperature, field3 to humidity, field6 to pressure, confirmed correct against ThingSpeak's own channel metadata for channel 12397. Covers only 3 of 8 available fields, and is specific to this one test channel's layout; would not generalize to a different sensor channel without code changes.
+
+### 5. previewThingSpeak.js is broken
+
+Calls a function fetchThingSpeakFeeds that does not exist in thingSpeakService.js's exports. Confirmed by reading both files; likely a leftover from a prior rename.
+
+### 6. Ingestion script usage does not match documentation
+
+Onboarding docs describe usage as node thingSpeakInjest.js <channelId>. The actual script requires <datasetName> <apiUrl>, a label and a full ThingSpeak API URL. Confirmed by reading the script directly and successfully running it with the corrected format.
+
+### 7. Correlation service input requirements, assessed, partially compatible
+
+Confirmed via correlation_alert/testing/run_real_dataset.py and its output real_alerts.json that the correlation service accepts generic field names (field1...field8) directly as selected_streams and produces valid results. Input is a CSV file upload, not a direct JSON/DB row, so a transformation step (DB row to CSV) is still required even though field renaming is not strictly mandatory.
+
+### 8. Anomaly service input requirements, assessed, undocumented
+
+No API contract, endpoint, or request/response format could be found for the anomaly detection service, unlike correlation, which has a clear Flask endpoint. Anomaly detection code appears to exist as standalone scripts rather than an exposed service. This needs clarification from whoever owns the Models/Data Science team before backend integration work can begin on this side.
+
+### 9. Missing dependency in package.json
+
+thingSpeakInjest.js requires node-fetch, which was not listed in package.json. A fresh npm install does not pull this in, causing a Cannot find module error for any new team member setting up the project.
+
+## Open Question for Senior Lead
+
+Should backend proceed building the anomaly-service connector without a documented contract, or should this be raised with the Models/Data Science team first to define one, similar to what already exists for correlation?
+
+## Status Summary
+
+- Sample payload prepared: Yes, see evidence/api-samples.json
+- Correlation input assessed: Yes, structurally compatible with a required DB-to-CSV transformation step
+- Anomaly input assessed: Yes, assessment complete; finding is that no contract currently exists
+- Mismatches logged: Yes, 9 findings recorded above

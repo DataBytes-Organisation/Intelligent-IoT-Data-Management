@@ -1,130 +1,65 @@
-# MVP Analytics & Correlation Service Contract Specification
+# Analytics Contract: Backend Data vs Correlation & Anomaly Service Inputs
 
-## Overview
-This contract defines the reusable data transformation standard between the PostgreSQL database/Express backend and the downstream Analytics services (Correlation Alert API & Anomaly Detection Pipeline). 
+## Purpose
 
-It establishes:
-1. **Request Payload Standards**: How PostgreSQL `timeseries` rows are formatted into analytics requests.
-2. **Response Mapping Standards**: How raw service outputs are normalized for frontend consumption and database persistence (`alerts` and `analytics_results`).
-3. **Edge Case & Error Standards**: Standardized handling for empty data, null values, timeouts, and service failures.
+This document records the current shape of data stored in our backend database, compares it against what the correlation and anomaly detection services expect, and identifies mismatches. It was produced by investigating the actual backend and correlation_alert source code directly, not just documentation, and by running real ingestion against ThingSpeak channel 12397 to confirm findings against live data.
 
----
+## Current Stored Data Shape
 
-## 1. Correlation Service Contract (`/detect-correlation-alert`)
+Two different storage formats exist in the database, depending on ingestion source.
 
-### Request Mapping Specification
-Transforming PostgreSQL wide-format rows (`timeseries` table) into the Correlation payload structure.
+### 1. Wide format (ThingSpeak ingestion), table: `timeseries`
 
-* **Target Endpoint**: `POST /detect-correlation-alert`
-* **Transport**: `JSON` / `multipart/form-data`
-* **Request Structure**:
-```json
-{
-  "dataset_id": 1,
-  "timestamp_col": "created_at",
-  "selected_streams": ["field1", "field2", "field3"],
-  "window_size": 20,
-  "step_size": 10,
-  "method": "pearson",
-  "data": [
-    { "created_at": "2026-08-04T10:00:00Z", "field1": 411.9, "field2": 7.7, "field3": 20.87 },
-    { "created_at": "2026-08-04T10:01:00Z", "field1": 412.3, "field2": 7.8, "field3": 20.91 }
-  ]
-}
-```
-### Response Mapping Specification
-Normalizing raw Python correlation output for frontend display and alerts persistence.
-* **Response Structure**:
-```json
-{
-"status": "success",
-"summary": {
-"processed_rows": 100,
-"windows": 9,
-"correlation_results": 27,
-"changes": 18,
-"alerts_count": 2
-},
-"alerts": [{
-"dataset_id": 1,
-"entity": "field1_vs_field2",
-"rule_name": "Correlation_Drop",
-"severity": "HIGH",
-"previous_corr": 0.91,
-"current_corr": 0.24,
-"delta": -0.67,
-"reason": "Significant correlation drop detected.",
-"triggered_at": "2026-08-04T10:20:00Z"
-}],
-"analytics_results": [
-{
-"dataset_id": 1,
-"metric_type": "pearson_correlation",
-"calculated_value": 0.94,
-"stream_1": "field1",
-"stream_2": "field2",
-"window_start": "2026-08-04T10:00:00Z",
-"window_end": "2026-08-04T10:20:00Z"
-}]}
-```
----
+Columns: `dataset_id, created_at, entry_id, field1...field8`
 
-## 2. Anomaly Service Contract
+Real example row (channel 12397, entry_id 5683301):
 
-### Request Mapping Specification
-Transforming PostgreSQL rows into Anomaly detector parameters.
-* **Request Structure**:
-```json 
-{
-"dataset_id": 1,
-"metric": "field1",
-"model_name": "PcaADDetector",
-"timestamps": ["2026-08-04T10:00:00Z", "2026-08-04T10:01:00Z"],
-"values": [411.9, 412.3]
-}
-```
+dataset_id | created_at              | entry_id | field1 | field2 | field3 | field4 | field5 | field6 | field7 | field8
+1          | 2026-07-30 21:36:15+10  | 5683301  | 170    | 3.9    | 0      | 0.1    | 0      | 29.52  | 0      | 0
 
-### Response Mapping Specification
-Normalizing raw Python correlation output for frontend display and alerts persistence.
-* **Response Structure**:
-```json 
-{
-"status": "success",
-"summary": {
-"processed_rows": 100,
-"windows": 9,
-"correlation_results": 27,
-"changes": 18,
-"alerts_count": 2
-},
-"alerts": [{
-"dataset_id": 1,
-"entity": "field1_vs_field2",
-"rule_name": "Correlation_Drop",
-"severity": "HIGH",
-"previous_corr": 0.91,
-"current_corr": 0.24,
-"delta": -0.67,
-"reason": "Significant correlation drop detected.",
-"triggered_at": "2026-08-04T10:20:00Z"
-}],
-"analytics_results": [{
-"dataset_id": 1,
-"metric_type": "pearson_correlation",
-"calculated_value": 0.94,
-"stream_1": "field1",
-"stream_2": "field2",
-"window_start": "2026-08-04T10:00:00Z",
-"window_end": "2026-08-04T10:20:00Z"
-}]}
-``` 
---- 
-## 3. Failure, Timeout, and Data-Rule Behaviors
+Field labels are generic, inherited directly from ThingSpeak's own naming convention. Real meaning is only available via ThingSpeak's channel metadata, not stored in our own schema:
 
-| **Scenario**                 | **Behavior / Status Code** | **Response / Handling Standard**                                                                                          |
-| ---------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| **Empty DB Rows (**[]**)** | HTTP 200 OK                | Returns { "status": "NO_DATA", "alerts": [], "analytics_results": [] }. Pipeline does not crash.                      |
-| **Missing / Invalid Metric** | HTTP 400 Bad Request       | Backend validation fails before calling upstream service. Throws "Requested metric does not exist in dataset schema".     |
-| **Null Values in Data**      | Auto-Handled               | Missing values are interpolated using linear or previous filling before processing.                                       |
-| **Upstream Timeout (>10s)**  | HTTP 504 Gateway Timeout   | Backend catches timeout, logs error, and returns standard error object { "status": "ERROR", "code": "UPSTREAM_TIMEOUT" }. |
-| **Upstream 500 Error**       | HTTP 502 Bad Gateway       | Wrapped as { "status": "ERROR", "code": "ANALYTICS_SERVICE_FAILED" }.                                                     |
+- field1: Wind Direction (degrees)
+- field2: Wind Speed (mph)
+- field3: % Humidity
+- field4: Temperature (F)
+- field5: Rain (inches/minute)
+- field6: Pressure (inHg)
+- field7: Power Level (V)
+- field8: Light Intensity
+
+### 2. Long format (CSV ingestion), table: `timeseries_long`
+
+Columns: `ts, entity, metric, value`
+
+This format already stores a real metric name per row and is structurally closer to a typical analytics-ready shape, one reading, one named metric, one row.
+
+## What the Correlation Service Expects
+
+Confirmed via `correlation_alert/testing/run_real_dataset.py` and its recorded output `real_alerts.json`:
+
+- Endpoint: `POST /detect-correlation-alert`
+- Input: CSV file upload (multipart/form-data), not JSON or direct DB rows
+- Required parameters: `timestamp_col`, `selected_streams` (list of column names), `window_size`, `step_size`, `method` (pearson/spearman)
+- Confirmed: the service works with generic field names (`field1`...`field8`) passed directly as `selected_streams`, no renaming required for the correlation math itself
+- However, output alerts are also labeled using whatever names were passed in (e.g. "stream_pair": ["field1", "field5"]), so if generic names go in, the human-readable meaning is lost on the way out
+
+## What the Anomaly Service Expects
+
+No documented API contract could be found for the anomaly detection service. Unlike correlation, no standalone endpoint with a defined request/response format was identified in the docs, handover materials, or repo structure reviewed. This absence is itself logged as a mismatch, see mvp-tracker.md.
+
+## Summary
+
+| Requirement | Current State |
+|---|---|
+| Correlation service can technically process wide-format data | Yes, accepts generic field names directly |
+| Correlation output is human-readable | No, output uses the same generic labels as input |
+| Anomaly service input contract | Undocumented / unknown |
+| Backend has a working connector to either service | No, /api/analyse is a placeholder stub |
+| A field-name translation layer exists | Partially, hardcoded for 3 of 8 fields, for one specific test channel only |
+
+Full details of each mismatch are recorded in mvp-tracker.md. A sample transformed payload is recorded in evidence/api-samples.json.
+
+## Caveat
+
+Findings are based on the public ThingSpeak test channel (12397), used as a placeholder pending the official project channel. Structural findings, data shape, format, and API expectations, remain valid regardless of which channel is used. Field-specific values may need revisiting once the real project channel is confirmed.

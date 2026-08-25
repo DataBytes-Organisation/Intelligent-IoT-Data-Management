@@ -1,71 +1,38 @@
 {
-  "correlation_request_success": {
+  "description": "Before/after example showing a real stored database row transformed into the shape expected by the correlation service's selected_streams input.",
+  "source": "timeseries table, dataset_id=1, entry_id=5683301, ThingSpeak channel 12397 (public test channel)",
+  "before_raw_db_row": {
     "dataset_id": 1,
+    "created_at": "2026-07-30T21:36:15+10:00",
+    "entry_id": 5683301,
+    "field1": 170,
+    "field2": 3.9,
+    "field3": 0,
+    "field4": 0.1,
+    "field5": 0,
+    "field6": 29.52,
+    "field7": 0,
+    "field8": 0
+  },
+  "after_correlation_service_input": {
     "timestamp_col": "created_at",
-    "selected_streams": ["field1", "field2"],
-    "window_size": 20,
-    "step_size": 10,
+    "selected_streams": ["field1", "field2", "field3", "field4", "field5", "field6", "field7", "field8"],
+    "window_size": 10,
+    "step_size": 1,
     "method": "pearson",
-    "data": [
-      { "created_at": "2026-08-04T10:00:00Z", "field1": 411.9, "field2": 7.7 },
-      { "created_at": "2026-08-04T10:01:00Z", "field1": 412.3, "field2": 7.8 }
-    ]
-  }, 
-  "correlation_response_success": {
-    "status": "success",
-    "summary": {
-      "processed_rows": 2,
-      "windows": 1,
-      "correlation_results": 1,
-      "changes": 0,
-      "alerts_count": 0
-    },
-    "alerts": [],
-    "analytics_results": [
-      {
-        "dataset_id": 1,
-        "metric_type": "pearson_correlation",
-        "calculated_value": 0.94,
-        "stream_1": "field1",
-        "stream_2": "field2",
-        "window_start": "2026-08-04T10:00:00Z",
-        "window_end": "2026-08-04T10:01:00Z"
-      }
-    ]
+    "note": "Correlation service accepts generic field labels directly, confirmed via correlation_alert/testing/run_real_dataset.py. No renaming is strictly required for the service to run, though output remains unlabeled as a result."
   },
-  "anomaly_request_success": {
-    "dataset_id": 1,
-    "metric": "field1",
-    "model_name": "PcaADDetector",
-    "timestamps": ["2026-08-04T10:00:00Z", "2026-08-04T10:01:00Z"],
-    "values": [411.9, 412.3]
+  "after_human_readable_optional_mapping": {
+    "timestamp": "2026-07-30T21:36:15+10:00",
+    "wind_direction_deg": 170,
+    "wind_speed_mph": 3.9,
+    "humidity_pct": 0,
+    "temperature_f": 0.1,
+    "rain_in_per_min": 0,
+    "pressure_inHg": 29.52,
+    "power_v": 0,
+    "light_intensity": 0,
+    "note": "Derived from ThingSpeak channel 12397's own metadata (fetched directly from the channel info endpoint). Not currently applied anywhere in persistent storage; exists only as hardcoded logic in thingSpeakService.js, and only for 3 of these 8 fields."
   },
-  "anomaly_response_success": {
-    "status": "success",
-    "model_name": "PcaADDetector",
-    "runtime_ms": 45,
-    "anomalies": [
-      {
-        "timestamp": "2026-08-04T10:01:00Z",
-        "score": 0.95,
-        "anomaly_flag": 1
-      }
-    ]
-  },
-  "error_empty_data": {
-    "status": "NO_DATA",
-    "message": "No timeseries records available for analysis in the specified window",
-    "alerts": [],
-    "analytics_results": []
-  },
-  "error_invalid_metric": {
-    "status": "ERROR",
-    "code": "INVALID_METRIC",
-    "message": "Requested stream 'field9' does not exist in dataset schema"
-  },
-  "error_upstream_timeout": {
-    "status": "ERROR",
-    "code": "UPSTREAM_TIMEOUT",
-    "message": "Correlation service request timed out after 10000ms"
-  }
+  "caveat": "All values were captured from the public ThingSpeak test channel 12397, used as a placeholder until the official project channel is available. Every reading captured during this testing session was identical, suggesting the test channel may currently be returning stale data. Structural findings remain valid regardless."
 }
