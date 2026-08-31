@@ -15,6 +15,7 @@
       "light_intensity": 0
     }
   },
+
   "channel_1350261": {
     "channel_id": 1350261,
     "dataset": "thingspeak-co2",
@@ -31,10 +32,122 @@
       "conductance_us": 1.13
     }
   },
+
   "normalization_rules": {
     "timestamps": "ISO 8601 UTC",
     "missing_values": "null",
     "invalid_numeric_values": "null",
     "zero_values": "preserved as 0"
+  },
+
+  "correlation_contract": {
+    "internal_service_base_url": "http://127.0.0.1:5001",
+    "internal_endpoint": "POST /detect-correlation-alert",
+    "health_endpoint": "GET /service-status",
+    "backend_public_endpoint": "POST /api/correlation-alert",
+    "default_method": "pearson",
+    "supported_methods": [
+      "pearson",
+      "spearman"
+    ],
+    "authentication": "No authentication is currently required by the internal Correlation service."
+  },
+
+  "correlation_request_sample": {
+    "datasetName": "thingspeak-live",
+    "selectedStreams": [
+      "wind_speed_mph",
+      "pressure_hg"
+    ],
+    "windowSize": 20,
+    "stepSize": 10,
+    "method": "pearson"
+  },
+
+  "correlation_service_payload_sample": {
+    "data": [
+      {
+        "timestamp": "2026-07-27T11:17:12.000Z",
+        "wind_speed_mph": 1.1,
+        "pressure_hg": 29.64
+      }
+    ],
+    "timestamp_col": "timestamp",
+    "selected_streams": [
+      "wind_speed_mph",
+      "pressure_hg"
+    ],
+    "window_size": 20,
+    "step_size": 10,
+    "method": "pearson"
+  },
+
+  "correlation_success_proof": {
+    "endpoint": "POST /api/correlation-alert",
+    "dataset": "thingspeak-live",
+    "dataset_id": 1,
+    "channel_id": 12397,
+    "row_count": 43,
+    "selected_streams": [
+      "wind_speed_mph",
+      "pressure_hg"
+    ],
+    "correlation": {
+      "status": "success",
+      "summary": {
+        "processed_rows": 32,
+        "windows": 2,
+        "correlation_results": 2,
+        "changes": 0,
+        "alerts": 0
+      },
+      "sample_result": {
+        "window_index": 1,
+        "window_size": 20,
+        "start_time": "2026-07-27 11:27:12+00:00",
+        "end_time": "2026-07-27 11:51:12+00:00",
+        "correlation_matrix": {
+          "pressure_hg": {
+            "pressure_hg": 1,
+            "wind_speed_mph": -0.1525
+          },
+          "wind_speed_mph": {
+            "pressure_hg": -0.1525,
+            "wind_speed_mph": 1
+          }
+        }
+      }
+    },
+    "status": "correlation analysis completed"
+  },
+
+  "correlation_failure_proof": {
+    "scenario": "Correlation service stopped while Backend remained running",
+    "endpoint": "POST /api/correlation-alert",
+    "response": {
+      "error": "Correlation analysis failed",
+      "message": "fetch failed"
+    }
+  },
+
+  "analytics_client_test_evidence": {
+    "test_suites_passed": 3,
+    "tests_passed": 20,
+    "coverage": [
+      "sensor field normalization",
+      "persisted row transformation",
+      "confirmed flat Correlation payload",
+      "minimum selected stream validation",
+      "successful HTTP response handling",
+      "HTTP failure handling",
+      "retry handling",
+      "timeout handling",
+      "missing service URL handling"
+    ]
+  },
+
+  "anomaly_integration_status": {
+    "status": "pending",
+    "reason": "Waiting for the Models team to confirm the Anomaly detector, service endpoint, response structure and score meaning."
   }
 }
