@@ -1,0 +1,118 @@
+
+> backendprototype@1.0.0 start
+> node src/server.js
+
+◇ injected env (0) from ..\.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (13) from .env // tip: ⌘ enable debugging { debug: true }
+Server running on http://localhost:3000
+ThingSpeak polling started. Interval: 15000 ms
+Repository: inserting wide row entry_id=5679172
+Repository: inserting wide row entry_id=5679173
+Repository: inserting wide row entry_id=5679174
+Repository: inserting wide row entry_id=5679175
+Repository: inserting wide row entry_id=5679176
+Repository: inserting wide row entry_id=5679177
+Repository: inserting wide row entry_id=5679178
+Repository: inserting wide row entry_id=5679179
+Repository: inserting wide row entry_id=5679180
+Repository: inserting wide row entry_id=5679181
+ThingSpeak poll successful: {
+  checkedAt: '2026-07-27T11:52:09.130Z',
+  channelId: 12397,
+  feedCount: 10,
+  savedCount: 10,
+  datasetName: 'thingspeak-live',
+  latestEntryId: 5679181
+}
+Repository: inserting wide row entry_id=5679172
+Repository: inserting wide row entry_id=5679173
+Repository: inserting wide row entry_id=5679174
+Repository: inserting wide row entry_id=5679175
+Repository: inserting wide row entry_id=5679176
+Repository: inserting wide row entry_id=5679177
+Repository: inserting wide row entry_id=5679178
+Repository: inserting wide row entry_id=5679179
+Repository: inserting wide row entry_id=5679180
+Repository: inserting wide row entry_id=5679181
+ThingSpeak poll successful: {
+  checkedAt: '2026-07-27T11:52:23.848Z',
+  channelId: 12397,
+  feedCount: 10,
+  savedCount: 10,
+  datasetName: 'thingspeak-live',
+  latestEntryId: 5679181
+}
+Repository: inserting wide row entry_id=5679172
+Repository: inserting wide row entry_id=5679173
+Repository: inserting wide row entry_id=5679174
+Repository: inserting wide row entry_id=5679175
+Repository: inserting wide row entry_id=5679176
+Repository: inserting wide row entry_id=5679177
+Repository: inserting wide row entry_id=5679178
+Repository: inserting wide row entry_id=5679179
+Repository: inserting wide row entry_id=5679180
+Repository: inserting wide row entry_id=5679181
+ThingSpeak poll successful: {
+  checkedAt: '2026-07-27T11:52:38.801Z',
+  channelId: 12397,
+  feedCount: 10,
+  savedCount: 10,
+  datasetName: 'thingspeak-live',
+  latestEntryId: 5679181
+}
+Repository: inserting wide row entry_id=5679173
+Repository: inserting wide row entry_id=5679174
+Repository: inserting wide row entry_id=5679175
+Repository: inserting wide row entry_id=5679176
+Repository: inserting wide row entry_id=5679177
+Repository: inserting wide row entry_id=5679178
+Repository: inserting wide row entry_id=5679179
+Repository: inserting wide row entry_id=5679180
+Repository: inserting wide row entry_id=5679181
+Repository: inserting wide row entry_id=5679182
+ThingSpeak poll successful: {
+  checkedAt: '2026-07-27T11:52:53.978Z',
+  channelId: 12397,
+  feedCount: 10,
+  savedCount: 10,
+  datasetName: 'thingspeak-live',
+  latestEntryId: 5679182
+}
+Repository: inserting wide row entry_id=5679173
+Repository: inserting wide row entry_id=5679174
+Repository: inserting wide row entry_id=5679175
+Repository: inserting wide row entry_id=5679176
+Repository: inserting wide row entry_id=5679177
+Repository: inserting wide row entry_id=5679178
+Repository: inserting wide row entry_id=5679179
+Repository: inserting wide row entry_id=5679180
+Repository: inserting wide row entry_id=5679181
+Repository: inserting wide row entry_id=5679182
+ThingSpeak poll successful: {
+  checkedAt: '2026-07-27T11:53:09.363Z',
+  channelId: 12397,
+  feedCount: 10,
+  savedCount: 10,
+  datasetName: 'thingspeak-live',
+  latestEntryId: 5679182
+}
+Repository: inserting wide row entry_id=5679174
+Repository: inserting wide row entry_id=5679175
+Repository: inserting wide row entry_id=5679176
+Repository: inserting wide row entry_id=5679177
+Repository: inserting wide row entry_id=5679178
+Repository: inserting wide row entry_id=5679179
+Repository: inserting wide row entry_id=5679180
+Repository: inserting wide row entry_id=5679181
+Repository: inserting wide row entry_id=5679182
+Repository: inserting wide row entry_id=5679183
+ThingSpeak poll successful: {
+  checkedAt: '2026-07-27T11:53:23.816Z',
+  channelId: 12397,
+  feedCount: 10,
+  savedCount: 10,
+  datasetName: 'thingspeak-live',
+  latestEntryId: 5679183
+}
+Terminate batch job (Y/N)? 
+^CThe syntax of the command is incorrect.
