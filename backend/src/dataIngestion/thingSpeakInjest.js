@@ -1,7 +1,10 @@
 // src/dataIngestion/thingSpeakInjest.js
-const fetch = require("node-fetch");
 const pool = require("../db/pool");
 const TimeseriesRepository = require("../repositories/timeseriesRepository.js");
+
+const {
+  normalizeThingSpeakFeed
+} = require("../services/sensorFieldNormalizer");
 
 const repo = new TimeseriesRepository();
 
@@ -48,10 +51,20 @@ async function ingestThingSpeak(datasetName, apiUrl) {
 
     console.log("Detected ThingSpeak metrics:", metricKeys);
 
+    const channelId = data.channel?.id;
+
+if (!channelId) {
+  throw new Error("ThingSpeak response is missing channel id");
+}
+
+const normalizedRows = [];
+
     // 3. Insert each feed row through repository
     let count = 0;
 
     for (const feed of data.feeds) {
+      const normalizedFeed = normalizeThingSpeakFeed(channelId, feed);
+      normalizedRows.push(normalizedFeed);
       const fields = Object.fromEntries(
         metricKeys.map(k => [k, feed[k] ?? null])
       );
@@ -68,10 +81,19 @@ async function ingestThingSpeak(datasetName, apiUrl) {
     }
 
     console.log("--------------------------------------------------");
+    console.log(
+      "Normalized sample:",
+      normalizedRows.length > 0 ? normalizedRows[0] : null
+    );
     console.log("ThingSpeak Ingestion Finished");
     console.log(`Total Rows Inserted: ${count}`);
     console.log(`End Time: ${new Date().toISOString()}`);
     console.log("--------------------------------------------------");
+    return {
+  channelId,
+  insertedCount: count,
+  normalizedRows
+};
 
   } catch (error) {
     console.error("ThingSpeak Ingestion Error:", error.message);

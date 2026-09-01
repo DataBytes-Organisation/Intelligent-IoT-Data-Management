@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +23,7 @@
     "pg": "^8.20.0"
   },
   "devDependencies": {
+    "jest": "^30.4.2",
     "nodemon": "^3.1.0"
   }
 }
