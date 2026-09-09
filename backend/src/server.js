@@ -13,6 +13,8 @@ const mockRoutes = require('./routes/mock');
 const thingSpeakRoutes = require('./routes/thingspeak');
 const authRoutes = require('./routes/auth');
 const alertRoutes = require('./routes/alertRoutes');
+const adminRoutes = require('./routes/adminRoutes');
+const { startCleanupScheduler } = require('./services/cleanupService');
 
 
 const { startThingSpeakPolling } = require('./services/thingspeakService');
@@ -83,6 +85,7 @@ app.use('/api', authRoutes);
 app.use('/api', mockRoutes);
 app.use('/api', thingSpeakRoutes);
 app.use('/api/alerts', alertRoutes);
+app.use('/api', adminRoutes);
 
 // Start server
 const PORT = process.env.PORT || 3000;
@@ -90,4 +93,7 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
   startThingSpeakPolling();
+  startCleanupScheduler();
 });
+
+
