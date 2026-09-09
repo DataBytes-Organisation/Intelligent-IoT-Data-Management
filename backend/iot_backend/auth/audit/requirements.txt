@@ -1,0 +1,9 @@
+
+Django>=4.2
+djangorestframework
+djangorestframework-simplejwt
+django-axes
+django-two-factor-auth
+django-cors-headers
+django-allauth
+drf-yasg
