@@ -1,0 +1,15 @@
+{
+  "timestamp": "2026-08-05T08:25:00Z",
+  "entity_id": "device_01",
+  "streams": [
+    "temperature",
+    "humidity"
+  ],
+  "values": {
+    "temperature": 28.5,
+    "humidity": 65.2
+  },
+  "method": "Pearson",
+  "time_window": 30,
+  "step_size": 5
+}
