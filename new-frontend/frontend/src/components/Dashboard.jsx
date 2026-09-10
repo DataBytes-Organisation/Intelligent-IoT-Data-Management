@@ -253,10 +253,10 @@ const Dashboard = ({ datasetId }) => {
   <h3 className="section-title">Available Streams</h3>
   <div className="streams-container">
     {streamNames.map((stream, index) => (
-      <div key={index} className="stream-chip">
-        <span className="stream-name">Field {index + 1}</span>
-        {stream.unit && <span className="stream-unit">({stream.unit})</span>}
-      </div>
+     <div key={index} className="stream-chip">
+       <span className="stream-name">{stream.name}</span>
+       {stream.unit && <span className="stream-unit">({stream.unit})</span>}
+     </div>
     ))}
   </div>
       </section>
