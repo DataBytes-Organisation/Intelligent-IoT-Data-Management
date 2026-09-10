@@ -35,7 +35,8 @@ CREATE TABLE timeseries_long (
 
     entity TEXT,
     metric TEXT NOT NULL,
-    ts TIMESTAMP NOT NULL,
+    -- Event timestamps are stored as UTC instants.
+    ts TIMESTAMPTZ NOT NULL,
     value DOUBLE PRECISION,
     quality_flag TEXT
 );
@@ -63,6 +64,7 @@ CREATE TABLE timeseries (
     dataset_id INTEGER NOT NULL REFERENCES datasets(id)
         ON DELETE CASCADE,
 
+    -- Event timestamps are stored as UTC instants.
     created_at TIMESTAMPTZ NOT NULL,
     entry_id INTEGER NOT NULL,
 
