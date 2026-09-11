@@ -9,13 +9,30 @@ const DatasetCard = ({
   streams,
   lastUpdated,
   status,
+  onDeleteClick,
+  isSystemDataset,
 }) => {
   return (
     <article className="dataset-card">
       <div>
         <div className="dataset-card__header">
           <div className="dataset-card__icon">{icon}</div>
-          <span className="dataset-card__status">{status}</span>
+
+          <div className="dataset-card__header-right">
+            <span className="dataset-card__status">{status}</span>
+
+            {!isSystemDataset && (
+              <button
+                type="button"
+                className="dataset-card__delete-btn"
+                onClick={() => onDeleteClick({ id, name })}
+                aria-label={`Delete ${name}`}
+                title="Delete dataset"
+              >
+                🗑
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="dataset-card__top">

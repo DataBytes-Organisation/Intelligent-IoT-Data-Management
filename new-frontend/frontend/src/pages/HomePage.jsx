@@ -3,6 +3,8 @@ import DatasetCard from "../components/DatasetCard";
 import UploadDatasetCard from "../components/UploadDatasetCard";
 import UploadDatasetDialog from "../components/UploadDatasetDialog";
 import { useDatasets } from "../hooks/useDatasets";
+import { deleteDataset } from "../services/datasetService";
+import ConfirmDeleteDialog from "../components/ConfirmDeleteDialog";
 import "./HomePage.css";
 
 const features = [
@@ -29,8 +31,41 @@ const HomePage = () => {
   loading,
   error,
   refreshDatasets,
+  removeDataset,
 } = useDatasets();
   const [showUploadDialog,setShowUploadDialog] = useState(false);
+
+  const [pendingDelete, setPendingDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState(null);
+
+  const handleDeleteClick = (dataset) => {
+    setPendingDelete(dataset);
+    setDeleteError(null);
+  };
+
+  const handleCancelDelete = () => {
+    if (isDeleting) return;
+    setPendingDelete(null);
+    setDeleteError(null);
+  };
+
+  const handleConfirmDelete = async () => {
+    setIsDeleting(true);
+    setDeleteError(null);
+
+    try {
+      await deleteDataset(pendingDelete.id);
+      removeDataset(pendingDelete.id);
+      setPendingDelete(null);
+    } catch (err) {
+      setDeleteError(
+        err.message || "Something went wrong while deleting. Please try again."
+      );
+    } finally {
+      setIsDeleting(false);
+    }
+  };
   const streamCount = datasets.reduce(
     (total, dataset) => total + Number(dataset.streams || 0),
     0,
@@ -68,7 +103,11 @@ const HomePage = () => {
     return (
       <div className="homepage__grid">
         {datasets.map((dataset) => (
-          <DatasetCard key={dataset.id} {...dataset} />
+          <DatasetCard
+            key={dataset.id}
+            {...dataset}
+            onDeleteClick={handleDeleteClick}
+          />
         ))}
 
         <UploadDatasetCard
@@ -170,6 +209,16 @@ const HomePage = () => {
             }}
           />
           )}
+
+        {pendingDelete && (
+          <ConfirmDeleteDialog
+            datasetName={pendingDelete.name}
+            isDeleting={isDeleting}
+            error={deleteError}
+            onCancel={handleCancelDelete}
+            onConfirm={handleConfirmDelete}
+          />
+        )}
       </main>
     </>
   );
