@@ -1,6 +1,17 @@
 import { useState, useRef, useEffect } from "react";
 import "./StreamSelector.css";
 
+const STREAM_LABELS = {
+  field1: "eCO2",
+  field2: "eTVOC",
+  field3: "Temperature",
+  field4: "Air Pressure",
+  field5: "Humidity",
+  field6: "Secondary Temperature",
+  field7: "Controller Temperature",
+  field8: "Conductance",
+};
+
 /**
  * StreamDropdownSelector Component
  * --------------------------------
@@ -115,7 +126,7 @@ const StreamDropdownSelector = ({ streams, selectedStreams, setSelectedStreams }
               />
 
               {/* Stream name */}
-              {stream}
+              {STREAM_LABELS[stream] || stream}
             </label>
           ))}
         </div>

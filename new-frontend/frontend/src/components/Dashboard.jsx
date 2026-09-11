@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from 'react';
+import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { useSensorData } from '../hooks/useSensorData.js';
 import { useFilteredData } from '../hooks/useFilteredData.js';
 import { useStreamNames } from '../hooks/useStreamNames.js';
@@ -12,6 +12,7 @@ import CorrelationAnalysis from './CorrelationAnalysis.jsx';
 import { calculateCorrelation } from '../utils/correlationUtils.js';
 import TimeRangePanel from './TimeRangePanel.jsx';
 import ActiveAlerts from "./ActiveAlerts.jsx";
+import { runAnalysis } from '../services/analysisService.js';
 
 const Dashboard = ({ datasetId }) => {
   // --- ALL HOOKS FIRST ---
@@ -38,6 +39,17 @@ const Dashboard = ({ datasetId }) => {
   const [selectedTimeStart, setSelectedTimeStart] = useState('');
   const [selectedTimeEnd, setSelectedTimeEnd] = useState('');
   const [selectedStreams, setSelectedStreams] = useState([]);
+
+  const [analysisResult, setAnalysisResult] = useState(null);
+  const [analysisLoading, setAnalysisLoading] = useState(false);
+  const [analysisError, setAnalysisError] = useState(null);
+  const [hasAnalysed, setHasAnalysed] = useState(false);
+
+  useEffect(() => {
+    setAnalysisResult(null);
+    setAnalysisError(null);
+    setHasAnalysed(false);
+  }, [datasetId, selectedStreams]);
 
   const intervals = ['5min', '15min', '1h', '6h'];
   const [selectedInterval, setSelectedInterval] = useState(intervals[0]);
@@ -139,6 +151,28 @@ const Dashboard = ({ datasetId }) => {
     setFinalEndTime(finalEndTime);
     console.log("Refreshed absolute time range");
   }, [timeMode, relativeRange, data, finalStartTime, finalEndTime]);
+
+  const handleRunAnalysis = useCallback(async () => {
+    setAnalysisLoading(true);
+    setAnalysisError(null);
+    setHasAnalysed(false);
+
+    try {
+      const result = await runAnalysis({
+        datasetId,
+        selectedStreams,
+      });
+
+      setAnalysisResult(result);
+      setHasAnalysed(true);
+    } catch (err) {
+      setAnalysisResult(null);
+      setAnalysisError(err);
+      setHasAnalysed(true);
+    } finally {
+      setAnalysisLoading(false);
+    }
+  }, [datasetId, selectedStreams]);
 
   const formatTimeRange = (start, end, mode, range) => {
     if (mode === "relative") {
@@ -311,47 +345,67 @@ const Dashboard = ({ datasetId }) => {
               />
             </div>
           )}
+          
+          <button
+            className="run-analysis-btn"
+            onClick={handleRunAnalysis}
+            disabled={analysisLoading || selectedStreams.length < 2}
+          >
+            {analysisLoading ? 'Running Analysis...' : 'Run Analysis'}
+          </button>
         </div>
       </section>
 
       <section className="dashboard-section insights-panel">
         <h3 className="section-title">Insight Cards</h3>
 
-        {streamCount === 0 && (
+        {streamCount === 0 ? (
           <div className="empty-state">
             Please select one or more streams to view summary insights and charts.
           </div>
-        )}
-
-        {streamCount > 0 && (
+        ) : (
           <div className="stream-stats">
-            {selectedStreams.map((stream) => (
-              <StreamStats key={stream} data={filteredData} stream={stream} />
+           {selectedStreams.map((stream) => (
+             <StreamStats
+               key={stream}
+               data={filteredData}
+               stream={stream}
+            />
             ))}
-
-            {correlationSummary && (
-              <div className="insight-card correlation-card">
-                <div className="insight-card-header">
-                  <span className="insight-label">Correlation</span>
-                  <h3 className="insight-stream-name">{correlationSummary.streams}</h3>
-                </div>
-
-                <div className="correlation-value">{correlationSummary.value}</div>
-                <p className="correlation-text">{correlationSummary.label}</p>
-              </div>
-            )}
           </div>
         )}
       </section>
 
       {/* Block 23 - Active Alerts Dashboard Integration*/}
       <ActiveAlerts
-        alerts={[]}
-        loading={false}
-        error={null}
-        hasAnalysed={false}  
+        alerts={analysisResult?.alerts ?? []}
+        loading={analysisLoading}
+        error={analysisError}
+        hasAnalysed={hasAnalysed}  
       />
+      <section className="dashboard-section analysis-panel">
+        <h3 className="section-title">Analysis Summary</h3>
 
+        {!hasAnalysed && !analysisLoading && (
+          <div className="status-message">
+            Run an analysis to view the summary.
+          </div>
+        )}
+
+        {analysisLoading && (
+          <div className="status-message">
+            Running analysis...
+          </div>
+        )}
+
+        {hasAnalysed && !analysisLoading && analysisResult?.summary && (
+          <div className="status-message">
+            Processed items: {analysisResult.summary.processed_items}
+            {' | '}
+            Alerts detected: {analysisResult.summary.alert_count}
+          </div>
+        )}
+      </section>
       <div className="chart-analysis-grid">
         <section className="dashboard-section chart-analysis-card">
           <h3 className="section-title chart-section-title">

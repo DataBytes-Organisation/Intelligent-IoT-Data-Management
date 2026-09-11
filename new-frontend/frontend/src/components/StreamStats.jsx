@@ -1,5 +1,7 @@
 const getStats = (data, stream) => {
-  const values = data.map((d) => parseFloat(d[stream])).filter((v) => !isNaN(v));
+  const values = data
+    .map((d) => parseFloat(d[stream]))
+    .filter((v) => !isNaN(v));
 
   if (values.length === 0) {
     return {
@@ -26,32 +28,57 @@ const getStats = (data, stream) => {
 const StreamStats = ({ data, stream }) => {
   const stats = getStats(data, stream);
 
+  const displayName =
+    stream.charAt(0).toUpperCase() + stream.slice(1);
+
+  const formatValue = (value) => {
+    if (value === '-') return '-';
+
+    const number = Number(value);
+
+    return Number.isNaN(number)
+      ? value
+      : number.toFixed(2);
+  };
+
   return (
     <div className="insight-card stream-insight-card">
-      <div className="insight-card-header">
-        <span className="insight-label">Selected Stream</span>
-        <h3 className="insight-stream-name">{stream}</h3>
+      <h3 className="insight-stream-name">
+        {displayName}
+      </h3>
+
+      <div className="insight-average-row">
+        <strong className="insight-average-value">
+          {formatValue(stats.avg)}
+        </strong>
+
+        <span className="insight-average-label">
+          Average
+        </span>
       </div>
 
-      <div className="insight-metrics-grid">
-        <div className="metric-box">
+      <div className="insight-divider"></div>
+
+      <div className="insight-stats-row">
+        <div className="insight-stat">
           <span className="metric-title">Min</span>
-          <strong className="metric-value">{stats.min}</strong>
+          <strong className="metric-value">
+            {formatValue(stats.min)}
+          </strong>
         </div>
 
-        <div className="metric-box">
+        <div className="insight-stat">
           <span className="metric-title">Max</span>
-          <strong className="metric-value">{stats.max}</strong>
+          <strong className="metric-value">
+            {formatValue(stats.max)}
+          </strong>
         </div>
 
-        <div className="metric-box">
-          <span className="metric-title">Average</span>
-          <strong className="metric-value">{stats.avg}</strong>
-        </div>
-
-        <div className="metric-box">
+        <div className="insight-stat">
           <span className="metric-title">Count</span>
-          <strong className="metric-value">{stats.count}</strong>
+          <strong className="metric-value">
+            {stats.count}
+          </strong>
         </div>
       </div>
     </div>

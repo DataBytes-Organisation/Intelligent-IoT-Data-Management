@@ -18,7 +18,15 @@ const formatTarget = (target) => {
         return target.map(formatLabel).join(" ↔ ");
     }
 
-    return formatLabel(target);
+    if (target && Array.isArray(target.metrics)) {
+        return target.metrics.map(formatLabel).join(" ↔ ");
+    }
+
+    if (typeof target === "string") {
+        return formatLabel(target);
+    }
+
+    return "Unknown";
 };
 
 // Block 13 - Format the Alert Timestamp
@@ -138,16 +146,18 @@ const ActiveAlerts = ({
             </div>
 
             <div className="active-alerts-list">
-                {alerts.map((alert) => {
+                {alerts.map((alert, index) => {
                     return (
                         <article
-                            className={`alert-card alert-card--${alert.severity.toLowerCase()}`}
-                            key={alert.alert_id}
+                            className={`alert-card ${alert.severity ? `alert-card--${alert.severity.toLowerCase()}` : ''}`}
+                            key={alert.alert_id ?? `${alert.alert_type}-${alert.timestamp}-${index}`}
                         >
                             <header className="alert-card-header">
-                                <span className="alert-severity">
-                                    {formatLabel(alert.severity)}
-                                </span>
+                                {alert.severity && (
+                                    <span className="alert-severity">
+                                        {formatLabel(alert.severity)}
+                                    </span>
+                                )}
 
                                 <time
                                     className="alert-timestamp"
@@ -176,7 +186,7 @@ const ActiveAlerts = ({
 
                                 <div className="alert-metadata-item">
                                     <dt>Source</dt>
-                                    <dd>{formatLabel(alert.source)}</dd>
+                                    <dd>{formatLabel(alert.source?.component || "Unknown")}</dd>
                                 </div>
 
                                 <div className="alert-metadata-item">

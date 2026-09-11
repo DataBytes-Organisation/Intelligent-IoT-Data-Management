@@ -16,7 +16,9 @@ DROP TABLE IF EXISTS datasets;
 
 CREATE TABLE datasets (
     id SERIAL PRIMARY KEY,
-    name TEXT UNIQUE NOT NULL
+    name TEXT UNIQUE NOT NULL,
+    description TEXT,
+    timestamp_field TEXT
 );
 
 -- ============================================================

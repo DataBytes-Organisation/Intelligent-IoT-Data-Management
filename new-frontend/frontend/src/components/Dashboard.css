@@ -97,13 +97,15 @@
   align-items: center;
   transition: var(--transition);
   position: relative;
-  flex-wrap: wrap;}
+  flex-wrap: wrap;
+}
 
 .selector-group {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
 }
+
 .selector-card {
   background: #f8fbff;
   border: 1px solid #dbe7f5;
@@ -113,11 +115,9 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
-
-
 .selector-card-wide {
   width: 100%;
-   justify-self: end; /* pushes it to the right */
+  justify-self: end;
 }
 
 .selector-card label,
@@ -189,61 +189,82 @@
 .stream-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1rem;
+  gap: 1.5rem;
+  margin-top: 1rem;
 }
 
 .insight-card {
-  background: #f8fbff;
+  background: #ffffff;
   border: 1px solid #dbe7f5;
-  border-radius: 20px;
-  padding: 1.25rem;
+  border-radius: 8px;
+  padding: 1rem;
 }
 
-.insight-card-header {
-  margin-bottom: 1rem;
-}
-
-.insight-label {
-  display: inline-block;
-  margin-bottom: 0.4rem;
-  font-size: 0.78rem;
-  font-weight: 800;
-  color: #1d4ed8;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+.stream-insight-card {
+  min-width: 0;
 }
 
 .insight-stream-name {
-  margin: 0;
+  margin: 0 0 0.8rem;
   color: #0f172a;
   font-size: 1.15rem;
-  font-weight: 850;
+  font-weight: 800;
 }
 
-.insight-metrics-grid {
+.insight-average-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  margin-bottom: 0.7rem;
+}
+
+.insight-average-value {
+  color: #0f172a;
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.insight-average-label {
+  color: #475569;
+  font-size: 0.8rem;
+}
+
+.insight-divider {
+  height: 1px;
+  background: #dbe7f5;
+  margin-bottom: 0.9rem;
+}
+
+.insight-stats-row {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.8rem;
+  grid-template-columns: repeat(3, 1fr);
 }
 
-.metric-box {
-  background: #ffffff;
-  border: 1px solid #dbe7f5;
-  border-radius: 16px;
-  padding: 0.9rem;
+.insight-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0 0.8rem;
+}
+
+.insight-stat:first-child {
+  padding-left: 0;
+}
+
+.insight-stat:not(:last-child) {
+  border-right: 1px solid #dbe7f5;
 }
 
 .metric-title {
-  display: block;
   font-size: 0.8rem;
-  color: #64748b;
-  margin-bottom: 0.4rem;
-  font-weight: 700;
+  color: #475569;
+  font-weight: 600;
 }
 
 .metric-value {
-  font-size: 1.3rem;
+  font-size: 0.95rem;
   color: #0f172a;
+  font-weight: 700;
 }
 
 .correlation-card {
@@ -302,12 +323,16 @@
     border-radius: 20px;
   }
 
-  .insight-metrics-grid {
+  .stream-stats {
     grid-template-columns: 1fr;
   }
 
-  .stream-stats {
-    grid-template-columns: 1fr;
+  .insight-stats-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .insight-stat {
+    padding: 0 0.5rem;
   }
 
   .dataset-summary {
@@ -327,7 +352,7 @@
 }
 
 .time-controls-wrapper {
-  margin-left: auto;      /* pushes the whole block to the right */
+  margin-left: auto;
   display: flex;
   align-items: center;
 }
@@ -338,9 +363,7 @@
   gap: 10px;
 }
 
-/* -----------------------------------------------------------
-   TIME RANGE PANEL OVERLAY
------------------------------------------------------------ */
+
 .time-range-overlay {
   position: absolute;
   top: 100%;
