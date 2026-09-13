@@ -53,6 +53,17 @@ def test_missing_required_column():
         )
 
 
+def test_missing_timestamp_column():
+    df = make_valid_data().drop(columns=["timestamp"])
+
+    with pytest.raises(ValueError, match="missing required columns"):
+        validate_input(
+            df,
+            timestamp_col="timestamp",
+            sensor_cols=["sensor_value"],
+        )
+
+
 def test_insufficient_readings():
     df = make_valid_data().head(5)
 
@@ -100,6 +111,19 @@ def test_invalid_timestamp():
             timestamp_col="timestamp",
             sensor_cols=["sensor_value"],
         )
+
+
+def test_multiple_sensor_columns():
+    df = make_valid_data()
+    df["sensor_2"] = range(20, 40)
+
+    assert validate_input(
+        df,
+        timestamp_col="timestamp",
+        sensor_cols=["sensor_value", "sensor_2"],
+        min_readings=20,
+    ) is True
+
 
 def test_invalid_dataframe_type():
     with pytest.raises(ValueError, match="pandas DataFrame"):
