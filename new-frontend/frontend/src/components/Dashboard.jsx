@@ -3,7 +3,7 @@ import { useSensorData } from '../hooks/useSensorData.js';
 import { useFilteredData } from '../hooks/useFilteredData.js';
 import { useStreamNames } from '../hooks/useStreamNames.js';
 import { useTimeRange } from '../hooks/useTimeRange.js';
-import StreamSelector from './StreamSelector.jsx';
+import StreamSelector, { STREAM_LABELS } from './StreamSelector.jsx';
 import IntervalSelector from './IntervalSelector.jsx';
 import StreamStats from './StreamStats.jsx';
 import './Dashboard.css';
@@ -34,6 +34,15 @@ const Dashboard = ({ datasetId }) => {
   }, [sensorData]);
 
   const streamNames = useStreamNames(data);
+  const streamLabels = useMemo(
+    () =>
+      Object.fromEntries(
+        (sensorData?.metadata?.streams || [])
+          .filter((stream) => stream.name && stream.name !== stream.id)
+          .map((stream) => [stream.id, stream.name])
+      ),
+    [sensorData]
+  );
   const { timeOptions } = useTimeRange(data);
 
   const [selectedTimeStart, setSelectedTimeStart] = useState('');
@@ -295,7 +304,8 @@ const Dashboard = ({ datasetId }) => {
         <div className="selector-grid">
           <div className="selector-group">
             <StreamSelector
-              streams={streamNames.map(s => s.name)}
+              streams={streamNames.map(s => s.id)}
+              streamLabels={streamLabels}
               selectedStreams={selectedStreams}
               setSelectedStreams={setSelectedStreams}
             />
@@ -360,10 +370,15 @@ const Dashboard = ({ datasetId }) => {
         ) : (
           <div className="stream-stats">
            {selectedStreams.map((stream) => (
-             <StreamStats
-               key={stream}
-               data={filteredData}
-               stream={stream}
+            <StreamStats
+              key={stream}
+              data={filteredData}
+              stream={stream}
+              displayName={
+                streamLabels[stream] ||
+                STREAM_LABELS[stream] ||
+                stream
+              }
             />
             ))}
           </div>
