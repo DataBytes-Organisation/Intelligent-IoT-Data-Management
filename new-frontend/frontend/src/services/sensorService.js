@@ -101,40 +101,41 @@ export const getSensorData = async (datasetId, options = {}) => {
   // not actual sensor streams
   let streams = [];
 
-  if (datasetId !== 'thingspeak-live') {
-    try {
-      const datasetsResponse = await fetch(`${baseUrl}/datasets`);
+  try {
+    const datasetsResponse = await fetch(`${baseUrl}/datasets`);
 
-      if (datasetsResponse.ok) {
-        const datasets = await datasetsResponse.json();
+    if (datasetsResponse.ok) {
+      const datasets = await datasetsResponse.json();
 
-        const dataset = datasets.find(
-          (item) => item.name === datasetId
+      const dataset = datasets.find(
+        (item) => item.name === datasetId
+      );
+
+      if (dataset) {
+        const detailsResponse = await fetch(
+          `${baseUrl}/datasets/${dataset.id}`
         );
 
-        if (dataset) {
-          const detailsResponse = await fetch(
-            `${baseUrl}/datasets/${dataset.id}`
-          );
+        if (detailsResponse.ok) {
+          const details = await detailsResponse.json();
 
-          if (detailsResponse.ok) {
-            const details = await detailsResponse.json();
-
-            if (Array.isArray(details.mappings)) {
-              streams = details.mappings.map((mapping) => ({
-                id: mapping.storageField,
-                name: mapping.displayName,
-              }));
-            }
+          if (Array.isArray(details.mappings)) {
+            streams = details.mappings.map((mapping) => ({
+              id: mapping.storageField,
+              name:
+                mapping.displayName ||
+                mapping.name ||
+                mapping.storageField,
+            }));
           }
         }
       }
-    } catch (error) {
-      console.warn(
-        'Unable to load dataset stream mappings:',
-        error
-      );
     }
+  } catch (error) {
+    console.warn(
+      'Unable to load dataset stream mappings:',
+      error
+    );
   }
 
   if (streams.length === 0) {

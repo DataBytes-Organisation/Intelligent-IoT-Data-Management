@@ -8,8 +8,6 @@ import IntervalSelector from './IntervalSelector.jsx';
 import StreamStats from './StreamStats.jsx';
 import './Dashboard.css';
 import Chart from './Chart.jsx';
-import CorrelationAnalysis from './CorrelationAnalysis.jsx';
-import { calculateCorrelation } from '../utils/correlationUtils.js';
 import TimeRangePanel from './TimeRangePanel.jsx';
 import ActiveAlerts from "./ActiveAlerts.jsx";
 import { runAnalysis } from '../services/analysisService.js';
@@ -34,15 +32,16 @@ const Dashboard = ({ datasetId }) => {
   }, [sensorData]);
 
   const streamNames = useStreamNames(data);
-  const streamLabels = useMemo(
-    () =>
-      Object.fromEntries(
-        (sensorData?.metadata?.streams || [])
-          .filter((stream) => stream.name && stream.name !== stream.id)
-          .map((stream) => [stream.id, stream.name])
-      ),
-    [sensorData]
-  );
+  const streamLabels = useMemo(() => {
+    return Object.fromEntries(
+      (sensorData?.metadata?.streams || []).map((stream) => [
+        stream.id,
+        stream.name && stream.name !== stream.id
+          ? stream.name
+          : STREAM_LABELS[stream.id] || stream.id,
+      ])
+    );
+  }, [sensorData]);
   const { timeOptions } = useTimeRange(data);
 
   const [selectedTimeStart, setSelectedTimeStart] = useState('');
@@ -77,39 +76,6 @@ const Dashboard = ({ datasetId }) => {
   });
 
   const streamCount = selectedStreams.length;
-
-  const correlationSummary = useMemo(() => {
-    if (selectedStreams.length !== 2 || filteredData.length === 0) return null;
-
-    const [streamA, streamB] = selectedStreams;
-
-    const x = filteredData
-      .map((d) => parseFloat(d[streamA]))
-      .filter((v) => !isNaN(v));
-
-    const y = filteredData
-      .map((d) => parseFloat(d[streamB]))
-      .filter((v) => !isNaN(v));
-
-    if (x.length === 0 || y.length === 0 || x.length !== y.length) return null;
-
-    const correlation = calculateCorrelation(x, y);
-
-    if (Number.isNaN(correlation) || !Number.isFinite(correlation)) return null;
-
-    let strengthLabel = 'Weak relationship';
-
-    if (correlation >= 0.7) strengthLabel = 'Strong positive relationship';
-    else if (correlation >= 0.3) strengthLabel = 'Moderate positive relationship';
-    else if (correlation <= -0.7) strengthLabel = 'Strong negative relationship';
-    else if (correlation <= -0.3) strengthLabel = 'Moderate negative relationship';
-
-    return {
-      streams: `${streamA} vs ${streamB}`,
-      value: correlation.toFixed(2),
-      label: strengthLabel,
-    };
-  }, [selectedStreams, filteredData]);
 
   const handleSubmit = useCallback(() => {
     console.log("Dashboard timeMode:", timeMode, "relativeRange:", relativeRange);
@@ -171,7 +137,7 @@ const Dashboard = ({ datasetId }) => {
         datasetId,
         selectedStreams,
       });
-
+      console.log('Analysis result:', result);
       setAnalysisResult(result);
       setHasAnalysed(true);
     } catch (err) {
@@ -416,16 +382,26 @@ const Dashboard = ({ datasetId }) => {
         )}
       </section>
       <div className="chart-analysis-grid">
-        <section className="dashboard-section chart-analysis-card">
+        <section className="dashboard-section chart-analysis-card sensor-timeline-card">
           <h3 className="section-title chart-section-title">
-            Sensor Trends <span>(Selected Streams)</span>
+            Sensor Timeline
+            {selectedStreams.length >= 2 && (
+              <span> (normalised view)</span>
+            )}
           </h3>
-          <Chart data={filteredData} selectedStreams={selectedStreams} />
-        </section>
 
-        <section className="dashboard-section chart-analysis-card correlation-analysis-card">
-          <h3 className="section-title chart-section-title">Correlation Analysis</h3>
-          <CorrelationAnalysis data={filteredData} selectedStreams={selectedStreams} />
+          <p className="sensor-timeline-description">
+            {selectedStreams.length >= 2
+              ? 'All selected streams are normalised for easy comparison.'
+              : 'Sensor readings over time.'}
+          </p>
+
+          <Chart
+            data={filteredData}
+            selectedStreams={selectedStreams}
+            streamLabels={streamLabels}
+            alerts={analysisResult?.alerts ?? []}
+          />
         </section>
       </div>
     </div>
