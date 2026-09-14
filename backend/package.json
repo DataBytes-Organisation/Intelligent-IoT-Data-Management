@@ -8,7 +8,8 @@
     "dev": "nodemon src/server.js",
     "migrate:auth": "node scripts/migrate-auth.js",
     "migrate:dataset-import": "node scripts/migrate-dataset-import.js",
-    "test": "node --test test/*.test.js"
+    "migrate:soft-delete": "node scripts/migrate-soft-delete.js",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",

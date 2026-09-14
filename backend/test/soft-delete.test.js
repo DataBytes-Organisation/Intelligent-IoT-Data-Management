@@ -1,22 +1,27 @@
 const { Pool } = require('pg');
 
+// Use TEST_DATABASE_URL for isolated testing
+// Falls back to development database if not set
 const pool = new Pool({
-  user: 'postgres',
-  password: 'postgres',
-  host: 'localhost',
-  port: 5432,
-  database: 'IoTDatabase',
+  connectionString: process.env.TEST_DATABASE_URL || 
+    'postgresql://postgres:postgres@localhost:5432/IoTDatabase_test',
 });
 
 describe('Soft-Delete Functionality', () => {
   
-  beforeAll(async () => {
-    await pool.query('DELETE FROM timeseries WHERE TRUE');
-    await pool.query('DELETE FROM timeseries_long WHERE TRUE');
-    await pool.query('DELETE FROM datasets WHERE TRUE');
+  beforeEach(async () => {
+    // Start transaction for this test
+    await pool.query('BEGIN');
+  });
+
+  afterEach(async () => {
+    // Rollback transaction to clean up
+    // This prevents test data from persisting
+    await pool.query('ROLLBACK');
   });
 
   afterAll(async () => {
+    // Close pool connection
     await pool.end();
   });
 
@@ -31,27 +36,34 @@ describe('Soft-Delete Functionality', () => {
   });
 
   test('Soft-delete sets deleted_at and deleted_by', async () => {
-    await pool.query(
-      'INSERT INTO datasets (name) VALUES ($1)',
+    // Insert test dataset
+    const insertResult = await pool.query(
+      'INSERT INTO datasets (name) VALUES ($1) RETURNING id',
       ['test-dataset-2']
     );
+    const datasetId = insertResult.rows[0].id;
     
+    // Soft-delete with UUID user ID
     const deleteResult = await pool.query(
-      "UPDATE datasets SET deleted_at = NOW(), deleted_by = 'testuser' WHERE name = $1 RETURNING *",
-      ['test-dataset-2']
+      'UPDATE datasets SET deleted_at = NOW(), deleted_by = $1 WHERE id = $2 RETURNING *',
+      ['123e4567-e89b-12d3-a456-426614174000', datasetId]
     );
     
     expect(deleteResult.rows[0].deleted_at).not.toBeNull();
-    expect(deleteResult.rows[0].deleted_by).toBe('testuser');
+    expect(deleteResult.rows[0].deleted_by).toBe('123e4567-e89b-12d3-a456-426614174000');
   });
 
   test('Active datasets query excludes soft-deleted', async () => {
+    // Insert active dataset
     await pool.query('INSERT INTO datasets (name) VALUES ($1)', ['active-1']);
+    
+    // Insert soft-deleted dataset
     await pool.query(
       "INSERT INTO datasets (name, deleted_at, deleted_by) VALUES ($1, NOW(), $2)",
-      ['deleted-1', 'testuser']
+      ['deleted-1', '123e4567-e89b-12d3-a456-426614174000']
     );
     
+    // Query only active datasets
     const result = await pool.query('SELECT * FROM datasets WHERE deleted_at IS NULL');
     
     expect(result.rows.length).toBeGreaterThan(0);
@@ -59,41 +71,53 @@ describe('Soft-Delete Functionality', () => {
     expect(result.rows.find(r => r.name === 'deleted-1')).toBeUndefined();
   });
 
-  test('Name can be reused after soft-deletion', async () => {
-    const name = 'reusable-name';
+  test('Retain name during soft-delete to prevent restore conflicts', async () => {
+    const name = 'reserved-name';
     
     // Create first dataset
-    await pool.query('INSERT INTO datasets (name) VALUES ($1)', [name]);
+    const firstResult = await pool.query(
+      'INSERT INTO datasets (name) VALUES ($1) RETURNING id',
+      [name]
+    );
+    const firstDatasetId = firstResult.rows[0].id;
     
     // Soft-delete it
     await pool.query(
-      "UPDATE datasets SET deleted_at = NOW(), deleted_by = 'testuser' WHERE name = $1",
-      [name]
+      "UPDATE datasets SET deleted_at = NOW(), deleted_by = $1 WHERE id = $2",
+      ['123e4567-e89b-12d3-a456-426614174000', firstDatasetId]
     );
     
-    // Should be able to create new active dataset with same name
-    const result = await pool.query(
-      'INSERT INTO datasets (name) VALUES ($1) RETURNING *',
-      [name]
-    );
+    // Try to create new dataset with same name (should fail - name is reserved)
+    try {
+      await pool.query(
+        'INSERT INTO datasets (name) VALUES ($1) RETURNING *',
+        [name]
+      );
+      // If we reach here, name reuse succeeded (test fails)
+      expect(true).toBe(false);
+    } catch (err) {
+      // Expected: unique constraint violation
+      expect(err.message).toContain('unique');
+    }
     
-    expect(result.rows[0].name).toBe(name);
-    expect(result.rows[0].deleted_at).toBeNull();
+    // After 15-day cleanup, the old record is deleted and name is available
+    // (cleanup job handles: DELETE FROM datasets WHERE deleted_at < NOW() - INTERVAL '15 days')
   });
 
   test('Find expired datasets (>15 days old)', async () => {
-    // Insert dataset deleted 20 days ago
+    // Insert dataset deleted 20 days ago (expired)
     await pool.query(
       "INSERT INTO datasets (name, deleted_at, deleted_by) VALUES ($1, NOW() - INTERVAL '20 days', $2)",
-      ['expired-dataset', 'testuser']
+      ['expired-dataset', '123e4567-e89b-12d3-a456-426614174000']
     );
     
-    // Insert dataset deleted 5 days ago
+    // Insert dataset deleted 5 days ago (recent)
     await pool.query(
       "INSERT INTO datasets (name, deleted_at, deleted_by) VALUES ($1, NOW() - INTERVAL '5 days', $2)",
-      ['recent-delete', 'testuser']
+      ['recent-delete', '123e4567-e89b-12d3-a456-426614174000']
     );
     
+    // Query expired datasets
     const result = await pool.query(
       "SELECT * FROM datasets WHERE deleted_at IS NOT NULL AND deleted_at < NOW() - INTERVAL '15 days'"
     );
@@ -119,8 +143,8 @@ describe('Soft-Delete Functionality', () => {
     
     // Soft-delete the dataset
     await pool.query(
-      "UPDATE datasets SET deleted_at = NOW(), deleted_by = 'testuser' WHERE id = $1",
-      [datasetId]
+      "UPDATE datasets SET deleted_at = NOW(), deleted_by = $1 WHERE id = $2",
+      ['123e4567-e89b-12d3-a456-426614174000', datasetId]
     );
     
     // Verify timeseries data still exists and links to soft-deleted dataset
@@ -133,24 +157,53 @@ describe('Soft-Delete Functionality', () => {
     expect(result.rows[0].deleted_at).not.toBeNull();
   });
 
-  test('Restore soft-deleted dataset', async () => {
+  test('Restore soft-deleted dataset within 15-day window', async () => {
     const name = 'restore-test';
     
     // Create and soft-delete
-    await pool.query('INSERT INTO datasets (name) VALUES ($1)', [name]);
-    await pool.query(
-      "UPDATE datasets SET deleted_at = NOW(), deleted_by = 'testuser' WHERE name = $1",
+    const insertResult = await pool.query(
+      'INSERT INTO datasets (name) VALUES ($1) RETURNING id',
       [name]
     );
+    const datasetId = insertResult.rows[0].id;
     
-    // Restore
+    await pool.query(
+      "UPDATE datasets SET deleted_at = NOW(), deleted_by = $1 WHERE id = $2",
+      ['123e4567-e89b-12d3-a456-426614174000', datasetId]
+    );
+    
+    // Restore (clears deleted_at and deleted_by)
     const result = await pool.query(
-      'UPDATE datasets SET deleted_at = NULL, deleted_by = NULL WHERE name = $1 RETURNING *',
-      [name]
+      'UPDATE datasets SET deleted_at = NULL, deleted_by = NULL WHERE id = $1 RETURNING *',
+      [datasetId]
     );
     
     expect(result.rows[0].deleted_at).toBeNull();
     expect(result.rows[0].deleted_by).toBeNull();
+  });
+
+  test('Record permanent time-series deletion timestamp (data_deleted_at)', async () => {
+    // Create dataset
+    const datasetResult = await pool.query(
+      'INSERT INTO datasets (name) VALUES ($1) RETURNING id',
+      ['deletion-tracking-dataset']
+    );
+    const datasetId = datasetResult.rows[0].id;
+    
+    // Soft-delete dataset (deleted_at set)
+    await pool.query(
+      "UPDATE datasets SET deleted_at = NOW(), deleted_by = $1 WHERE id = $2",
+      ['123e4567-e89b-12d3-a456-426614174000', datasetId]
+    );
+    
+    // AFI-23: Record when time-series data was permanently deleted
+    const result = await pool.query(
+      'UPDATE datasets SET data_deleted_at = NOW() WHERE id = $1 RETURNING *',
+      [datasetId]
+    );
+    
+    expect(result.rows[0].data_deleted_at).not.toBeNull();
+    expect(result.rows[0].deleted_at).not.toBeNull();
   });
 
 });
