@@ -87,23 +87,284 @@
   line-height: 1.7;
 }
 
+
+/* =========================================================
+   CONTROL PANEL
+   ========================================================= */
+
 .controls-panel {
-  background: rgba(255, 255, 255, 0.9);
+  background: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 22px 20px 20px;
+  box-shadow: none;
+  position: relative;
+  min-height: 0;
 }
 
-.selector-grid {
+.controls-row {
   display: flex;
-  gap: 1rem;
-  align-items: center;
-  transition: var(--transition);
-  position: relative;
-  flex-wrap: wrap;}
+  align-items: flex-end;
+  justify-content: flex-start;
+  width: 100%;
+  gap: 55px;
+}
 
-.selector-group {
+.control-item {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 10px;
+  flex: 0 0 auto;
 }
+
+.control-label {
+  color: #111827;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   SELECT STREAMS
+   ========================================================= */
+
+.streams-control {
+  width: 230px;
+}
+
+.streams-control > div {
+  width: 100%;
+}
+
+.streams-control button,
+.streams-control select {
+  width: 230px !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  padding: 0 12px !important;
+  background: #ffffff !important;
+  color: #111827 !important;
+  border: 1px solid #1f2937 !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   INTERVAL
+   ========================================================= */
+
+.interval-control {
+  width: 125px;
+}
+
+.interval-control > div {
+  width: 100%;
+}
+
+.interval-control button,
+.interval-control select {
+  width: 125px !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  padding: 0 12px !important;
+  background: #ffffff !important;
+  color: #111827 !important;
+  border: 1px solid #1f2937 !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   TIME RANGE
+   ========================================================= */
+
+.range-control {
+  width: 205px;
+}
+
+.time-range-container {
+  position: relative;
+  width: 205px;
+}
+
+.time-range-button {
+  width: 205px;
+  height: 40px;
+  min-height: 40px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  color: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 6px;
+  box-shadow: none;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.calendar-icon {
+  flex: 0 0 auto;
+  margin: 0;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.time-range-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.range-arrow {
+  flex: 0 0 auto;
+  margin-left: auto;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.time-range-overlay {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 9999;
+}
+
+
+/* =========================================================
+   REFRESH
+   ========================================================= */
+
+.refresh-control {
+  display: flex;
+  align-items: flex-end;
+  flex: 0 0 auto;
+  margin-left: 15px;
+}
+
+.refresh-control-button {
+  height: 40px;
+  min-height: 40px;
+  min-width: 110px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  background: #a8bfff;
+  color: #1554e8;
+  border: none;
+  border-radius: 8px;
+  box-shadow: none;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
+}
+
+.refresh-control-button:hover {
+  background: #96b0fb;
+}
+
+.refresh-control-button:active {
+  transform: translateY(1px);
+}
+
+.refresh-icon {
+  font-size: 15px;
+  line-height: 1;
+}
+
+
+/* =========================================================
+   RUN ANALYSIS
+   ========================================================= */
+
+.run-analysis-control {
+  display: flex;
+  align-items: flex-end;
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+
+.run-analysis-btn {
+  height: 40px;
+  min-height: 40px;
+  min-width: 145px;
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  box-shadow: none;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    opacity 0.2s ease,
+    transform 0.15s ease;
+}
+
+.run-analysis-btn:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.run-analysis-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.run-analysis-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   FOCUS STATES
+   ========================================================= */
+
+.streams-control button:focus,
+.streams-control select:focus,
+.interval-control button:focus,
+.interval-control select:focus,
+.time-range-button:focus {
+  outline: none;
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+}
+
+
+/* =========================================================
+   OLD SELECTOR / INPUT STYLES
+   ========================================================= */
+
 .selector-card {
   background: #f8fbff;
   border: 1px solid #dbe7f5;
@@ -113,11 +374,9 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
-
-
 .selector-card-wide {
   width: 100%;
-   justify-self: end; /* pushes it to the right */
+  justify-self: end;
 }
 
 .selector-card label,
@@ -176,6 +435,11 @@
   transform: translateY(-1px);
 }
 
+
+/* =========================================================
+   EMPTY / STATUS STATES
+   ========================================================= */
+
 .empty-state,
 .status-message {
   border: 1px dashed #bfdbfe;
@@ -186,65 +450,96 @@
   line-height: 1.6;
 }
 
+
+/* =========================================================
+   STREAM STATS
+   ========================================================= */
+
 .stream-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1rem;
+  gap: 1.5rem;
+  margin-top: 1rem;
 }
 
 .insight-card {
-  background: #f8fbff;
+  background: #ffffff;
   border: 1px solid #dbe7f5;
-  border-radius: 20px;
-  padding: 1.25rem;
+  border-radius: 8px;
+  padding: 1rem;
 }
 
-.insight-card-header {
-  margin-bottom: 1rem;
-}
-
-.insight-label {
-  display: inline-block;
-  margin-bottom: 0.4rem;
-  font-size: 0.78rem;
-  font-weight: 800;
-  color: #1d4ed8;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+.stream-insight-card {
+  min-width: 0;
 }
 
 .insight-stream-name {
-  margin: 0;
+  margin: 0 0 0.8rem;
   color: #0f172a;
   font-size: 1.15rem;
-  font-weight: 850;
+  font-weight: 800;
 }
 
-.insight-metrics-grid {
+.insight-average-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  margin-bottom: 0.7rem;
+}
+
+.insight-average-value {
+  color: #0f172a;
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.insight-average-label {
+  color: #475569;
+  font-size: 0.8rem;
+}
+
+.insight-divider {
+  height: 1px;
+  background: #dbe7f5;
+  margin-bottom: 0.9rem;
+}
+
+.insight-stats-row {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.8rem;
+  grid-template-columns: repeat(3, 1fr);
 }
 
-.metric-box {
-  background: #ffffff;
-  border: 1px solid #dbe7f5;
-  border-radius: 16px;
-  padding: 0.9rem;
+.insight-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0 0.8rem;
+}
+
+.insight-stat:first-child {
+  padding-left: 0;
+}
+
+.insight-stat:not(:last-child) {
+  border-right: 1px solid #dbe7f5;
 }
 
 .metric-title {
-  display: block;
   font-size: 0.8rem;
-  color: #64748b;
-  margin-bottom: 0.4rem;
-  font-weight: 700;
+  color: #475569;
+  font-weight: 600;
 }
 
 .metric-value {
-  font-size: 1.3rem;
+  font-size: 0.95rem;
   color: #0f172a;
+  font-weight: 700;
 }
+
+
+/* =========================================================
+   CORRELATION
+   ========================================================= */
 
 .correlation-card {
   background: linear-gradient(180deg, #eff6ff 0%, #ffffff 100%);
@@ -263,6 +558,11 @@
   color: #475569;
   font-size: 0.95rem;
 }
+
+
+/* =========================================================
+   CHARTS
+   ========================================================= */
 
 .chart-container {
   background: #ffffff;
@@ -322,6 +622,11 @@
   line-height: 1.55;
   text-align: center;
 }
+
+
+/* =========================================================
+   CORRELATION CONTENT
+   ========================================================= */
 
 .correlation-content {
   display: grid;
@@ -399,8 +704,11 @@
   gap: 1rem;
 }
 
-/* In the two-card desktop layout, keep chart metadata out of the plot flow so
-   both plotting areas begin directly below their matching card headings. */
+
+/* =========================================================
+   DESKTOP
+   ========================================================= */
+
 @media (min-width: 993px) {
   .correlation-content {
     display: block;
@@ -432,12 +740,28 @@
   }
 }
 
-@media (max-width: 992px) {
-  .chart-analysis-grid {
-    grid-template-columns: 1fr;
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1100px) {
+  .controls-row {
+    gap: 28px;
+    flex-wrap: wrap;
   }
 
-  .selector-grid {
+  .refresh-control {
+    margin-left: 0;
+  }
+
+  .run-analysis-control {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 992px) {
+  .chart-analysis-grid {
     grid-template-columns: 1fr;
   }
 
@@ -454,18 +778,68 @@
   }
 }
 
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
 @media (max-width: 640px) {
   .dashboard-section {
     padding: 1rem;
     border-radius: 20px;
   }
 
-  .insight-metrics-grid {
-    grid-template-columns: 1fr;
+  .controls-panel {
+    padding: 18px;
+    border-radius: 12px;
+  }
+
+  .controls-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .control-label {
+    font-size: 13px;
+  }
+
+  .streams-control,
+  .interval-control,
+  .range-control,
+  .time-range-container {
+    width: 100%;
+  }
+
+  .streams-control button,
+  .streams-control select,
+  .interval-control button,
+  .interval-control select,
+  .time-range-button {
+    width: 100% !important;
+  }
+
+  .refresh-control,
+  .run-analysis-control {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .refresh-control-button,
+  .run-analysis-btn {
+    width: 100%;
   }
 
   .stream-stats {
     grid-template-columns: 1fr;
+  }
+
+  .insight-stats-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .insight-stat {
+    padding: 0 0.5rem;
   }
 
   .dataset-summary {
@@ -517,173 +891,4 @@
   .scatter-title {
     margin-bottom: 0.3rem;
   }
-}
-
-.selector-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  min-width: 100px;
-}
-
-.time-controls-wrapper {
-  margin-left: auto;      /* pushes the whole block to the right */
-  display: flex;
-  align-items: center;
-}
-
-.time-controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* -----------------------------------------------------------
-   TIME RANGE PANEL OVERLAY
------------------------------------------------------------ */
-.time-range-overlay {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  z-index: 9999;
-}
-
-/* =========================
-   FIGMA - AVAILABLE STREAMS
-========================= */
-
-.available-streams-grid {
-  display: flex;
-  gap: 24px;
-  flex-wrap: wrap;
-  margin-top: 20px;
-}
-
-.available-stream-card {
-  width: 115px;
-  height: 46px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  background: #e4ecff;
-  border-radius: 4px;
-
-  color: #111;
-}
-
-.available-stream-card strong {
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.available-stream-card span {
-  font-size: 9px;
-  margin-top: 1px;
-}
-
-
-/* =========================
-   FIGMA - CONTROLS
-========================= */
-
-.figma-controls-row {
-  display: flex;
-  align-items: flex-end;
-  gap: 55px;
-  margin-top: 18px;
-  flex-wrap: wrap;
-}
-
-.figma-control-item {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.figma-control-item label {
-  font-size: 12px;
-  font-weight: 600;
-  color: #111;
-}
-
-.figma-time-item {
-  position: relative;
-}
-
-.figma-time-button {
-  width: 170px;
-  height: 36px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  padding: 0 10px;
-
-  background: #fff;
-  border: 1px solid #333;
-  border-radius: 4px;
-
-  font-size: 12px;
-  cursor: pointer;
-}
-
-.figma-refresh-button {
-  height: 36px;
-  padding: 0 16px;
-
-  border: none;
-  border-radius: 6px;
-
-  background: #b8ccff;
-  color: #2563eb;
-
-  font-size: 12px;
-  cursor: pointer;
-}
-
-.figma-refresh-button:hover {
-  background: #a7bfff;
-}
-
-
-/* Keep popup under time selector */
-.time-range-overlay {
-  position: absolute;
-  top: 65px;
-  left: 0;
-  z-index: 1000;
-}
-
-/* Available Streams - Figma design */
-.available-streams-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
-  margin-top: 20px;
-}
-
-.available-stream-card {
-  min-width: 110px;
-  padding: 12px 16px;
-  background: #e4ecff;
-  border-radius: 4px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 13px;
-  font-weight: 600;
-  color: #111827;
-  text-align: center;
-}
-
-.no-streams-message {
-  margin: 0;
-  color: #64748b;
-  font-size: 14px;
 }
