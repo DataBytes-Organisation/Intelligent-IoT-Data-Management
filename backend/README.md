@@ -1,13 +1,19 @@
 # Backend Overview
+
 Intelligent IoT Data Management – Backend
 
 ## Overview
+
 The backend is a Node.js + Express server designed to ingest, store, analyse, and serve IoT sensor data.
+
 It follows a clean Controller → Service → Repository architecture and integrates with a PostgreSQL database for persistent storage.
-The backend supports real‑time ingestion from ThingSpeak, CSV ingestion, JWT authentication, and dataset‑based API endpoints used by the frontend dashboard. For onboarding, see the Backend Onboarding Document in 'Backend/docs'.
+
+The backend supports real-time ingestion from ThingSpeak, CSV ingestion, JWT authentication, and dataset-based API endpoints used by the frontend dashboard. For onboarding, see the Backend Onboarding Document in `Backend/docs`.
 
 ## Backend Architecture
-- The backend is structured into modular layers to ensure maintainability and scalability:
+
+The backend is structured into modular layers to ensure maintainability and scalability:
+
 - Routes – define API endpoints
 - Controllers – handle HTTP requests/responses
 - Services – business logic
@@ -15,32 +21,40 @@ The backend supports real‑time ingestion from ThingSpeak, CSV ingestion, JWT a
 - Data Ingestion – ThingSpeak + CSV ingestion
 - Authentication – JWT, bcrypt, RBAC
 - Database Layer – PostgreSQL schema + queries
-- This structure ensures each layer has a single responsibility and can be extended independently
+
+This structure ensures each layer has a single responsibility and can be extended independently.
 
 ## Key Features Implemented
-1. Authentication
-- JWT‑based login and registration
+
+### 1. Authentication
+
+- JWT-based login and registration
 - Bcrypt password hashing
-- Role‑Based Access Control (RBAC)
+- Role-Based Access Control (RBAC)
 - Protected routes with middleware
 - Account lockout on repeated failures
 
-2. Database Layer (PostgreSQL)
-- datasets table for dataset metadata
-- timeseries table (wide format) for CSV + ThingSpeak ingestion
-- Automatic dataset creation during ingestion
-- Efficient wide‑format storage for fast dashboard queries
+### 2. Database Layer (PostgreSQL)
 
-3. Ingestion Pipelines
-- ThingSpeak ingestion (field1–field8)
-- CSV ingestion (same wide‑format structure)
+- `datasets` table for dataset metadata
+- `timeseries` table (wide format) for CSV + ThingSpeak ingestion
+- Automatic dataset creation during ingestion
+- Efficient wide-format storage for fast dashboard queries
+
+### 3. Ingestion Pipelines
+
+- ThingSpeak ingestion (`field1`–`field8`)
+- CSV ingestion using the same wide-format structure
 - Preview mode for ThingSpeak channels
 - Unified ingestion logic across both sources
 
-4. API Endpoints. View 'Backend/docs'.
+### 4. API Endpoints
+
+View `Backend/docs` for API documentation.
 
 ## Project Structure
-```
+
+```text
 backend/
 │
 ├── src/
@@ -63,7 +77,7 @@ backend/
 └── schema.sql
 ```
 
-To Run the Backend Locally, view 'Backend/docs/' Backend Onboarding Document pdf.
+To run the backend locally, view the Backend Onboarding Document in `Backend/docs/`.
 
 ### Database migrations
 
@@ -72,4 +86,82 @@ For an existing database, apply migrations in this order after the base schema:
 ```bash
 npm run migrate:auth
 npm run migrate:dataset-import
+npm run migrate:timeseries-utc
 ```
+
+### Time-Series UTC Migration
+
+The `timeseries_long.ts` column is standardised from `TIMESTAMP` to `TIMESTAMPTZ` so stored event timestamps represent unambiguous UTC instants.
+
+#### Before running the migration
+
+Existing `timeseries_long.ts` values must be confirmed to represent UTC timestamps before applying this migration.
+
+Do not run this migration on an existing environment if the legacy timestamps may represent local time, because the migration interprets existing values as UTC.
+
+A pre-deployment audit should confirm the timezone meaning of existing timestamp values before the migration is applied.
+
+#### Run the migration
+
+From the `backend` directory:
+
+```bash
+npm run migrate:timeseries-utc
+```
+
+This runs:
+
+```text
+src/db/migrations/003_standardise_timeseries_utc.sql
+```
+
+The migration converts:
+
+```text
+timeseries_long.ts
+TIMESTAMP -> TIMESTAMPTZ
+```
+
+using UTC as the legacy timestamp assumption.
+
+The migration includes a type guard:
+
+- If `timeseries_long.ts` is `TIMESTAMP WITHOUT TIME ZONE`, it is converted to `TIMESTAMPTZ` using UTC.
+- If `timeseries_long.ts` is already `TIMESTAMPTZ`, the migration safely performs no conversion.
+- This prevents an already-converted timestamp from being reinterpreted using the database session timezone.
+
+#### Verification
+
+After migration:
+
+- `timeseries.created_at` should use `TIMESTAMPTZ`.
+- `timeseries_long.ts` should use `TIMESTAMPTZ`.
+- `idx_timeseries_ts` should still exist.
+- Existing time-range queries should continue to work.
+- Rerunning the migration should leave existing UTC instants unchanged.
+
+#### Integration test
+
+The UTC timestamp migration integration test uses a dedicated PostgreSQL test database configured through `TEST_DATABASE_URL`.
+
+Run the integration test with:
+
+```bash
+npm run test:integration
+```
+
+The integration test verifies that:
+
+- legacy `TIMESTAMP` values are converted to `TIMESTAMPTZ`
+- the expected UTC instant is preserved
+- rerunning the migration is safe and does not shift timestamps
+- the timestamp index remains available
+- time-range queries continue to work
+
+The normal unit-test command remains:
+
+```bash
+npm test
+```
+
+The normal unit-test suite does not depend on the migration integration database.
