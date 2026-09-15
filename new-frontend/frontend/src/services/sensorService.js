@@ -99,30 +99,70 @@ export const getSensorData = async (datasetId, options = {}) => {
 
   // These fields are metadata,
   // not actual sensor streams
-  const excludedFields = new Set([
-    'dataset_id',
-    'created_at',
-    'entry_id',
-  ]);
+  let streams = [];
 
-  // Check every row instead of only the first row,
-  // because some readings may have missing fields
-  const streamIds = [
-    ...new Set(
-      rows.flatMap((row) =>
-        Object.keys(row).filter(
-          (key) => !excludedFields.has(key)
+  try {
+    const datasetsResponse = await fetch(`${baseUrl}/datasets`);
+
+    if (datasetsResponse.ok) {
+      const datasets = await datasetsResponse.json();
+
+      const dataset = datasets.find(
+        (item) => item.name === datasetId
+      );
+
+      if (dataset) {
+        const detailsResponse = await fetch(
+          `${baseUrl}/datasets/${dataset.id}`
+        );
+
+        if (detailsResponse.ok) {
+          const details = await detailsResponse.json();
+
+          if (Array.isArray(details.mappings)) {
+            streams = details.mappings.map((mapping) => ({
+              id: mapping.storageField,
+              name:
+                mapping.displayName ||
+                mapping.name ||
+                mapping.storageField,
+            }));
+          }
+        }
+      }
+    }
+  } catch (error) {
+    console.warn(
+      'Unable to load dataset stream mappings:',
+      error
+    );
+  }
+
+  if (streams.length === 0) {
+    const excludedFields = new Set([
+      'dataset_id',
+      'created_at',
+      'entry_id',
+    ]);
+
+    const streamIds = [
+      ...new Set(
+        rows.flatMap((row) =>
+          Object.keys(row).filter(
+            (key) =>
+              !excludedFields.has(key) &&
+              row[key] !== null &&
+              row[key] !== undefined
+          )
         )
-      )
-    ),
-  ];
+      ),
+    ];
 
-  // Convert stream IDs into the structure
-  // expected by the existing Dashboard
-  const streams = streamIds.map((id) => ({
-    id,
-    name: id,
-  }));
+    streams = streamIds.map((id) => ({
+      id,
+      name: id,
+    }));
+  }
 
   // ---------------------------------
   // NORMALISED FRONTEND RESPONSE
