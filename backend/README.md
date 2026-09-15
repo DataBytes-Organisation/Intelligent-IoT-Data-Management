@@ -153,10 +153,11 @@ create an unowned dataset.
 
 ### Dataset visibility
 
-`GET /api/datasets` and `GET /api/datasets/:id` require authentication. They
-return active datasets created by the authenticated user plus the shared
-ThingSpeak dataset owned by `THINGSPEAK_DATASET_OWNER_ID`. They do not return
-another user's datasets or soft-deleted datasets.
+Dataset list, detail, series, series-filter, and timestamp endpoints require
+authentication. They return active datasets created by the authenticated user
+plus the shared ThingSpeak dataset owned by
+`THINGSPEAK_DATASET_OWNER_ID`. They do not return another user's datasets or
+soft-deleted datasets.
 
 ### Ingestion ownership
 

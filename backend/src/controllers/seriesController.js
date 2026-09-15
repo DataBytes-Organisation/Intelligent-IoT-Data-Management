@@ -20,7 +20,10 @@ const getSeriesByDatasetName = async (req, res) => {
   try {
     const { name } = req.params;
 
-    const entries = await timeseriesService.getWideEntriesForDatasetName(name);
+    const entries = await timeseriesService.getWideEntriesForDatasetName(
+      name,
+      req.user.sub
+    );
 
     if (!entries) {
       return res.status(404).json({ error: 'Dataset not found or empty' });
@@ -46,7 +49,11 @@ const filterSeriesByMetrics = async (req, res) => {
       return res.status(400).json({ error: 'streamNames must be a non-empty array' });
     }
 
-    const filtered = await timeseriesService.filterWideEntriesByMetrics(name, streamNames);
+    const filtered = await timeseriesService.filterWideEntriesByMetrics(
+      name,
+      streamNames,
+      req.user.sub
+    );
 
     if (!filtered) {
       return res.status(404).json({ error: 'Dataset not found or empty' });

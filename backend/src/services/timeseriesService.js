@@ -9,6 +9,16 @@
 const TimeseriesRepository = require('../repositories/timeseriesRepository');
 const repo = new TimeseriesRepository();
 
+function getThingSpeakDatasetOwnerId() {
+  const ownerId = process.env.THINGSPEAK_DATASET_OWNER_ID;
+  if (!ownerId) {
+    throw new Error(
+      'THINGSPEAK_DATASET_OWNER_ID is required to access shared ThingSpeak data.'
+    );
+  }
+  return ownerId;
+}
+
 /* -----------------------------
  * Helpers
  * ----------------------------- */
@@ -58,10 +68,14 @@ function pivotLongToWide(rows) {
 /* -----------------------------
  * MD‑02: Wide-format support
  * ----------------------------- */
-async function getWideEntriesForDatasetName(datasetName) {
+async function getWideEntriesForDatasetName(datasetName, userId) {
   if (!datasetName) return null;
 
-  const datasetId = await repo.getDatasetIdByName(datasetName);
+  const datasetId = await repo.getDatasetIdByName(
+    datasetName,
+    userId,
+    getThingSpeakDatasetOwnerId()
+  );
   if (datasetId == null) return null;
 
   // 1. Try ThingSpeak wide-format first
@@ -82,10 +96,14 @@ async function getWideEntriesForDatasetName(datasetName) {
 /* -----------------------------
  * MD‑02: Dynamic metric extraction
  * ----------------------------- */
-async function getAvailableMetricsForDatasetName(datasetName) {
+async function getAvailableMetricsForDatasetName(datasetName, userId) {
   if (!datasetName) return null;
 
-  const datasetId = await repo.getDatasetIdByName(datasetName);
+  const datasetId = await repo.getDatasetIdByName(
+    datasetName,
+    userId,
+    getThingSpeakDatasetOwnerId()
+  );
   if (datasetId == null) return null;
 
   // Prefer wide-format metrics
@@ -105,8 +123,8 @@ async function getAvailableMetricsForDatasetName(datasetName) {
 /* -----------------------------
  * Filtering (works for both formats)
  * ----------------------------- */
-async function filterWideEntriesByMetrics(datasetName, streamNames) {
-  const entries = await getWideEntriesForDatasetName(datasetName);
+async function filterWideEntriesByMetrics(datasetName, streamNames, userId) {
+  const entries = await getWideEntriesForDatasetName(datasetName, userId);
   if (!entries) return null;
 
   return entries.map(entry => {
