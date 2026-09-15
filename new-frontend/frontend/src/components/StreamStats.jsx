@@ -25,11 +25,8 @@ const getStats = (data, stream) => {
   };
 };
 
-const StreamStats = ({ data, stream }) => {
+const StreamStats = ({ data, stream, displayName }) => {
   const stats = getStats(data, stream);
-
-  const displayName =
-    stream.charAt(0).toUpperCase() + stream.slice(1);
 
   const formatValue = (value) => {
     if (value === '-') return '-';
