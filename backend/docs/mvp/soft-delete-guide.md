@@ -83,6 +83,7 @@ Schedule that command once per day with the deployment platform's scheduler.
 For example, a cron-managed deployment can run it at 03:00 UTC:
 
 ```cron
+CRON_TZ=UTC
 0 3 * * * cd /path/to/backend && /usr/bin/npm run cleanup:expired-datasets
 ```
 
