@@ -30,7 +30,8 @@ const HomePage = () => {
   error,
   refreshDatasets,
 } = useDatasets();
-  const [showUploadDialog,setShowUploadDialog] = useState(false);
+  const [showUploadDialog, setShowUploadDialog] = useState(false);
+  const [showRecentlyDeleted, setShowRecentlyDeleted] = useState(false);
   const streamCount = datasets.reduce(
     (total, dataset) => total + Number(dataset.streams || 0),
     0,
@@ -140,17 +141,61 @@ const HomePage = () => {
           </div>
         </section>
 
-        <section className="homepage__datasets" id="datasets">
+                <section className="homepage__datasets" id="datasets">
           <div className="homepage__section-header">
             <p className="homepage__section-label">Dataset Library</p>
-            <h2>Available Sensor Datasets</h2>
+
+            <div className="homepage__dataset-tabs">
+              <button
+                type="button"
+                className={`homepage__dataset-tab ${
+                  !showRecentlyDeleted
+                    ? "homepage__dataset-tab--active"
+                    : ""
+                }`}
+                onClick={() => setShowRecentlyDeleted(false)}
+              >
+                Available Sensor Datasets
+              </button>
+
+              <button
+                type="button"
+                className={`homepage__dataset-tab ${
+                  showRecentlyDeleted
+                    ? "homepage__dataset-tab--active"
+                    : ""
+                }`}
+                onClick={() => setShowRecentlyDeleted(true)}
+              >
+                Recently Deleted
+              </button>
+            </div>
+
             <p>
-              Select a dataset to open its dashboard and explore available
-              streams, trends, and analytical outputs.
+              {showRecentlyDeleted
+                ? "View datasets that have been recently deleted."
+                : "Select a dataset to open its dashboard and explore available streams, trends, and analytical outputs."}
             </p>
           </div>
 
-          {renderDatasets()}
+          {showRecentlyDeleted ? (
+            <div className="homepage__dataset-state">
+                <div className="homepage__deleted-icon" aria-hidden="true">
+                <span className="homepage__bin-handle"></span>
+                <span className="homepage__bin-lid"></span>
+                <span className="homepage__bin-body">
+                  <span></span>
+                  <span></span>
+                </span>
+              </div>
+
+              <h3>No deleted datasets</h3>
+
+              <p>There are currently no deleted datasets available.</p>
+            </div>
+          ) : (
+            renderDatasets()
+          )}
         </section>
 
         <section className="homepage__features" id="platform-info">
