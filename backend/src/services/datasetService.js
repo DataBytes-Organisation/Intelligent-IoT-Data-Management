@@ -14,34 +14,56 @@
 
 const datasetRepository = require('../repositories/datasetRepository');
 const { importDataset, updateDataset } = require('./datasetImportService');
+const configurationError = (message) =>
+  Object.assign(new Error(message), {
+    code: 'DATASET_CONFIGURATION_ERROR',
+    status: 500,
+  });
+
+function getThingSpeakDatasetOwnerId() {
+  const ownerId = process.env.THINGSPEAK_DATASET_OWNER_ID;
+  if (!ownerId) {
+    throw configurationError(
+      'THINGSPEAK_DATASET_OWNER_ID is required to list shared ThingSpeak data.'
+    );
+  }
+  return ownerId;
+}
 
 class datasetService {
   /**
    * Returns all datasets.
    */
-  async getAllDatasets() {
-    return await datasetRepository.findAll();
+  async getAllDatasets(userId) {
+    return await datasetRepository.findAll(
+      userId,
+      getThingSpeakDatasetOwnerId()
+    );
   }
 
   /**
    * Returns a dataset by its numeric ID.
    */
-  async getDatasetById(id) {
-    return await datasetRepository.findById(id);
+  async getDatasetById(id, userId) {
+    return await datasetRepository.findById(
+      id,
+      userId,
+      getThingSpeakDatasetOwnerId()
+    );
   }
 
   /**
    * Returns a dataset by its name (e.g., "sensor1").
    */
-  async getDatasetByName(name) {
-    return await datasetRepository.findByName(name);
+  async getDatasetByName(name, userId) {
+    return await datasetRepository.findByName(name, userId);
   }
 
   /**
    * Creates a new dataset.
    */
-  async createDataset(data) {
-    return await datasetRepository.create(data);
+  async createDataset(data, userId) {
+    return await datasetRepository.create({ ...data, userId });
   }
 
   async importDataset(data, userId) {

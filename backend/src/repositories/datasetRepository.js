@@ -16,7 +16,7 @@ const repositoryError = (code, status, message) =>
   Object.assign(new Error(message), { code, status });
 
 class DatasetRepository {
-  async findAll() {
+  async findAll(userId, thingspeakOwnerId) {
     const result = await db.query(`
       SELECT
         d.id,
@@ -28,13 +28,15 @@ class DatasetRepository {
         d.updated_at AS "updatedAt"
       FROM datasets d
       LEFT JOIN timeseries t ON t.dataset_id = d.id
+      WHERE d.deleted_at IS NULL
+        AND (d.created_by = $1 OR d.created_by = $2)
       GROUP BY d.id, d.name, d.created_by, d.updated_by, d.created_at, d.updated_at
       ORDER BY d.id ASC
-    `);
+    `, [userId, thingspeakOwnerId]);
     return result.rows;
   }
 
-  async findById(id) {
+  async findById(id, userId, thingspeakOwnerId) {
     const result = await db.query(
       `
       SELECT
@@ -69,35 +71,39 @@ class DatasetRepository {
         ) AS mappings
       FROM datasets d
       WHERE d.id = $1
+        AND d.deleted_at IS NULL
+        AND (d.created_by = $2 OR d.created_by = $3)
       `,
-      [id]
+      [id, userId, thingspeakOwnerId]
     );
     return result.rows[0] || null;
   }
 
-  async findByName(name) {
+  async findByName(name, userId) {
     const result = await db.query(
       `
       SELECT id, name, created_by AS "createdBy", updated_by AS "updatedBy",
              created_at AS "createdAt", updated_at AS "updatedAt"
       FROM datasets
       WHERE name = $1
+        AND created_by = $2
+        AND deleted_at IS NULL
       `,
-      [name]
+      [name, userId]
     );
     return result.rows[0] || null;
   }
 
   async create(data) {
-    const { name } = data;
+    const { name, userId } = data;
 
     const result = await db.query(
       `
-      INSERT INTO datasets (name)
-      VALUES ($1)
-      RETURNING id, name
+      INSERT INTO datasets (name, created_by, updated_by)
+      VALUES ($1, $2, $2)
+      RETURNING id, name, created_by AS "createdBy", updated_by AS "updatedBy"
       `,
-      [name]
+      [name, userId]
     );
 
     return result.rows[0];

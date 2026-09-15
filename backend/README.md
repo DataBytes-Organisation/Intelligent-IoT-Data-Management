@@ -81,13 +81,112 @@ To run the backend locally, view the Backend Onboarding Document in `Backend/doc
 
 ### Database migrations
 
-For an existing database, apply migrations in this order after the base schema:
+#### Fresh database
+
+1. Run `npm run migrate:auth` to create `auth_users` and its dependent auth
+   tables.
+2. Set `THINGSPEAK_DATASET_OWNER_ID` and
+   `THINGSPEAK_DATASET_OWNER_PASSWORD` in `.env`, then run
+   `npm run migrate:thingspeak-owner` to create the dedicated ThingSpeak
+   service account.
+3. Apply `src/db/schema.sql` using the normal database setup process.
+4. Run `npm run migrate:dataset-import` to create dataset field mappings.
+
+The base schema already includes the final UTC timestamp and soft-delete
+definitions, so do not run the upgrade-only timestamp or soft-delete migrations
+on a fresh database. `schema.sql` drops dataset and time-series tables and must
+**not** be used to upgrade an existing database.
+
+#### Existing database
+
+For an existing database, apply only the migrations that have not already been
+applied, in this order:
 
 ```bash
 npm run migrate:auth
 npm run migrate:dataset-import
 npm run migrate:timeseries-utc
+npm run migrate:soft-delete
+npm run migrate:thingspeak-owner
 ```
+
+Before `npm run migrate:soft-delete`, every existing dataset must have a valid
+`created_by` value. The migration stops without changing the schema if it finds
+an unowned dataset. Assign an owner from `auth_users`, then rerun the command.
+It makes `created_by` mandatory and replaces the former global name constraint
+with active owner-scoped name uniqueness.
+
+### Dataset soft-delete migration
+
+`004_add_soft_delete_to_datasets.sql` adds `deleted_at`, `deleted_by`, and
+`data_deleted_at` to `datasets`, plus an index for the 15-day cleanup job.
+
+Dataset names are unique among a user's active datasets only. A name may be
+reused immediately after its original dataset is soft-deleted. The migration
+checks that existing datasets have a valid `created_by` value before replacing
+the old global name constraint, then makes `created_by` mandatory. An operator
+must assign an owner to legacy datasets before rerunning it.
+
+Run it from `backend` with:
+
+```bash
+npm run migrate:soft-delete
+```
+
+This schema change deliberately does not delete time-series rows. The
+dataset-deletion API must delete those rows and set the three deletion fields
+in one transaction when a user deletes a dataset. The dataset configuration
+and field mappings remain recoverable for 15 days. API code must use the
+active-dataset uniqueness rule instead of `ON CONFLICT (name)`. If recovery is
+attempted after the name has been reused by an active dataset owned by the same
+user, the dataset-recovery API must return `409 DATASET_NAME_CONFLICT` and
+require the user to choose another name.
+
+The ThingSpeak owner provisioning command creates
+`thingspeak-service@system.local` using `THINGSPEAK_DATASET_OWNER_ID` and a
+bcrypt hash of `THINGSPEAK_DATASET_OWNER_PASSWORD`. Both values must be set in
+the runtime `.env` before running the command; neither credential is committed
+to the repository. The poller validates that the configured UUID exists and
+stops the write with a clear configuration error if it does not. Legacy
+CSV/ThingSpeak CLI ingestion now requires an owner UUID as well, so it cannot
+create an unowned dataset.
+
+### Dataset visibility
+
+Dataset list, detail, series, series-filter, and timestamp endpoints require
+authentication. They return active datasets created by the authenticated user
+plus the shared ThingSpeak dataset owned by
+`THINGSPEAK_DATASET_OWNER_ID`. They do not return another user's datasets or
+soft-deleted datasets.
+
+### Ingestion ownership
+
+Every ingestion path must create or find a dataset using its owner:
+
+```sql
+INSERT INTO datasets (name, created_by, updated_by)
+VALUES ($1, $2, $2)
+ON CONFLICT (created_by, name) WHERE deleted_at IS NULL
+DO UPDATE SET updated_by = EXCLUDED.updated_by,
+              updated_at = CURRENT_TIMESTAMP;
+```
+
+### Testing database changes
+
+Run the unit suite from `backend`:
+
+```bash
+npm test
+```
+
+Migration integration tests require a disposable PostgreSQL database:
+
+```bash
+TEST_DATABASE_URL=postgres://... npm run test:integration
+```
+
+Each migration integration test uses a dedicated schema and a transaction that
+rolls back at the end.
 
 ### Time-Series UTC Migration
 
