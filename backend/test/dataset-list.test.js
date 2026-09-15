@@ -88,3 +88,34 @@ test("findById returns dataset detail with its total persisted row count", async
     db.query = originalQuery;
   }
 });
+
+test("findMappingsByName returns storage fields with their logical source fields", async () => {
+  const originalQuery = db.query;
+  let query;
+  let params;
+  db.query = async (sql, values) => {
+    query = sql;
+    params = values;
+    return {
+      rows: [
+        { storageField: "field1", sourceField: "AirTemperature" },
+        { storageField: "field2", sourceField: "RelativeHumidity" },
+      ],
+    };
+  };
+
+  try {
+    const mappings = await datasetRepository.findMappingsByName("microclimate-april");
+
+    assert.deepEqual(mappings, [
+      { storageField: "field1", sourceField: "AirTemperature" },
+      { storageField: "field2", sourceField: "RelativeHumidity" },
+    ]);
+    assert.deepEqual(params, ["microclimate-april"]);
+    assert.match(query, /INNER JOIN dataset_field_mappings m/);
+    assert.match(query, /m\.source_field AS "sourceField"/);
+    assert.match(query, /m\.storage_field AS "storageField"/);
+  } finally {
+    db.query = originalQuery;
+  }
+});

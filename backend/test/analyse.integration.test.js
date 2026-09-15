@@ -3,8 +3,14 @@ const http = require('node:http');
 const test = require('node:test');
 
 const app = require('../src/app');
+const db = require('../src/db/pool');
+const datasetRepository = require('../src/repositories/datasetRepository');
 const timeseriesService = require('../src/services/timeseriesService');
-const { normaliseRows } = require('../src/services/analyseService');
+const {
+  buildAnalyticsPayload,
+  normaliseRows,
+} = require('../src/services/analyseService');
+const { ensureThingSpeakDataset } = require('../src/services/thingspeakService');
 
 function listen(server) {
   return new Promise((resolve) => server.listen(0, '127.0.0.1', () => resolve(server.address().port)));
@@ -41,6 +47,107 @@ test('1350261 ThingSpeak rows use the documented canonical metric names', () => 
       conductance: 723,
     }],
   );
+});
+
+test('uploaded dataset selections and stored values use sourceField names', async () => {
+  const originalFindMappings = datasetRepository.findMappingsByName;
+  datasetRepository.findMappingsByName = async () => [
+    { storageField: 'field1', sourceField: 'AirTemperature' },
+    { storageField: 'field2', sourceField: 'RelativeHumidity' },
+  ];
+
+  try {
+    const payload = await buildAnalyticsPayload(
+      {
+        dataset: 'microclimate-april',
+        model: { metric: 'field1' },
+        correlation: { streams: ['field1', 'field2'] },
+      },
+      [{
+        created_at: '2026-04-28T15:25:15.000Z',
+        entry_id: 1,
+        field1: 16.7,
+        field2: null,
+      }],
+    );
+
+    assert.deepEqual(payload, {
+      entity_id: 'microclimate-april',
+      timestamp_col: 'timestamp',
+      data: [{
+        timestamp: '2026-04-28T15:25:15.000Z',
+        AirTemperature: 16.7,
+        RelativeHumidity: null,
+      }],
+      model: { detector: 'isolationforest', metric: 'AirTemperature', parameters: {} },
+      correlation: {
+        streams: ['AirTemperature', 'RelativeHumidity'],
+        window_size: 20,
+        step_size: 10,
+        method: 'pearson',
+      },
+    });
+  } finally {
+    datasetRepository.findMappingsByName = originalFindMappings;
+  }
+});
+
+test('dataset-first analysis rejects a selected stream with no mapping', async () => {
+  const originalFindMappings = datasetRepository.findMappingsByName;
+  datasetRepository.findMappingsByName = async () => [
+    { storageField: 'field1', sourceField: 'AirTemperature' },
+  ];
+
+  try {
+    await assert.rejects(
+      () => buildAnalyticsPayload(
+        {
+          dataset: 'microclimate-april',
+          model: { metric: 'field8' },
+          correlation: { streams: ['field1', 'field8'] },
+        },
+        [{ created_at: '2026-04-28T15:25:15.000Z', entry_id: 1, field1: 16.7 }],
+      ),
+      (error) => error.code === 'ANALYTICS_METRIC_UNMAPPED' && error.status === 400,
+    );
+  } finally {
+    datasetRepository.findMappingsByName = originalFindMappings;
+  }
+});
+
+test('ThingSpeak live dataset is seeded with configured channel mappings', async () => {
+  const originalQuery = db.query;
+  const originalEnsureMappings = datasetRepository.ensureSystemMappings;
+  let receivedMappings;
+  db.query = async (_query, values) => {
+    assert.deepEqual(values, ['thingspeak-live']);
+    return { rows: [{ id: 42 }] };
+  };
+  datasetRepository.ensureSystemMappings = async (datasetId, mappings) => {
+    assert.equal(datasetId, 42);
+    receivedMappings = mappings;
+  };
+
+  try {
+    const dataset = await ensureThingSpeakDataset('1350261');
+    assert.equal(dataset.id, 42);
+    assert.deepEqual(
+      receivedMappings.map(({ storageField, sourceField }) => ({ storageField, sourceField })),
+      [
+        { storageField: 'field1', sourceField: 'eco2' },
+        { storageField: 'field2', sourceField: 'etvoc' },
+        { storageField: 'field3', sourceField: 'temperature' },
+        { storageField: 'field4', sourceField: 'air_pressure' },
+        { storageField: 'field5', sourceField: 'humidity' },
+        { storageField: 'field6', sourceField: 'temperature_secondary' },
+        { storageField: 'field7', sourceField: 'controller_temperature' },
+        { storageField: 'field8', sourceField: 'conductance' },
+      ],
+    );
+  } finally {
+    db.query = originalQuery;
+    datasetRepository.ensureSystemMappings = originalEnsureMappings;
+  }
 });
 
 test('POST /api/analyse normalises Backend data and returns the AIntl response', async () => {
