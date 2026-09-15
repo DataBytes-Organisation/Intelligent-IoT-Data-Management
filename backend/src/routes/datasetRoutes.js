@@ -10,10 +10,10 @@ const {
 const authMiddleware = require('../middleware/authMiddleware');
 
 // GET /api/datasets
-router.get('/datasets', getAllDatasets);
+router.get('/datasets', authMiddleware, getAllDatasets);
 
 // GET /api/datasets/:id
-router.get('/datasets/:id', getDatasetById);
+router.get('/datasets/:id', authMiddleware, getDatasetById);
 
 // POST /api/datasets
 router.post('/datasets', authMiddleware, createDataset);

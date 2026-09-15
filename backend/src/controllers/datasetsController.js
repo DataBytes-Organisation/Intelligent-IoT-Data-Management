@@ -33,7 +33,7 @@ const datasetError = (res, req, err) => {
  */
 const getAllDatasets = async (req, res) => {
   try {
-    const datasets = await datasetService.getAllDatasets();
+    const datasets = await datasetService.getAllDatasets(req.user.sub);
     return res.status(200).json(datasets);
   } catch (err) {
     console.error('Error getting datasets:', err);
@@ -51,7 +51,7 @@ const getDatasetById = async (req, res) => {
     if (!/^\d+$/.test(id) || Number(id) < 1) {
       return res.status(400).json({ error: 'Dataset ID must be a positive integer' });
     }
-    const dataset = await datasetService.getDatasetById(id);
+    const dataset = await datasetService.getDatasetById(id, req.user.sub);
 
     if (!dataset) {
       return res.status(404).json({ error: 'Dataset not found' });
