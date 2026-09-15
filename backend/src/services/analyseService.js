@@ -1,36 +1,18 @@
 const timeseriesService = require('./timeseriesService');
+const datasetRepository = require('../repositories/datasetRepository');
+const {
+  fieldMapForChannel,
+  fieldMapFromMappings,
+} = require('./thingSpeakFieldMappings');
 
 const DEFAULT_TIMEOUT_MS = 15_000;
 
-// Keep source-specific field names at the Backend boundary. Analytics only
-// receives canonical sensor names.
-const CHANNEL_FIELD_MAPPINGS = {
-  '12397': {
-    field3: 'humidity',
-    field4: 'temperature',
-    // The source value is inches of mercury; the canonical Backend metric is hPa.
-    field6: { name: 'pressure', transform: (value) => value * 33.8639 },
-  },
-  '1350261': {
-    field1: 'eco2',
-    field2: 'etvoc',
-    field3: 'temperature',
-    field4: 'air_pressure',
-    field5: 'humidity',
-    field6: 'temperature_secondary',
-    field7: 'controller_temperature',
-    field8: 'conductance',
-  },  
-};
-
-function mappingForDataset(dataset) {
-  // `thingspeak-live` is the active ingestion dataset. Named channel aliases
-  // make historical/parallel datasets deterministic without exposing fields to AIntl.
-  if (dataset === 'thingspeak-live') {
-    return CHANNEL_FIELD_MAPPINGS[process.env.THINGSPEAK_CHANNEL_ID] || {};
-  }
+function staticMappingForDataset(dataset) {
+  // Named historical/parallel channel datasets can be normalised without a
+  // database lookup. The active `thingspeak-live` dataset must use its saved
+  // dataset_field_mappings record instead.
   const channelId = /^thingspeak-(\d+)$/.exec(dataset || '')?.[1];
-  return CHANNEL_FIELD_MAPPINGS[channelId] || {};
+  return channelId ? fieldMapForChannel(channelId) || {} : {};
 }
 
 class AnalysisServiceError extends Error {
@@ -61,15 +43,13 @@ function assertObject(value, name) {
   }
 }
 
-function normaliseRows(rows, dataset) {
+function normaliseRowsWithFieldMap(rows, mapping) {
   if (!Array.isArray(rows) || rows.length === 0) {
     throw new AnalysisServiceError('No sensor data is available for analysis', {
       status: 404,
       code: 'DATA_NOT_FOUND',
     });
   }
-
-  const mapping = mappingForDataset(dataset);
 
   return rows.map((row) => {
     const normalised = {};
@@ -109,10 +89,88 @@ function normaliseRows(rows, dataset) {
   });
 }
 
-function buildAnalyticsPayload(request, rows) {
+function normaliseRows(rows, dataset) {
+  return normaliseRowsWithFieldMap(rows, staticMappingForDataset(dataset));
+}
+
+function canonicalName(fieldMapping) {
+  return typeof fieldMapping === 'object' ? fieldMapping.name : fieldMapping;
+}
+
+function normaliseSelectedMetrics(request, fieldMap) {
+  const mappedMetric = (metric) => {
+    const fieldMapping = fieldMap[metric];
+    if (fieldMapping) return canonicalName(fieldMapping);
+    if (Object.values(fieldMap).some((value) => canonicalName(value) === metric)) {
+      return metric;
+    }
+    throw new AnalysisServiceError(
+      `Selected stream '${metric}' is not mapped for this dataset`,
+      { status: 400, code: 'ANALYTICS_METRIC_UNMAPPED' },
+    );
+  };
+
+  return {
+    ...request,
+    ...(request.model?.metric
+      ? { model: { ...request.model, metric: mappedMetric(request.model.metric) } }
+      : {}),
+    ...(Array.isArray(request.correlation?.streams)
+      ? {
+          correlation: {
+            ...request.correlation,
+            streams: request.correlation.streams.map(mappedMetric),
+          },
+        }
+      : {}),
+  };
+}
+
+async function normaliseDatasetRequest(request, rows) {
+  // Direct data batches are already required by the API contract to use
+  // logical metric names, and have no persisted dataset mapping to resolve.
+  if (Array.isArray(request.data)) {
+    return { request, rows: normaliseRows(rows, request.dataset) };
+  }
+
+  // Historical channel aliases carry the channel in their dataset name and do
+  // not need the active live dataset's persisted mapping.
+  const staticFieldMap = staticMappingForDataset(request.dataset);
+  if (Object.keys(staticFieldMap).length) {
+    return {
+      request: normaliseSelectedMetrics(request, staticFieldMap),
+      rows: normaliseRowsWithFieldMap(rows, staticFieldMap),
+    };
+  }
+
+  const mappings = await datasetRepository.findMappingsByName(request.dataset);
+  if (mappings.length) {
+    const channelId = request.dataset === 'thingspeak-live'
+      ? process.env.THINGSPEAK_CHANNEL_ID
+      : undefined;
+    const fieldMap = fieldMapFromMappings(mappings, channelId);
+    return {
+      request: normaliseSelectedMetrics(request, fieldMap),
+      rows: normaliseRowsWithFieldMap(rows, fieldMap),
+    };
+  }
+
+  // Every remaining dataset-first request must have a persisted mapping;
+  // passing raw fieldN names through to AIntl is forbidden.
+  throw new AnalysisServiceError(
+    'No field mapping is configured for this dataset',
+    { status: 400, code: 'ANALYTICS_DATASET_MAPPING_NOT_FOUND' },
+  );
+}
+
+async function buildAnalyticsPayload(request, rows) {
   assertObject(request, 'Request body');
   assertObject(request.model, 'model');
   assertObject(request.correlation, 'correlation');
+
+  const normalised = await normaliseDatasetRequest(request, rows);
+  request = normalised.request;
+  rows = normalised.rows;
 
   const { model, correlation } = request;
   if (typeof model.metric !== 'string' || !model.metric.trim()) {
@@ -128,7 +186,7 @@ function buildAnalyticsPayload(request, rows) {
     });
   }
 
-  const data = normaliseRows(rows, request.dataset);
+  const data = rows;
   const columns = new Set(data.flatMap((row) => Object.keys(row)));
   const requestedMetrics = [model.metric, ...correlation.streams];
   const unknownMetric = requestedMetrics.find((metric) => !columns.has(metric));
@@ -230,8 +288,14 @@ async function callAnalytics(payload) {
 async function runAnalysis(request) {
   assertObject(request, 'Request body');
   const rows = await loadRows(request);
-  const payload = buildAnalyticsPayload(request, rows);
+  const payload = await buildAnalyticsPayload(request, rows);
   return callAnalytics(payload);
 }
 
-module.exports = { runAnalysis, buildAnalyticsPayload, normaliseRows, AnalysisServiceError };
+module.exports = {
+  runAnalysis,
+  buildAnalyticsPayload,
+  normaliseRows,
+  normaliseRowsWithFieldMap,
+  AnalysisServiceError,
+};
