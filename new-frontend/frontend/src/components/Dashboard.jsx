@@ -8,6 +8,7 @@ import IntervalSelector from './IntervalSelector.jsx';
 import StreamStats from './StreamStats.jsx';
 import './Dashboard.css';
 import Chart from './Chart.jsx';
+import RelationshipChangesTimeline from './RelationshipChangesTimeline.jsx';
 import TimeRangePanel from './TimeRangePanel.jsx';
 import ActiveAlerts from "./ActiveAlerts.jsx";
 import { runAnalysis } from '../services/analysisService.js';
@@ -78,6 +79,9 @@ const Dashboard = ({ datasetId }) => {
     selectedStreams,
     interval: selectedInterval
   });
+
+  const visibleStartTime = filteredData.length > 0 ? new Date(filteredData[0].created_at).getTime(): null;
+  const visibleEndTime = filteredData.length > 0 ? new Date(filteredData[filteredData.length - 1].created_at).getTime(): null;
 
   const streamCount = selectedStreams.length;
 
@@ -627,7 +631,19 @@ const Dashboard = ({ datasetId }) => {
         </section>
 
       </div>
+      <section className="dashboard-section">
+        <RelationshipChangesTimeline 
 
+        selectedStreams={selectedStreams}
+        alerts={analysisResult?.alerts ?? []}
+        streamLabels={streamLabels}
+        startTime={visibleStartTime}
+        endTime={visibleEndTime}
+        
+        
+        />
+
+      </section>
     </div>
   );
 };
