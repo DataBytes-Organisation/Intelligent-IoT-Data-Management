@@ -831,6 +831,7 @@
   .refresh-control-button,
   .run-analysis-btn {
     width: 100%;
+  }
   .stream-stats {
     grid-template-columns: 1fr;
   }
@@ -991,5 +992,4 @@
   color: #b91c1c;
   font-size: 12px;
   font-weight: 700;
-}
 }
