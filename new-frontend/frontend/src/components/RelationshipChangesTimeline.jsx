@@ -17,6 +17,19 @@ const formatLabel = (value) => {
     );
 };
 
+const formatTime = (timestamp) => {
+    const date = new Date(timestamp);
+
+    if (Number.isNaN(date.getTime())) {
+        return "";
+    }
+
+    return date.toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "2-digit",
+    });
+};
+
 const formatAxisTime = (
     timestamp,
     timelineStart,
@@ -127,19 +140,8 @@ const RelationshipChangesTimeline = ({
         (alert) => alert.alert_type === "CORRELATION_CHANGE"
     );
 
-    const alertTimes = correlationAlerts.flatMap((alert)=>[
-        new Date(alert.time_window?.start).getTime(),
-
-        new Date(alert.time_window?.end).getTime(),
-
-    ]);
-    const validAlertTimes = alertTimes.filter(Number.isFinite);
-
-    const parsedStartTime = startTime !== null ? new Date(startTime).getTime(): null;
-    const parsedEndTime = endTime !== null ? new Date(endTime).getTime() : null;
-    const timelineStart = Number.isFinite(parsedStartTime) ? parsedStartTime: validAlertTimes.length > 0? Math.min(...validAlertTimes): null;
-    const timelineEnd = Number.isFinite(parsedEndTime) ? parsedEndTime: validAlertTimes.length > 0? Math.max(...validAlertTimes): null;
-
+    const timelineStart = startTime !== null ? new Date(startTime).getTime(): null;
+    const timelineEnd = endTime !== null ? new Date(endTime).getTime(): null;
     const hasTimeline = Number.isFinite(timelineStart) && Number.isFinite(timelineEnd) && timelineEnd > timelineStart;
 
     const getDisplayName = (stream) => streamLabels[stream] || formatLabel(stream);
@@ -276,9 +278,9 @@ const RelationshipChangesTimeline = ({
                                                         {getDisplayName(pair[1])}
                                                     </span>
                                                     <span>
-                                                        {formatAxisTime(alert.time_window.start)}
-                                                        {"-"}
-                                                        {formatAxisTime(alert.time_window.end)}
+                                                        {formatTime(alert.time_window.start)}
+                                                        {" - "}
+                                                        {formatTime(alert.time_window.end)}
                                                     </span>
 
                                                     <p>

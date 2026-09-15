@@ -80,6 +80,9 @@ const Dashboard = ({ datasetId }) => {
     interval: selectedInterval
   });
 
+  const visibleStartTime = filteredData.length > 0 ? new Date(filteredData[0].created_at).getTime(): null;
+  const visibleEndTime = filteredData.length > 0 ? new Date(filteredData[filteredData.length - 1].created_at).getTime(): null;
+
   const streamCount = selectedStreams.length;
 
   const handleSubmit = useCallback(() => {
@@ -628,23 +631,19 @@ const Dashboard = ({ datasetId }) => {
         </section>
 
       </div>
-<<<<<<< HEAD
       <section className="dashboard-section">
         <RelationshipChangesTimeline 
 
         selectedStreams={selectedStreams}
         alerts={analysisResult?.alerts ?? []}
         streamLabels={streamLabels}
-        startTime={finalStartTime}
-        endTime={finalEndTime}
+        startTime={visibleStartTime}
+        endTime={visibleEndTime}
         
         
         />
 
       </section>
-=======
-
->>>>>>> origin/main
     </div>
   );
 };
