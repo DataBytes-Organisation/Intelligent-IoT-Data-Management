@@ -1,6 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import "./ForgotPassword.css";
+
+const RESET_TOKEN_WAIT_SECONDS = 60;
+
+const formatCountdown = (totalSeconds) => {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+};
 
 const ForgotPassword = () => {
   const [searchParams] = useSearchParams();
@@ -14,6 +23,49 @@ const ForgotPassword = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [secondsRemaining, setSecondsRemaining] = useState(0);
+
+  useEffect(() => {
+    if (secondsRemaining <= 0) return undefined;
+
+    const timerId = window.setInterval(() => {
+      setSecondsRemaining((currentSeconds) =>
+        currentSeconds > 1 ? currentSeconds - 1 : 0
+      );
+    }, 1000);
+
+    return () => window.clearInterval(timerId);
+  }, [secondsRemaining]);
+
+  const requestResetToken = async () => {
+    const response = await fetch(
+      "/api/auth/password-reset/request",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email.trim(),
+        }),
+      }
+    );
+
+    let data = {};
+
+    try {
+      data = await response.json();
+    } catch {
+      // Keep the fallback message below if the response is not JSON.
+    }
+
+    if (!response.ok) {
+      setMessage(data.error?.message || "Unable to send reset link.");
+      return false;
+    }
+
+    return true;
+  };
 
   const sendResetLink = async (e) => {
     e.preventDefault();
@@ -27,32 +79,32 @@ const ForgotPassword = () => {
       setIsSubmitting(true);
       setMessage("");
 
-      const response = await fetch(
-        "/api/auth/password-reset/request",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email.trim(),
-          }),
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setMessage(
-          data.error?.message ||
-            "Unable to send reset link."
-        );
-        return;
+      if (await requestResetToken()) {
+        setMessage("");
+        setSecondsRemaining(RESET_TOKEN_WAIT_SECONDS);
+        setStep(2);
       }
+    } catch {
+      setMessage(
+        "Backend connection failed. Please try again later."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
+  const resendResetToken = async () => {
+    if (secondsRemaining > 0 || isSubmitting) return;
+
+    try {
+      setIsSubmitting(true);
       setMessage("");
-      setStep(2);
-    } catch (error) {
+
+      if (await requestResetToken()) {
+        setResetToken("");
+        setSecondsRemaining(RESET_TOKEN_WAIT_SECONDS);
+      }
+    } catch {
       setMessage(
         "Backend connection failed. Please try again later."
       );
@@ -142,7 +194,7 @@ const ForgotPassword = () => {
 
       setMessage("");
       setStep(4);
-    } catch (error) {
+    } catch {
       setMessage(
         "Backend connection failed. Please try again later."
       );
@@ -223,10 +275,37 @@ const ForgotPassword = () => {
               <button
                 type="submit"
                 className="forgot-primary-btn"
+                disabled={isSubmitting}
               >
                 Continue to Reset Password
               </button>
             </form>
+
+            <div className="forgot-resend" aria-live="polite">
+              {secondsRemaining > 0 ? (
+                <p className="forgot-countdown">
+                  You can request a new reset token in{" "}
+                  <strong>{formatCountdown(secondsRemaining)}</strong>
+                </p>
+              ) : (
+                <p className="forgot-countdown">
+                  Didn&apos;t receive a reset token?
+                </p>
+              )}
+
+              <button
+                type="button"
+                className="forgot-secondary-btn"
+                onClick={resendResetToken}
+                disabled={secondsRemaining > 0 || isSubmitting}
+              >
+                {isSubmitting
+                  ? "Sending..."
+                  : secondsRemaining > 0
+                    ? `Resend available in ${formatCountdown(secondsRemaining)}`
+                    : "Resend Reset Token"}
+              </button>
+            </div>
           </>
         )}
 
