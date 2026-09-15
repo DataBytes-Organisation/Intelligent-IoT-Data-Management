@@ -66,6 +66,32 @@ DATASET_NAME_CONFLICT
 
 The client should ask the user to choose a new name before retrying recovery.
 
+## Permanent cleanup job
+
+The cleanup job removes datasets whose `deleted_at` is at least 15 days old.
+The single `DELETE` statement is atomic. Database foreign-key cascades remove
+retained field mappings and provide a final safeguard for any time-series rows
+that unexpectedly remain.
+
+Run the job once from the backend directory:
+
+```bash
+npm run cleanup:expired-datasets
+```
+
+Schedule that command once per day with the deployment platform's scheduler.
+For example, a cron-managed deployment can run it at 03:00 UTC:
+
+```cron
+0 3 * * * cd /path/to/backend && /usr/bin/npm run cleanup:expired-datasets
+```
+
+Alternatively, set `DATASET_CLEANUP_ENABLED=true` on a single application
+instance to run it at startup and every 24 hours. Set
+`DATASET_CLEANUP_INTERVAL_MS` to change the interval; it must be at least one
+hour. Do not enable this mode on multiple instances when a platform scheduler
+already runs the command.
+
 ## Common Queries
 
 ### List datasets recoverable by a user
