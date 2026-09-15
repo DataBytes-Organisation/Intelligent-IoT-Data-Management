@@ -18,15 +18,19 @@ const Dashboard = ({ datasetId }) => {
 
   const data = useMemo(() => {
     if (!sensorData || !sensorData.rows) return [];
+
     const streamIds = sensorData.metadata?.streams?.map(s => s.id) || [];
+
     return sensorData.rows.map((row) => {
       const entry = {
         created_at: row.created_at,
         entry_id: row.entry_id,
       };
+
       streamIds.forEach((id) => {
         entry[id] = row[id] !== undefined ? row[id] : null;
       });
+
       return entry;
     });
   }, [sensorData]);
@@ -78,19 +82,32 @@ const Dashboard = ({ datasetId }) => {
   const streamCount = selectedStreams.length;
 
   const handleSubmit = useCallback(() => {
-    console.log("Dashboard timeMode:", timeMode, "relativeRange:", relativeRange);
+    console.log(
+      "Dashboard timeMode:",
+      timeMode,
+      "relativeRange:",
+      relativeRange
+    );
 
     if (timeMode === "absolute") {
       setFinalStartTime(
-        selectedTimeStart ? new Date(selectedTimeStart).getTime() : null
+        selectedTimeStart
+          ? new Date(selectedTimeStart).getTime()
+          : null
       );
+
       setFinalEndTime(
-        selectedTimeEnd ? new Date(selectedTimeEnd).getTime() : null
+        selectedTimeEnd
+          ? new Date(selectedTimeEnd).getTime()
+          : null
       );
     }
 
     if (timeMode === "relative") {
-      const now = new Date(data[data.length - 1].created_at).getTime();
+      const now = new Date(
+        data[data.length - 1].created_at
+      ).getTime();
+
       const ranges = {
         "5min": 5 * 60 * 1000,
         "15min": 15 * 60 * 1000,
@@ -98,34 +115,45 @@ const Dashboard = ({ datasetId }) => {
         "6h": 6 * 60 * 60 * 1000,
         "24h": 24 * 60 * 60 * 1000
       };
+
       const duration = ranges[relativeRange] || 0;
+
       setFinalEndTime(now);
       setFinalStartTime(now - duration);
     }
 
     setShowTimePanel(false);
-  }, [timeMode, relativeRange, selectedTimeStart, selectedTimeEnd, data]);
+  }, [
+    timeMode,
+    relativeRange,
+    selectedTimeStart,
+    selectedTimeEnd,
+    data
+  ]);
 
   const handleRefresh = useCallback(() => {
-    if (timeMode === "relative") {
-      const now = new Date(data[data.length - 1].created_at).getTime();
-      const ranges = {
-        "5min": 5 * 60 * 1000,
-        "15min": 15 * 60 * 1000,
-        "1h": 60 * 60 * 1000,
-        "6h": 6 * 60 * 60 * 1000,
-        "24h": 24 * 60 * 60 * 1000
-      };
-      const duration = ranges[relativeRange];
-      setFinalEndTime(now);
-      setFinalStartTime(now - duration);
-      console.log("Refreshed relative time range");
-      return;
-    }
-    setFinalStartTime(finalStartTime);
-    setFinalEndTime(finalEndTime);
-    console.log("Refreshed absolute time range");
-  }, [timeMode, relativeRange, data, finalStartTime, finalEndTime]);
+  // Clear selected streams
+  setSelectedStreams([]);
+
+  // Reset interval
+  setSelectedInterval(intervals[0]);
+
+  // Clear time range selections
+  setSelectedTimeStart('');
+  setSelectedTimeEnd('');
+  setFinalStartTime(null);
+  setFinalEndTime(null);
+
+  // Reset time range controls
+  setTimeMode("absolute");
+  setRelativeRange("5min");
+  setShowTimePanel(false);
+
+  // Clear analysis results
+  setAnalysisResult(null);
+  setAnalysisError(null);
+  setHasAnalysed(false);
+}, []);
 
   const handleRunAnalysis = useCallback(async () => {
     setAnalysisLoading(true);
@@ -153,27 +181,72 @@ const Dashboard = ({ datasetId }) => {
     if (mode === "relative") {
       return `Last ${range}`;
     }
-    const startStr = new Date(start).toLocaleString();
-    const endStr = new Date(end).toLocaleString();
-    return `${startStr} → ${endStr}`;
+
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+
+    /*
+      If both dates are the same, show the compact Figma-style date.
+      Example: August 24, 2025
+    */
+    if (startDate.toDateString() === endDate.toDateString()) {
+      return startDate.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+    }
+
+    const startStr = startDate.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+
+    const endStr = endDate.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+
+    return `${startStr} - ${endStr}`;
   };
 
-  // --- CONDITIONAL RETURNS (after all hooks) ---
+  // --- CONDITIONAL RETURNS ---
   if (loading) {
     return (
-      <div className="dashboard-state" style={{ textAlign: "center", padding: "3rem" }}>
-        <div className="spinner" style={{
-          border: "4px solid #e2e8f0",
-          borderTop: "4px solid #2563eb",
-          borderRadius: "50%",
-          width: "40px",
-          height: "40px",
-          animation: "spin 1s linear infinite",
-          margin: "0 auto 1rem",
-        }} />
+      <div
+        className="dashboard-state"
+        style={{
+          textAlign: "center",
+          padding: "3rem"
+        }}
+      >
+        <div
+          className="spinner"
+          style={{
+            border: "4px solid #e2e8f0",
+            borderTop: "4px solid #2563eb",
+            borderRadius: "50%",
+            width: "40px",
+            height: "40px",
+            animation: "spin 1s linear infinite",
+            margin: "0 auto 1rem",
+          }}
+        />
+
         <p>Loading sensor data for {datasetId}...</p>
+
         <style>{`
-          @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+          @keyframes spin {
+            0% {
+              transform: rotate(0deg);
+            }
+
+            100% {
+              transform: rotate(360deg);
+            }
+          }
         `}</style>
       </div>
     );
@@ -181,8 +254,18 @@ const Dashboard = ({ datasetId }) => {
 
   if (error) {
     return (
-      <div className="dashboard-state" style={{ textAlign: "center", padding: "3rem", color: "#dc2626" }}>
-        <p>⚠️ {error.message || "An unexpected error occurred."}</p>
+      <div
+        className="dashboard-state"
+        style={{
+          textAlign: "center",
+          padding: "3rem",
+          color: "#dc2626"
+        }}
+      >
+        <p>
+          ⚠️ {error.message || "An unexpected error occurred."}
+        </p>
+
         <button
           onClick={() => window.location.reload()}
           style={{
@@ -203,48 +286,91 @@ const Dashboard = ({ datasetId }) => {
 
   if (!isValid) {
     return (
-      <div className="dashboard-state" style={{ textAlign: "center", padding: "3rem", color: "#dc2626" }}>
-        <p>⚠️ The data format is invalid and cannot be displayed.</p>
+      <div
+        className="dashboard-state"
+        style={{
+          textAlign: "center",
+          padding: "3rem",
+          color: "#dc2626"
+        }}
+      >
+        <p>
+          ⚠️ The data format is invalid and cannot be displayed.
+        </p>
       </div>
     );
   }
 
-  if (isEmpty || !sensorData || !sensorData.rows || sensorData.rows.length === 0) {
+  if (
+    isEmpty ||
+    !sensorData ||
+    !sensorData.rows ||
+    sensorData.rows.length === 0
+  ) {
     return (
-      <div className="dashboard-state" style={{ textAlign: "center", padding: "3rem", color: "#64748b" }}>
-        <p>📭 No sensor records found for this dataset.</p>
+      <div
+        className="dashboard-state"
+        style={{
+          textAlign: "center",
+          padding: "3rem",
+          color: "#64748b"
+        }}
+      >
+        <p>
+          📭 No sensor records found for this dataset.
+        </p>
       </div>
     );
   }
 
-  // --- REST OF THE COMPONENT (unchanged) ---
   return (
     <div className="dashboard-page">
+
+      {/* =====================================================
+          DASHBOARD NOTES
+          ===================================================== */}
+
       <section className="dashboard-section info-panel">
-        <h3 className="section-title">Dashboard Notes</h3>
+        <h3 className="section-title">
+          Dashboard Notes
+        </h3>
+
         <ol className="note-list">
-          <li>Select at least one stream to view the line chart.</li>
           <li>
-            Select two streams to view their scatter plot, correlation coefficient,
-            and rolling correlation using the selected time window.
+            Select at least one stream to view the line chart.
           </li>
+
           <li>
-            Select at least three streams to identify the most correlated pair in
-            the selected time range.
+            Select two streams to view their scatter plot,
+            correlation coefficient, and rolling correlation
+            using the selected time window.
           </li>
+
           <li>
-            If no scatter plot is shown, the selected data may not have enough
+            Select at least three streams to identify the most
+            correlated pair in the selected time range.
+          </li>
+
+          <li>
+            If no scatter plot is shown, the selected data may
+            not have enough variance.
+          </li>
+
+          <li>
+            If no rolling correlation line is shown, the
+            selected data may not have enough variance.
+          </li>
+
+          <li>
+            If no meaningful scatter plot is available for the
+            most correlated pair, one or both streams may lack
             variance.
           </li>
+
           <li>
-            If no rolling correlation line is shown, the selected data may not have
-            enough variance.
+            If no time range is selected, the entire dataset is
+            used.
           </li>
-          <li>
-            If no meaningful scatter plot is available for the most correlated pair,
-            one or both streams may lack variance.
-          </li>
-          <li>If no time range is selected, the entire dataset is used.</li>
         </ol>
 
         <div className="dataset-summary">
@@ -252,6 +378,7 @@ const Dashboard = ({ datasetId }) => {
             <span>Total Data Points</span>
             <strong>{data.length}</strong>
           </div>
+
           <div className="summary-pill">
             <span>Selected Range Points</span>
             <strong>{filteredData.length}</strong>
@@ -259,75 +386,170 @@ const Dashboard = ({ datasetId }) => {
         </div>
       </section>
 
+      {/* =====================================================
+          AVAILABLE STREAMS
+          ===================================================== */}
+
       <section className="dashboard-section stream-panel">
-        <h3 className="section-title">Available Streams</h3>
-        <p className="stream-list">{streamNames.map((s) => s.name).join(', ')}</p>
+        <h3 className="section-title">
+          Available Streams
+        </h3>
+
+        <p className="stream-list">
+          {streamNames.map((s) => s.name).join(', ')}
+        </p>
       </section>
 
-      <section className="dashboard-section controls-panel">
-        <h3 className="section-title">Controls</h3>
+      {/* =====================================================
+          CONTROL PANEL
+          ===================================================== */}
 
-        <div className="selector-grid">
-          <div className="selector-group">
+      <section className="dashboard-section controls-panel">
+
+        <h3 className="section-title">
+          Stream Selector
+        </h3>
+
+        <div className="controls-row">
+
+          {/* SELECT STREAMS */}
+          <div className="control-item streams-control">
+
+            <div className="control-label">
+              Select Streams
+            </div>
+
             <StreamSelector
               streams={streamNames.map(s => s.id)}
               streamLabels={streamLabels}
               selectedStreams={selectedStreams}
               setSelectedStreams={setSelectedStreams}
             />
+
           </div>
-          <div className="selector-group">
+
+          {/* TIME INTERVAL */}
+          <div className="control-item interval-control">
+
+            <div className="control-label">
+              Time Interval
+            </div>
+
             <IntervalSelector
               intervals={intervals}
               selectedInterval={selectedInterval}
               setSelectedInterval={setSelectedInterval}
             />
+
           </div>
 
-          <div className="time-controls-wrapper">
-            <div className='time-controls'>
+          {/* TIME RANGE */}
+          <div className="control-item range-control">
+
+            <div className="control-label">
+              Time Range
+            </div>
+
+            <div className="time-range-container">
+
               <button
-                className="time-range-toggle"
-                onClick={() => setShowTimePanel(prev => !prev)}>
-                {finalStartTime && finalEndTime
-                  ? formatTimeRange(finalStartTime, finalEndTime, timeMode, relativeRange)
-                  : "Select Time Range ▼"}
+                type="button"
+                className="time-range-button"
+                onClick={() => setShowTimePanel((prev) => !prev)}
+              >
+                <span className="calendar-icon">
+                  ▣
+                </span>
+
+                <span className="time-range-text">
+                  {finalStartTime && finalEndTime
+                    ? formatTimeRange(
+                        finalStartTime,
+                        finalEndTime,
+                        timeMode,
+                        relativeRange
+                      )
+                    : "Select Time Range"}
+                </span>
+
+                <span className="range-arrow">
+                  ▼
+                </span>
               </button>
 
-              <button className="refresh-btn" onClick={handleRefresh}>
-                ⟳
-              </button>
+              {showTimePanel && (
+                <div className="time-range-overlay">
+
+                  <TimeRangePanel
+                    timeOptions={timeOptions}
+                    selectedTimeStart={selectedTimeStart}
+                    setSelectedTimeStart={setSelectedTimeStart}
+                    selectedTimeEnd={selectedTimeEnd}
+                    setSelectedTimeEnd={setSelectedTimeEnd}
+                    timeMode={timeMode}
+                    setTimeMode={setTimeMode}
+                    relativeRange={relativeRange}
+                    setRelativeRange={setRelativeRange}
+                    onAnalyze={handleSubmit}
+                  />
+
+                </div>
+              )}
+
             </div>
+
           </div>
-          {showTimePanel && (
-            <div className="time-range-overlay">
-              <TimeRangePanel
-                timeOptions={timeOptions}
-                selectedTimeStart={selectedTimeStart}
-                setSelectedTimeStart={setSelectedTimeStart}
-                selectedTimeEnd={selectedTimeEnd}
-                setSelectedTimeEnd={setSelectedTimeEnd}
-                timeMode={timeMode}
-                setTimeMode={setTimeMode}
-                relativeRange={relativeRange}
-                setRelativeRange={setRelativeRange}
-                onAnalyze={handleSubmit}
-              />
-            </div>
-          )}
-          
-          <button
-            className="run-analysis-btn"
-            onClick={handleRunAnalysis}
-            disabled={analysisLoading || selectedStreams.length < 2}
-          >
-            {analysisLoading ? 'Running Analysis...' : 'Run Analysis'}
-          </button>
+
+          {/* REFRESH */}
+          <div className="refresh-control">
+
+            <button
+              type="button"
+              className="refresh-control-button"
+              onClick={handleRefresh}
+            >
+              <span className="refresh-icon">
+                ⟳
+              </span>
+
+              <span>
+                Refresh
+              </span>
+            </button>
+
+          </div>
+
+          {/* RUN ANALYSIS */}
+          <div className="run-analysis-control">
+
+            <button
+              type="button"
+              className="run-analysis-btn"
+              onClick={handleRunAnalysis}
+              disabled={
+                analysisLoading ||
+                selectedStreams.length < 2
+              }
+            >
+              {analysisLoading
+                ? "Running Analysis..."
+                : "Run Analysis"}
+            </button>
+
+          </div>
+
         </div>
+
       </section>
 
+      {/* =====================================================
+          INSIGHT CARDS
+          ===================================================== */}
+
       <section className="dashboard-section insights-panel">
-        <h3 className="section-title">Insight Cards</h3>
+        <h3 className="section-title">
+          Insight Cards
+        </h3>
 
         {streamCount === 0 ? (
           <div className="empty-state">
@@ -351,7 +573,7 @@ const Dashboard = ({ datasetId }) => {
         )}
       </section>
 
-      {/* Block 23 - Active Alerts Dashboard Integration*/}
+      {/* Block 23 - Active Alerts Dashboard Integration */}
       <ActiveAlerts
         alerts={analysisResult?.alerts ?? []}
         loading={analysisLoading}
@@ -403,7 +625,9 @@ const Dashboard = ({ datasetId }) => {
             alerts={analysisResult?.alerts ?? []}
           />
         </section>
+
       </div>
+
     </div>
   );
 };
