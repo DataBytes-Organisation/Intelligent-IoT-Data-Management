@@ -1,39 +1,62 @@
 -- ============================================================
 --  Database Schema for Time-Series Backend
---  Tables: datasets, timeseries_long, timeseries
+--  Tables: datasets, timeseries_long, timeseries, auth_users
 --  Author: Farris (Backend Lead)
 --  Updated: W9 - Added soft-delete support
+--
+--  SETUP ORDER REQUIRED:
+--  1. Create auth_users table (or run migrate:auth first)
+--  2. Apply this schema.sql
+--  3. Apply any remaining migrations
+--
+--  Fresh installations use this schema.sql only.
+--  Existing databases apply 003_add_soft_delete.sql migration.
 -- ============================================================
 
 -- Drop tables if they exist (optional for development)
 DROP TABLE IF EXISTS timeseries;
 DROP TABLE IF EXISTS timeseries_long;
 DROP TABLE IF EXISTS datasets;
+DROP TABLE IF EXISTS auth_users;
+
+-- ============================================================
+--  AUTH_USERS TABLE (Base auth schema)
+--  Required for soft-delete audit trail
+-- ============================================================
+
+CREATE TABLE auth_users (
+    id UUID PRIMARY KEY,
+    username TEXT NOT NULL UNIQUE,
+    email TEXT NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
 
 -- ============================================================
 --  DATASETS TABLE
 --  Stores dataset metadata (one row per dataset)
---  Soft-delete support: 15-day recovery period, name reservation
+--  Includes soft-delete support for recovery and audit trail
 -- ============================================================
 
 CREATE TABLE datasets (
     id SERIAL PRIMARY KEY,
+    created_by UUID NOT NULL REFERENCES auth_users(id) ON DELETE RESTRICT,
     name TEXT NOT NULL,
     description TEXT,
     timestamp_field TEXT,
     deleted_at TIMESTAMPTZ DEFAULT NULL,
     deleted_by UUID DEFAULT NULL REFERENCES auth_users(id) ON DELETE SET NULL,
-    data_deleted_at TIMESTAMPTZ DEFAULT NULL
+    data_deleted_at TIMESTAMPTZ DEFAULT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Unique constraint on name for ACTIVE datasets only
--- (allows reuse after 15-day cleanup period)
-CREATE UNIQUE INDEX idx_datasets_name_active
-    ON datasets (name)
+-- Partial unique index: only active datasets must have unique names (scoped by owner)
+-- Allows immediate name reuse after soft-delete within same workspace
+CREATE UNIQUE INDEX idx_datasets_active_by_owner
+    ON datasets (created_by, name)
     WHERE deleted_at IS NULL;
 
--- Index on deleted_at for efficient queries
--- (find soft-deleted datasets, identify expired records for cleanup)
+-- Index on deleted_at for efficient cleanup queries
 CREATE INDEX idx_datasets_deleted_at
     ON datasets (deleted_at);
 
@@ -41,6 +64,7 @@ CREATE INDEX idx_datasets_deleted_at
 --  TIMESERIES_LONG TABLE
 --  Stores long-format time-series data
 --  One row per (dataset, entity, metric, timestamp)
+--  Uses TIMESTAMPTZ for timezone-aware timestamps (UTC standard)
 -- ============================================================
 
 CREATE TABLE timeseries_long (
