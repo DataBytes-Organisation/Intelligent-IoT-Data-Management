@@ -13,15 +13,18 @@
 const timeseriesService = require('../services/timeseriesService');
 
 /**
- * GET /api/datasets/:name/series
+ * GET /api/datasets/:datasetId/series
  * Returns all wide-format time‑series entries for a dataset.
  */
-const getSeriesByDatasetName = async (req, res) => {
+const getSeriesByDatasetId = async (req, res) => {
   try {
-    const { name } = req.params;
+    const { datasetId } = req.params;
+    if (!/^\d+$/.test(datasetId) || Number(datasetId) < 1) {
+      return res.status(400).json({ error: 'Dataset ID must be a positive integer' });
+    }
 
-    const entries = await timeseriesService.getWideEntriesForDatasetName(
-      name,
+    const entries = await timeseriesService.getWideEntriesForDatasetId(
+      Number(datasetId),
       req.user.sub
     );
 
@@ -37,20 +40,24 @@ const getSeriesByDatasetName = async (req, res) => {
 };
 
 /**
- * POST /api/datasets/:name/series/filter
+ * POST /api/datasets/:datasetId/series/filter
  * Filters wide-format entries by a list of metric names.
  */
 const filterSeriesByMetrics = async (req, res) => {
   try {
-    const { name } = req.params;
+    const { datasetId } = req.params;
     const { streamNames } = req.body;
+
+    if (!/^\d+$/.test(datasetId) || Number(datasetId) < 1) {
+      return res.status(400).json({ error: 'Dataset ID must be a positive integer' });
+    }
 
     if (!Array.isArray(streamNames) || streamNames.length === 0) {
       return res.status(400).json({ error: 'streamNames must be a non-empty array' });
     }
 
     const filtered = await timeseriesService.filterWideEntriesByMetrics(
-      name,
+      Number(datasetId),
       streamNames,
       req.user.sub
     );
@@ -67,6 +74,6 @@ const filterSeriesByMetrics = async (req, res) => {
 };
 
 module.exports = {
-  getSeriesByDatasetName,
+  getSeriesByDatasetId,
   filterSeriesByMetrics,
 };

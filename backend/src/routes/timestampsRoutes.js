@@ -2,11 +2,11 @@ const express = require('express');
 const router = express.Router();
 
 const {
-  getTimestampsForDatasetName,
+  getTimestampsForDatasetId,
 } = require('../controllers/timestampsController');
 const authMiddleware = require('../middleware/authMiddleware');
 
-// GET /api/datasets/:name/timestamps
-router.get('/datasets/:name/timestamps', authMiddleware, getTimestampsForDatasetName);
+// GET /api/datasets/:datasetId/timestamps
+router.get('/datasets/:datasetId/timestamps', authMiddleware, getTimestampsForDatasetId);
 
 module.exports = router;
