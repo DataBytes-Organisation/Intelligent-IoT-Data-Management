@@ -9,6 +9,7 @@
     "migrate:auth": "node scripts/migrate-auth.js",
     "migrate:dataset-import": "node scripts/migrate-dataset-import.js",
     "migrate:timeseries-utc": "node scripts/migrate-timeseries-utc.js",
+    "test:integration": "node --test test/integration/*.test.js",
     "test": "node --test test/*.test.js"
   },
   "keywords": [],
