@@ -11,6 +11,7 @@
     "migrate:timeseries-utc": "node scripts/migrate-timeseries-utc.js",
     "migrate:soft-delete": "node scripts/migrate-soft-delete.js",
     "migrate:thingspeak-owner": "node scripts/migrate-thingspeak-owner.js",
+    "cleanup:expired-datasets": "node scripts/cleanup-expired-datasets.js",
     "test:integration": "node --test test/integration/*.test.js",
     "test": "node --test test/*.test.js"
   },
