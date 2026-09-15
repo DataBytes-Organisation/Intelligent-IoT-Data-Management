@@ -64,3 +64,12 @@ backend/
 ```
 
 To Run the Backend Locally, view 'Backend/docs/' Backend Onboarding Document pdf.
+
+### Database migrations
+
+For an existing database, apply migrations in this order after the base schema:
+
+```bash
+npm run migrate:auth
+npm run migrate:dataset-import
+```

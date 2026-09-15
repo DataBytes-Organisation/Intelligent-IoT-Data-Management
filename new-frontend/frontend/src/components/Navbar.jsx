@@ -1,14 +1,16 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
+import { logoutUser } from "../services/authClient";
 
 const Navbar = () => {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    localStorage.removeItem("isAuthenticated");
-    sessionStorage.removeItem("iot_auth");
-
-    navigate("/");
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+    } finally {
+      navigate("/");
+    }
   };
 
   return (
@@ -16,7 +18,11 @@ const Navbar = () => {
       <div className="navbar__container">
 
         {/* LEFT SIDE */}
-        <Link to="/home" className="navbar__brand">
+        <Link
+          to="/home"
+          className="navbar__brand"
+          onClick={() => window.scrollTo(0, 0)}
+        >
           <div className="navbar__logo">
             <span>IoT</span>
           </div>
@@ -28,7 +34,11 @@ const Navbar = () => {
 
         {/* RIGHT SIDE */}
         <div className="navbar__actions">
-          <Link to="/home" className="navbar__link">
+          <Link
+            to="/home"
+            className="navbar__link"
+            onClick={() => window.scrollTo(0, 0)}
+          >
             Home
           </Link>
 

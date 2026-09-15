@@ -13,6 +13,7 @@
  */
 
 const datasetRepository = require('../repositories/datasetRepository');
+const { importDataset, updateDataset } = require('./datasetImportService');
 
 class datasetService {
   /**
@@ -41,6 +42,14 @@ class datasetService {
    */
   async createDataset(data) {
     return await datasetRepository.create(data);
+  }
+
+  async importDataset(data, userId) {
+    return importDataset(data, userId, datasetRepository);
+  }
+
+  async updateDataset(id, data, user) {
+    return updateDataset(id, data, user, datasetRepository);
   }
 }
 

@@ -1,4 +1,7 @@
+import { useState } from "react";
 import DatasetCard from "../components/DatasetCard";
+import UploadDatasetCard from "../components/UploadDatasetCard";
+import UploadDatasetDialog from "../components/UploadDatasetDialog";
 import { useDatasets } from "../hooks/useDatasets";
 import "./HomePage.css";
 
@@ -21,7 +24,13 @@ const features = [
 ];
 
 const HomePage = () => {
-  const { datasets, loading, error } = useDatasets();
+  const {
+  datasets,
+  loading,
+  error,
+  refreshDatasets,
+} = useDatasets();
+  const [showUploadDialog,setShowUploadDialog] = useState(false);
   const streamCount = datasets.reduce(
     (total, dataset) => total + Number(dataset.streams || 0),
     0,
@@ -61,6 +70,10 @@ const HomePage = () => {
         {datasets.map((dataset) => (
           <DatasetCard key={dataset.id} {...dataset} />
         ))}
+
+        <UploadDatasetCard
+        onClick={() => setShowUploadDialog(true)}
+         />
       </div>
     );
   };
@@ -148,6 +161,15 @@ const HomePage = () => {
             </div>
           ))}
         </section>
+
+        {showUploadDialog && (
+          <UploadDatasetDialog
+            onClose={() => {
+              setShowUploadDialog(false);
+              refreshDatasets();
+            }}
+          />
+          )}
       </main>
     </>
   );

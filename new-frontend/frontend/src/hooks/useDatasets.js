@@ -1,77 +1,97 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-const DEFAULT_DATASET_URL = "/mock/mockdatasets.json";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api";
 
-const isNonEmptyString = (value) =>
-  typeof value === "string" && value.trim().length > 0;
+const formatUpdatedTime = (value) => {
+  if (!value) return "Unknown";
 
-const isValidDataset = (dataset) =>
-  dataset !== null &&
-  typeof dataset === "object" &&
-  !Array.isArray(dataset) &&
-  isNonEmptyString(dataset.id) &&
-  isNonEmptyString(dataset.name) &&
-  isNonEmptyString(dataset.icon) &&
-  isNonEmptyString(dataset.description) &&
-  Number.isInteger(dataset.streams) &&
-  dataset.streams >= 0 &&
-  isNonEmptyString(dataset.lastUpdated) &&
-  isNonEmptyString(dataset.status);
+  const date = new Date(value);
 
-export const useDatasets = (url = DEFAULT_DATASET_URL) => {
+  if (Number.isNaN(date.getTime())) {
+    return "Unknown";
+  }
+
+  return date.toLocaleString();
+};
+
+const buildDatasetCard = (dataset) => ({
+  id: dataset.name,
+  name:
+    dataset.name === "thingspeak-live"
+      ? "ThingSpeak Live"
+      : dataset.name,
+  icon: dataset.name === "thingspeak-live" ? "📡" : "📊",
+  description:
+    dataset.description ||
+    (dataset.name === "thingspeak-live"
+      ? "Live IoT sensor dataset for dashboard monitoring and analysis."
+      : `${dataset.totalRows ?? 0} imported sensor records.`),
+  streams: Array.isArray(dataset.mappings)
+    ? dataset.mappings.length
+    : 0,
+  lastUpdated:
+    dataset.name === "thingspeak-live"
+      ? "Live"
+      : formatUpdatedTime(dataset.updatedAt),
+  status: "Available",
+});
+
+export const useDatasets = () => {
   const [datasets, setDatasets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const controller = new AbortController();
+  const loadDatasets = useCallback(async () => {
+    setLoading(true);
+    setError(null);
 
-    const loadDatasets = async () => {
-      setLoading(true);
-      setError(null);
+    try {
+      const response = await fetch(`${API_BASE_URL}/datasets`);
 
-      try {
-        const response = await fetch(url, { signal: controller.signal });
-
-        if (!response.ok) {
-          throw new Error(
-            `Dataset request failed with status ${response.status}`
-          );
-        }
-
-        const payload = await response.json();
-
-        if (!Array.isArray(payload)) {
-          throw new Error("Dataset response must be an array");
-        }
-
-        const invalidRecordIndex = payload.findIndex(
-          (dataset) => !isValidDataset(dataset)
+      if (!response.ok) {
+        throw new Error(
+          `Dataset request failed with status ${response.status}`
         );
-
-        if (invalidRecordIndex !== -1) {
-          throw new Error(
-            `Invalid dataset record at index ${invalidRecordIndex}`
-          );
-        }
-
-        setDatasets(payload);
-      } catch (requestError) {
-        if (requestError.name !== "AbortError") {
-          setDatasets([]);
-          setError(requestError);
-        }
-      } finally {
-        if (!controller.signal.aborted) {
-          setLoading(false);
-        }
       }
-    };
 
+      const datasetList = await response.json();
+
+      if (!Array.isArray(datasetList)) {
+        throw new Error("Dataset response must be an array");
+      }
+
+      const detailedDatasets = await Promise.all(
+        datasetList.map(async (dataset) => {
+          const detailResponse = await fetch(
+            `${API_BASE_URL}/datasets/${dataset.id}`
+          );
+
+          if (!detailResponse.ok) {
+            return dataset;
+          }
+
+          return detailResponse.json();
+        })
+      );
+
+      setDatasets(detailedDatasets.map(buildDatasetCard));
+    } catch (requestError) {
+      setDatasets([]);
+      setError(requestError);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
     loadDatasets();
+  }, [loadDatasets]);
 
-    return () => controller.abort();
-  }, [url]);
-
-  return { datasets, loading, error };
+  return {
+    datasets,
+    loading,
+    error,
+    refreshDatasets: loadDatasets,
+  };
 };
