@@ -10,8 +10,8 @@ import './Dashboard.css';
 import Chart from './Chart.jsx';
 import RelationshipChangesTimeline from './RelationshipChangesTimeline.jsx';
 import TimeRangePanel from './TimeRangePanel.jsx';
-import ActiveAlerts from "./ActiveAlerts.jsx";
 import { runAnalysis } from '../services/analysisService.js';
+import AnalysisSummary from './AnalysisSummary.jsx';
 
 const Dashboard = ({ datasetId }) => {
   // --- ALL HOOKS FIRST ---
@@ -577,36 +577,16 @@ const Dashboard = ({ datasetId }) => {
         )}
       </section>
 
-      {/* Block 23 - Active Alerts Dashboard Integration */}
-      <ActiveAlerts
+      {/* Analysis Summary */}
+
+      <AnalysisSummary
         alerts={analysisResult?.alerts ?? []}
         loading={analysisLoading}
         error={analysisError}
-        hasAnalysed={hasAnalysed}  
+        hasAnalysed={hasAnalysed}
+        streamLabels={streamLabels}
+        summary={analysisResult?.summary ?? null}
       />
-      <section className="dashboard-section analysis-panel">
-        <h3 className="section-title">Analysis Summary</h3>
-
-        {!hasAnalysed && !analysisLoading && (
-          <div className="status-message">
-            Run an analysis to view the summary.
-          </div>
-        )}
-
-        {analysisLoading && (
-          <div className="status-message">
-            Running analysis...
-          </div>
-        )}
-
-        {hasAnalysed && !analysisLoading && analysisResult?.summary && (
-          <div className="status-message">
-            Processed items: {analysisResult.summary.processed_items}
-            {' | '}
-            Alerts detected: {analysisResult.summary.alert_count}
-          </div>
-        )}
-      </section>
       <div className="chart-analysis-grid">
         <section className="dashboard-section chart-analysis-card sensor-timeline-card">
           <h3 className="section-title chart-section-title">
