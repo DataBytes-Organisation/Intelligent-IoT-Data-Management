@@ -132,39 +132,28 @@ const Dashboard = ({ datasetId }) => {
   ]);
 
   const handleRefresh = useCallback(() => {
-    if (timeMode === "relative") {
-      const now = new Date(
-        data[data.length - 1].created_at
-      ).getTime();
+  // Clear selected streams
+  setSelectedStreams([]);
 
-      const ranges = {
-        "5min": 5 * 60 * 1000,
-        "15min": 15 * 60 * 1000,
-        "1h": 60 * 60 * 1000,
-        "6h": 6 * 60 * 60 * 1000,
-        "24h": 24 * 60 * 60 * 1000
-      };
+  // Reset interval
+  setSelectedInterval(intervals[0]);
 
-      const duration = ranges[relativeRange];
+  // Clear time range selections
+  setSelectedTimeStart('');
+  setSelectedTimeEnd('');
+  setFinalStartTime(null);
+  setFinalEndTime(null);
 
-      setFinalEndTime(now);
-      setFinalStartTime(now - duration);
+  // Reset time range controls
+  setTimeMode("absolute");
+  setRelativeRange("5min");
+  setShowTimePanel(false);
 
-      console.log("Refreshed relative time range");
-      return;
-    }
-
-    setFinalStartTime(finalStartTime);
-    setFinalEndTime(finalEndTime);
-
-    console.log("Refreshed absolute time range");
-  }, [
-    timeMode,
-    relativeRange,
-    data,
-    finalStartTime,
-    finalEndTime
-  ]);
+  // Clear analysis results
+  setAnalysisResult(null);
+  setAnalysisError(null);
+  setHasAnalysed(false);
+}, []);
 
   const handleRunAnalysis = useCallback(async () => {
     setAnalysisLoading(true);
