@@ -979,9 +979,8 @@
   color: #0f172a;
 }
 
-.sensor-anomaly-tooltip > div {
-  margin-top: 4px;
-}
+
+
 
 .sensor-anomaly-warning {
   display: inline-block;
@@ -993,3 +992,7 @@
   font-size: 12px;
   font-weight: 700;
 }
+.sensor-anomaly-tooltip > div {
+  margin-top: 4px;
+  
+} 
