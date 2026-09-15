@@ -77,3 +77,17 @@ CREATE TABLE timeseries (
 
     PRIMARY KEY (dataset_id, entry_id)
 );
+
+-- ============================================================
+--  AUTOMATED CLEANUP PROCEDURE
+-- ============================================================
+
+    CREATE OR REPLACE FUNCTION purge_expired_datasets()
+RETURNS TABLE(purged_id INT, purged_name TEXT) 
+LANGUAGE sql AS 
+'
+    DELETE FROM datasets
+    WHERE deleted_at IS NOT NULL
+      AND deleted_at <= NOW() - INTERVAL ''15 days''
+    RETURNING id, name;
+';
