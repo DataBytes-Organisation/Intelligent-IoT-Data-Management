@@ -41,8 +41,12 @@ class datasetService {
     );
   }
   async restoreDataset(datasetId, user) {
-    return await datasetRepository.restoreDataset(datasetId, user);
-  }
+  return await datasetRepository.restoreDataset(
+    datasetId,
+    user,
+    process.env.THINGSPEAK_DATASET_OWNER_ID
+  );
+}
 
   /**
    * Returns a dataset by its numeric ID.

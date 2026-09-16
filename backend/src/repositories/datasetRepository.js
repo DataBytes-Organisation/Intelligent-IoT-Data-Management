@@ -301,7 +301,7 @@ class DatasetRepository {
       client.release();
     }
   }
-    async restoreDataset(datasetId, user) {
+    async restoreDataset(datasetId, user, thingspeakOwnerId) {
     const client = await db.connect();
 
     try {
@@ -314,8 +314,10 @@ class DatasetRepository {
                 deleted_at AS "deletedAt"
          FROM datasets
          WHERE id = $1
+            AND created_by = $2
+            AND created_by <> $3
          FOR UPDATE`,
-        [datasetId],
+        [datasetId, user.sub, thingspeakOwnerId],
       );
 
       const dataset = result.rows[0];
