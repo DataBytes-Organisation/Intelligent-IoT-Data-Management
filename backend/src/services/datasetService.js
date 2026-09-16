@@ -21,7 +21,7 @@ const configurationError = (message) =>
   });
 
 function getThingSpeakDatasetOwnerId() {
-  const ownerId = getThingSpeakDatasetOwnerId()
+  const ownerId = process.env.THINGSPEAK_DATASET_OWNER_ID;
   if (!ownerId) {
     throw configurationError(
       'THINGSPEAK_DATASET_OWNER_ID is required to list shared ThingSpeak data.'
@@ -41,12 +41,12 @@ class datasetService {
     );
   }
   async restoreDataset(datasetId, user) {
-  return await datasetRepository.restoreDataset(
-    datasetId,
-    user,
-    getThingSpeakDatasetOwnerId()
-  );
-}
+    return await datasetRepository.restoreDataset(
+      datasetId,
+      user,
+      getThingSpeakDatasetOwnerId()
+    );
+  }
 
   /**
    * Returns a dataset by its numeric ID.
