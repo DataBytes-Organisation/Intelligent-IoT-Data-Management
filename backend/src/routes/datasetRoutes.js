@@ -9,11 +9,13 @@ const {
   deleteDataset,
   restoreDataset,
 } = require('../controllers/datasetsController');
-const authMiddleware = require('../middleware/authMiddleware');
+const legacyDatasetIdentityMiddleware = require('../middleware/legacyDatasetIdentityMiddleware');
 
-// TODO(FE auth migration): Reapply authMiddleware to these read routes after
-// the frontend sends Bearer tokens for dataset reads. It must keep `dataset.id`
-// (not `dataset.name`) as the dashboard route value at the same time.
+// TODO(FE auth migration): Replace this temporary shared ThingSpeak identity
+// with authMiddleware after the frontend sends Bearer tokens and keeps
+// `dataset.id` (not `dataset.name`) as the dashboard route value.
+router.use(legacyDatasetIdentityMiddleware);
+
 // GET /api/datasets
 router.get('/datasets', getAllDatasets);
 
@@ -21,14 +23,14 @@ router.get('/datasets', getAllDatasets);
 router.get('/datasets/:id', getDatasetById);
 
 // POST /api/datasets
-router.post('/datasets', authMiddleware, createDataset);
+router.post('/datasets', createDataset);
 
 // PUT /api/datasets/:id
-router.put('/datasets/:id', authMiddleware, updateDataset);
+router.put('/datasets/:id', updateDataset);
 
 // DELETE /api/datasets/:id
-router.delete('/datasets/:id', authMiddleware, deleteDataset);
+router.delete('/datasets/:id', deleteDataset);
 
-router.post('/datasets/:id/restore', authMiddleware, restoreDataset);
+router.post('/datasets/:id/restore', restoreDataset);
 
 module.exports = router;

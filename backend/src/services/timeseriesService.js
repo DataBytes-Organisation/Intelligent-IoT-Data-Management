@@ -93,13 +93,17 @@ async function getWideEntriesForDatasetId(datasetId, userId) {
   return pivotLongToWide(longRows);
 }
 
-async function getWideEntriesForDatasetName(datasetName) {
+async function getWideEntriesForDatasetName(datasetName, userId) {
   if (!datasetName) return null;
 
-  const datasetId = await repo.getActiveDatasetIdByName(datasetName);
+  const datasetId = await repo.getAccessibleDatasetIdByName(
+    datasetName,
+    userId,
+    getThingSpeakDatasetOwnerId(),
+  );
   if (datasetId == null) return null;
 
-  return getWideEntriesForDatasetId(datasetId);
+  return getWideEntriesForDatasetId(datasetId, userId);
 }
 
 /* -----------------------------

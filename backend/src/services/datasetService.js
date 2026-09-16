@@ -31,12 +31,21 @@ function getThingSpeakDatasetOwnerId() {
   return ownerId;
 }
 
+function getThingSpeakDatasetName() {
+  const name = process.env.THINGSPEAK_DATASET_NAME;
+  if (!name) {
+    throw configurationError(
+      "THINGSPEAK_DATASET_NAME is required to protect the live ThingSpeak dataset.",
+    );
+  }
+  return name;
+}
+
 class datasetService {
   /**
    * Returns all datasets accessible to the given user, filtered by status.
    */
   async getAllDatasets(status, userId) {
-    if (!userId) return await datasetRepository.findAll(status);
     return await datasetRepository.findAll(
       status,
       userId,
@@ -47,7 +56,7 @@ class datasetService {
     return await datasetRepository.restoreDataset(
       datasetId,
       user,
-      getThingSpeakDatasetOwnerId()
+      getThingSpeakDatasetName(),
     );
   }
 
@@ -55,7 +64,6 @@ class datasetService {
    * Returns a dataset by its numeric ID.
    */
   async getDatasetById(id, userId) {
-    if (!userId) return await datasetRepository.findById(id);
     return await datasetRepository.findById(
       id,
       userId,
@@ -89,7 +97,7 @@ class datasetService {
     return datasetRepository.deleteDataset(
       id,
       user,
-      getThingSpeakDatasetOwnerId(),
+      getThingSpeakDatasetName(),
     );
   }
 }

@@ -35,7 +35,7 @@ test('dataset lookup by ID is limited to active user or ThingSpeak datasets', as
   }
 });
 
-test('legacy name lookup remains available for the unauthenticated dashboard', async () => {
+test('legacy shared-identity name lookup remains available for the dashboard', async () => {
   const originalQuery = pool.query;
   let query;
   let params;
@@ -47,12 +47,21 @@ test('legacy name lookup remains available for the unauthenticated dashboard', a
 
   try {
     const repository = new TimeseriesRepository();
-    const datasetId = await repository.getActiveDatasetIdByName('thingspeak-live');
+    const datasetId = await repository.getAccessibleDatasetIdByName(
+      'thingspeak-live',
+      'thingspeak-owner-uuid',
+      'thingspeak-owner-uuid',
+    );
 
     assert.equal(datasetId, 42);
     assert.match(query, /WHERE name = \$1/);
     assert.match(query, /deleted_at IS NULL/);
-    assert.deepEqual(params, ['thingspeak-live']);
+    assert.match(query, /created_by = \$2 OR created_by = \$3/);
+    assert.deepEqual(params, [
+      'thingspeak-live',
+      'thingspeak-owner-uuid',
+      'thingspeak-owner-uuid',
+    ]);
   } finally {
     pool.query = originalQuery;
   }
