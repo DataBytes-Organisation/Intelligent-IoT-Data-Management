@@ -36,6 +36,7 @@ class datasetService {
    * Returns all datasets accessible to the given user, filtered by status.
    */
   async getAllDatasets(status, userId) {
+    if (!userId) return await datasetRepository.findAll(status);
     return await datasetRepository.findAll(
       status,
       userId,
@@ -54,6 +55,7 @@ class datasetService {
    * Returns a dataset by its numeric ID.
    */
   async getDatasetById(id, userId) {
+    if (!userId) return await datasetRepository.findById(id);
     return await datasetRepository.findById(
       id,
       userId,

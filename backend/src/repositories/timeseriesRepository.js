@@ -19,14 +19,33 @@ class TimeseriesRepository {
    * SHARED: Dataset lookup
    * ----------------------------- */
   async getAccessibleDatasetId(datasetId, userId, thingspeakOwnerId) {
+    const accessClause = userId
+      ? "AND (created_by = $2 OR created_by = $3)"
+      : "";
+    const queryParams = userId
+      ? [datasetId, userId, thingspeakOwnerId]
+      : [datasetId];
     const result = await pool.query(
       `SELECT id
        FROM datasets
        WHERE id = $1
          AND deleted_at IS NULL
-         AND (created_by = $2 OR created_by = $3)
+         ${accessClause}
        LIMIT 1`,
-      [datasetId, userId, thingspeakOwnerId],
+      queryParams,
+    );
+    return result.rows[0]?.id ?? null;
+  }
+
+  async getActiveDatasetIdByName(name) {
+    const result = await pool.query(
+      `SELECT id
+       FROM datasets
+       WHERE name = $1
+         AND deleted_at IS NULL
+       ORDER BY id ASC
+       LIMIT 1`,
+      [name],
     );
     return result.rows[0]?.id ?? null;
   }

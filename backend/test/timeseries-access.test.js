@@ -34,3 +34,26 @@ test('dataset lookup by ID is limited to active user or ThingSpeak datasets', as
     pool.query = originalQuery;
   }
 });
+
+test('legacy name lookup remains available for the unauthenticated dashboard', async () => {
+  const originalQuery = pool.query;
+  let query;
+  let params;
+  pool.query = async (sql, values) => {
+    query = sql;
+    params = values;
+    return { rows: [{ id: 42 }] };
+  };
+
+  try {
+    const repository = new TimeseriesRepository();
+    const datasetId = await repository.getActiveDatasetIdByName('thingspeak-live');
+
+    assert.equal(datasetId, 42);
+    assert.match(query, /WHERE name = \$1/);
+    assert.match(query, /deleted_at IS NULL/);
+    assert.deepEqual(params, ['thingspeak-live']);
+  } finally {
+    pool.query = originalQuery;
+  }
+});

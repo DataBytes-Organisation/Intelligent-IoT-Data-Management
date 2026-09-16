@@ -33,7 +33,8 @@ const datasetError = (res, req, err) => {
 
 /**
  * GET /api/datasets
- * Returns a list of all datasets accessible to the authenticated user.
+ * Temporarily returns active datasets for the legacy unauthenticated frontend.
+ * Deleted datasets remain unavailable until the frontend read-auth migration.
  * Optional ?status=active|deleted (default: active).
  */
 const getAllDatasets = async (req, res) => {
@@ -47,7 +48,15 @@ const getAllDatasets = async (req, res) => {
         },
       });
     }
-    const datasets = await datasetService.getAllDatasets(status, req.user.sub);
+    if (status === "deleted" && !req.user?.sub) {
+      return res.status(401).json({
+        error: {
+          code: "UNAUTHENTICATED",
+          message: "Authentication is required to view deleted datasets.",
+        },
+      });
+    }
+    const datasets = await datasetService.getAllDatasets(status, req.user?.sub);
     return res.status(200).json(datasets);
   } catch (err) {
     console.error("Error getting datasets:", err);
@@ -67,7 +76,7 @@ const getDatasetById = async (req, res) => {
         .status(400)
         .json({ error: "Dataset ID must be a positive integer" });
     }
-    const dataset = await datasetService.getDatasetById(id, req.user.sub);
+    const dataset = await datasetService.getDatasetById(id, req.user?.sub);
 
     if (!dataset) {
       return res.status(404).json({ error: "Dataset not found" });

@@ -74,7 +74,7 @@ async function getWideEntriesForDatasetId(datasetId, userId) {
   const accessibleDatasetId = await repo.getAccessibleDatasetId(
     datasetId,
     userId,
-    getThingSpeakDatasetOwnerId()
+    userId ? getThingSpeakDatasetOwnerId() : undefined,
   );
   if (accessibleDatasetId == null) return null;
 
@@ -91,6 +91,15 @@ async function getWideEntriesForDatasetId(datasetId, userId) {
 
   const longRows = await repo.findAllLongByDatasetId(accessibleDatasetId);
   return pivotLongToWide(longRows);
+}
+
+async function getWideEntriesForDatasetName(datasetName) {
+  if (!datasetName) return null;
+
+  const datasetId = await repo.getActiveDatasetIdByName(datasetName);
+  if (datasetId == null) return null;
+
+  return getWideEntriesForDatasetId(datasetId);
 }
 
 /* -----------------------------
@@ -146,6 +155,7 @@ async function filterWideEntriesByMetrics(datasetId, streamNames, userId) {
 module.exports = {
   pivotLongToWide,
   getWideEntriesForDatasetId,
+  getWideEntriesForDatasetName,
   getAvailableMetricsForDatasetId,
   filterWideEntriesByMetrics,
 };

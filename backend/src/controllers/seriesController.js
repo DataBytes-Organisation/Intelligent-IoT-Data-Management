@@ -13,20 +13,14 @@
 const timeseriesService = require('../services/timeseriesService');
 
 /**
- * GET /api/datasets/:datasetId/series
+ * GET /api/datasets/:name/series
  * Returns all wide-format time‑series entries for a dataset.
  */
-const getSeriesByDatasetId = async (req, res) => {
+const getSeriesByDatasetName = async (req, res) => {
   try {
-    const { datasetId } = req.params;
-    if (!/^\d+$/.test(datasetId) || Number(datasetId) < 1) {
-      return res.status(400).json({ error: 'Dataset ID must be a positive integer' });
-    }
+    const { name } = req.params;
 
-    const entries = await timeseriesService.getWideEntriesForDatasetId(
-      Number(datasetId),
-      req.user.sub
-    );
+    const entries = await timeseriesService.getWideEntriesForDatasetName(name);
 
     if (!entries) {
       return res.status(404).json({ error: 'Dataset not found or empty' });
@@ -74,6 +68,6 @@ const filterSeriesByMetrics = async (req, res) => {
 };
 
 module.exports = {
-  getSeriesByDatasetId,
+  getSeriesByDatasetName,
   filterSeriesByMetrics,
 };
