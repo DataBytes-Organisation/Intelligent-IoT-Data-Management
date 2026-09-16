@@ -238,6 +238,69 @@ class DatasetRepository {
       client.release();
     }
   }
+
+  async deleteDataset(datasetId, user, thingspeakOwnerId) {
+    const client = await db.connect();
+    try {
+      await client.query("BEGIN");
+      const datasetResult = await client.query(
+        `SELECT id, name, description, timestamp_field AS "timestampField",
+                created_by AS "createdBy", deleted_at AS "deletedAt"
+         FROM datasets
+         WHERE id = $1
+           AND created_by = $2
+           AND created_by <> $3
+         FOR UPDATE`,
+        [datasetId, user.sub, thingspeakOwnerId],
+      );
+      const dataset = datasetResult.rows[0];
+      if (!dataset)
+        throw repositoryError("DATASET_NOT_FOUND", 404, "Dataset not found.");
+      if (dataset.deletedAt)
+        throw repositoryError(
+          "DATASET_ALREADY_DELETED",
+          409,
+          "Dataset has already been deleted.",
+        );
+
+      const wideDeleteResult = await client.query(
+        `DELETE FROM timeseries WHERE dataset_id = $1`,
+        [datasetId],
+      );
+      const longDeleteResult = await client.query(
+        `DELETE FROM timeseries_long WHERE dataset_id = $1`,
+        [datasetId],
+      );
+
+      const deletedResult = await client.query(
+        `UPDATE datasets
+         SET deleted_at = CURRENT_TIMESTAMP,
+             deleted_by = $2,
+             data_deleted_at = CURRENT_TIMESTAMP,
+             updated_by = $2,
+             updated_at = CURRENT_TIMESTAMP
+         WHERE id = $1
+         RETURNING id, name, description, timestamp_field AS "timestampField",
+                   deleted_at AS "deletedAt", deleted_by AS "deletedBy",
+                   data_deleted_at AS "dataDeletedAt", updated_at AS "updatedAt"`,
+        [datasetId, user.sub],
+      );
+
+      await client.query("COMMIT");
+      return {
+        ...deletedResult.rows[0],
+        deletedRows: {
+          timeseries: wideDeleteResult.rowCount,
+          timeseriesLong: longDeleteResult.rowCount,
+        },
+      };
+    } catch (error) {
+      await client.query("ROLLBACK");
+      throw error;
+    } finally {
+      client.release();
+    }
+  }
 }
 
 module.exports = new DatasetRepository();

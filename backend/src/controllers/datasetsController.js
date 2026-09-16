@@ -90,9 +90,28 @@ const updateDataset = async (req, res) => {
   }
 };
 
+/**
+ * DELETE /api/datasets/:id
+ * Soft-deletes the dataset configuration after removing synced data.
+ */
+const deleteDataset = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!/^\d+$/.test(id) || Number(id) < 1) {
+      return res.status(400).json({ error: 'Dataset ID must be a positive integer' });
+    }
+
+    const dataset = await datasetService.deleteDataset(id, req.user);
+    return res.status(200).json({ data: dataset, meta: { requestId: requestId(req) } });
+  } catch (err) {
+    return datasetError(res, req, err);
+  }
+};
+
 module.exports = {
   getAllDatasets,
   getDatasetById,
   createDataset,
   updateDataset,
+  deleteDataset,
 };
