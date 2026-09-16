@@ -9,9 +9,9 @@ const {
   MAX_CSV_UPLOAD_ROWS,
 } = require("../src/services/datasetImportService");
 const {
-  MAX_CSV_UPLOAD_BYTES,
+  MAX_REQUEST_BODY_BYTES,
   maxUploadSizeLabel,
-  uploadLimitErrorHandler,
+  requestBodyLimitErrorHandler,
 } = require("../src/middleware/uploadLimitMiddleware");
 
 const mappings = [
@@ -198,7 +198,7 @@ test("the configured CSV row limit itself remains valid", () => {
   );
 });
 
-test("an oversized JSON body returns the documented upload-limit response", () => {
+test("an oversized JSON body returns the documented generic limit response", () => {
   let statusCode;
   let responseBody;
   let nextCalled = false;
@@ -213,7 +213,7 @@ test("an oversized JSON body returns the documented upload-limit response", () =
     },
   };
 
-  uploadLimitErrorHandler(
+  requestBodyLimitErrorHandler(
     { type: "entity.too.large" },
     {},
     response,
@@ -222,12 +222,12 @@ test("an oversized JSON body returns the documented upload-limit response", () =
     },
   );
 
-  assert.equal(MAX_CSV_UPLOAD_BYTES, 10 * 1024 * 1024);
+  assert.equal(MAX_REQUEST_BODY_BYTES, 10 * 1024 * 1024);
   assert.equal(statusCode, 413);
   assert.deepEqual(responseBody, {
     error: {
-      code: "UPLOAD_TOO_LARGE",
-      message: `CSV upload requests must not exceed ${maxUploadSizeLabel}.`,
+      code: "REQUEST_BODY_TOO_LARGE",
+      message: `Request body must not exceed ${maxUploadSizeLabel}.`,
     },
   });
   assert.equal(nextCalled, false);

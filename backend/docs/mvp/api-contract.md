@@ -521,7 +521,7 @@ The reviewed upload request is limited to **10 MiB** of JSON and **10,000 CSV ro
 | Failure case | HTTP status / code | Frontend behaviour |
 | --- | --- | --- |
 | Missing, malformed, duplicate mappings, invalid timestamps/numbers, too many rows | `400` / `VALIDATION_ERROR` | Keep the wizard at review and map `error.fields` to the relevant row or mapping. |
-| JSON request exceeds 10 MiB | `413` / `UPLOAD_TOO_LARGE` | Ask the user to split the CSV into smaller uploads. |
+| JSON request exceeds 10 MiB | `413` / `REQUEST_BODY_TOO_LARGE` | Ask the user to split the CSV into smaller uploads. |
 | No/invalid/expired access token | `401` / `UNAUTHENTICATED` or `ACCESS_TOKEN_EXPIRED` | Refresh once, then return to sign-in if needed. |
 | Dataset name already exists | `409` / `DATASET_NAME_EXISTS` | Ask for a different dataset name; preserve the reviewed data. |
 | Database failure | `500` / `INTERNAL_ERROR` | Leave the user on review; retry is safe because the database transaction was rolled back. |
