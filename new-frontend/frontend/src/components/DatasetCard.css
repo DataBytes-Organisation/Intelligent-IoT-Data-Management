@@ -100,3 +100,30 @@
   opacity: 0.96;
   transform: translateY(-1px);
 }
+
+.dataset-card__header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dataset-card__delete-btn {
+  background: #dc2626;
+  border: none;
+  color: #ffffff;
+  border-radius: 8px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.dataset-card__delete-btn:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+}
