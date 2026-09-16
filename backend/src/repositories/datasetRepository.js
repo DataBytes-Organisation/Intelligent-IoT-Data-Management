@@ -19,7 +19,7 @@ class DatasetRepository {
   async findAll(status, userId, thingspeakOwnerId) {
     const whereClause =
       status === "deleted"
-        ? "d.deleted_at IS NOT NULL"
+        ? "d.deleted_at IS NOT NULL AND d.deleted_at > CURRENT_TIMESTAMP - INTERVAL '15 days'"
         : "d.deleted_at IS NULL";
 
     const result = await db.query(
@@ -222,7 +222,7 @@ class DatasetRepository {
       await client.query("BEGIN");
       const datasetResult = await client.query(
         `SELECT id, created_by AS "createdBy"
-         FROM datasets WHERE id = $1 FOR UPDATE`,
+       FROM datasets WHERE id = $1 FOR UPDATE`,
         [datasetId],
       );
       const dataset = datasetResult.rows[0];

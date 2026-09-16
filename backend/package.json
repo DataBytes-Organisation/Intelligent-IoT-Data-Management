@@ -8,7 +8,6 @@
     "dev": "nodemon src/server.js",
     "migrate:auth": "node scripts/migrate-auth.js",
     "migrate:dataset-import": "node scripts/migrate-dataset-import.js",
-    "migrate:dataset-soft-delete": "node scripts/migrate-dataset-soft-delete.js",
     "migrate:timeseries-utc": "node scripts/migrate-timeseries-utc.js",
     "migrate:soft-delete": "node scripts/migrate-soft-delete.js",
     "migrate:thingspeak-owner": "node scripts/migrate-thingspeak-owner.js",

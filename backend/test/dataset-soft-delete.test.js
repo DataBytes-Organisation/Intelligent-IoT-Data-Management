@@ -30,6 +30,29 @@ test("findAll(active) excludes soft-deleted datasets and scopes to owner", async
   }
 });
 
+test("findAll(deleted) excludes datasets past the recovery window", async () => {
+  const originalQuery = db.query;
+  let capturedSql;
+  db.query = async (sql) => {
+    capturedSql = sql;
+    return { rows: [] }; // EXCLUDE EXPIRED ROW SO NOTHING IS RETURNED
+  };
+  try {
+    const rows = await datasetRepository.findAll(
+      "deleted",
+      USER_ID,
+      THINGSPEAK_OWNER_ID,
+    );
+    assert.match(
+      capturedSql,
+      /d\.deleted_at > CURRENT_TIMESTAMP - INTERVAL '15 days'/,
+    );
+    assert.equal(rows.length, 0);
+  } finally {
+    db.query = originalQuery;
+  }
+});
+
 test("findAll(deleted) computes recoveryExpiresAt and remainingRecoveryDays from deletedAt", async () => {
   const originalQuery = db.query;
   const deletedAt = new Date(Date.now() - 60000); // deleted 1 minute ago, avoids rounding flakiness
