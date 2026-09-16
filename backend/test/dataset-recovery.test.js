@@ -1,146 +1,353 @@
-const test = require('node:test');
-const assert = require('node:assert/strict');
+const test = require("node:test");
+const assert = require("node:assert/strict");
 
-const datasetService = require('../src/services/datasetService');
-const { restoreDataset } = require('../src/controllers/datasetsController');
+const db = require("../src/db/pool");
+const datasetRepository = require("../src/repositories/datasetRepository");
 
-const createResponse = () => ({
-  statusCode: null,
-  body: null,
+function mockClient(handler) {
+  const calls = [];
 
-  status(code) {
-    this.statusCode = code;
-    return this;
-  },
+  return {
+    calls,
+    released: false,
 
-  json(body) {
-    this.body = body;
-    return this;
-  },
-});
+    async query(sql, values) {
+      calls.push({ sql, values });
+      return handler(sql, values, calls);
+    },
 
-const createRequest = (
-  id,
-  user = { sub: 'user-123', role: 'user' }
-) => ({
-  params: { id },
-  user,
+    release() {
+      this.released = true;
+    },
+  };
+}
 
-  get(name) {
-    if (name === 'x-request-id') {
-      return 'test-request-id';
+function assertNoRestoreUpdate(calls) {
+  assert.equal(
+    calls.some((call) => /UPDATE datasets/.test(call.sql)),
+    false,
+  );
+}
+
+test("restoreDataset restores an owned dataset and clears deletion state", async () => {
+  const originalConnect = db.connect;
+
+  const client = mockClient(async (sql) => {
+    if (sql === "BEGIN" || sql === "COMMIT" || sql === "ROLLBACK") {
+      return { rows: [], rowCount: 0 };
     }
-    return undefined;
-  },
-});
 
-test('restore dataset succeeds for an authorised user', async () => {
-  const original = datasetService.restoreDataset;
+    if (/SELECT id, name/.test(sql)) {
+      return {
+        rows: [
+          {
+            id: 42,
+            name: "microclimate",
+            description: "April readings",
+            timestampField: "Time",
+            createdBy: "user-uuid",
+            deletedAt: "2026-09-10T02:00:00.000Z",
+            dataDeletedAt: "2026-09-10T02:00:00.000Z",
+          },
+        ],
+      };
+    }
 
-  datasetService.restoreDataset = async (datasetId, user) => {
-    assert.equal(datasetId, '12');
-    assert.equal(user.sub, 'user-123');
+    if (sql.includes("INTERVAL '15 days'")) {
+      return { rows: [{ expired: false }] };
+    }
 
-    return {
-      id: 12,
-      name: 'Test Dataset',
-      description: 'Test description',
-      timestampField: 'timestamp',
-      createdBy: 'user-123',
-    };
-  };
+    if (/SELECT 1/.test(sql)) {
+      return { rows: [] };
+    }
+
+    if (/UPDATE datasets/.test(sql)) {
+      return {
+        rows: [
+          {
+            id: 42,
+            name: "microclimate",
+            description: "April readings",
+            timestampField: "Time",
+            createdBy: "user-uuid",
+            updatedBy: "user-uuid",
+            createdAt: "2026-09-01T02:00:00.000Z",
+            updatedAt: "2026-09-16T02:00:00.000Z",
+          },
+        ],
+      };
+    }
+
+    throw new Error(`Unexpected SQL: ${sql}`);
+  });
+
+  db.connect = async () => client;
 
   try {
-    const req = createRequest('12');
-    const res = createResponse();
+    const result = await datasetRepository.restoreDataset(
+      42,
+      { sub: "user-uuid", role: "user" },
+      "thingspeak-owner-uuid",
+    );
 
-    await restoreDataset(req, res);
+    assert.equal(result.id, 42);
+    assert.equal(result.name, "microclimate");
+    assert.equal(client.released, true);
 
-    assert.equal(res.statusCode, 200);
-    assert.equal(res.body.data.id, 12);
-    assert.equal(res.body.data.name, 'Test Dataset');
-    assert.equal(res.body.meta.requestId, 'test-request-id');
+    assert.match(client.calls[1].sql, /created_by = \$2/);
+    assert.match(client.calls[1].sql, /created_by <> \$3/);
+    assert.deepEqual(client.calls[1].values, [
+      42,
+      "user-uuid",
+      "thingspeak-owner-uuid",
+    ]);
+
+    assert.match(
+      client.calls[4].sql,
+      /deleted_at = NULL/,
+    );
+    assert.match(
+      client.calls[4].sql,
+      /deleted_by = NULL/,
+    );
+    assert.match(
+      client.calls[4].sql,
+      /data_deleted_at = NULL/,
+    );
   } finally {
-    datasetService.restoreDataset = original;
+    db.connect = originalConnect;
   }
 });
 
-test('restore dataset rejects an expired recovery period', async () => {
-  const original = datasetService.restoreDataset;
+test("restoreDataset hides another user's dataset and does not update it", async () => {
+  const originalConnect = db.connect;
 
-  datasetService.restoreDataset = async () => {
-    const error = new Error('Dataset recovery period has expired.');
-    error.code = 'RECOVERY_EXPIRED';
-    error.status = 410;
-    throw error;
-  };
+  const client = mockClient(async (sql) => {
+    if (sql === "BEGIN" || sql === "ROLLBACK") {
+      return { rows: [], rowCount: 0 };
+    }
+
+    if (/SELECT id, name/.test(sql)) {
+      return { rows: [] };
+    }
+
+    throw new Error(`Unexpected SQL: ${sql}`);
+  });
+
+  db.connect = async () => client;
 
   try {
-    const req = createRequest('12');
-    const res = createResponse();
-
-    await restoreDataset(req, res);
-
-    assert.equal(res.statusCode, 410);
-    assert.equal(res.body.error.code, 'RECOVERY_EXPIRED');
-    assert.equal(
-      res.body.error.message,
-      'Dataset recovery period has expired.'
+    await assert.rejects(
+      () =>
+        datasetRepository.restoreDataset(
+          42,
+          { sub: "other-user-uuid", role: "user" },
+          "thingspeak-owner-uuid",
+        ),
+      (error) =>
+        error.code === "DATASET_NOT_FOUND" &&
+        error.status === 404 &&
+        error.message === "Dataset not found.",
     );
+
+    assert.equal(client.calls.at(-1).sql, "ROLLBACK");
+    assertNoRestoreUpdate(client.calls);
+    assert.equal(client.released, true);
   } finally {
-    datasetService.restoreDataset = original;
+    db.connect = originalConnect;
   }
 });
 
-test('restore dataset rejects an unauthorised user', async () => {
-  const original = datasetService.restoreDataset;
+test("restoreDataset hides the ThingSpeak-owned dataset and does not update it", async () => {
+  const originalConnect = db.connect;
 
-  datasetService.restoreDataset = async () => {
-    const error = new Error('You cannot restore this dataset.');
-    error.code = 'FORBIDDEN';
-    error.status = 403;
-    throw error;
-  };
+  const client = mockClient(async (sql) => {
+    if (sql === "BEGIN" || sql === "ROLLBACK") {
+      return { rows: [], rowCount: 0 };
+    }
+
+    if (/SELECT id, name/.test(sql)) {
+      return { rows: [] };
+    }
+
+    throw new Error(`Unexpected SQL: ${sql}`);
+  });
+
+  db.connect = async () => client;
 
   try {
-    const req = createRequest('12', {
-      sub: 'different-user',
-      role: 'user',
-    });
-    const res = createResponse();
-
-    await restoreDataset(req, res);
-
-    assert.equal(res.statusCode, 403);
-    assert.equal(res.body.error.code, 'FORBIDDEN');
-    assert.equal(
-      res.body.error.message,
-      'You cannot restore this dataset.'
+    await assert.rejects(
+      () =>
+        datasetRepository.restoreDataset(
+          42,
+          { sub: "user-uuid", role: "user" },
+          "thingspeak-owner-uuid",
+        ),
+      (error) =>
+        error.code === "DATASET_NOT_FOUND" &&
+        error.status === 404 &&
+        error.message === "Dataset not found.",
     );
+
+    assert.equal(client.calls.at(-1).sql, "ROLLBACK");
+    assertNoRestoreUpdate(client.calls);
+    assert.equal(client.released, true);
   } finally {
-    datasetService.restoreDataset = original;
+    db.connect = originalConnect;
   }
 });
 
-test('restore dataset rejects an invalid dataset ID', async () => {
-  const original = datasetService.restoreDataset;
+test("restoreDataset rejects an expired recovery period without updating", async () => {
+  const originalConnect = db.connect;
 
-  datasetService.restoreDataset = async () => {
-    throw new Error('Service should not be called for an invalid ID.');
-  };
+  const client = mockClient(async (sql) => {
+    if (sql === "BEGIN" || sql === "ROLLBACK") {
+      return { rows: [], rowCount: 0 };
+    }
+
+    if (/SELECT id, name/.test(sql)) {
+      return {
+        rows: [
+          {
+            id: 42,
+            name: "microclimate",
+            createdBy: "user-uuid",
+            deletedAt: "2026-08-01T02:00:00.000Z",
+          },
+        ],
+      };
+    }
+
+    if (sql.includes("INTERVAL '15 days'")) {
+      return { rows: [{ expired: true }] };
+    }
+
+    throw new Error(`Unexpected SQL: ${sql}`);
+  });
+
+  db.connect = async () => client;
 
   try {
-    const req = createRequest('abc');
-    const res = createResponse();
-
-    await restoreDataset(req, res);
-
-    assert.equal(res.statusCode, 400);
-    assert.equal(
-      res.body.error,
-      'Dataset ID must be a positive integer'
+    await assert.rejects(
+      () =>
+        datasetRepository.restoreDataset(
+          42,
+          { sub: "user-uuid", role: "user" },
+          "thingspeak-owner-uuid",
+        ),
+      (error) =>
+        error.code === "RECOVERY_EXPIRED" &&
+        error.status === 410 &&
+        error.message === "Dataset recovery period has expired.",
     );
+
+    assert.equal(client.calls.at(-1).sql, "ROLLBACK");
+    assertNoRestoreUpdate(client.calls);
+    assert.equal(client.released, true);
   } finally {
-    datasetService.restoreDataset = original;
+    db.connect = originalConnect;
+  }
+});
+
+test("restoreDataset rejects an active dataset", async () => {
+  const originalConnect = db.connect;
+
+  const client = mockClient(async (sql) => {
+    if (sql === "BEGIN" || sql === "ROLLBACK") {
+      return { rows: [], rowCount: 0 };
+    }
+
+    if (/SELECT id, name/.test(sql)) {
+      return {
+        rows: [
+          {
+            id: 42,
+            name: "microclimate",
+            createdBy: "user-uuid",
+            deletedAt: null,
+          },
+        ],
+      };
+    }
+
+    throw new Error(`Unexpected SQL: ${sql}`);
+  });
+
+  db.connect = async () => client;
+
+  try {
+    await assert.rejects(
+      () =>
+        datasetRepository.restoreDataset(
+          42,
+          { sub: "user-uuid", role: "user" },
+          "thingspeak-owner-uuid",
+        ),
+      (error) =>
+        error.code === "INVALID_RESTORE_REQUEST" &&
+        error.status === 400,
+    );
+
+    assert.equal(client.calls.at(-1).sql, "ROLLBACK");
+    assertNoRestoreUpdate(client.calls);
+    assert.equal(client.released, true);
+  } finally {
+    db.connect = originalConnect;
+  }
+});
+
+test("restoreDataset rejects an active dataset name conflict", async () => {
+  const originalConnect = db.connect;
+
+  const client = mockClient(async (sql) => {
+    if (sql === "BEGIN" || sql === "ROLLBACK") {
+      return { rows: [], rowCount: 0 };
+    }
+
+    if (/SELECT id, name/.test(sql)) {
+      return {
+        rows: [
+          {
+            id: 42,
+            name: "microclimate",
+            createdBy: "user-uuid",
+            deletedAt: "2026-09-10T02:00:00.000Z",
+          },
+        ],
+      };
+    }
+
+    if (sql.includes("INTERVAL '15 days'")) {
+      return { rows: [{ expired: false }] };
+    }
+
+    if (/SELECT 1/.test(sql)) {
+      return { rows: [{ "?column?": 1 }] };
+    }
+
+    throw new Error(`Unexpected SQL: ${sql}`);
+  });
+
+  db.connect = async () => client;
+
+  try {
+    await assert.rejects(
+      () =>
+        datasetRepository.restoreDataset(
+          42,
+          { sub: "user-uuid", role: "user" },
+          "thingspeak-owner-uuid",
+        ),
+      (error) =>
+        error.code === "DATASET_NAME_CONFLICT" &&
+        error.status === 409 &&
+        error.message === "An active dataset with this name already exists.",
+    );
+
+    assert.equal(client.calls.at(-1).sql, "ROLLBACK");
+    assertNoRestoreUpdate(client.calls);
+    assert.equal(client.released, true);
+  } finally {
+    db.connect = originalConnect;
   }
 });

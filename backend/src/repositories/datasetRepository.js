@@ -311,7 +311,8 @@ class DatasetRepository {
         `SELECT id, name, description,
                 timestamp_field AS "timestampField",
                 created_by AS "createdBy",
-                deleted_at AS "deletedAt"
+                deleted_at AS "deletedAt",
+                data_deleted_at AS "dataDeletedAt"
          FROM datasets
          WHERE id = $1
             AND created_by = $2
@@ -355,10 +356,30 @@ class DatasetRepository {
         );
       }
 
+      const conflictResult = await client.query(
+  `SELECT 1
+   FROM datasets
+   WHERE created_by = $1
+     AND name = $2
+     AND deleted_at IS NULL
+     AND id <> $3
+   LIMIT 1`,
+  [dataset.createdBy, dataset.name, datasetId],
+);
+
+if (conflictResult.rows.length > 0) {
+  throw repositoryError(
+    "DATASET_NAME_CONFLICT",
+    409,
+    "An active dataset with this name already exists.",
+  );
+}
+
       const restored = await client.query(
         `UPDATE datasets
          SET deleted_at = NULL,
              deleted_by = NULL,
+             data_deleted_at = NULL,
              updated_by = $2,
              updated_at = CURRENT_TIMESTAMP
          WHERE id = $1
