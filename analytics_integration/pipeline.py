@@ -53,10 +53,11 @@ def _require_columns(
 def run_models_path(
     df: pd.DataFrame,
     timestamp_col: str,
-    model_metric: str,
+    model_metric: str | None = None,
     entity_id: str | None = None,
     detector_name: str = "isolationforest",
     detector_parameters: dict | None = None,
+    model_metrics: list[str] | None = None,
 ) -> tuple[list[dict], dict]:
     """
     Run the Models path:
@@ -66,32 +67,49 @@ def run_models_path(
     -> detector runner
     -> Models Draft V0.1 adapter
     """
+    # multiple metrics for multivariate detectors.
+    if model_metrics is not None:
+        selected_metrics = model_metrics
+    elif model_metric is not None:
+        selected_metrics = [model_metric]
+    else:
+        raise ValueError(
+            "At least one model metric must be provided."
+        )
+
+    if not selected_metrics:
+        raise ValueError(
+            "At least one model metric must be provided."
+        )
+
+    # Avoid passing the same metric more than once.
+    selected_metrics = list(dict.fromkeys(selected_metrics))
 
     _require_columns(
         df,
         [
             timestamp_col,
-            model_metric,
+            *selected_metrics,
         ],
     )
 
     model_df = df[
         [
             timestamp_col,
-            model_metric,
+            *selected_metrics,
         ]
     ].copy()
 
     validated_df = validate_input(
         model_df,
         timestamp_col=timestamp_col,
-        sensor_cols=[model_metric],
+        sensor_cols=selected_metrics,
         min_readings=20,
     )
 
     raw_model_result = run_detector(
         detector_name=detector_name,
-        dataframe=validated_df[[model_metric]],
+        dataframe=validated_df[selected_metrics],
         parameters=detector_parameters,
     )
 
@@ -101,12 +119,14 @@ def run_models_path(
             f"{raw_model_result.get('error', 'unknown error')}"
         )
 
+
     input_context = {
         "entity_id": entity_id,
-        "metrics": [model_metric],
-        "sensor_values": validated_df[
-            model_metric
-        ].tolist(),
+        "metrics": selected_metrics,
+        "sensor_values": {
+            metric: validated_df[metric].tolist()
+            for metric in selected_metrics
+        },
     }
 
     models_alerts = adapt_models_output(
@@ -227,13 +247,14 @@ def run_analytics_pipeline(
     df: pd.DataFrame,
     timestamp_col: str,
     entity_id: str | None,
-    model_metric: str,
+    model_metric: str | None,
     correlation_streams: list[str],
     detector_name: str = "isolationforest",
     detector_parameters: dict | None = None,
     correlation_window_size: int = 20,
     correlation_step_size: int = 10,
     correlation_method: str = "pearson",
+    model_metrics: list[str] | None = None,
 ) -> dict:
     """
     Execute the complete reusable Analytics Intelligence path.
@@ -256,6 +277,7 @@ def run_analytics_pipeline(
         entity_id=entity_id,
         detector_name=detector_name,
         detector_parameters=detector_parameters,
+        model_metrics=model_metrics,
     )
 
     correlation_alerts, _ = run_correlation_path(

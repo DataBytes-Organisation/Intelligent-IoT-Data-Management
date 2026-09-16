@@ -62,12 +62,14 @@ class IsolationForestDetector:
         raw_scores = self.model.decision_function(df.values)  # higher=normal
         runtime = time.time() - start
 
+
         return {
             "anomaly_flag": pd.Series(preds == -1, index=df.index),
-            "score":        pd.Series(-raw_scores, index=df.index),  # flip so higher = more anomalous
+            "score":        pd.Series(-raw_scores, index=df.index),
             "model_name":   self.name,
             "timestamp":    df.index,
             "runtime":      runtime,
+            "metrics":      list(df.columns),
         }
 
     def get_name(self) -> str:
