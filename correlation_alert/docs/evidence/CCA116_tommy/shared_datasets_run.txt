@@ -1,0 +1,66 @@
+CCA116, correlation pipeline run over the shared datasets
+====================================================================
+Generated 2026-08-06T00:15:28.241714Z
+pandas 2.3.3, numpy 2.3.5
+window_size=30, step_size=5, method=pearson
+
+traffic_4stream_merged.csv, primary
+  rows kept        1850
+  windows          365
+  comparisons      2184
+  alerts           77
+  alerts/comparison0.0353
+  by severity      {'LOW': 72, 'MEDIUM': 5}
+  runtime          0.053 s
+
+aws_control_merged.csv, negative control
+  rows kept        4024
+  windows          799
+  comparisons      2394
+  alerts           47
+  alerts/comparison0.0196
+  by severity      {'LOW': 40, 'MEDIUM': 5, 'HIGH': 2}
+  runtime          0.064 s
+
+False positive review
+--------------------------------------------------------------------
+  real data          3.53%
+  independent data   1.96%
+  ratio              1.80x
+  HIGH on independent data 2
+  HIGH on real data        0
+
+  The AWS streams are independent, so the correct answer there is close
+  to zero. The pipeline fires almost as often on noise as on real data,
+  and only the noise produces HIGH alerts. The alert logic barely
+  separates signal from noise. Belongs to CCA113.
+
+Outlier removal against NAB ground truth
+--------------------------------------------------------------------
+  labelled anomaly rows 521 of 1853
+  occupancy_t4013    removed  10, labelled  10
+  speed_t4013        removed  54, labelled  33
+  occupancy_6005     removed   4, labelled   2
+  speed_6005         removed   3, labelled   3
+  total removed 71, labelled 48 (68%)
+  global Pearson, primary pair: -0.4983 before, -0.2446 after
+
+  remove_outliers uses an IQR factor of 3.0 and deletes mostly the
+  labelled anomalies, halving the measured strength of the primary
+  pair. Preprocessing is removing the events the service exists to
+  detect. No accuracy number can be trusted until this is settled.
+
+Sample alert, Contract v1 shape
+--------------------------------------------------------------------
+{
+  "window_index": 4,
+  "start_time": "2015-09-01T21:05:00Z",
+  "end_time": "2015-09-02T06:30:00Z",
+  "stream_1": "speed_t4013",
+  "stream_2": "occupancy_6005",
+  "previous_corr": 0.2998,
+  "current_corr": -0.0566,
+  "delta": 0.3565,
+  "alert_level": "LOW",
+  "reason": "Correlation changed by 0.36, classified as LOW severity"
+}

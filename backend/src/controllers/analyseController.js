@@ -19,7 +19,11 @@ const analyse = async (req, res) => {
     return res.status(200).json(result);
   } catch (err) {
     console.error('Error analysing data:', err);
-    return res.status(500).json({ error: 'Failed to analyse data' });
+    return res.status(err.status || 500).json({
+      error: err.message || 'Failed to analyse data',
+      code: err.code || 'INTERNAL_ERROR',
+      ...(err.details ? { details: err.details } : {}),
+    });
   }
 };
 

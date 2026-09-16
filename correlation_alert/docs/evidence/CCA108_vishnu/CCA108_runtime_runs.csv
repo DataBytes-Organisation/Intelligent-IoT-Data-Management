@@ -1,0 +1,19 @@
+method,window_size,step_size,repetition,http_code,json_status,runtime_ms,error
+pearson,20,10,1,200,success,48.702,
+pearson,20,10,2,200,success,22.262,
+pearson,20,10,3,200,success,21.573,
+spearman,20,10,1,500,error,7.369,'NoneType' object cannot be interpreted as an integer
+spearman,20,10,2,500,error,7.288,'NoneType' object cannot be interpreted as an integer
+spearman,20,10,3,500,error,6.906,'NoneType' object cannot be interpreted as an integer
+pearson,40,20,1,200,success,13.685,
+pearson,40,20,2,200,success,12.97,
+pearson,40,20,3,200,success,13.251,
+spearman,40,20,1,500,error,6.269,'NoneType' object cannot be interpreted as an integer
+spearman,40,20,2,500,error,6.369,'NoneType' object cannot be interpreted as an integer
+spearman,40,20,3,500,error,6.632,'NoneType' object cannot be interpreted as an integer
+pearson,60,30,1,200,success,10.992,
+pearson,60,30,2,200,success,10.945,
+pearson,60,30,3,200,success,10.608,
+spearman,60,30,1,500,error,6.543,'NoneType' object cannot be interpreted as an integer
+spearman,60,30,2,500,error,6.681,'NoneType' object cannot be interpreted as an integer
+spearman,60,30,3,500,error,6.579,'NoneType' object cannot be interpreted as an integer

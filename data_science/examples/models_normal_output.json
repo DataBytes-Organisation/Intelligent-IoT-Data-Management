@@ -1,0 +1,19 @@
+{
+    "model_name": "IsolationForest",
+    "timestamp": [
+        "2026-08-05T08:20:00Z",
+        "2026-08-05T08:21:00Z",
+        "2026-08-05T08:22:00Z"
+    ],
+    "anomaly_flag": [
+        false,
+        false,
+        false
+    ],
+    "score": [
+        0.12,
+        0.18,
+        0.09
+    ],
+    "runtime": 0.024
+}

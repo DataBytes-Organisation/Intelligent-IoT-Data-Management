@@ -1,0 +1,56 @@
+[
+    {
+        "timestamp": "2026-08-05T08:21:00Z",
+        "alert_type": "POINTWISE_ANOMALY",
+        "target": {
+            "entity_id": "sensor_node_01",
+            "metrics": [
+                "temperature"
+            ]
+        },
+        "method": "IsolationForest",
+        "score": 0.91,
+        "score_metadata": {
+            "type": "raw_anomaly_score",
+            "normalized": false
+        },
+        "severity": null,
+        "message": "Anomaly detected in temperature using IsolationForest.",
+        "time_window": null,
+        "supporting_values": {
+            "runtime_ms": 24.0,
+            "sensor_value": 31.8
+        },
+        "source": {
+            "component": "models"
+        },
+        "alert_id": null
+    },
+    {
+        "timestamp": "2026-08-05T08:23:00Z",
+        "alert_type": "POINTWISE_ANOMALY",
+        "target": {
+            "entity_id": "sensor_node_01",
+            "metrics": [
+                "temperature"
+            ]
+        },
+        "method": "IsolationForest",
+        "score": 0.95,
+        "score_metadata": {
+            "type": "raw_anomaly_score",
+            "normalized": false
+        },
+        "severity": null,
+        "message": "Anomaly detected in temperature using IsolationForest.",
+        "time_window": null,
+        "supporting_values": {
+            "runtime_ms": 24.0,
+            "sensor_value": 33.1
+        },
+        "source": {
+            "component": "models"
+        },
+        "alert_id": null
+    }
+]

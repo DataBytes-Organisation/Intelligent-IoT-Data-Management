@@ -1,0 +1,209 @@
+{
+  "info": {
+    "_postman_id": "44e8ed5b-367e-48ce-8ab2-067e0d4fda26",
+    "name": "Correlation Service Request Tests",
+    "description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "57030541"
+  },
+  "item": [
+    {
+      "name": "CSV Request Test",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Successful POST request\", function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+              "});",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "uuid": "7b4bf629-5cd8-4d75-98a5-64116aa46a65",
+              "src": "/Users/rishiharshadsoni/Intelligent-IoT-Data-Management/correlation_alert/rishi_test_data.csv"
+            },
+            {
+              "key": "timestamp_col",
+              "value": "time",
+              "type": "text",
+              "uuid": "2efb60af-4474-4f04-86c7-c740aef8d382"
+            },
+            {
+              "key": "selected_streams",
+              "value": "s1,s2,s3",
+              "type": "text",
+              "uuid": "dbf2c874-27e5-4ba2-a83c-de5961932a05"
+            },
+            {
+              "key": "window_size",
+              "value": "10",
+              "type": "text",
+              "uuid": "3a8fef40-588b-492b-9789-f91657080575"
+            },
+            {
+              "key": "step_size",
+              "value": "5",
+              "type": "text",
+              "uuid": "6cdd0325-7a51-43e4-8ad3-52f9d87e6b92"
+            },
+            {
+              "key": "method",
+              "value": "pearson",
+              "type": "text",
+              "uuid": "0a28dddf-e43f-4218-8bb1-f919c46fb1a6"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5001/detect-correlation-alert",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5001",
+          "path": [
+            "detect-correlation-alert"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "JSON Request Test",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"data\": [\n    {\n      \"time\": \"2026-07-01 10:00:00\",\n      \"s1\": 10,\n      \"s2\": 20,\n      \"s3\": 30\n    },\n    {\n      \"time\": \"2026-07-01 10:01:00\",\n      \"s1\": 11,\n      \"s2\": 21,\n      \"s3\": 29\n    },\n    {\n      \"time\": \"2026-07-01 10:02:00\",\n      \"s1\": 12,\n      \"s2\": 22,\n      \"s3\": 28\n    },\n    {\n      \"time\": \"2026-07-01 10:03:00\",\n      \"s1\": 13,\n      \"s2\": 23,\n      \"s3\": 27\n    },\n    {\n      \"time\": \"2026-07-01 10:04:00\",\n      \"s1\": 14,\n      \"s2\": 24,\n      \"s3\": 26\n    },\n    {\n      \"time\": \"2026-07-01 10:05:00\",\n      \"s1\": 15,\n      \"s2\": 25,\n      \"s3\": 25\n    }\n  ],\n  \"timestamp_col\": \"time\",\n  \"selected_streams\": [\n    \"s1\",\n    \"s2\",\n    \"s3\"\n  ],\n  \"window_size\": 3,\n  \"step_size\": 1,\n  \"method\": \"pearson\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5001/detect-correlation-alert",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5001",
+          "path": [
+            "detect-correlation-alert"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Invalid Request Test",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Successful POST request\", function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+              "});",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "uuid": "7b4bf629-5cd8-4d75-98a5-64116aa46a65",
+              "src": "/Users/rishiharshadsoni/Intelligent-IoT-Data-Management/correlation_alert/rishi_test_data.csv"
+            },
+            {
+              "key": "timestamp_col",
+              "value": "",
+              "type": "text",
+              "uuid": "2efb60af-4474-4f04-86c7-c740aef8d382"
+            },
+            {
+              "key": "selected_streams",
+              "value": "s1,s2,s3",
+              "type": "text",
+              "uuid": "dbf2c874-27e5-4ba2-a83c-de5961932a05"
+            },
+            {
+              "key": "window_size",
+              "value": "10",
+              "type": "text",
+              "uuid": "3a8fef40-588b-492b-9789-f91657080575"
+            },
+            {
+              "key": "step_size",
+              "value": "5",
+              "type": "text",
+              "uuid": "6cdd0325-7a51-43e4-8ad3-52f9d87e6b92"
+            },
+            {
+              "key": "method",
+              "value": "pearson",
+              "type": "text",
+              "uuid": "0a28dddf-e43f-4218-8bb1-f919c46fb1a6"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5001/detect-correlation-alert",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5001",
+          "path": [
+            "detect-correlation-alert"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

@@ -2,3 +2,6 @@ pandas
 numpy
 matplotlib
 seaborn
+flask
+flask-cors
+requests

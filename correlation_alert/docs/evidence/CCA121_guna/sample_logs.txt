@@ -1,0 +1,21 @@
+2026-08-13T18:26:58 INFO    correlation.api          [STARTUP] Correlation Alert Service starting
+2026-08-13T18:26:58 INFO    correlation.api          [STARTUP] service_url=http://127.0.0.1:5001
+2026-08-13T18:26:58 INFO    correlation.api          [STARTUP] request_timeout_seconds=30
+2026-08-13T18:26:58 INFO    correlation.api          [STARTUP] log_level=INFO
+2026-08-13T18:26:58 INFO    correlation.api          [STARTUP] log_file=docs\evidence\CCA121_guna\sample_logs.txt
+2026-08-13T18:26:58 INFO    correlation.api          [STARTUP] debug=False
+2026-08-13T18:27:25 INFO    correlation.api          [HEALTH] ready=True check_ms=9
+2026-08-13T18:27:55 WARNING correlation.api          [5cf9f810] rejected: missing timestamp_col
+2026-08-13T18:28:00 INFO    correlation.api          [f22ed400] received source=file rows_in=1008 streams=['s1', 's2', 's3'] window_size=20 step_size=10 method=pearson
+2026-08-13T18:28:00 INFO    correlation.preprocessing [TIMESTAMPS] Parsed 'time' as numeric (1008/1008 rows valid)
+2026-08-13T18:28:00 INFO    correlation.preprocessing [TIMESTAMPS] Sorted by 'time', detected numeric, kept 1008 rows
+2026-08-13T18:28:00 INFO    correlation.preprocessing [NUMERIC] Converted sensor columns to numeric: ['s1', 's2', 's3']
+2026-08-13T18:28:00 INFO    correlation.preprocessing [MISSING] Missing values before: 0
+2026-08-13T18:28:00 INFO    correlation.preprocessing [MISSING] Missing values after: 0
+2026-08-13T18:28:00 INFO    correlation.preprocessing [OUTLIERS] No outliers replaced
+2026-08-13T18:28:00 INFO    correlation.preprocessing [VALIDATE] Output shape: (1008, 4)
+2026-08-13T18:28:00 INFO    correlation.preprocessing [VALIDATE] Dataset is sorted, clean, and ready for correlation analysis
+2026-08-13T18:28:00 INFO    correlation.api          [f22ed400] completed rows_out=1008 windows=99 changes=294 alerts=19 imputed=0 coerced=0 runtime_ms=45
+2026-08-13T18:28:56 INFO    correlation.api          [5c9063f9] received source=file rows_in=1008 streams=['s1', 's2', 's99'] window_size=20 step_size=10 method=pearson
+2026-08-13T18:28:56 WARNING correlation.api          [5c9063f9] invalid_input after 2ms: Requested stream(s) not found in the uploaded file: ['s99']. Available columns: ['time', 's1', 's2', 's3']
+2026-08-13T18:29:09 WARNING correlation.api          [76926ff8] rejected: missing timestamp_col

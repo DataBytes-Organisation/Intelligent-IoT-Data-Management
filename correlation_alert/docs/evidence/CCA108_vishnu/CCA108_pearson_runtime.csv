@@ -1,0 +1,4 @@
+method,window_size,step_size,http_codes,successful_runs,average_runtime_ms
+Pearson,20,10,200|200|200,3,29.265
+Pearson,40,20,200|200|200,3,13.014
+Pearson,60,30,200|200|200,3,10.671

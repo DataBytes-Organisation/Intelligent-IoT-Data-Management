@@ -1,0 +1,53 @@
+{
+  "summary": {
+    "processed_rows": 100,
+    "windows": 12,
+    "correlation_results": 12,
+    "changes": 2,
+    "alerts": 1
+  },
+  "correlations": [
+    {
+      "window_index": 1,
+      "stream_1": "temperature",
+      "stream_2": "pressure",
+      "correlation": 0.89
+    }
+  ],
+  "changes": [
+    {
+      "window_index": 2,
+      "stream_1": "temperature",
+      "stream_2": "pressure",
+      "previous_corr": 0.89,
+      "current_corr": 0.82,
+      "delta": 0.07,
+      "alert_level": null
+    },
+    {
+      "window_index": 4,
+      "stream_1": "temperature",
+      "stream_2": "pressure",
+      "start_time": "2026-08-05T08:20:00Z",
+      "end_time": "2026-08-05T08:25:00Z",
+      "previous_corr": 0.91,
+      "current_corr": 0.12,
+      "delta": 0.79,
+      "alert_level": "HIGH"
+    }
+  ],
+  "alerts": [
+    {
+      "window_index": 4,
+      "stream_1": "temperature",
+      "stream_2": "pressure",
+      "start_time": "2026-08-05T08:20:00Z",
+      "end_time": "2026-08-05T08:25:00Z",
+      "previous_corr": 0.91,
+      "current_corr": 0.12,
+      "delta": 0.79,
+      "alert_level": "HIGH",
+      "reason": "Correlation between temperature and pressure changed by 0.79."
+    }
+  ]
+}

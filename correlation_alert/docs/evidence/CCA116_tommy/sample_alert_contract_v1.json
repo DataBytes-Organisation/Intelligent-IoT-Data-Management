@@ -1,0 +1,12 @@
+{
+  "window_index": 4,
+  "start_time": "2015-09-01T21:05:00Z",
+  "end_time": "2015-09-02T06:30:00Z",
+  "stream_1": "speed_t4013",
+  "stream_2": "occupancy_6005",
+  "previous_corr": 0.2998,
+  "current_corr": -0.0566,
+  "delta": 0.3565,
+  "alert_level": "LOW",
+  "reason": "Correlation changed by 0.36, classified as LOW severity"
+}

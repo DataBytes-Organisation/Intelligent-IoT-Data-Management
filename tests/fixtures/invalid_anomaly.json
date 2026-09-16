@@ -1,0 +1,22 @@
+{
+  "timestamp": "02-08-2026 12:30",
+  "alert_type": "INVALID_ANOMALY_TYPE",
+  "target": {
+    "entity_id": null,
+    "metrics": []
+  },
+  "method": "IsolationForest",
+  "score": "high",
+  "score_metadata": {
+    "type": "raw_anomaly_score",
+    "normalized": false
+  },
+  "severity": "URGENT",
+  "message": "Invalid anomaly example",
+  "time_window": null,
+  "supporting_values": {},
+  "source": {
+    "component": "models"
+  },
+  "alert_id": null
+}

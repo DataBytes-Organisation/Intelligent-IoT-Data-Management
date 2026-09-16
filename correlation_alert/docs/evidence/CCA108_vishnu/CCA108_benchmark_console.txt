@@ -1,0 +1,71 @@
+
+======================================================================
+Testing method=pearson, window_size=20, step_size=10
+======================================================================
+Run 1: HTTP 200 | JSON status=success | Runtime=48.702 ms
+Run 2: HTTP 200 | JSON status=success | Runtime=22.262 ms
+Run 3: HTTP 200 | JSON status=success | Runtime=21.573 ms
+
+======================================================================
+Testing method=spearman, window_size=20, step_size=10
+======================================================================
+Run 1: HTTP 500 | JSON status=error | Runtime=7.369 ms
+  Error: 'NoneType' object cannot be interpreted as an integer
+Run 2: HTTP 500 | JSON status=error | Runtime=7.288 ms
+  Error: 'NoneType' object cannot be interpreted as an integer
+Run 3: HTTP 500 | JSON status=error | Runtime=6.906 ms
+  Error: 'NoneType' object cannot be interpreted as an integer
+
+======================================================================
+Testing method=pearson, window_size=40, step_size=20
+======================================================================
+Run 1: HTTP 200 | JSON status=success | Runtime=13.685 ms
+Run 2: HTTP 200 | JSON status=success | Runtime=12.970 ms
+Run 3: HTTP 200 | JSON status=success | Runtime=13.251 ms
+
+======================================================================
+Testing method=spearman, window_size=40, step_size=20
+======================================================================
+Run 1: HTTP 500 | JSON status=error | Runtime=6.269 ms
+  Error: 'NoneType' object cannot be interpreted as an integer
+Run 2: HTTP 500 | JSON status=error | Runtime=6.369 ms
+  Error: 'NoneType' object cannot be interpreted as an integer
+Run 3: HTTP 500 | JSON status=error | Runtime=6.632 ms
+  Error: 'NoneType' object cannot be interpreted as an integer
+
+======================================================================
+Testing method=pearson, window_size=60, step_size=30
+======================================================================
+Run 1: HTTP 200 | JSON status=success | Runtime=10.992 ms
+Run 2: HTTP 200 | JSON status=success | Runtime=10.945 ms
+Run 3: HTTP 200 | JSON status=success | Runtime=10.608 ms
+
+======================================================================
+Testing method=spearman, window_size=60, step_size=30
+======================================================================
+Run 1: HTTP 500 | JSON status=error | Runtime=6.543 ms
+  Error: 'NoneType' object cannot be interpreted as an integer
+Run 2: HTTP 500 | JSON status=error | Runtime=6.681 ms
+  Error: 'NoneType' object cannot be interpreted as an integer
+Run 3: HTTP 500 | JSON status=error | Runtime=6.579 ms
+  Error: 'NoneType' object cannot be interpreted as an integer
+
+======================================================================================================================
+FINAL CONFIGURATION RESULTS
+======================================================================================================================
+Method      Window   Step              Status   Windows   Alerts    LOW   MEDIUM   HIGH     Avg ms
+----------------------------------------------------------------------------------------------------------------------
+Pearson         20     10             SUCCESS        99       19      3       13      3     30.846
+Spearman        20     10   FAILED (HTTP 500)       N/A      N/A    N/A      N/A    N/A      7.188
+  Note: 'NoneType' object cannot be interpreted as an integer
+Pearson         40     20             SUCCESS        49       18      2       12      4     13.302
+Spearman        40     20   FAILED (HTTP 500)       N/A      N/A    N/A      N/A    N/A      6.423
+  Note: 'NoneType' object cannot be interpreted as an integer
+Pearson         60     30             SUCCESS        32       20      2       15      3     10.848
+Spearman        60     30   FAILED (HTTP 500)       N/A      N/A    N/A      N/A    N/A      6.601
+  Note: 'NoneType' object cannot be interpreted as an integer
+
+Created:
+  CCA108_final_results.csv
+  CCA108_runtime_runs.csv
+  cca108_raw_evidence/
