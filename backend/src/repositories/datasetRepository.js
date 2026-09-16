@@ -375,22 +375,36 @@ if (conflictResult.rows.length > 0) {
   );
 }
 
-      const restored = await client.query(
-        `UPDATE datasets
-         SET deleted_at = NULL,
-             deleted_by = NULL,
-             data_deleted_at = NULL,
-             updated_by = $2,
-             updated_at = CURRENT_TIMESTAMP
-         WHERE id = $1
-         RETURNING id, name, description,
-                   timestamp_field AS "timestampField",
-                   created_by AS "createdBy",
-                   updated_by AS "updatedBy",
-                   created_at AS "createdAt",
-                   updated_at AS "updatedAt"`,
-        [datasetId, user.sub],
-      );
+      let restored;
+
+try {
+  restored = await client.query(
+    `UPDATE datasets
+     SET deleted_at = NULL,
+         deleted_by = NULL,
+         data_deleted_at = NULL,
+         updated_by = $2,
+         updated_at = CURRENT_TIMESTAMP
+     WHERE id = $1
+     RETURNING id, name, description,
+               timestamp_field AS "timestampField",
+               created_by AS "createdBy",
+               updated_by AS "updatedBy",
+               created_at AS "createdAt",
+               updated_at AS "updatedAt"`,
+    [datasetId, user.sub],
+  );
+} catch (error) {
+  if (error.code === "23505") {
+    throw repositoryError(
+      "DATASET_NAME_CONFLICT",
+      409,
+      "An active dataset with this name already exists.",
+    );
+  }
+
+  throw error;
+}
 
       await client.query("COMMIT");
       return restored.rows[0];
