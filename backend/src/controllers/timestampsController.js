@@ -14,14 +14,20 @@
 const timeseriesService = require('../services/timeseriesService');
 
 /**
- * GET /api/datasets/:name/timestamps
+ * GET /api/datasets/:datasetId/timestamps
  * Returns a list of timestamps for the dataset.
  */
-const getTimestampsForDatasetName = async (req, res) => {
+const getTimestampsForDatasetId = async (req, res) => {
   try {
-    const { name } = req.params;
+    const { datasetId } = req.params;
+    if (!/^\d+$/.test(datasetId) || Number(datasetId) < 1) {
+      return res.status(400).json({ error: 'Dataset ID must be a positive integer' });
+    }
 
-    const entries = await timeseriesService.getWideEntriesForDatasetName(name);
+    const entries = await timeseriesService.getWideEntriesForDatasetId(
+      Number(datasetId),
+      req.user.sub
+    );
 
     if (!entries) {
       return res.status(404).json({ error: 'Dataset not found or empty' });
@@ -37,5 +43,5 @@ const getTimestampsForDatasetName = async (req, res) => {
 };
 
 module.exports = {
-  getTimestampsForDatasetName,
+  getTimestampsForDatasetId,
 };
