@@ -1,4 +1,5 @@
 import React, { useMemo, useState, useCallback, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSensorData } from '../hooks/useSensorData.js';
 import { useFilteredData } from '../hooks/useFilteredData.js';
 import { useStreamNames } from '../hooks/useStreamNames.js';
@@ -9,6 +10,8 @@ import StreamStats from './StreamStats.jsx';
 import './Dashboard.css';
 import Chart from './Chart.jsx';
 import ApiResponseTrend from './ApiResponseTrend.jsx';
+import AnalyticsMiniChart from './AnalyticsMiniChart.jsx';
+import DeveloperMetrics from './DeveloperMetrics.jsx';
 import CorrelationAnalysis from './CorrelationAnalysis.jsx';
 import { calculateCorrelation } from '../utils/correlationUtils.js';
 import TimeRangePanel from './TimeRangePanel.jsx';
@@ -16,6 +19,7 @@ import ActiveAlerts from "./ActiveAlerts.jsx";
 import { runAnalysis } from '../services/analysisService.js';
 
 const Dashboard = ({ datasetId }) => {
+const navigate = useNavigate();
   // --- ALL HOOKS FIRST ---
   const {
   data: sensorData,
@@ -70,6 +74,7 @@ const Dashboard = ({ datasetId }) => {
   const [relativeRange, setRelativeRange] = useState("5min");
   const [finalStartTime, setFinalStartTime] = useState(null);
   const [finalEndTime, setFinalEndTime] = useState(null);
+  const [showDeveloperMetrics, setShowDeveloperMetrics] = useState(false);
 
   const filteredData = useFilteredData(data, {
     startTime: finalStartTime,
@@ -520,16 +525,17 @@ const dataQuality = useMemo(() => {
       Select one or more streams to view the analytics summary.
     </div>
   ) : (
-    <div className="stream-stats">
-      {analyticsSummary.map((item) => (
-        <div className="summary-pill" key={item.stream}>
-          <span>{item.stream}</span>
-          <strong>
-            Avg: {item.average} | Min: {item.min} | Max: {item.max} | Records: {item.records}
-          </strong>
-        </div>
-      ))}
-    </div>
+    <div className="analytics-mini-grid">
+  {analyticsSummary.map((item, index) => (
+    <AnalyticsMiniChart
+      key={item.stream}
+      data={filteredData}
+      stream={item.stream}
+      index={index}
+      summary={item}
+    />
+  ))}
+</div>
   )}
 </section>
 
@@ -595,9 +601,32 @@ const dataQuality = useMemo(() => {
           </div>
         )}
       </section>
-      <section className="dashboard-section">
-      <ApiResponseTrend data={apiTrendData} />
-      </section>
+
+      <section className="dashboard-section server-status-section">
+  <h3 className="section-title">Server Status</h3>
+
+  <div className="server-status-display">
+    <span
+      className={`server-status-dot ${
+        backendStatus === 'Online' ? 'status-good' : 'status-down'
+      }`}
+    ></span>
+
+    <strong>
+      {backendStatus === 'Online' ? 'Good' : 'Server Down'}
+    </strong>
+  </div>
+</section>
+
+<section className="dashboard-section">
+  <button
+    className="developer-metrics-toggle"
+    onClick={() => navigate(`/developer-metrics/${datasetId}`)}
+  >
+    View Developer Metrics
+  </button>
+</section>
+
       <div className="chart-analysis-grid">
         <section className="dashboard-section chart-analysis-card">
           <h3 className="section-title chart-section-title">

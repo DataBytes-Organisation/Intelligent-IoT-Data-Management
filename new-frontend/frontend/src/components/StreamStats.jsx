@@ -86,7 +86,7 @@ const StreamStats = ({ data, stream }) => {
           </strong>
         </div>
         <div className="insight-stat">
-  <span className="metric-title">Std Dev</span>
+  <span className="metric-title">Variability</span>
   <strong className="metric-value">
     {formatValue(stats.stdDev)}
   </strong>

@@ -7,6 +7,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
 import HomePage from "./pages/HomePage";
 import DashboardPage from "./pages/DashboardPage";
+import DeveloperMetricsPage from "./pages/DeveloperMetricsPage";
 import RegistrationPage from "./pages/RegistrationPage";
 import ForgotPassword from "./pages/ForgotPassword";
 
@@ -19,26 +20,29 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
 
         <Route
-          path="/home"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <HomePage />
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
-
+  path="/home"
+  element={
+    <Layout>
+      <HomePage />
+    </Layout>
+  }
+/>
+<Route
+  path="/developer-metrics/:id"
+  element={
+    <Layout>
+      <DeveloperMetricsPage />
+    </Layout>
+  }
+/>
         <Route
-          path="/dashboard/:id"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <DashboardPage />
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
+  path="/dashboard/:id"
+  element={
+    <Layout>
+      <DashboardPage />
+    </Layout>
+  }
+/>
       </Routes>
     </BrowserRouter>
   );
