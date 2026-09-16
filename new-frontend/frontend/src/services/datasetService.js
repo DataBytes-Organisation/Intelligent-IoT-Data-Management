@@ -51,3 +51,9 @@ export const createDataset = async (payload) => {
     throw error;
   }
 };
+
+export const deleteDataset = async (datasetId) => {
+  await new Promise((resolve) => setTimeout(resolve, 700));
+
+  return { success: true, id: datasetId };
+};
