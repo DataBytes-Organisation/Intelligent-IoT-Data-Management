@@ -301,6 +301,120 @@ class DatasetRepository {
       client.release();
     }
   }
+    async restoreDataset(datasetId, user, thingspeakOwnerId) {
+    const client = await db.connect();
+
+    try {
+      await client.query("BEGIN");
+
+      const result = await client.query(
+        `SELECT id, name, description,
+                timestamp_field AS "timestampField",
+                created_by AS "createdBy",
+                deleted_at AS "deletedAt",
+                data_deleted_at AS "dataDeletedAt"
+         FROM datasets
+         WHERE id = $1
+            AND created_by = $2
+            AND created_by <> $3
+         FOR UPDATE`,
+        [datasetId, user.sub, thingspeakOwnerId],
+      );
+
+      const dataset = result.rows[0];
+
+      if (!dataset) {
+        throw repositoryError("DATASET_NOT_FOUND", 404, "Dataset not found.");
+      }
+
+      if (dataset.createdBy !== user.sub && user.role !== "admin") {
+        throw repositoryError(
+          "FORBIDDEN",
+          403,
+          "You cannot restore this dataset.",
+        );
+      }
+
+      if (dataset.deletedAt === null) {
+        throw repositoryError(
+          "INVALID_RESTORE_REQUEST",
+          400,
+          "Dataset is already active.",
+        );
+      }
+
+      const expiryResult = await client.query(
+        `SELECT ($1::timestamptz + INTERVAL '15 days') <= CURRENT_TIMESTAMP AS expired`,
+        [dataset.deletedAt],
+      );
+
+      if (expiryResult.rows[0].expired) {
+        throw repositoryError(
+          "RECOVERY_EXPIRED",
+          410,
+          "Dataset recovery period has expired.",
+        );
+      }
+
+      const conflictResult = await client.query(
+  `SELECT 1
+   FROM datasets
+   WHERE created_by = $1
+     AND name = $2
+     AND deleted_at IS NULL
+     AND id <> $3
+   LIMIT 1`,
+  [dataset.createdBy, dataset.name, datasetId],
+);
+
+if (conflictResult.rows.length > 0) {
+  throw repositoryError(
+    "DATASET_NAME_CONFLICT",
+    409,
+    "An active dataset with this name already exists.",
+  );
+}
+
+      let restored;
+
+try {
+  restored = await client.query(
+    `UPDATE datasets
+     SET deleted_at = NULL,
+         deleted_by = NULL,
+         data_deleted_at = NULL,
+         updated_by = $2,
+         updated_at = CURRENT_TIMESTAMP
+     WHERE id = $1
+     RETURNING id, name, description,
+               timestamp_field AS "timestampField",
+               created_by AS "createdBy",
+               updated_by AS "updatedBy",
+               created_at AS "createdAt",
+               updated_at AS "updatedAt"`,
+    [datasetId, user.sub],
+  );
+} catch (error) {
+  if (error.code === "23505") {
+    throw repositoryError(
+      "DATASET_NAME_CONFLICT",
+      409,
+      "An active dataset with this name already exists.",
+    );
+  }
+
+  throw error;
+}
+
+      await client.query("COMMIT");
+      return restored.rows[0];
+    } catch (error) {
+      await client.query("ROLLBACK");
+      throw error;
+    } finally {
+      client.release();
+    }
+  }
 }
 
 module.exports = new DatasetRepository();

@@ -42,7 +42,7 @@ Use this document as the single source of truth for the MVP API release.
 | DATA-03 | `PUT` | `/api/datasets/:id` | Replace mapping metadata and append reviewed CSV rows | Bearer access token | FE dataset editor | Implemented |
 | DATA-04 | `GET` | `/api/datasets/:id` | Retrieve one dataset's metadata and persisted row count | None | FE dataset detail | Implemented |
 | DATA-05 | `DELETE` | `/api/datasets/:id` | Soft-delete a dataset configuration and permanently remove synced time-series rows | Bearer access token | FE dataset management | Implemented |
-
+| DATA-06 | `POST` | `/api/datasets/:id/restore` | Restore a soft-deleted dataset within the 15-day recovery period | Bearer access token | FE dataset management | Implemented |
 ## 4. Data and naming rules
 
 | Field / concept | Rule | Example |
@@ -733,6 +733,50 @@ The request uses the same timestamp, mapping, and row fields as `POST /api/datas
 | Dataset does not exist, is owned by another user, or is owned by the ThingSpeak service account | `404` / `DATASET_NOT_FOUND` | Remove the stale item from local state or show not found. |
 | Dataset is already soft-deleted | `409` / `DATASET_ALREADY_DELETED` | Treat the delete action as no longer available and refresh the dataset list. |
 | Database failure | `500` / `INTERNAL_ERROR` | Keep the dataset visible; retry is safe because the database transaction was rolled back. |
+
+### 6.14 DATA-06 - POST /api/datasets/:id/restore
+
+| Field | Value |
+| --- | --- |
+| Purpose | Restore a soft-deleted dataset configuration within the 15-day recovery period. Historical time-series data is not restored. |
+| Authentication | `Authorization: Bearer <accessToken>` |
+| Content type | None |
+| Transaction behaviour | Dataset recovery state and audit metadata are updated in one transaction. If any step fails, the request rolls back. |
+| Recovery window | The dataset can be restored only within 15 days of `deleted_at`. |
+| Retained configuration | The existing `datasets` row, `timestamp_field`, and `dataset_field_mappings` rows are retained and become active again. |
+| Historical data | Previously deleted `timeseries` and `timeseries_long` rows are not restored. |
+| Name conflict | Restoration is rejected if another active dataset owned by the same user already uses the dataset name. |
+
+**Request**
+
+```http
+POST /api/datasets/42/restore
+Authorization: Bearer <accessToken>
+{
+  "data": {
+    "id": 42,
+    "name": "microclimate-sensors-april-2026",
+    "description": "Greenhouse sensor readings collected during April 2026.",
+    "timestampField": "Time",
+    "createdBy": "4c7c77b9-2bb8-4a3e-9b7a-4a66782e9dd6",
+    "updatedBy": "4c7c77b9-2bb8-4a3e-9b7a-4a66782e9dd6",
+    "createdAt": "2026-09-04T10:00:00.000Z",
+    "updatedAt": "2026-09-16T10:00:00.000Z"
+  },
+  "meta": {
+    "requestId": "req_04"
+  }
+}
+| Failure case                                                                                    | HTTP status / code                                  | Frontend behaviour                                           |
+| ----------------------------------------------------------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------------ |
+| Dataset ID is not a positive integer                                                            | `400` / `VALIDATION_ERROR`                          | Show validation feedback.                                    |
+| No/invalid/expired access token                                                                 | `401` / `UNAUTHENTICATED` or `ACCESS_TOKEN_EXPIRED` | Refresh once, then return to sign-in if needed.              |
+| Dataset does not exist, is owned by another user, or is owned by the ThingSpeak service account | `404` / `DATASET_NOT_FOUND`                         | Remove the stale item or show not found.                     |
+| Dataset is already active                                                                       | `400` / `INVALID_RESTORE_REQUEST`                   | Refresh the dataset state.                                   |
+| Recovery period has expired                                                                     | `410` / `RECOVERY_EXPIRED`                          | Inform the user that the 15-day recovery period has expired. |
+| Active dataset with the same name already exists                                                | `409` / `DATASET_NAME_CONFLICT`                     | Ask the user to resolve the name conflict before restoring.  |
+| Database failure                                                                                | `500` / `INTERNAL_ERROR`                            | Preserve the current state and offer retry.                  |
+
 
 ## 7. Authentication and session flows
 

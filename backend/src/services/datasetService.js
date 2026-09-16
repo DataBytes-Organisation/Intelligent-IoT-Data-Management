@@ -40,6 +40,13 @@ class datasetService {
       getThingSpeakDatasetOwnerId()
     );
   }
+  async restoreDataset(datasetId, user) {
+    return await datasetRepository.restoreDataset(
+      datasetId,
+      user,
+      getThingSpeakDatasetOwnerId()
+    );
+  }
 
   /**
    * Returns a dataset by its numeric ID.

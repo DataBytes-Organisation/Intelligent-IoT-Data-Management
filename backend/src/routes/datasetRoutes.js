@@ -7,6 +7,7 @@ const {
   createDataset,
   updateDataset,
   deleteDataset,
+  restoreDataset,
 } = require('../controllers/datasetsController');
 const authMiddleware = require('../middleware/authMiddleware');
 
@@ -24,5 +25,7 @@ router.put('/datasets/:id', authMiddleware, updateDataset);
 
 // DELETE /api/datasets/:id
 router.delete('/datasets/:id', authMiddleware, deleteDataset);
+
+router.post('/datasets/:id/restore', authMiddleware, restoreDataset);
 
 module.exports = router;
