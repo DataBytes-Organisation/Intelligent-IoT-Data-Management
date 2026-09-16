@@ -127,3 +127,37 @@ test("getAccessibleDatasetId excludes soft-deleted datasets and scopes to owner"
     db.query = originalQuery;
   }
 });
+
+test("replaceMappingsAndAddRows rejects updates to a soft-deleted dataset", async () => {
+  const originalQuery = db.query;
+  const originalConnect = db.connect;
+  let capturedSql;
+  const mockClient = {
+    query: async (sql, params) => {
+      if (sql.includes("FOR UPDATE")) {
+        capturedSql = sql;
+        return { rows: [] }; // soft-deleted dataset is excluded, so nothing comes back
+      }
+      return { rows: [] };
+    },
+    release: () => {},
+  };
+  db.connect = async () => mockClient;
+  try {
+    await assert.rejects(
+      () =>
+        datasetRepository.replaceMappingsAndAddRows(1, {
+          description: "test",
+          timestampField: "Time",
+          mappings: [],
+          wideRows: [],
+          user: { sub: USER_ID, role: "user" },
+        }),
+      (error) => error.code === "DATASET_NOT_FOUND",
+    );
+    assert.match(capturedSql, /deleted_at IS NULL/);
+  } finally {
+    db.connect = originalConnect;
+    db.query = originalQuery;
+  }
+});

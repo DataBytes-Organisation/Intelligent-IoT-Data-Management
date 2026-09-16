@@ -222,7 +222,10 @@ class DatasetRepository {
       await client.query("BEGIN");
       const datasetResult = await client.query(
         `SELECT id, created_by AS "createdBy"
-       FROM datasets WHERE id = $1 FOR UPDATE`,
+       FROM datasets
+       WHERE id = $1
+         AND deleted_at IS NULL
+       FOR UPDATE`,
         [datasetId],
       );
       const dataset = datasetResult.rows[0];
