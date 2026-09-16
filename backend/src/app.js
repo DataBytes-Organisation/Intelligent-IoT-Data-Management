@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const { assertProductionAuthConfig } = require("./config/authConfig");
+const { MAX_CSV_UPLOAD_BYTES } = require("./config/uploadLimits");
+const { uploadLimitErrorHandler } = require("./middleware/uploadLimitMiddleware");
 const apiRoutes = require("./routes");
 const authRoutes = require("./routes/auth");
 function cookieParser(req, _res, next) {
@@ -22,7 +24,7 @@ function createApp() {
   app.use(
     cors({ origin: origin ? origin.split(",") : true, credentials: true }),
   );
-  app.use(express.json());
+  app.use(express.json({ limit: MAX_CSV_UPLOAD_BYTES }));
   app.use(cookieParser);
   app.get("/", (_req, res) => res.send("Backend is running"));
   app.get("/health", (_req, res) =>
@@ -46,6 +48,7 @@ function createApp() {
   );
   app.use("/api", apiRoutes);
   app.use("/api", authRoutes);
+  app.use(uploadLimitErrorHandler);
   return app;
 }
 module.exports = createApp();
