@@ -5,15 +5,17 @@ const {
   getSeriesByDatasetName,
   filterSeriesByMetrics,
 } = require('../controllers/seriesController');
-const authMiddleware = require('../middleware/authMiddleware');
+const legacyDatasetIdentityMiddleware = require('../middleware/legacyDatasetIdentityMiddleware');
 
-// TODO(FE dataset-ID migration): Restore authMiddleware and use a numeric
-// `:datasetId` only after the frontend sends Bearer tokens and routes dashboards
-// with `dataset.id`. Until then, preserve the existing name-based read route.
+// TODO(FE auth and dataset-ID migration): Replace this temporary shared
+// ThingSpeak identity with authMiddleware and use a numeric `:datasetId` only
+// after the frontend sends Bearer tokens and routes dashboards with `dataset.id`.
+router.use(legacyDatasetIdentityMiddleware);
+
 // GET /api/datasets/:name/series
 router.get('/datasets/:name/series', getSeriesByDatasetName);
 
 // POST /api/datasets/:datasetId/series/filter
-router.post('/datasets/:datasetId/series/filter', authMiddleware, filterSeriesByMetrics);
+router.post('/datasets/:datasetId/series/filter', filterSeriesByMetrics);
 
 module.exports = router;

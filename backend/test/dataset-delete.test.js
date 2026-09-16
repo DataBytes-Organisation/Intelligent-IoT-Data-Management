@@ -77,7 +77,7 @@ test("deleteDataset soft-deletes an owned active dataset and removes synced rows
         sub: "user-uuid",
         role: "user",
       },
-      "thingspeak-owner-uuid",
+      "thingspeak-live",
     );
 
     assert.equal(result.id, 42);
@@ -92,11 +92,11 @@ test("deleteDataset soft-deletes an owned active dataset and removes synced rows
     );
     assert.match(client.calls[1].sql, /FOR UPDATE/);
     assert.match(client.calls[1].sql, /created_by = \$2/);
-    assert.match(client.calls[1].sql, /created_by <> \$3/);
+    assert.match(client.calls[1].sql, /name <> \$3/);
     assert.deepEqual(client.calls[1].values, [
       42,
       "user-uuid",
-      "thingspeak-owner-uuid",
+      "thingspeak-live",
     ]);
     assert.match(client.calls[2].sql, /DELETE FROM timeseries WHERE dataset_id = \$1/);
     assert.match(client.calls[3].sql, /DELETE FROM timeseries_long WHERE dataset_id = \$1/);
@@ -133,7 +133,7 @@ test("deleteDataset hides another user's dataset before deleting rows", async ()
             sub: "other-user-uuid",
             role: "user",
           },
-          "thingspeak-owner-uuid",
+          "thingspeak-live",
         ),
       (error) =>
         error.code === "DATASET_NOT_FOUND" &&
@@ -141,11 +141,11 @@ test("deleteDataset hides another user's dataset before deleting rows", async ()
         error.message === "Dataset not found.",
     );
     assert.match(client.calls[1].sql, /created_by = \$2/);
-    assert.match(client.calls[1].sql, /created_by <> \$3/);
+    assert.match(client.calls[1].sql, /name <> \$3/);
     assert.deepEqual(client.calls[1].values, [
       42,
       "other-user-uuid",
-      "thingspeak-owner-uuid",
+      "thingspeak-live",
     ]);
     assert.equal(client.calls.at(-1).sql, "ROLLBACK");
     assertNoDeleteOrUpdate(client.calls);
@@ -155,7 +155,7 @@ test("deleteDataset hides another user's dataset before deleting rows", async ()
   }
 });
 
-test("deleteDataset hides the ThingSpeak service-owned dataset before deleting rows", async () => {
+test("deleteDataset hides the protected ThingSpeak live dataset before deleting rows", async () => {
   const originalConnect = db.connect;
   const client = mockClient(async (sql) => {
     if (sql === "BEGIN" || sql === "ROLLBACK")
@@ -175,18 +175,18 @@ test("deleteDataset hides the ThingSpeak service-owned dataset before deleting r
             sub: "user-uuid",
             role: "user",
           },
-          "thingspeak-owner-uuid",
+          "thingspeak-live",
         ),
       (error) =>
         error.code === "DATASET_NOT_FOUND" &&
         error.status === 404 &&
         error.message === "Dataset not found.",
     );
-    assert.match(client.calls[1].sql, /created_by <> \$3/);
+    assert.match(client.calls[1].sql, /name <> \$3/);
     assert.deepEqual(client.calls[1].values, [
       42,
       "user-uuid",
-      "thingspeak-owner-uuid",
+      "thingspeak-live",
     ]);
     assert.equal(client.calls.at(-1).sql, "ROLLBACK");
     assertNoDeleteOrUpdate(client.calls);
@@ -224,7 +224,7 @@ test("deleteDataset rejects an already deleted dataset", async () => {
             sub: "user-uuid",
             role: "user",
           },
-          "thingspeak-owner-uuid",
+          "thingspeak-live",
         ),
       (error) =>
         error.code === "DATASET_ALREADY_DELETED" &&
@@ -272,7 +272,7 @@ test("deleteDataset rolls back if synced row deletion fails", async () => {
             sub: "user-uuid",
             role: "user",
           },
-          "thingspeak-owner-uuid",
+          "thingspeak-live",
         ),
       failure,
     );

@@ -87,7 +87,7 @@ test("restoreDataset restores an owned dataset and clears deletion state", async
     const result = await datasetRepository.restoreDataset(
       42,
       { sub: "user-uuid", role: "user" },
-      "thingspeak-owner-uuid",
+      "thingspeak-live",
     );
 
     assert.equal(result.id, 42);
@@ -95,11 +95,11 @@ test("restoreDataset restores an owned dataset and clears deletion state", async
     assert.equal(client.released, true);
 
     assert.match(client.calls[1].sql, /created_by = \$2/);
-    assert.match(client.calls[1].sql, /created_by <> \$3/);
+    assert.match(client.calls[1].sql, /name <> \$3/);
     assert.deepEqual(client.calls[1].values, [
       42,
       "user-uuid",
-      "thingspeak-owner-uuid",
+      "thingspeak-live",
     ]);
 
     assert.match(
@@ -142,7 +142,7 @@ test("restoreDataset hides another user's dataset and does not update it", async
         datasetRepository.restoreDataset(
           42,
           { sub: "other-user-uuid", role: "user" },
-          "thingspeak-owner-uuid",
+          "thingspeak-live",
         ),
       (error) =>
         error.code === "DATASET_NOT_FOUND" &&
@@ -158,7 +158,7 @@ test("restoreDataset hides another user's dataset and does not update it", async
   }
 });
 
-test("restoreDataset hides the ThingSpeak-owned dataset and does not update it", async () => {
+test("restoreDataset hides the protected ThingSpeak live dataset and does not update it", async () => {
   const originalConnect = db.connect;
 
   const client = mockClient(async (sql) => {
@@ -181,7 +181,7 @@ test("restoreDataset hides the ThingSpeak-owned dataset and does not update it",
         datasetRepository.restoreDataset(
           42,
           { sub: "user-uuid", role: "user" },
-          "thingspeak-owner-uuid",
+          "thingspeak-live",
         ),
       (error) =>
         error.code === "DATASET_NOT_FOUND" &&
@@ -233,7 +233,7 @@ test("restoreDataset rejects an expired recovery period without updating", async
         datasetRepository.restoreDataset(
           42,
           { sub: "user-uuid", role: "user" },
-          "thingspeak-owner-uuid",
+          "thingspeak-live",
         ),
       (error) =>
         error.code === "RECOVERY_EXPIRED" &&
@@ -281,7 +281,7 @@ test("restoreDataset rejects an active dataset", async () => {
         datasetRepository.restoreDataset(
           42,
           { sub: "user-uuid", role: "user" },
-          "thingspeak-owner-uuid",
+          "thingspeak-live",
         ),
       (error) =>
         error.code === "INVALID_RESTORE_REQUEST" &&
@@ -336,7 +336,7 @@ test("restoreDataset rejects an active dataset name conflict", async () => {
         datasetRepository.restoreDataset(
           42,
           { sub: "user-uuid", role: "user" },
-          "thingspeak-owner-uuid",
+          "thingspeak-live",
         ),
       (error) =>
         error.code === "DATASET_NAME_CONFLICT" &&

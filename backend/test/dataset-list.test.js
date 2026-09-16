@@ -103,26 +103,3 @@ test("findById returns dataset detail with its total persisted row count", async
     db.query = originalQuery;
   }
 });
-
-test("legacy public dataset reads keep active-dataset filtering without owner parameters", async () => {
-  const originalQuery = db.query;
-  const calls = [];
-  db.query = async (sql, values) => {
-    calls.push({ sql, values });
-    return { rows: [] };
-  };
-
-  try {
-    await datasetRepository.findAll("active");
-    await datasetRepository.findById(42);
-
-    assert.equal(calls[0].values.length, 0);
-    assert.match(calls[0].sql, /d\.deleted_at IS NULL/);
-    assert.doesNotMatch(calls[0].sql, /d\.created_by = \$1/);
-    assert.deepEqual(calls[1].values, [42]);
-    assert.match(calls[1].sql, /d\.deleted_at IS NULL/);
-    assert.doesNotMatch(calls[1].sql, /d\.created_by = \$2/);
-  } finally {
-    db.query = originalQuery;
-  }
-});

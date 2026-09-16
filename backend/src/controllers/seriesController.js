@@ -20,7 +20,10 @@ const getSeriesByDatasetName = async (req, res) => {
   try {
     const { name } = req.params;
 
-    const entries = await timeseriesService.getWideEntriesForDatasetName(name);
+    const entries = await timeseriesService.getWideEntriesForDatasetName(
+      name,
+      req.user.sub,
+    );
 
     if (!entries) {
       return res.status(404).json({ error: 'Dataset not found or empty' });

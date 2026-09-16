@@ -21,11 +21,6 @@ class DatasetRepository {
       status === "deleted"
         ? "d.deleted_at IS NOT NULL AND d.deleted_at > CURRENT_TIMESTAMP - INTERVAL '15 days'"
         : "d.deleted_at IS NULL";
-    const accessClause = userId
-      ? "AND (d.created_by = $1 OR d.created_by = $2)"
-      : "";
-    const queryParams = userId ? [userId, thingspeakOwnerId] : [];
-
     const result = await db.query(
       `
       SELECT
@@ -40,11 +35,11 @@ class DatasetRepository {
       FROM datasets d
       LEFT JOIN timeseries t ON t.dataset_id = d.id
       WHERE ${whereClause}
-        ${accessClause}
+        AND (d.created_by = $1 OR d.created_by = $2)
       GROUP BY d.id, d.name, d.created_by, d.updated_by, d.created_at, d.updated_at, d.deleted_at
       ORDER BY d.id ASC
     `,
-      queryParams,
+      [userId, thingspeakOwnerId],
     );
 
     return result.rows.map((row) => {
@@ -64,10 +59,6 @@ class DatasetRepository {
   }
 
   async findById(id, userId, thingspeakOwnerId) {
-    const accessClause = userId
-      ? "AND (d.created_by = $2 OR d.created_by = $3)"
-      : "";
-    const queryParams = userId ? [id, userId, thingspeakOwnerId] : [id];
     const result = await db.query(
       `
       SELECT
@@ -103,9 +94,9 @@ class DatasetRepository {
       FROM datasets d
       WHERE d.id = $1
         AND d.deleted_at IS NULL
-        ${accessClause}
+        AND (d.created_by = $2 OR d.created_by = $3)
       `,
-      queryParams,
+      [id, userId, thingspeakOwnerId],
     );
     return result.rows[0] || null;
   }
@@ -320,7 +311,7 @@ class DatasetRepository {
     }
   }
 
-  async deleteDataset(datasetId, user, thingspeakOwnerId) {
+  async deleteDataset(datasetId, user, thingspeakDatasetName) {
     const client = await db.connect();
     try {
       await client.query("BEGIN");
@@ -330,9 +321,9 @@ class DatasetRepository {
          FROM datasets
          WHERE id = $1
            AND created_by = $2
-           AND created_by <> $3
+           AND name <> $3
          FOR UPDATE`,
-        [datasetId, user.sub, thingspeakOwnerId],
+        [datasetId, user.sub, thingspeakDatasetName],
       );
       const dataset = datasetResult.rows[0];
       if (!dataset)
@@ -382,7 +373,7 @@ class DatasetRepository {
       client.release();
     }
   }
-    async restoreDataset(datasetId, user, thingspeakOwnerId) {
+    async restoreDataset(datasetId, user, thingspeakDatasetName) {
     const client = await db.connect();
 
     try {
@@ -397,9 +388,9 @@ class DatasetRepository {
          FROM datasets
          WHERE id = $1
             AND created_by = $2
-            AND created_by <> $3
+            AND name <> $3
          FOR UPDATE`,
-        [datasetId, user.sub, thingspeakOwnerId],
+        [datasetId, user.sub, thingspeakDatasetName],
       );
 
       const dataset = result.rows[0];
