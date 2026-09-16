@@ -8,6 +8,7 @@ const ALLOWED_STORAGE_FIELDS = new Set([
   "field7",
   "field8",
 ]);
+const { MAX_CSV_UPLOAD_ROWS } = require("../config/uploadLimits");
 
 class DatasetImportError extends Error {
   constructor(message, fields) {
@@ -74,6 +75,8 @@ function validateImport(input, { requireName = true } = {}) {
   if (!timestampField) fields.timestampField = "Select one CSV timestamp column.";
   if (!rows || rows.length < 1)
     fields.rows = "Provide one or more CSV rows.";
+  else if (rows.length > MAX_CSV_UPLOAD_ROWS)
+    fields.rows = `Provide no more than ${MAX_CSV_UPLOAD_ROWS.toLocaleString("en-AU")} CSV rows per upload.`;
 
   if (Object.keys(fields).length) throw validationError(fields);
   return {
@@ -141,4 +144,5 @@ module.exports = {
   updateDataset,
   validateImport,
   mapRows,
+  MAX_CSV_UPLOAD_ROWS,
 };

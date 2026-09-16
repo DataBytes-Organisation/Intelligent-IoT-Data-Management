@@ -34,19 +34,27 @@ const getSeriesByDatasetName = async (req, res) => {
 };
 
 /**
- * POST /api/datasets/:name/series/filter
+ * POST /api/datasets/:datasetId/series/filter
  * Filters wide-format entries by a list of metric names.
  */
 const filterSeriesByMetrics = async (req, res) => {
   try {
-    const { name } = req.params;
+    const { datasetId } = req.params;
     const { streamNames } = req.body;
+
+    if (!/^\d+$/.test(datasetId) || Number(datasetId) < 1) {
+      return res.status(400).json({ error: 'Dataset ID must be a positive integer' });
+    }
 
     if (!Array.isArray(streamNames) || streamNames.length === 0) {
       return res.status(400).json({ error: 'streamNames must be a non-empty array' });
     }
 
-    const filtered = await timeseriesService.filterWideEntriesByMetrics(name, streamNames);
+    const filtered = await timeseriesService.filterWideEntriesByMetrics(
+      Number(datasetId),
+      streamNames,
+      req.user.sub
+    );
 
     if (!filtered) {
       return res.status(404).json({ error: 'Dataset not found or empty' });
