@@ -45,3 +45,4 @@ data_science/outputs/*.png
 .env.development.local
 .env.test.local
 .env.production.local
+venv/

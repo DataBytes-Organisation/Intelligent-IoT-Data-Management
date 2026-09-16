@@ -35,6 +35,7 @@ const buildDatasetCard = (dataset) => ({
       ? "Live"
       : formatUpdatedTime(dataset.updatedAt),
   status: "Available",
+  isSystemDataset: dataset.name === "thingspeak-live",
 });
 
 export const useDatasets = () => {
@@ -88,10 +89,15 @@ export const useDatasets = () => {
     loadDatasets();
   }, [loadDatasets]);
 
+  const removeDataset = useCallback((id) => {
+    setDatasets((prev) => prev.filter((dataset) => dataset.id !== id));
+  }, []);
+
   return {
     datasets,
     loading,
     error,
     refreshDatasets: loadDatasets,
+    removeDataset,
   };
 };
