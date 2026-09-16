@@ -707,7 +707,6 @@
   gap: 1rem;
 }
 
-
 /* =========================================================
    DESKTOP
    ========================================================= */
@@ -859,48 +858,6 @@
   .summary-pill {
     min-width: 100%;
   }
-
-  .chart-analysis-card {
-    min-height: 350px;
-    padding: 1rem;
-  }
-
-  .sensor-trends-chart,
-  .scatter-chart {
-    height: 280px;
-  }
-
-  .chart-empty-state {
-    min-height: 280px;
-  }
-
-  .correlation-summary {
-    position: static;
-    grid-column: auto;
-    max-width: none;
-    margin: 0 0 0.65rem;
-    padding: 0;
-    text-align: left;
-  }
-
-  .correlation-content {
-    grid-template-columns: 1fr;
-  }
-
-  .scatter-card {
-    display: block;
-    grid-column: auto;
-  }
-
-  .scatter-title,
-  .correlation-content .scatter-chart {
-    grid-column: auto;
-    grid-row: auto;
-  }
-
-  .scatter-title {
-    margin-bottom: 0.3rem;
-  }
 }
 
 .selector-group {
@@ -929,6 +886,48 @@
   right: 0;
   z-index: 9999;
 }
+
+/* Container for the chips */
+.streams-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px; /* Adjust spacing between chips */
+  padding: 16px 0;
+}
+
+.stream-chip {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  /* OR use a simpler background if Figma shows plain */
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px; /* Pill shape */
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  width: fit-content;
+}
+
+.stream-chip:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-color: #667eea;
+}
+
+.stream-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.stream-unit {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 400;
+}
+
 
 /* Sensor Timeline */
 

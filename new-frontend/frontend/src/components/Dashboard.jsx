@@ -37,6 +37,8 @@ const Dashboard = ({ datasetId }) => {
   }, [sensorData]);
 
   const streamNames = useStreamNames(data);
+  
+  // Keep Rimzim's new streamLabels feature
   const streamLabels = useMemo(() => {
     return Object.fromEntries(
       (sensorData?.metadata?.streams || []).map((stream) => [
@@ -47,11 +49,13 @@ const Dashboard = ({ datasetId }) => {
       ])
     );
   }, [sensorData]);
+
   const { timeOptions } = useTimeRange(data);
 
   const [selectedTimeStart, setSelectedTimeStart] = useState('');
   const [selectedTimeEnd, setSelectedTimeEnd] = useState('');
   const [selectedStreams, setSelectedStreams] = useState([]);
+  const [selectedStream, setSelectedStream] = useState(null); // Added for chip highlighting
 
   const [analysisResult, setAnalysisResult] = useState(null);
   const [analysisLoading, setAnalysisLoading] = useState(false);
@@ -327,6 +331,7 @@ const Dashboard = ({ datasetId }) => {
     );
   }
 
+  // --- REST OF THE COMPONENT ---
   return (
     <div className="dashboard-page">
 
@@ -390,18 +395,27 @@ const Dashboard = ({ datasetId }) => {
         </div>
       </section>
 
-      {/* =====================================================
-          AVAILABLE STREAMS
-          ===================================================== */}
-
+      {/* ✅ THIS IS THE FIXED SECTION THAT READS DIRECTLY FROM BACKEND ✅ */}
       <section className="dashboard-section stream-panel">
-        <h3 className="section-title">
-          Available Streams
-        </h3>
-
-        <p className="stream-list">
-          {streamNames.map((s) => s.name).join(', ')}
-        </p>
+        <h3 className="section-title">Available Streams</h3>
+        <div className="streams-container">
+          {sensorData.metadata?.streams?.map((stream, index) => {
+            // ✅ USE THE EXACT SAME streamLabels FALLBACK AS THE DROPDOWN ✅
+            const displayName = streamLabels[stream.id] || stream.id;
+    
+            return (
+              <div 
+                key={index} 
+                className={`stream-chip ${selectedStream === stream.id ? 'selected' : ''}`}
+                onClick={() => setSelectedStream(stream.id)}
+                tabIndex={0}
+              >
+                <span className="stream-name">{displayName}</span>
+                {stream.unit && <span className="stream-unit">({stream.unit})</span>}
+              </div>
+            );
+          })}
+        </div>
       </section>
 
       {/* =====================================================
