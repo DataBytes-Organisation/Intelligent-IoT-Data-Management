@@ -20,8 +20,9 @@ test("findAll returns the user's and ThingSpeak datasets with their row counts",
 
   try {
     const datasets = await datasetRepository.findAll(
+      "active",
       "user-uuid",
-      "thingspeak-owner-uuid"
+      "thingspeak-owner-uuid",
     );
 
     assert.deepEqual(datasets, [
@@ -70,7 +71,7 @@ test("findById returns dataset detail with its total persisted row count", async
     const dataset = await datasetRepository.findById(
       1,
       "user-uuid",
-      "thingspeak-owner-uuid"
+      "thingspeak-owner-uuid",
     );
 
     assert.deepEqual(dataset, {

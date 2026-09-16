@@ -11,33 +11,47 @@
  * It manages dataset metadata and the reviewed CSV import endpoint.
  */
 
-const datasetService = require('../services/datasetService');
-const crypto = require('crypto');
+const datasetService = require("../services/datasetService");
+const crypto = require("crypto");
 
-const requestId = (req) => req.get('x-request-id') || `req_${crypto.randomUUID()}`;
+const requestId = (req) =>
+  req.get("x-request-id") || `req_${crypto.randomUUID()}`;
 const datasetError = (res, req, err) => {
-  const status = err.status || (err.code === '23505' ? 409 : 500);
-  const code = err.code === '23505' ? 'DATASET_NAME_EXISTS' : err.code || 'INTERNAL_ERROR';
-  if (status >= 500) console.error('Dataset request failed:', err);
+  const status = err.status || (err.code === "23505" ? 409 : 500);
+  const code =
+    err.code === "23505" ? "DATASET_NAME_EXISTS" : err.code || "INTERNAL_ERROR";
+  if (status >= 500) console.error("Dataset request failed:", err);
   const error = {
     code,
-    message: status === 500 ? 'An unexpected error occurred.' : err.message,
+    message: status === 500 ? "An unexpected error occurred." : err.message,
   };
   if (err.fields) error.fields = err.fields;
-  return res.status(status).json({ error, meta: { requestId: requestId(req) } });
+  return res
+    .status(status)
+    .json({ error, meta: { requestId: requestId(req) } });
 };
 
 /**
  * GET /api/datasets
- * Returns a list of all datasets.
+ * Returns a list of all datasets accessible to the authenticated user.
+ * Optional ?status=active|deleted (default: active).
  */
 const getAllDatasets = async (req, res) => {
   try {
-    const datasets = await datasetService.getAllDatasets(req.user.sub);
+    const status = req.query.status || "active";
+    if (!["active", "deleted"].includes(status)) {
+      return res.status(400).json({
+        error: {
+          code: "VALIDATION_ERROR",
+          message: "status must be one of: active, deleted",
+        },
+      });
+    }
+    const datasets = await datasetService.getAllDatasets(status, req.user.sub);
     return res.status(200).json(datasets);
   } catch (err) {
-    console.error('Error getting datasets:', err);
-    return res.status(500).json({ error: 'Failed to load datasets' });
+    console.error("Error getting datasets:", err);
+    return res.status(500).json({ error: "Failed to load datasets" });
   }
 };
 
@@ -49,18 +63,20 @@ const getDatasetById = async (req, res) => {
   try {
     const { id } = req.params;
     if (!/^\d+$/.test(id) || Number(id) < 1) {
-      return res.status(400).json({ error: 'Dataset ID must be a positive integer' });
+      return res
+        .status(400)
+        .json({ error: "Dataset ID must be a positive integer" });
     }
     const dataset = await datasetService.getDatasetById(id, req.user.sub);
 
     if (!dataset) {
-      return res.status(404).json({ error: 'Dataset not found' });
+      return res.status(404).json({ error: "Dataset not found" });
     }
 
     return res.status(200).json(dataset);
   } catch (err) {
-    console.error('Error getting dataset by ID:', err);
-    return res.status(500).json({ error: 'Failed to load dataset' });
+    console.error("Error getting dataset by ID:", err);
+    return res.status(500).json({ error: "Failed to load dataset" });
   }
 };
 
@@ -71,7 +87,9 @@ const getDatasetById = async (req, res) => {
 const createDataset = async (req, res) => {
   try {
     const dataset = await datasetService.importDataset(req.body, req.user.sub);
-    return res.status(201).json({ data: dataset, meta: { requestId: requestId(req) } });
+    return res
+      .status(201)
+      .json({ data: dataset, meta: { requestId: requestId(req) } });
   } catch (err) {
     return datasetError(res, req, err);
   }
@@ -83,8 +101,14 @@ const createDataset = async (req, res) => {
  */
 const updateDataset = async (req, res) => {
   try {
-    const dataset = await datasetService.updateDataset(req.params.id, req.body, req.user);
-    return res.status(200).json({ data: dataset, meta: { requestId: requestId(req) } });
+    const dataset = await datasetService.updateDataset(
+      req.params.id,
+      req.body,
+      req.user,
+    );
+    return res
+      .status(200)
+      .json({ data: dataset, meta: { requestId: requestId(req) } });
   } catch (err) {
     return datasetError(res, req, err);
   }
@@ -98,11 +122,15 @@ const deleteDataset = async (req, res) => {
   try {
     const { id } = req.params;
     if (!/^\d+$/.test(id) || Number(id) < 1) {
-      return res.status(400).json({ error: 'Dataset ID must be a positive integer' });
+      return res
+        .status(400)
+        .json({ error: "Dataset ID must be a positive integer" });
     }
 
     const dataset = await datasetService.deleteDataset(id, req.user);
-    return res.status(200).json({ data: dataset, meta: { requestId: requestId(req) } });
+    return res
+      .status(200)
+      .json({ data: dataset, meta: { requestId: requestId(req) } });
   } catch (err) {
     return datasetError(res, req, err);
   }

@@ -11,13 +11,19 @@
  * This repository does NOT interact with time‑series rows.
  */
 
-const db = require('../db/pool'); // pg Pool instance
+const db = require("../db/pool"); // pg Pool instance
 const repositoryError = (code, status, message) =>
   Object.assign(new Error(message), { code, status });
 
 class DatasetRepository {
-  async findAll(userId, thingspeakOwnerId) {
-    const result = await db.query(`
+  async findAll(status, userId, thingspeakOwnerId) {
+    const whereClause =
+      status === "deleted"
+        ? "d.deleted_at IS NOT NULL AND d.deleted_at > CURRENT_TIMESTAMP - INTERVAL '15 days'"
+        : "d.deleted_at IS NULL";
+
+    const result = await db.query(
+      `
       SELECT
         d.id,
         d.name,
@@ -25,15 +31,32 @@ class DatasetRepository {
         d.created_by AS "createdBy",
         d.updated_by AS "updatedBy",
         d.created_at AS "createdAt",
-        d.updated_at AS "updatedAt"
+        d.updated_at AS "updatedAt",
+        d.deleted_at AS "deletedAt"
       FROM datasets d
       LEFT JOIN timeseries t ON t.dataset_id = d.id
-      WHERE d.deleted_at IS NULL
+      WHERE ${whereClause}
         AND (d.created_by = $1 OR d.created_by = $2)
-      GROUP BY d.id, d.name, d.created_by, d.updated_by, d.created_at, d.updated_at
+      GROUP BY d.id, d.name, d.created_by, d.updated_by, d.created_at, d.updated_at, d.deleted_at
       ORDER BY d.id ASC
-    `, [userId, thingspeakOwnerId]);
-    return result.rows;
+    `,
+      [userId, thingspeakOwnerId],
+    );
+
+    return result.rows.map((row) => {
+      if (status !== "deleted") return row;
+      const { deletedAt, ...rest } = row;
+      const recoveryExpiresAt = new Date(
+        new Date(deletedAt).getTime() + 15 * 86400000,
+      );
+      const remainingMs = recoveryExpiresAt.getTime() - Date.now();
+      return {
+        ...rest,
+        deletedAt,
+        recoveryExpiresAt: recoveryExpiresAt.toISOString(),
+        remainingRecoveryDays: Math.max(0, Math.floor(remainingMs / 86400000)),
+      };
+    });
   }
 
   async findById(id, userId, thingspeakOwnerId) {
@@ -74,7 +97,7 @@ class DatasetRepository {
         AND d.deleted_at IS NULL
         AND (d.created_by = $2 OR d.created_by = $3)
       `,
-      [id, userId, thingspeakOwnerId]
+      [id, userId, thingspeakOwnerId],
     );
     return result.rows[0] || null;
   }
@@ -89,7 +112,7 @@ class DatasetRepository {
         AND created_by = $2
         AND deleted_at IS NULL
       `,
-      [name, userId]
+      [name, userId],
     );
     return result.rows[0] || null;
   }
@@ -103,7 +126,7 @@ class DatasetRepository {
       VALUES ($1, $2, $2)
       RETURNING id, name, created_by AS "createdBy", updated_by AS "updatedBy"
       `,
-      [name, userId]
+      [name, userId],
     );
 
     return result.rows[0];
@@ -140,20 +163,36 @@ class DatasetRepository {
           `INSERT INTO dataset_field_mappings
              (dataset_id, source_field, storage_field, source_data_type, display_name, created_by, updated_by)
            VALUES ($1, $2, $3, $4, $5, $6, $6)`,
-          [dataset.id, mapping.sourceField, mapping.storageField, mapping.sourceDataType, mapping.displayName, userId],
+          [
+            dataset.id,
+            mapping.sourceField,
+            mapping.storageField,
+            mapping.sourceDataType,
+            mapping.displayName,
+            userId,
+          ],
         );
       }
 
       for (const row of wideRows) {
-        const storageFields = Object.keys(row).filter((key) => key.startsWith("field"));
-        const columns = ["dataset_id", "created_at", "entry_id", ...storageFields];
+        const storageFields = Object.keys(row).filter((key) =>
+          key.startsWith("field"),
+        );
+        const columns = [
+          "dataset_id",
+          "created_at",
+          "entry_id",
+          ...storageFields,
+        ];
         const values = [
           dataset.id,
           row.createdAt,
           row.entryId,
           ...storageFields.map((field) => row[field]),
         ];
-        const placeholders = columns.map((_, index) => `$${index + 1}`).join(", ");
+        const placeholders = columns
+          .map((_, index) => `$${index + 1}`)
+          .join(", ");
         await client.query(
           `INSERT INTO timeseries (${columns.join(", ")}) VALUES (${placeholders})`,
           values,
@@ -174,28 +213,48 @@ class DatasetRepository {
     }
   }
 
-  async replaceMappingsAndAddRows(datasetId, { description, timestampField, mappings, wideRows, user }) {
+  async replaceMappingsAndAddRows(
+    datasetId,
+    { description, timestampField, mappings, wideRows, user },
+  ) {
     const client = await db.connect();
     try {
       await client.query("BEGIN");
       const datasetResult = await client.query(
         `SELECT id, created_by AS "createdBy"
-         FROM datasets WHERE id = $1 FOR UPDATE`,
+       FROM datasets
+       WHERE id = $1
+         AND deleted_at IS NULL
+       FOR UPDATE`,
         [datasetId],
       );
       const dataset = datasetResult.rows[0];
       if (!dataset)
         throw repositoryError("DATASET_NOT_FOUND", 404, "Dataset not found.");
       if (dataset.createdBy !== user.sub && user.role !== "admin")
-        throw repositoryError("FORBIDDEN", 403, "You cannot update this dataset.");
+        throw repositoryError(
+          "FORBIDDEN",
+          403,
+          "You cannot update this dataset.",
+        );
 
-      await client.query(`DELETE FROM dataset_field_mappings WHERE dataset_id = $1`, [datasetId]);
+      await client.query(
+        `DELETE FROM dataset_field_mappings WHERE dataset_id = $1`,
+        [datasetId],
+      );
       for (const mapping of mappings) {
         await client.query(
           `INSERT INTO dataset_field_mappings
              (dataset_id, source_field, storage_field, source_data_type, display_name, created_by, updated_by)
            VALUES ($1, $2, $3, $4, $5, $6, $6)`,
-          [datasetId, mapping.sourceField, mapping.storageField, mapping.sourceDataType, mapping.displayName, user.sub],
+          [
+            datasetId,
+            mapping.sourceField,
+            mapping.storageField,
+            mapping.sourceDataType,
+            mapping.displayName,
+            user.sub,
+          ],
         );
       }
 
@@ -206,10 +265,24 @@ class DatasetRepository {
       );
       const maxEntryId = maxEntryResult.rows[0].maxEntryId;
       for (const [index, row] of wideRows.entries()) {
-        const storageFields = Object.keys(row).filter((key) => key.startsWith("field"));
-        const columns = ["dataset_id", "created_at", "entry_id", ...storageFields];
-        const values = [datasetId, row.createdAt, maxEntryId + index + 1, ...storageFields.map((field) => row[field])];
-        const placeholders = columns.map((_, index) => `$${index + 1}`).join(", ");
+        const storageFields = Object.keys(row).filter((key) =>
+          key.startsWith("field"),
+        );
+        const columns = [
+          "dataset_id",
+          "created_at",
+          "entry_id",
+          ...storageFields,
+        ];
+        const values = [
+          datasetId,
+          row.createdAt,
+          maxEntryId + index + 1,
+          ...storageFields.map((field) => row[field]),
+        ];
+        const placeholders = columns
+          .map((_, index) => `$${index + 1}`)
+          .join(", ");
         await client.query(
           `INSERT INTO timeseries (${columns.join(", ")}) VALUES (${placeholders})`,
           values,

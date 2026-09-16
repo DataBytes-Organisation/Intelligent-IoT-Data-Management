@@ -12,11 +12,12 @@
  * It only manages dataset metadata (id, name, etc.).
  */
 
-const datasetRepository = require('../repositories/datasetRepository');
-const { importDataset, updateDataset } = require('./datasetImportService');
+const datasetRepository = require("../repositories/datasetRepository");
+const { importDataset, updateDataset } = require("./datasetImportService");
+
 const configurationError = (message) =>
   Object.assign(new Error(message), {
-    code: 'DATASET_CONFIGURATION_ERROR',
+    code: "DATASET_CONFIGURATION_ERROR",
     status: 500,
   });
 
@@ -24,7 +25,7 @@ function getThingSpeakDatasetOwnerId() {
   const ownerId = process.env.THINGSPEAK_DATASET_OWNER_ID;
   if (!ownerId) {
     throw configurationError(
-      'THINGSPEAK_DATASET_OWNER_ID is required to list shared ThingSpeak data.'
+      "THINGSPEAK_DATASET_OWNER_ID is required to list shared ThingSpeak data.",
     );
   }
   return ownerId;
@@ -32,12 +33,13 @@ function getThingSpeakDatasetOwnerId() {
 
 class datasetService {
   /**
-   * Returns all datasets.
+   * Returns all datasets accessible to the given user, filtered by status.
    */
-  async getAllDatasets(userId) {
+  async getAllDatasets(status, userId) {
     return await datasetRepository.findAll(
+      status,
       userId,
-      getThingSpeakDatasetOwnerId()
+      getThingSpeakDatasetOwnerId(),
     );
   }
   async restoreDataset(datasetId, user) {
@@ -55,7 +57,7 @@ class datasetService {
     return await datasetRepository.findById(
       id,
       userId,
-      getThingSpeakDatasetOwnerId()
+      getThingSpeakDatasetOwnerId(),
     );
   }
 
@@ -69,8 +71,8 @@ class datasetService {
   /**
    * Creates a new dataset.
    */
-  async createDataset(data, userId) {
-    return await datasetRepository.create({ ...data, userId });
+  async createDataset(data) {
+    return await datasetRepository.create(data);
   }
 
   async importDataset(data, userId) {
@@ -83,9 +85,9 @@ class datasetService {
 
   async deleteDataset(id, user) {
     return datasetRepository.deleteDataset(
-      Number(id),
+      id,
       user,
-      getThingSpeakDatasetOwnerId()
+      getThingSpeakDatasetOwnerId(),
     );
   }
 }
