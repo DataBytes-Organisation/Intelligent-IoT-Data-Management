@@ -41,6 +41,7 @@ Use this document as the single source of truth for the MVP API release.
 | DATA-02 | `POST` | `/api/datasets` | Persist a reviewed CSV dataset, its mappings and mapped time-series rows | Bearer access token | FE upload wizard | Implemented |
 | DATA-03 | `PUT` | `/api/datasets/:id` | Replace mapping metadata and append reviewed CSV rows | Bearer access token | FE dataset editor | Implemented |
 | DATA-04 | `GET` | `/api/datasets/:id` | Retrieve one dataset's metadata and persisted row count | None | FE dataset detail | Implemented |
+| DATA-05 | `DELETE` | `/api/datasets/:id` | Soft-delete a dataset configuration and permanently remove synced time-series rows | Bearer access token | FE dataset management | Implemented |
 
 ## 4. Data and naming rules
 
@@ -690,6 +691,48 @@ The request uses the same timestamp, mapping, and row fields as `POST /api/datas
 | Database failure | `500` / `{ "error": "Failed to load dataset" }` |
 
 `timestampField` is the source CSV header used to write `timeseries.created_at`; it can be `null` for legacy datasets created before this field was saved. `mappings` is always an array. Each item contains the saved `sourceField`, `storageField`, `sourceDataType`, and `displayName`; items are ordered by `storageField`.
+
+### 6.13 DATA-05 - DELETE /api/datasets/:id
+
+| Field | Value |
+| --- | --- |
+| Purpose | Soft-delete an active dataset configuration while permanently deleting all synced rows from `timeseries` and `timeseries_long`. |
+| Authentication | `Authorization: Bearer <accessToken>` |
+| Content type | None |
+| Transaction behaviour | The time-series deletion and dataset metadata update run in one transaction. If any step fails, the request rolls back and no partial deletion is committed. |
+| Retained configuration | The `datasets` row, `timestamp_field`, and `dataset_field_mappings` rows remain for recovery. |
+
+**Success response: `200 OK`**
+
+```json
+{
+  "data": {
+    "id": 42,
+    "name": "microclimate-sensors-april-2026",
+    "description": "Greenhouse sensor readings collected during April 2026.",
+    "timestampField": "Time",
+    "deletedAt": "2026-09-16T02:00:00.000Z",
+    "deletedBy": "4c7c77b9-2bb8-4a3e-9b7a-4a66782e9dd6",
+    "dataDeletedAt": "2026-09-16T02:00:00.000Z",
+    "updatedAt": "2026-09-16T02:00:00.000Z",
+    "deletedRows": {
+      "timeseries": 18,
+      "timeseriesLong": 0
+    }
+  },
+  "meta": {
+    "requestId": "req_03"
+  }
+}
+```
+
+| Failure case | HTTP status / code | Frontend behaviour |
+| --- | --- | --- |
+| Dataset ID is not a positive integer | `400` / `{ "error": "Dataset ID must be a positive integer" }` | Keep the user on the current screen and show validation feedback. |
+| No/invalid/expired access token | `401` / `UNAUTHENTICATED` or `ACCESS_TOKEN_EXPIRED` | Refresh once, then return to sign-in if needed. |
+| Dataset does not exist, is owned by another user, or is owned by the ThingSpeak service account | `404` / `DATASET_NOT_FOUND` | Remove the stale item from local state or show not found. |
+| Dataset is already soft-deleted | `409` / `DATASET_ALREADY_DELETED` | Treat the delete action as no longer available and refresh the dataset list. |
+| Database failure | `500` / `INTERNAL_ERROR` | Keep the dataset visible; retry is safe because the database transaction was rolled back. |
 
 ## 7. Authentication and session flows
 

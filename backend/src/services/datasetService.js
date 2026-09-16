@@ -73,6 +73,14 @@ class datasetService {
   async updateDataset(id, data, user) {
     return updateDataset(id, data, user, datasetRepository);
   }
+
+  async deleteDataset(id, user) {
+    return datasetRepository.deleteDataset(
+      Number(id),
+      user,
+      getThingSpeakDatasetOwnerId()
+    );
+  }
 }
 
 module.exports = new datasetService();
