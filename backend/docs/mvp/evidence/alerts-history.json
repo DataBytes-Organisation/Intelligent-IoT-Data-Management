@@ -1,0 +1,96 @@
+{
+    "contract": {
+        "name": "Data API Contract",
+        "version": "v1.0.0-data",
+        "status": "contract-only-pending-BDAI-11",
+        "source": "../data-api-contract.md"
+    },
+    "description": "Standalone V1 alert history example payload for frontend adapter consumption. Alert persistence is pending BDAI-11.",
+    "request": {
+        "method": "GET",
+        "path": "/api/alerts/history",
+        "query": {
+            "datasetName": "thingspeak-live",
+            "status": "resolved",
+            "severity": "warning",
+            "limit": 2,
+            "offset": 0
+        },
+        "headers": {
+            "Authorization": "Bearer <accessToken>"
+        }
+    },
+    "response": {
+        "status": 200,
+        "body": {
+            "data": {
+                "dataset": {
+                    "id": 5,
+                    "name": "thingspeak-live",
+                    "displayName": "ThingSpeak Live Sensor Feed"
+                },
+                "alerts": [
+                    {
+                        "id": "alert_5702066_field1_high",
+                        "datasetName": "thingspeak-live",
+                        "entry_id": 5702066,
+                        "streamName": "field1",
+                        "severity": "warning",
+                        "status": "resolved",
+                        "message": "field1 exceeded the configured warning threshold.",
+                        "value": 113,
+                        "threshold": 100,
+                        "created_at": "2026-08-13T00:55:37.000Z",
+                        "resolved_at": "2026-08-13T01:05:37.000Z"
+                    },
+                    {
+                        "id": "alert_5696578_field1_high",
+                        "datasetName": "thingspeak-live",
+                        "entry_id": 5696578,
+                        "streamName": "field1",
+                        "severity": "warning",
+                        "status": "resolved",
+                        "message": "field1 exceeded the configured warning threshold.",
+                        "value": 138,
+                        "threshold": 100,
+                        "created_at": "2026-08-09T03:55:28.000Z",
+                        "resolved_at": "2026-08-09T04:05:28.000Z"
+                    }
+                ],
+                "pagination": {
+                    "limit": 2,
+                    "offset": 0,
+                    "total": 2
+                }
+            },
+            "meta": {
+                "requestId": "req_alert_history_success",
+                "timestamp": "2026-08-13T01:15:09.655Z",
+                "contractVersion": "v1"
+            }
+        }
+    },
+    "emptyResponse": {
+        "status": 200,
+        "body": {
+            "data": {
+                "dataset": {
+                    "id": 5,
+                    "name": "thingspeak-live",
+                    "displayName": "ThingSpeak Live Sensor Feed"
+                },
+                "alerts": [],
+                "pagination": {
+                    "limit": 10,
+                    "offset": 0,
+                    "total": 0
+                }
+            },
+            "meta": {
+                "requestId": "req_alert_history_empty",
+                "timestamp": "2026-08-13T01:15:09.655Z",
+                "contractVersion": "v1"
+            }
+        }
+    }
+}

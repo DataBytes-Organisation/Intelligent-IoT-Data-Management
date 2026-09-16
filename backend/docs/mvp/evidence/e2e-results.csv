@@ -1,0 +1,9 @@
+Step,Scenario,Area,Method,Endpoint Or Check,Expected Result,Actual Result,Status,Owner,Priority
+"1","Success","Dataset API","GET","/api/datasets","thingspeak-live appears in dataset list","thingspeak-live found","PASS","Backend","High"
+"2","Success","Series API","GET","/api/datasets/thingspeak-live/series","Live persisted rows are returned","Returned 289 rows","PASS","Backend","High"
+"3","Empty data","Series API","GET","/api/datasets/not-a-real-dataset/series","Clear missing dataset response","Dataset not found or empty","PASS","Backend","Medium"
+"4","Validation error","Filter API","POST","/api/datasets/thingspeak-live/series/filter","Invalid request is rejected","streamNames must be a non-empty array","PASS","Backend","Medium"
+"5","Success","Filter API","POST","/api/datasets/thingspeak-live/series/filter","Filtered live rows are returned","Returned 289 filtered rows","PASS","Backend","High"
+"6","Incomplete","Analytics API","POST","/api/analyse","Real analytics execution is performed","Returned placeholder message only","BLOCKED","Backend API / Analytics","High"
+"7","Incomplete","Alert persistence","N/A","Backend schema/routes","Generated alerts are persisted","No alerts table found","BLOCKED","Backend API / Analytics","High"
+"8","Incomplete","Dashboard rendering","N/A","Frontend dashboard","Dashboard renders live backend data","Dashboard uses useSensorData(true)","BLOCKED","Frontend","High"

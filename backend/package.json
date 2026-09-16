@@ -6,9 +6,7 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "migrate:auth": "node scripts/migrate-auth.js",
-    "migrate:dataset-import": "node scripts/migrate-dataset-import.js",
-    "test": "node --test test/*.test.js"
+    "test": "node --test"
   },
   "keywords": [],
   "author": "",
@@ -21,7 +19,6 @@
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
-    "nodemailer": "^9.0.5",
     "pg": "^8.20.0"
   },
   "devDependencies": {

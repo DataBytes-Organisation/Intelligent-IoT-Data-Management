@@ -1,0 +1,1155 @@
+{
+  "note": "This file currently holds two competing PROPOSED response-envelope conventions for the final V1 API contract, kept side by side rather than one overwriting the other. Neither matches the CURRENT live backend behaviour, which returns a flat array with no envelope (see backend/docs/mvp/api-contract.md Open Items for the actual captured evidence and the response-envelope decision that is still pending team review). movini_afi12_proposal uses a {data, meta} / {error, meta} envelope with real captured field values from a live thingspeak-live run. akshith_afi07_examples uses a {success, data, message} / {success, error} envelope with illustrative (non-captured) values. Do not treat either as final until the team decides.",
+  "movini_afi12_proposal": {
+    "contract": {
+      "name": "Data API Contract",
+      "version": "v1.0.0-data",
+      "status": "frontend-ready examples",
+      "source": "../data-api-contract.md"
+    },
+    "examples": {
+      "datasets": {
+        "listSuccess": {
+          "description": "Successful dataset list response for frontend dataset selection.",
+          "request": {
+            "method": "GET",
+            "path": "/api/datasets",
+            "query": {},
+            "headers": {
+              "Authorization": "Bearer <accessToken>"
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "data": {
+                "datasets": [
+                  {
+                    "id": 1,
+                    "name": "thingspeak-live",
+                    "displayName": "ThingSpeak Live Sensor Feed"
+                  }
+                ]
+              },
+              "meta": {
+                "requestId": "req_dataset_list_success",
+                "timestamp": "2026-08-13T00:00:00.000Z",
+                "contractVersion": "v1"
+              }
+            }
+          }
+        },
+        "listEmpty": {
+          "description": "Successful dataset list response when no datasets are available.",
+          "request": {
+            "method": "GET",
+            "path": "/api/datasets",
+            "query": {},
+            "headers": {
+              "Authorization": "Bearer <accessToken>"
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "data": {
+                "datasets": []
+              },
+              "meta": {
+                "requestId": "req_dataset_list_empty",
+                "timestamp": "2026-08-13T00:00:00.000Z",
+                "contractVersion": "v1"
+              }
+            }
+          }
+        },
+        "authenticationFailure": {
+          "description": "Dataset list request without a valid access token.",
+          "request": {
+            "method": "GET",
+            "path": "/api/datasets",
+            "query": {},
+            "headers": {}
+          },
+          "response": {
+            "status": 401,
+            "body": {
+              "error": {
+                "code": "AUTH_REQUIRED",
+                "message": "Authentication is required.",
+                "fields": {}
+              },
+              "meta": {
+                "requestId": "req_dataset_auth_failure",
+                "timestamp": "2026-08-13T00:00:00.000Z",
+                "contractVersion": "v1"
+              }
+            }
+          }
+        },
+        "upstreamFailure": {
+          "description": "Dataset list request when the database or upstream data source is unavailable.",
+          "request": {
+            "method": "GET",
+            "path": "/api/datasets",
+            "query": {},
+            "headers": {
+              "Authorization": "Bearer <accessToken>"
+            }
+          },
+          "response": {
+            "status": 503,
+            "body": {
+              "error": {
+                "code": "UPSTREAM_UNAVAILABLE",
+                "message": "Dataset service is temporarily unavailable.",
+                "fields": {}
+              },
+              "meta": {
+                "requestId": "req_dataset_upstream_failure",
+                "timestamp": "2026-08-13T00:00:00.000Z",
+                "contractVersion": "v1"
+              }
+            }
+          }
+        }
+      },
+      "series": {
+        "getSuccess": {
+          "description": "Successful V1 series response using real persisted ThingSpeak dataset evidence.",
+          "evidence": {
+            "source": "GET http://localhost:3000/api/datasets/thingspeak-live/series",
+            "capturedAt": "2026-08-13T01:15:09.655Z",
+            "datasetName": "thingspeak-live",
+            "datasetId": 5,
+            "persistedRowCount": 371,
+            "sampleEntryIds": [
+              5702066,
+              5702067,
+              5702068
+            ]
+          },
+          "request": {
+            "method": "GET",
+            "path": "/api/datasets/thingspeak-live/series",
+            "query": {
+              "limit": 3,
+              "sort": "created_at:desc"
+            },
+            "headers": {
+              "Authorization": "Bearer <accessToken>"
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "data": {
+                "dataset": {
+                  "id": 5,
+                  "name": "thingspeak-live",
+                  "displayName": "ThingSpeak Live Sensor Feed"
+                },
+                "series": [
+                  {
+                    "created_at": "2026-08-13T00:55:37.000Z",
+                    "entry_id": 5702066,
+                    "field1": 113,
+                    "field2": 1.8,
+                    "field3": 0,
+                    "field4": 0.1,
+                    "field5": 0,
+                    "field6": 29.59,
+                    "field7": 0,
+                    "field8": 0
+                  },
+                  {
+                    "created_at": "2026-08-13T00:56:37.000Z",
+                    "entry_id": 5702067,
+                    "field1": 0,
+                    "field2": 2,
+                    "field3": 0,
+                    "field4": 0.1,
+                    "field5": 0,
+                    "field6": 29.59,
+                    "field7": 0,
+                    "field8": 0
+                  },
+                  {
+                    "created_at": "2026-08-13T00:57:37.000Z",
+                    "entry_id": 5702068,
+                    "field1": 0,
+                    "field2": 1.7,
+                    "field3": 0,
+                    "field4": 0.1,
+                    "field5": 0,
+                    "field6": 29.59,
+                    "field7": 0,
+                    "field8": 0
+                  }
+                ]
+              },
+              "meta": {
+                "requestId": "req_series_success",
+                "timestamp": "2026-08-13T01:15:09.655Z",
+                "contractVersion": "v1"
+              }
+            }
+          }
+        },
+        "getEmpty": {
+          "description": "Successful V1 series response when the dataset exists but no rows match the query.",
+          "request": {
+            "method": "GET",
+            "path": "/api/datasets/thingspeak-live/series",
+            "query": {
+              "from": "2030-01-01T00:00:00.000Z",
+              "to": "2030-01-02T00:00:00.000Z"
+            },
+            "headers": {
+              "Authorization": "Bearer <accessToken>"
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "data": {
+                "dataset": {
+                  "id": 5,
+                  "name": "thingspeak-live",
+                  "displayName": "ThingSpeak Live Sensor Feed"
+                },
+                "series": []
+              },
+              "meta": {
+                "requestId": "req_series_empty",
+                "timestamp": "2026-08-13T01:15:09.655Z",
+                "contractVersion": "v1"
+              }
+            }
+          }
+        },
+        "validationError": {
+          "description": "Series request with an invalid date range.",
+          "request": {
+            "method": "GET",
+            "path": "/api/datasets/thingspeak-live/series",
+            "query": {
+              "from": "2026-08-14T00:00:00.000Z",
+              "to": "2026-08-13T00:00:00.000Z"
+            },
+            "headers": {
+              "Authorization": "Bearer <accessToken>"
+            }
+          },
+          "response": {
+            "status": 400,
+            "body": {
+              "error": {
+                "code": "VALIDATION_ERROR",
+                "message": "Invalid series query parameters.",
+                "fields": {
+                  "to": "to must be greater than or equal to from"
+                }
+              },
+              "meta": {
+                "requestId": "req_series_validation_error",
+                "timestamp": "2026-08-13T01:15:09.655Z",
+                "contractVersion": "v1"
+              }
+            }
+          }
+        },
+        "notFound": {
+          "description": "Series request for an unknown dataset.",
+          "request": {
+            "method": "GET",
+            "path": "/api/datasets/unknown-dataset/series",
+            "query": {},
+            "headers": {
+              "Authorization": "Bearer <accessToken>"
+            }
+          },
+          "response": {
+            "status": 404,
+            "body": {
+              "error": {
+                "code": "DATASET_NOT_FOUND",
+                "message": "Dataset was not found.",
+                "fields": {
+                  "name": "unknown-dataset"
+                }
+              },
+              "meta": {
+                "requestId": "req_series_not_found",
+                "timestamp": "2026-08-13T01:15:09.655Z",
+                "contractVersion": "v1"
+              }
+            }
+          }
+        },
+        "upstreamFailure": {
+          "description": "Series request when the database or upstream data source is unavailable.",
+          "request": {
+            "method": "GET",
+            "path": "/api/datasets/thingspeak-live/series",
+            "query": {},
+            "headers": {
+              "Authorization": "Bearer <accessToken>"
+            }
+          },
+          "response": {
+            "status": 503,
+            "body": {
+              "error": {
+                "code": "UPSTREAM_UNAVAILABLE",
+                "message": "Series data is temporarily unavailable.",
+                "fields": {}
+              },
+              "meta": {
+                "requestId": "req_series_upstream_failure",
+                "timestamp": "2026-08-13T01:15:09.655Z",
+                "contractVersion": "v1"
+              }
+            }
+          }
+        }
+      },
+      "filters": {
+        "postSuccess": {
+          "description": "Successful V1 filtered series response using selected persisted ThingSpeak fields.",
+          "evidence": {
+            "source": "POST http://localhost:3000/api/datasets/thingspeak-live/series/filter",
+            "datasetName": "thingspeak-live",
+            "datasetId": 5,
+            "selectedStreamNames": [
+              "field1",
+              "field2",
+              "field6"
+            ],
+            "sampleEntryIds": [
+              5702066,
+              5702067,
+              5702068
+            ]
+          },
+          "request": {
+            "method": "POST",
+            "path": "/api/datasets/thingspeak-live/series/filter",
+            "headers": {
+              "Authorization": "Bearer <accessToken>",
+              "Content-Type": "application/json"
+            },
+            "body": {
+              "streamNames": [
+                "field1",
+                "field2",
+                "field6"
+              ]
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "data": {
+                "dataset": {
+                  "id": 5,
+                  "name": "thingspeak-live",
+                  "displayName": "ThingSpeak Live Sensor Feed"
+                },
+                "filters": {
+                  "streamNames": [
+                    "field1",
+                    "field2",
+                    "field6"
+                  ]
+                },
+                "series": [
+                  {
+                    "created_at": "2026-08-13T00:55:37.000Z",
+                    "entry_id": 5702066,
+                    "field1": 113,
+                    "field2": 1.8,
+                    "field6": 29.59
+                  },
+                  {
+                    "created_at": "2026-08-13T00:56:37.000Z",
+                    "entry_id": 5702067,
+                    "field1": 0,
+                    "field2": 2,
+                    "field6": 29.59
+                  },
+                  {
+                    "created_at": "2026-08-13T00:57:37.000Z",
+                    "entry_id": 5702068,
+                    "field1": 0,
+                    "field2": 1.7,
+                    "field6": 29.59
+                  }
+                ]
+              },
+              "meta": {
+                "requestId": "req_filter_success",
+                "timestamp": "2026-08-13T01:15:09.655Z",
+                "contractVersion": "v1"
+              }
+            }
+          }
+        },
+        "postEmpty": {
+          "description": "Successful V1 filtered response when the filter is valid but no rows match the query.",
+          "request": {
+            "method": "POST",
+            "path": "/api/datasets/thingspeak-live/series/filter",
+            "headers": {
+              "Authorization": "Bearer <accessToken>",
+              "Content-Type": "application/json"
+            },
+            "body": {
+              "streamNames": [
+                "field1",
+                "field2"
+              ],
+              "from": "2030-01-01T00:00:00.000Z",
+              "to": "2030-01-02T00:00:00.000Z"
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "data": {
+                "dataset": {
+                  "id": 5,
+                  "name": "thingspeak-live",
+                  "displayName": "ThingSpeak Live Sensor Feed"
+                },
+                "filters": {
+                  "streamNames": [
+                    "field1",
+                    "field2"
+                  ],
+                  "from": "2030-01-01T00:00:00.000Z",
+                  "to": "2030-01-02T00:00:00.000Z"
+                },
+                "series": []
+              },
+              "meta": {
+                "requestId": "req_filter_empty",
+                "timestamp": "2026-08-13T01:15:09.655Z",
+                "contractVersion": "v1"
+              }
+            }
+          }
+        },
+        "validationError": {
+          "description": "Filter request with no selected stream names.",
+          "request": {
+            "method": "POST",
+            "path": "/api/datasets/thingspeak-live/series/filter",
+            "headers": {
+              "Authorization": "Bearer <accessToken>",
+              "Content-Type": "application/json"
+            },
+            "body": {
+              "streamNames": []
+            }
+          },
+          "response": {
+            "status": 400,
+            "body": {
+              "error": {
+                "code": "VALIDATION_ERROR",
+                "message": "Invalid filter request.",
+                "fields": {
+                  "streamNames": "streamNames must be a non-empty array"
+                }
+              },
+              "meta": {
+                "requestId": "req_filter_validation_error",
+                "timestamp": "2026-08-13T01:15:09.655Z",
+                "contractVersion": "v1"
+              }
+            }
+          }
+        },
+        "authenticationFailure": {
+          "description": "Filter request without a valid access token.",
+          "request": {
+            "method": "POST",
+            "path": "/api/datasets/thingspeak-live/series/filter",
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "body": {
+              "streamNames": [
+                "field1",
+                "field2"
+              ]
+            }
+          },
+          "response": {
+            "status": 401,
+            "body": {
+              "error": {
+                "code": "AUTH_REQUIRED",
+                "message": "Authentication is required.",
+                "fields": {}
+              },
+              "meta": {
+                "requestId": "req_filter_auth_failure",
+                "timestamp": "2026-08-13T01:15:09.655Z",
+                "contractVersion": "v1"
+              }
+            }
+          }
+        },
+        "upstreamFailure": {
+          "description": "Filter request when the database or upstream data source is unavailable.",
+          "request": {
+            "method": "POST",
+            "path": "/api/datasets/thingspeak-live/series/filter",
+            "headers": {
+              "Authorization": "Bearer <accessToken>",
+              "Content-Type": "application/json"
+            },
+            "body": {
+              "streamNames": [
+                "field1",
+                "field2"
+              ]
+            }
+          },
+          "response": {
+            "status": 503,
+            "body": {
+              "error": {
+                "code": "UPSTREAM_UNAVAILABLE",
+                "message": "Filtered series data is temporarily unavailable.",
+                "fields": {}
+              },
+              "meta": {
+                "requestId": "req_filter_upstream_failure",
+                "timestamp": "2026-08-13T01:15:09.655Z",
+                "contractVersion": "v1"
+              }
+            }
+          }
+        }
+      },
+      "analytics": {
+        "postSuccess": {
+          "description": "Successful V1 analytics response. Contract-only example pending persisted analytics implementation.",
+          "implementationStatus": "contract-only-pending-BDAI-10",
+          "request": {
+            "method": "POST",
+            "path": "/api/analyse",
+            "headers": {
+              "Authorization": "Bearer <accessToken>",
+              "Content-Type": "application/json"
+            },
+            "body": {
+              "datasetName": "thingspeak-live",
+              "streamNames": [
+                "field1",
+                "field2",
+                "field6"
+              ],
+              "analysisType": "summary",
+              "from": "2026-08-13T00:55:37.000Z",
+              "to": "2026-08-13T00:57:37.000Z"
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "data": {
+                "dataset": {
+                  "id": 5,
+                  "name": "thingspeak-live",
+                  "displayName": "ThingSpeak Live Sensor Feed"
+                },
+                "analysis": {
+                  "analysisType": "summary",
+                  "window": {
+                    "from": "2026-08-13T00:55:37.000Z",
+                    "to": "2026-08-13T00:57:37.000Z"
+                  },
+                  "streams": [
+                    {
+                      "name": "field1",
+                      "count": 3,
+                      "min": 0,
+                      "max": 113,
+                      "average": 37.67
+                    },
+                    {
+                      "name": "field2",
+                      "count": 3,
+                      "min": 1.7,
+                      "max": 2,
+                      "average": 1.83
+                    },
+                    {
+                      "name": "field6",
+                      "count": 3,
+                      "min": 29.59,
+                      "max": 29.59,
+                      "average": 29.59
+                    }
+                  ]
+                }
+              },
+              "meta": {
+                "requestId": "req_analytics_success",
+                "timestamp": "2026-08-13T01:15:09.655Z",
+                "contractVersion": "v1"
+              }
+            }
+          }
+        },
+        "postEmpty": {
+          "description": "Successful analytics response when no rows match the requested window.",
+          "implementationStatus": "contract-only-pending-BDAI-10",
+          "request": {
+            "method": "POST",
+            "path": "/api/analyse",
+            "headers": {
+              "Authorization": "Bearer <accessToken>",
+              "Content-Type": "application/json"
+            },
+            "body": {
+              "datasetName": "thingspeak-live",
+              "streamNames": [
+                "field1",
+                "field2"
+              ],
+              "analysisType": "summary",
+              "from": "2030-01-01T00:00:00.000Z",
+              "to": "2030-01-02T00:00:00.000Z"
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "data": {
+                "dataset": {
+                  "id": 5,
+                  "name": "thingspeak-live",
+                  "displayName": "ThingSpeak Live Sensor Feed"
+                },
+                "analysis": {
+                  "analysisType": "summary",
+                  "window": {
+                    "from": "2030-01-01T00:00:00.000Z",
+                    "to": "2030-01-02T00:00:00.000Z"
+                  },
+                  "streams": []
+                }
+              },
+              "meta": {
+                "requestId": "req_analytics_empty",
+                "timestamp": "2026-08-13T01:15:09.655Z",
+                "contractVersion": "v1"
+              }
+            }
+          }
+        },
+        "validationError": {
+          "description": "Analytics request with unsupported analysis type.",
+          "request": {
+            "method": "POST",
+            "path": "/api/analyse",
+            "headers": {
+              "Authorization": "Bearer <accessToken>",
+              "Content-Type": "application/json"
+            },
+            "body": {
+              "datasetName": "thingspeak-live",
+              "streamNames": [
+                "field1"
+              ],
+              "analysisType": "unsupported-type"
+            }
+          },
+          "response": {
+            "status": 400,
+            "body": {
+              "error": {
+                "code": "VALIDATION_ERROR",
+                "message": "Invalid analytics request.",
+                "fields": {
+                  "analysisType": "analysisType must be one of: summary, correlation, anomaly"
+                }
+              },
+              "meta": {
+                "requestId": "req_analytics_validation_error",
+                "timestamp": "2026-08-13T01:15:09.655Z",
+                "contractVersion": "v1"
+              }
+            }
+          }
+        },
+        "authenticationFailure": {
+          "description": "Analytics request without a valid access token.",
+          "request": {
+            "method": "POST",
+            "path": "/api/analyse",
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "body": {
+              "datasetName": "thingspeak-live",
+              "streamNames": [
+                "field1"
+              ],
+              "analysisType": "summary"
+            }
+          },
+          "response": {
+            "status": 401,
+            "body": {
+              "error": {
+                "code": "AUTH_REQUIRED",
+                "message": "Authentication is required.",
+                "fields": {}
+              },
+              "meta": {
+                "requestId": "req_analytics_auth_failure",
+                "timestamp": "2026-08-13T01:15:09.655Z",
+                "contractVersion": "v1"
+              }
+            }
+          }
+        },
+        "upstreamFailure": {
+          "description": "Analytics request when the analytics service is unavailable.",
+          "implementationStatus": "contract-only-pending-BDAI-10",
+          "request": {
+            "method": "POST",
+            "path": "/api/analyse",
+            "headers": {
+              "Authorization": "Bearer <accessToken>",
+              "Content-Type": "application/json"
+            },
+            "body": {
+              "datasetName": "thingspeak-live",
+              "streamNames": [
+                "field1",
+                "field2"
+              ],
+              "analysisType": "summary"
+            }
+          },
+          "response": {
+            "status": 503,
+            "body": {
+              "error": {
+                "code": "UPSTREAM_UNAVAILABLE",
+                "message": "Analytics service is temporarily unavailable.",
+                "fields": {}
+              },
+              "meta": {
+                "requestId": "req_analytics_upstream_failure",
+                "timestamp": "2026-08-13T01:15:09.655Z",
+                "contractVersion": "v1"
+              }
+            }
+          }
+        }
+      },
+      "latestAlerts": {
+        "getSuccess": {
+          "description": "Successful V1 latest alerts response. Contract-only example pending persisted alert implementation.",
+          "implementationStatus": "contract-only-pending-BDAI-11",
+          "request": {
+            "method": "GET",
+            "path": "/api/alerts/latest",
+            "query": {
+              "datasetName": "thingspeak-live",
+              "limit": 2
+            },
+            "headers": {
+              "Authorization": "Bearer <accessToken>"
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "data": {
+                "dataset": {
+                  "id": 5,
+                  "name": "thingspeak-live",
+                  "displayName": "ThingSpeak Live Sensor Feed"
+                },
+                "alerts": [
+                  {
+                    "id": "alert_5702066_field1_high",
+                    "datasetName": "thingspeak-live",
+                    "entry_id": 5702066,
+                    "streamName": "field1",
+                    "severity": "warning",
+                    "status": "active",
+                    "message": "field1 exceeded the configured warning threshold.",
+                    "value": 113,
+                    "threshold": 100,
+                    "created_at": "2026-08-13T00:55:37.000Z"
+                  },
+                  {
+                    "id": "alert_5702068_field2_low",
+                    "datasetName": "thingspeak-live",
+                    "entry_id": 5702068,
+                    "streamName": "field2",
+                    "severity": "info",
+                    "status": "active",
+                    "message": "field2 is below the configured observation threshold.",
+                    "value": 1.7,
+                    "threshold": 2,
+                    "created_at": "2026-08-13T00:57:37.000Z"
+                  }
+                ]
+              },
+              "meta": {
+                "requestId": "req_latest_alerts_success",
+                "timestamp": "2026-08-13T01:15:09.655Z",
+                "contractVersion": "v1"
+              }
+            }
+          }
+        },
+        "getEmpty": {
+          "description": "Successful latest alerts response when no active alerts exist.",
+          "implementationStatus": "contract-only-pending-BDAI-11",
+          "request": {
+            "method": "GET",
+            "path": "/api/alerts/latest",
+            "query": {
+              "datasetName": "thingspeak-live",
+              "limit": 2
+            },
+            "headers": {
+              "Authorization": "Bearer <accessToken>"
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "data": {
+                "dataset": {
+                  "id": 5,
+                  "name": "thingspeak-live",
+                  "displayName": "ThingSpeak Live Sensor Feed"
+                },
+                "alerts": []
+              },
+              "meta": {
+                "requestId": "req_latest_alerts_empty",
+                "timestamp": "2026-08-13T01:15:09.655Z",
+                "contractVersion": "v1"
+              }
+            }
+          }
+        },
+        "authenticationFailure": {
+          "description": "Latest alerts request without a valid access token.",
+          "request": {
+            "method": "GET",
+            "path": "/api/alerts/latest",
+            "query": {
+              "datasetName": "thingspeak-live"
+            },
+            "headers": {}
+          },
+          "response": {
+            "status": 401,
+            "body": {
+              "error": {
+                "code": "AUTH_REQUIRED",
+                "message": "Authentication is required.",
+                "fields": {}
+              },
+              "meta": {
+                "requestId": "req_latest_alerts_auth_failure",
+                "timestamp": "2026-08-13T01:15:09.655Z",
+                "contractVersion": "v1"
+              }
+            }
+          }
+        },
+        "upstreamFailure": {
+          "description": "Latest alerts request when alert storage or evaluation service is unavailable.",
+          "implementationStatus": "contract-only-pending-BDAI-11",
+          "request": {
+            "method": "GET",
+            "path": "/api/alerts/latest",
+            "query": {
+              "datasetName": "thingspeak-live"
+            },
+            "headers": {
+              "Authorization": "Bearer <accessToken>"
+            }
+          },
+          "response": {
+            "status": 503,
+            "body": {
+              "error": {
+                "code": "UPSTREAM_UNAVAILABLE",
+                "message": "Alert service is temporarily unavailable.",
+                "fields": {}
+              },
+              "meta": {
+                "requestId": "req_latest_alerts_upstream_failure",
+                "timestamp": "2026-08-13T01:15:09.655Z",
+                "contractVersion": "v1"
+              }
+            }
+          }
+        }
+      },
+      "alertHistory": {
+        "getSuccess": {
+          "description": "Successful V1 paginated alert history response. Contract-only example pending persisted alert implementation.",
+          "implementationStatus": "contract-only-pending-BDAI-11",
+          "request": {
+            "method": "GET",
+            "path": "/api/alerts/history",
+            "query": {
+              "datasetName": "thingspeak-live",
+              "status": "resolved",
+              "severity": "warning",
+              "limit": 2,
+              "offset": 0
+            },
+            "headers": {
+              "Authorization": "Bearer <accessToken>"
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "data": {
+                "dataset": {
+                  "id": 5,
+                  "name": "thingspeak-live",
+                  "displayName": "ThingSpeak Live Sensor Feed"
+                },
+                "alerts": [
+                  {
+                    "id": "alert_5702066_field1_high",
+                    "datasetName": "thingspeak-live",
+                    "entry_id": 5702066,
+                    "streamName": "field1",
+                    "severity": "warning",
+                    "status": "resolved",
+                    "message": "field1 exceeded the configured warning threshold.",
+                    "value": 113,
+                    "threshold": 100,
+                    "created_at": "2026-08-13T00:55:37.000Z",
+                    "resolved_at": "2026-08-13T01:05:37.000Z"
+                  },
+                  {
+                    "id": "alert_5696578_field1_high",
+                    "datasetName": "thingspeak-live",
+                    "entry_id": 5696578,
+                    "streamName": "field1",
+                    "severity": "warning",
+                    "status": "resolved",
+                    "message": "field1 exceeded the configured warning threshold.",
+                    "value": 138,
+                    "threshold": 100,
+                    "created_at": "2026-08-09T03:55:28.000Z",
+                    "resolved_at": "2026-08-09T04:05:28.000Z"
+                  }
+                ],
+                "pagination": {
+                  "limit": 2,
+                  "offset": 0,
+                  "total": 2
+                }
+              },
+              "meta": {
+                "requestId": "req_alert_history_success",
+                "timestamp": "2026-08-13T01:15:09.655Z",
+                "contractVersion": "v1"
+              }
+            }
+          }
+        },
+        "getEmpty": {
+          "description": "Successful alert history response when no historical alerts match the filters.",
+          "implementationStatus": "contract-only-pending-BDAI-11",
+          "request": {
+            "method": "GET",
+            "path": "/api/alerts/history",
+            "query": {
+              "datasetName": "thingspeak-live",
+              "status": "resolved",
+              "severity": "critical",
+              "limit": 10,
+              "offset": 0
+            },
+            "headers": {
+              "Authorization": "Bearer <accessToken>"
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "data": {
+                "dataset": {
+                  "id": 5,
+                  "name": "thingspeak-live",
+                  "displayName": "ThingSpeak Live Sensor Feed"
+                },
+                "alerts": [],
+                "pagination": {
+                  "limit": 10,
+                  "offset": 0,
+                  "total": 0
+                }
+              },
+              "meta": {
+                "requestId": "req_alert_history_empty",
+                "timestamp": "2026-08-13T01:15:09.655Z",
+                "contractVersion": "v1"
+              }
+            }
+          }
+        },
+        "validationError": {
+          "description": "Alert history request with invalid pagination.",
+          "request": {
+            "method": "GET",
+            "path": "/api/alerts/history",
+            "query": {
+              "datasetName": "thingspeak-live",
+              "limit": -1,
+              "offset": 0
+            },
+            "headers": {
+              "Authorization": "Bearer <accessToken>"
+            }
+          },
+          "response": {
+            "status": 400,
+            "body": {
+              "error": {
+                "code": "VALIDATION_ERROR",
+                "message": "Invalid alert history query parameters.",
+                "fields": {
+                  "limit": "limit must be greater than 0"
+                }
+              },
+              "meta": {
+                "requestId": "req_alert_history_validation_error",
+                "timestamp": "2026-08-13T01:15:09.655Z",
+                "contractVersion": "v1"
+              }
+            }
+          }
+        },
+        "authenticationFailure": {
+          "description": "Alert history request without a valid access token.",
+          "request": {
+            "method": "GET",
+            "path": "/api/alerts/history",
+            "query": {
+              "datasetName": "thingspeak-live"
+            },
+            "headers": {}
+          },
+          "response": {
+            "status": 401,
+            "body": {
+              "error": {
+                "code": "AUTH_REQUIRED",
+                "message": "Authentication is required.",
+                "fields": {}
+              },
+              "meta": {
+                "requestId": "req_alert_history_auth_failure",
+                "timestamp": "2026-08-13T01:15:09.655Z",
+                "contractVersion": "v1"
+              }
+            }
+          }
+        },
+        "upstreamFailure": {
+          "description": "Alert history request when alert storage or evaluation service is unavailable.",
+          "implementationStatus": "contract-only-pending-BDAI-11",
+          "request": {
+            "method": "GET",
+            "path": "/api/alerts/history",
+            "query": {
+              "datasetName": "thingspeak-live"
+            },
+            "headers": {
+              "Authorization": "Bearer <accessToken>"
+            }
+          },
+          "response": {
+            "status": 503,
+            "body": {
+              "error": {
+                "code": "UPSTREAM_UNAVAILABLE",
+                "message": "Alert history is temporarily unavailable.",
+                "fields": {}
+              },
+              "meta": {
+                "requestId": "req_alert_history_upstream_failure",
+                "timestamp": "2026-08-13T01:15:09.655Z",
+                "contractVersion": "v1"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "akshith_afi07_examples": {
+    "seriesResponse": {
+      "success": true,
+      "data": [
+        {
+          "created_at": "2026-07-30T10:00:00Z",
+          "entry_id": 1,
+          "field1": 25.4,
+          "field2": 60.2
+        }
+      ],
+      "message": "Series data loaded successfully"
+    },
+    "analyticsResponse": {
+      "success": true,
+      "data": {
+        "analysis": {
+          "highestCorrelation": {
+            "stream1": "field1",
+            "stream2": "field2",
+            "score": 0.94
+          }
+        }
+      },
+      "message": "Analysis completed successfully"
+    },
+    "alertResponse": {
+      "success": true,
+      "data": {
+        "alerts": [
+          {
+            "id": 1,
+            "severity": "High",
+            "message": "Temperature exceeded threshold",
+            "created_at": "2026-07-30T10:00:00Z"
+          }
+        ]
+      },
+      "message": "Alerts loaded successfully"
+    },
+    "errorResponse": {
+      "success": false,
+      "error": {
+        "code": 404,
+        "message": "Requested resource was not found"
+      }
+    }
+  }
+}
