@@ -171,6 +171,14 @@ DO UPDATE SET updated_by = EXCLUDED.updated_by,
               updated_at = CURRENT_TIMESTAMP;
 ```
 
+### CSV upload limits
+
+The dataset import APIs accept the frontend's reviewed CSV rows as JSON. Each
+`POST /api/datasets` or `PUT /api/datasets/:id` request is limited to **10 MiB**
+and **10,000 rows**, with one to eight sensor mappings. Larger CSV files must
+be split into separate uploads. See `docs/mvp/api-contract.md` for the exact
+request and error-response contract.
+
 ### Testing database changes
 
 Run the unit suite from `backend`:

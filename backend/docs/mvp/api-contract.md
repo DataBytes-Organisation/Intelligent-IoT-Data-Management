@@ -457,6 +457,10 @@ FE clears memory and broadcasts `{ "type": "LOGOUT" }` via `BroadcastChannel('io
 
 The frontend parses the selected file locally for the Upload, Map fields, and Review steps. On **Import**, it posts the parsed values for selected columns together with the user-confirmed `mappings`. Unselected CSV columns are not persisted. This avoids re-uploading a file that the user has already reviewed and makes the final request deterministic.
 
+#### CSV upload limits
+
+The reviewed upload request is limited to **10 MiB** of JSON and **10,000 CSV rows**. The mapping limit remains one to eight sensor fields. The frontend should validate these limits before import and display the server error if a request is rejected.
+
 | Body field | Type | Required | Rules |
 | --- | --- | --- | --- |
 | `name` | string | Yes | Trimmed, 1–120 characters; unique dataset name. |
@@ -467,7 +471,7 @@ The frontend parses the selected file locally for the Upload, Map fields, and Re
 | `mappings[].storageField` | string | Yes | `field1` through `field8`; unique per dataset. |
 | `mappings[].displayName` | string | Yes | User-facing field label, maximum 120 characters. |
 | `mappings[].sourceDataType` | string | Yes | `number`. It records the detected source type; `field1`–`field8` require numeric values because their PostgreSQL destination is `DOUBLE PRECISION`. |
-| `rows` | object[] | Yes | Parsed CSV rows keyed by source header. Selected timestamp values must be parseable dates; selected sensor values must be finite numbers or empty (stored as `NULL`). |
+| `rows` | object[] | Yes | 1–10,000 parsed CSV rows keyed by source header. Selected timestamp values must be parseable dates; selected sensor values must be finite numbers or empty (stored as `NULL`). |
 
 ```json
 {
@@ -517,6 +521,7 @@ The frontend parses the selected file locally for the Upload, Map fields, and Re
 | Failure case | HTTP status / code | Frontend behaviour |
 | --- | --- | --- |
 | Missing, malformed, duplicate mappings, invalid timestamps/numbers, too many rows | `400` / `VALIDATION_ERROR` | Keep the wizard at review and map `error.fields` to the relevant row or mapping. |
+| JSON request exceeds 10 MiB | `413` / `REQUEST_BODY_TOO_LARGE` | Ask the user to split the CSV into smaller uploads. |
 | No/invalid/expired access token | `401` / `UNAUTHENTICATED` or `ACCESS_TOKEN_EXPIRED` | Refresh once, then return to sign-in if needed. |
 | Dataset name already exists | `409` / `DATASET_NAME_EXISTS` | Ask for a different dataset name; preserve the reviewed data. |
 | Database failure | `500` / `INTERNAL_ERROR` | Leave the user on review; retry is safe because the database transaction was rolled back. |
@@ -533,6 +538,8 @@ The frontend parses the selected file locally for the Upload, Map fields, and Re
 
 The request uses the same timestamp, mapping, and row fields as `POST /api/datasets`, but omits `name`.
 
+The same **10 MiB** JSON-body and **10,000-row** CSV upload limits apply.
+
 | Body field | Type | Required | Rules |
 | --- | --- | --- | --- |
 | `timestampField` | string | Yes | CSV header written to `timeseries.created_at`. |
@@ -542,7 +549,7 @@ The request uses the same timestamp, mapping, and row fields as `POST /api/datas
 | `mappings[].storageField` | string | Yes | `field1` through `field8`; unique per dataset. |
 | `mappings[].displayName` | string | Yes | Frontend label, maximum 120 characters. |
 | `mappings[].sourceDataType` | string | Yes | Must be `number`. |
-| `rows` | object[] | Yes | New parsed CSV rows keyed by source header. |
+| `rows` | object[] | Yes | 1–10,000 new parsed CSV rows keyed by source header. |
 
 **Example request body**
 
