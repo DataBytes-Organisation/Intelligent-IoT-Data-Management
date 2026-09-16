@@ -1,40 +1,10 @@
 const thingspeakRepository = require('../repositories/thingspeakRepository');
 const pool = require('../db/pool');
 const TimeseriesRepository = require('../repositories/timeseriesRepository');
-const datasetRepository = require('../repositories/datasetRepository');
-const { mappingsForChannel } = require('./thingSpeakFieldMappings');
 
 const timeseriesRepository = new TimeseriesRepository();
 const THINGSPEAK_DATASET_NAME =
   process.env.THINGSPEAK_DATASET_NAME || 'thingspeak-live';
-
-function configuredChannelId() {
-  const channelId = String(process.env.THINGSPEAK_CHANNEL_ID || '').trim();
-  if (!channelId) {
-    throw new Error('THINGSPEAK_CHANNEL_ID is missing in .env');
-  }
-  if (!mappingsForChannel(channelId)) {
-    throw new Error(`No Backend field mapping is configured for ThingSpeak channel ${channelId}`);
-  }
-  return channelId;
-}
-
-async function ensureThingSpeakDataset(channelId = configuredChannelId()) {
-  const datasetResult = await pool.query(
-    `INSERT INTO datasets (name)
-     VALUES ($1)
-     ON CONFLICT (name) DO UPDATE SET name = EXCLUDED.name
-     RETURNING id`,
-    [THINGSPEAK_DATASET_NAME],
-  );
-
-  const dataset = datasetResult.rows[0];
-  await datasetRepository.ensureSystemMappings(
-    dataset.id,
-    mappingsForChannel(channelId),
-  );
-  return dataset;
-}
 
 const getThingSpeakFeeds = async () => {
   //const rawData = await thingspeakRepository.getMockThingSpeakData();
@@ -92,16 +62,15 @@ const saveThingSpeakRawDataToDatabase = async (rawData) => {
     return 0;
   }
 
-  const configuredChannel = configuredChannelId();
-  const responseChannel = rawData?.channel?.id;
-  if (responseChannel !== undefined && String(responseChannel) !== configuredChannel) {
-    throw new Error(
-      `ThingSpeak response channel ${responseChannel} does not match configured channel ${configuredChannel}`,
-    );
-  }
+  const datasetResult = await pool.query(
+    `INSERT INTO datasets (name)
+     VALUES ($1)
+     ON CONFLICT (name) DO UPDATE SET name = EXCLUDED.name
+     RETURNING id`,
+    [THINGSPEAK_DATASET_NAME]
+  );
 
-  const dataset = await ensureThingSpeakDataset(configuredChannel);
-  const datasetId = dataset.id;
+  const datasetId = datasetResult.rows[0].id;
 
   const metricKeys = Object.keys(feeds[0]).filter((key) =>
     key.startsWith('field')
@@ -230,7 +199,6 @@ const startThingSpeakPolling = () => {
 };
 
 module.exports = {
-  ensureThingSpeakDataset,
   getThingSpeakFeeds,
   startThingSpeakPolling,
   fetchThingSpeakWithRetry,

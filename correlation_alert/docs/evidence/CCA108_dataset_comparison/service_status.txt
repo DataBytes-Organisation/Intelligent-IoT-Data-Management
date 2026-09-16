@@ -1,5 +1,0 @@
-{
-  "message": "Correlation Alert Service is running.",
-  "service": "correlation-alert-api",
-  "status": "running"
-}

@@ -1,0 +1,151 @@
+{
+	"info": {
+		"_postman_id": "ddbc00ff-d5bc-4a69-9d0a-052301918a5a",
+		"name": "IIoDT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "18400380",
+		"_collection_link": "https://gold-resonance-926490.postman.co/workspace/Free-Time~336dd29d-a401-4a62-8231-630d570bf47a/collection/18400380-ddbc00ff-d5bc-4a69-9d0a-052301918a5a?action=share&source=collection_link&creator=18400380"
+	},
+	"item": [
+		{
+			"name": "Detect Correlation Alert",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var template = `",
+							"<canvas id=\"myHeatmap\" height=\"75\"></canvas>",
+							"",
+							"<script src=\"https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js\"></script>",
+							"<script src=\"https://cdn.jsdelivr.net/npm/chartjs-plugin-heatmap\"></script>",
+							"",
+							"<script>",
+							"    var ctx = document.getElementById(\"myHeatmap\");",
+							"",
+							"    var myHeatmap = new Chart(ctx, {",
+							"        type: \"heatmap\",",
+							"        data: {",
+							"            datasets: [{",
+							"                label: \"Correlation Heatmap\",",
+							"                data: [],",
+							"                backgroundColor: 'rgba(255, 99, 132, 0.5)',",
+							"                borderColor: 'rgba(255, 99, 132, 1)',",
+							"                borderWidth: 1",
+							"            }]",
+							"        },",
+							"        options: {",
+							"            scales: {",
+							"                xAxes: [{",
+							"                    type: 'category',",
+							"                    labels: ['s1', 's2', 's3'],",
+							"                    scaleLabel: {",
+							"                        display: true,",
+							"                        labelString: 'Streams'",
+							"                    }",
+							"                }],",
+							"                yAxes: [{",
+							"                    type: 'category',",
+							"                    labels: ['s1', 's2', 's3'],",
+							"                    scaleLabel: {",
+							"                        display: true,",
+							"                        labelString: 'Streams'",
+							"                    }",
+							"                }]",
+							"            }",
+							"        }",
+							"    });",
+							"",
+							"    pm.getData(function (err, value) {",
+							"        var correlations = value.response.correlations;",
+							"        var heatmapData = [];",
+							"",
+							"        correlations.forEach(cor => {",
+							"            Object.keys(cor.correlation_matrix).forEach(key1 => {",
+							"                Object.keys(cor.correlation_matrix[key1]).forEach(key2 => {",
+							"                    heatmapData.push({",
+							"                        x: key1,",
+							"                        y: key2,",
+							"                        v: cor.correlation_matrix[key1][key2]",
+							"                    });",
+							"                });",
+							"            });",
+							"        });",
+							"",
+							"        myHeatmap.data.datasets[0].data = heatmapData;",
+							"        myHeatmap.update();",
+							"    });",
+							"</script>`;",
+							"",
+							"function constructVisualizerPayload() {",
+							"    var res = pm.response.json();",
+							"    ",
+							"    return { response: res };",
+							"}",
+							"",
+							"pm.visualizer.set(template, constructVisualizerPayload());"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "postman-cloud:///1f14b903-c554-40f0-a8de-f534d289da54"
+						},
+						{
+							"key": "timestamp_col",
+							"value": "time",
+							"type": "text"
+						},
+						{
+							"key": "selected_streams",
+							"value": "s1,s2,s3",
+							"type": "text"
+						},
+						{
+							"key": "window_size",
+							"value": "20",
+							"type": "text"
+						},
+						{
+							"key": "step_size",
+							"value": "10",
+							"type": "text"
+						},
+						{
+							"key": "method",
+							"value": "pearson",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://127.0.0.1:5001/detect-correlation-alert"
+			},
+			"response": []
+		},
+		{
+			"name": "Check Service Status",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:5001/service-status"
+			},
+			"response": []
+		}
+	]
+}
