@@ -107,6 +107,28 @@ const deleteDataset = async (req, res) => {
     return datasetError(res, req, err);
   }
 };
+const restoreDataset = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!/^\d+$/.test(id) || Number(id) < 1) {
+      return res.status(400).json({
+        error: "Dataset ID must be a positive integer",
+      });
+    }
+
+    const dataset = await datasetService.restoreDataset(id, req.user);
+
+    return res.status(200).json({
+      data: dataset,
+      meta: {
+        requestId: requestId(req),
+      },
+    });
+  } catch (error) {
+    return datasetError(res, req, error);
+  }
+};
 
 module.exports = {
   getAllDatasets,
@@ -114,4 +136,5 @@ module.exports = {
   createDataset,
   updateDataset,
   deleteDataset,
+  restoreDataset
 };
