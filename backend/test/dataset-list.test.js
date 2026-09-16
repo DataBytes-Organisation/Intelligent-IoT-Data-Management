@@ -3,11 +3,13 @@ const assert = require("node:assert/strict");
 const db = require("../src/db/pool");
 const datasetRepository = require("../src/repositories/datasetRepository");
 
-test("findAll returns each dataset name with its total persisted row count", async () => {
+test("findAll returns the user's and ThingSpeak datasets with their row counts", async () => {
   const originalQuery = db.query;
   let query;
-  db.query = async (sql) => {
+  let params;
+  db.query = async (sql, values) => {
     query = sql;
+    params = values;
     return {
       rows: [
         { id: 1, name: "microclimate", totalRows: 3 },
@@ -17,7 +19,11 @@ test("findAll returns each dataset name with its total persisted row count", asy
   };
 
   try {
-    const datasets = await datasetRepository.findAll();
+    const datasets = await datasetRepository.findAll(
+      "active",
+      "user-uuid",
+      "thingspeak-owner-uuid",
+    );
 
     assert.deepEqual(datasets, [
       { id: 1, name: "microclimate", totalRows: 3 },
@@ -25,6 +31,9 @@ test("findAll returns each dataset name with its total persisted row count", asy
     ]);
     assert.match(query, /LEFT JOIN timeseries t ON t\.dataset_id = d\.id/);
     assert.match(query, /COUNT\(t\.entry_id\)::integer AS "totalRows"/);
+    assert.match(query, /d\.deleted_at IS NULL/);
+    assert.match(query, /d\.created_by = \$1 OR d\.created_by = \$2/);
+    assert.deepEqual(params, ["user-uuid", "thingspeak-owner-uuid"]);
   } finally {
     db.query = originalQuery;
   }
@@ -59,7 +68,11 @@ test("findById returns dataset detail with its total persisted row count", async
   };
 
   try {
-    const dataset = await datasetRepository.findById(1);
+    const dataset = await datasetRepository.findById(
+      1,
+      "user-uuid",
+      "thingspeak-owner-uuid",
+    );
 
     assert.deepEqual(dataset, {
       id: 1,
@@ -76,7 +89,7 @@ test("findById returns dataset detail with its total persisted row count", async
         },
       ],
     });
-    assert.deepEqual(params, [1]);
+    assert.deepEqual(params, [1, "user-uuid", "thingspeak-owner-uuid"]);
     assert.match(query, /FROM timeseries t/);
     assert.match(query, /COUNT\(\*\)::integer/);
     assert.match(query, /FROM dataset_field_mappings m/);
@@ -84,6 +97,8 @@ test("findById returns dataset detail with its total persisted row count", async
     assert.match(query, /timestamp_field AS "timestampField"/);
     assert.match(query, /d\.description/);
     assert.match(query, /WHERE d\.id = \$1/);
+    assert.match(query, /d\.deleted_at IS NULL/);
+    assert.match(query, /d\.created_by = \$2 OR d\.created_by = \$3/);
   } finally {
     db.query = originalQuery;
   }

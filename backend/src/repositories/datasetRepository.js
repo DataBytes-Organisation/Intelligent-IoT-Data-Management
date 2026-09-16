@@ -16,44 +16,50 @@ const repositoryError = (code, status, message) =>
   Object.assign(new Error(message), { code, status });
 
 class DatasetRepository {
-  async findAll(status = "active") {
+  async findAll(status, userId, thingspeakOwnerId) {
     const whereClause =
       status === "deleted"
-        ? "d.deleted_at IS NOT NULL AND d.recovery_expires_at > NOW()"
+        ? "d.deleted_at IS NOT NULL"
         : "d.deleted_at IS NULL";
 
-    const result = await db.query(`
-    SELECT
-      d.id,
-      d.name,
-      COUNT(t.entry_id)::integer AS "totalRows",
-      d.created_by AS "createdBy",
-      d.updated_by AS "updatedBy",
-      d.created_at AS "createdAt",
-      d.updated_at AS "updatedAt",
-      d.deleted_at AS "deletedAt",
-      d.recovery_expires_at AS "recoveryExpiresAt"
-    FROM datasets d
-    LEFT JOIN timeseries t ON t.dataset_id = d.id
-    WHERE ${whereClause}
-    GROUP BY d.id, d.name, d.created_by, d.updated_by, d.created_at, d.updated_at, d.deleted_at, d.recovery_expires_at
-    ORDER BY d.id ASC
-  `);
+    const result = await db.query(
+      `
+      SELECT
+        d.id,
+        d.name,
+        COUNT(t.entry_id)::integer AS "totalRows",
+        d.created_by AS "createdBy",
+        d.updated_by AS "updatedBy",
+        d.created_at AS "createdAt",
+        d.updated_at AS "updatedAt",
+        d.deleted_at AS "deletedAt"
+      FROM datasets d
+      LEFT JOIN timeseries t ON t.dataset_id = d.id
+      WHERE ${whereClause}
+        AND (d.created_by = $1 OR d.created_by = $2)
+      GROUP BY d.id, d.name, d.created_by, d.updated_by, d.created_at, d.updated_at, d.deleted_at
+      ORDER BY d.id ASC
+    `,
+      [userId, thingspeakOwnerId],
+    );
 
     return result.rows.map((row) => {
       if (status !== "deleted") return row;
-      const { deletedAt, recoveryExpiresAt, ...rest } = row;
-      const remainingMs = new Date(recoveryExpiresAt).getTime() - Date.now();
+      const { deletedAt, ...rest } = row;
+      const recoveryExpiresAt = new Date(
+        new Date(deletedAt).getTime() + 15 * 86400000,
+      );
+      const remainingMs = recoveryExpiresAt.getTime() - Date.now();
       return {
         ...rest,
         deletedAt,
-        recoveryExpiresAt,
+        recoveryExpiresAt: recoveryExpiresAt.toISOString(),
         remainingRecoveryDays: Math.max(0, Math.floor(remainingMs / 86400000)),
       };
     });
   }
 
-  async findById(id) {
+  async findById(id, userId, thingspeakOwnerId) {
     const result = await db.query(
       `
       SELECT
@@ -87,36 +93,40 @@ class DatasetRepository {
           '[]'::json
         ) AS mappings
       FROM datasets d
-      WHERE d.id = $1 AND d.deleted_at IS NULL
+      WHERE d.id = $1
+        AND d.deleted_at IS NULL
+        AND (d.created_by = $2 OR d.created_by = $3)
       `,
-      [id],
+      [id, userId, thingspeakOwnerId],
     );
     return result.rows[0] || null;
   }
 
-  async findByName(name) {
+  async findByName(name, userId) {
     const result = await db.query(
       `
       SELECT id, name, created_by AS "createdBy", updated_by AS "updatedBy",
              created_at AS "createdAt", updated_at AS "updatedAt"
       FROM datasets
       WHERE name = $1
+        AND created_by = $2
+        AND deleted_at IS NULL
       `,
-      [name],
+      [name, userId],
     );
     return result.rows[0] || null;
   }
 
   async create(data) {
-    const { name } = data;
+    const { name, userId } = data;
 
     const result = await db.query(
       `
-      INSERT INTO datasets (name)
-      VALUES ($1)
-      RETURNING id, name
+      INSERT INTO datasets (name, created_by, updated_by)
+      VALUES ($1, $2, $2)
+      RETURNING id, name, created_by AS "createdBy", updated_by AS "updatedBy"
       `,
-      [name],
+      [name, userId],
     );
 
     return result.rows[0];
@@ -298,18 +308,68 @@ class DatasetRepository {
       client.release();
     }
   }
-}
 
-async function assertDatasetActive(id) {
-  const result = await db.query(
-    `SELECT deleted_at AS "deletedAt" FROM datasets WHERE id = $1`,
-    [id],
-  );
-  if (result.rows.length === 0) {
-    throw repositoryError("DATASET_NOT_FOUND", 404, "Dataset not found.");
-  }
-  if (result.rows[0].deletedAt !== null) {
-    throw repositoryError("DATASET_NOT_FOUND", 404, "Dataset not found.");
+  async deleteDataset(datasetId, user, thingspeakOwnerId) {
+    const client = await db.connect();
+    try {
+      await client.query("BEGIN");
+      const datasetResult = await client.query(
+        `SELECT id, name, description, timestamp_field AS "timestampField",
+                created_by AS "createdBy", deleted_at AS "deletedAt"
+         FROM datasets
+         WHERE id = $1
+           AND created_by = $2
+           AND created_by <> $3
+         FOR UPDATE`,
+        [datasetId, user.sub, thingspeakOwnerId],
+      );
+      const dataset = datasetResult.rows[0];
+      if (!dataset)
+        throw repositoryError("DATASET_NOT_FOUND", 404, "Dataset not found.");
+      if (dataset.deletedAt)
+        throw repositoryError(
+          "DATASET_ALREADY_DELETED",
+          409,
+          "Dataset has already been deleted.",
+        );
+
+      const wideDeleteResult = await client.query(
+        `DELETE FROM timeseries WHERE dataset_id = $1`,
+        [datasetId],
+      );
+      const longDeleteResult = await client.query(
+        `DELETE FROM timeseries_long WHERE dataset_id = $1`,
+        [datasetId],
+      );
+
+      const deletedResult = await client.query(
+        `UPDATE datasets
+         SET deleted_at = CURRENT_TIMESTAMP,
+             deleted_by = $2,
+             data_deleted_at = CURRENT_TIMESTAMP,
+             updated_by = $2,
+             updated_at = CURRENT_TIMESTAMP
+         WHERE id = $1
+         RETURNING id, name, description, timestamp_field AS "timestampField",
+                   deleted_at AS "deletedAt", deleted_by AS "deletedBy",
+                   data_deleted_at AS "dataDeletedAt", updated_at AS "updatedAt"`,
+        [datasetId, user.sub],
+      );
+
+      await client.query("COMMIT");
+      return {
+        ...deletedResult.rows[0],
+        deletedRows: {
+          timeseries: wideDeleteResult.rowCount,
+          timeseriesLong: longDeleteResult.rowCount,
+        },
+      };
+    } catch (error) {
+      await client.query("ROLLBACK");
+      throw error;
+    } finally {
+      client.release();
+    }
   }
 }
 

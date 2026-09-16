@@ -6,6 +6,29 @@ const timeseriesRepository = new TimeseriesRepository();
 const THINGSPEAK_DATASET_NAME =
   process.env.THINGSPEAK_DATASET_NAME || 'thingspeak-live';
 
+async function getThingSpeakDatasetOwnerId() {
+  const ownerId = process.env.THINGSPEAK_DATASET_OWNER_ID;
+
+  if (!ownerId) {
+    throw new Error(
+      'THINGSPEAK_DATASET_OWNER_ID is required to store a ThingSpeak dataset.'
+    );
+  }
+
+  const ownerResult = await pool.query(
+    'SELECT id FROM auth_users WHERE id = $1',
+    [ownerId]
+  );
+
+  if (ownerResult.rows.length === 0) {
+    throw new Error(
+      'THINGSPEAK_DATASET_OWNER_ID must reference an existing auth_users record. Run npm run migrate:thingspeak-owner first.'
+    );
+  }
+
+  return ownerId;
+}
+
 const getThingSpeakFeeds = async () => {
   //const rawData = await thingspeakRepository.getMockThingSpeakData();
   const rawData = await thingspeakRepository.fetchChannelFeed();
@@ -62,12 +85,16 @@ const saveThingSpeakRawDataToDatabase = async (rawData) => {
     return 0;
   }
 
+  const ownerId = await getThingSpeakDatasetOwnerId();
+
   const datasetResult = await pool.query(
-    `INSERT INTO datasets (name)
-     VALUES ($1)
-     ON CONFLICT (name) DO UPDATE SET name = EXCLUDED.name
+    `INSERT INTO datasets (name, created_by, updated_by)
+     VALUES ($1, $2, $2)
+     ON CONFLICT (created_by, name) WHERE deleted_at IS NULL
+     DO UPDATE SET updated_by = EXCLUDED.updated_by,
+                   updated_at = CURRENT_TIMESTAMP
      RETURNING id`,
-    [THINGSPEAK_DATASET_NAME]
+    [THINGSPEAK_DATASET_NAME, ownerId]
   );
 
   const datasetId = datasetResult.rows[0].id;
