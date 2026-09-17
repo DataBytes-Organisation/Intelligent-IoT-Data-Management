@@ -1,4 +1,10 @@
-import React, { useMemo, useState, useCallback, useEffect } from 'react';
+import React, {
+  useMemo,
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+} from "react";
 import { useSensorData } from '../hooks/useSensorData.js';
 import { useFilteredData } from '../hooks/useFilteredData.js';
 import { useStreamNames } from '../hooks/useStreamNames.js';
@@ -61,6 +67,29 @@ const Dashboard = ({ datasetId }) => {
   const [analysisLoading, setAnalysisLoading] = useState(false);
   const [analysisError, setAnalysisError] = useState(null);
   const [hasAnalysed, setHasAnalysed] = useState(false);
+
+  // redirect from line individual line chart, to general timeline, and highlight it
+  const [focusedStream, setFocusedStream] = useState(null);
+  const sensorTimelineRef = useRef(null);
+
+  const handleInsightChartClick = useCallback((stream) => {
+  setFocusedStream(stream);
+
+  sensorTimelineRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+  }, []);
+
+  useEffect(() => {
+    if (
+      focusedStream &&
+      !selectedStreams.includes(focusedStream)
+    ) {
+      setFocusedStream(null);
+    }
+  }, [focusedStream, selectedStreams]);
+
 
   useEffect(() => {
     setAnalysisResult(null);
@@ -575,17 +604,19 @@ const Dashboard = ({ datasetId }) => {
           </div>
         ) : (
           <div className="stream-stats">
-           {selectedStreams.map((stream) => (
-            <StreamStats
-              key={stream}
-              data={filteredData}
-              stream={stream}
-              displayName={
-                streamLabels[stream] ||
-                STREAM_LABELS[stream] ||
-                stream
-              }
-            />
+            {selectedStreams.map((stream, index) => (
+              <StreamStats
+                key={stream}
+                data={filteredData}
+                stream={stream}
+                colorIndex={index}
+                displayName={
+                  streamLabels[stream] ||
+                  STREAM_LABELS[stream] ||
+                  stream
+                }
+                onChartClick={() => handleInsightChartClick(stream)}
+              />
             ))}
           </div>
         )}
@@ -602,13 +633,28 @@ const Dashboard = ({ datasetId }) => {
         summary={analysisResult?.summary ?? null}
       />
       <div className="chart-analysis-grid">
-        <section className="dashboard-section chart-analysis-card sensor-timeline-card">
-          <h3 className="section-title chart-section-title">
-            Sensor Timeline
-            {selectedStreams.length >= 2 && (
-              <span> (normalised view)</span>
+        <section
+          ref={sensorTimelineRef}
+          className="dashboard-section chart-analysis-card sensor-timeline-card"
+        >
+          <div className="sensor-timeline-header">
+            <h3 className="section-title chart-section-title">
+              Sensor Timeline
+              {selectedStreams.length >= 2 && (
+                <span> (normalised view)</span>
+              )}
+            </h3>
+
+            {focusedStream && (
+              <button
+                type="button"
+                className="clear-highlight-btn"
+                onClick={() => setFocusedStream(null)}
+              >
+                Clear {streamLabels[focusedStream] || focusedStream} highlight
+              </button>
             )}
-          </h3>
+          </div>
 
           <p className="sensor-timeline-description">
             {selectedStreams.length >= 2
@@ -621,6 +667,7 @@ const Dashboard = ({ datasetId }) => {
             selectedStreams={selectedStreams}
             streamLabels={streamLabels}
             alerts={analysisResult?.alerts ?? []}
+            highlightedStream={focusedStream}
           />
         </section>
 
