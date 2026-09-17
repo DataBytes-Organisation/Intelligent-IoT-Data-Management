@@ -135,3 +135,49 @@ export const getDeletedDatasets = async () => {
     throw error;
   }
 };
+
+
+export const restoreDataset = async (datasetId) => {
+  let token = getAccessToken();
+
+  if (!token) {
+    const refreshed = await refreshSession();
+    token = refreshed.data?.accessToken;
+  }
+
+  try {
+    const response = await datasetClient.post(
+      `/datasets/${datasetId}/restore`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    return response.data;
+  } catch (error) {
+    if (
+      error.response?.status === 401 &&
+      error.response?.data?.error?.code === "ACCESS_TOKEN_EXPIRED"
+    ) {
+      const refreshed = await refreshSession();
+      const refreshedToken = refreshed.data?.accessToken;
+
+      const retryResponse = await datasetClient.post(
+        `/datasets/${datasetId}/restore`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${refreshedToken}`,
+          },
+        },
+      );
+
+      return retryResponse.data;
+    }
+
+    throw error;
+  }
+};

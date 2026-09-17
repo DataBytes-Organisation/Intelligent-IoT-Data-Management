@@ -448,3 +448,50 @@
   background: #ef4444;
   border-radius: 2px;
 }
+
+/* recover button stuff */
+.homepage__restore-btn {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+
+  border: 1px solid #bfdbfe;
+  border-radius: 10px;
+
+  background: #eff6ff;
+  color: #1d4ed8;
+
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.homepage__restore-btn:hover:not(:disabled) {
+  background: #dbeafe;
+  border-color: #93c5fd;
+}
+
+.homepage__restore-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.homepage__restore-error {
+  margin-bottom: 1rem;
+  padding: 0.85rem 1rem;
+
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+
+  background: #fff7f7;
+  color: #b91c1c;
+
+  font-size: 0.9rem;
+  font-weight: 600;
+}
