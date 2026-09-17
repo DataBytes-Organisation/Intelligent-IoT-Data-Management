@@ -3,6 +3,7 @@ import "./DatasetCard.css";
 
 const DatasetCard = ({
   id,
+  datasetId,
   name,
   icon,
   description,
@@ -25,7 +26,7 @@ const DatasetCard = ({
               <button
               type="button"
               className="dataset-card__delete-btn"
-              onClick={() => onDeleteClick({ id, name })}
+              onClick={() => onDeleteClick({ id: datasetId, name })}
               aria-label={`Delete ${name}`}
               title="Delete dataset"
             >
