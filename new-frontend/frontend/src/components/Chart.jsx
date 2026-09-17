@@ -9,14 +9,7 @@ import {
   YAxis,
 } from 'recharts';
 
-const colors = [
-  '#2563eb',
-  '#16a34a',
-  '#9333ea',
-  '#ea580c',
-  '#0891b2',
-  '#7c3aed',
-];
+import { getChartColor } from "../utils/chartColors.js";
 
 const formatTimestamp = (timestamp) => {
   const date = new Date(timestamp);
@@ -225,8 +218,18 @@ const TimelineTooltip = ({
             key={stream}
             className="sensor-tooltip-row"
           >
-            <span>
-              {streamLabels[stream] || stream}
+            <span className="sensor-tooltip-label">
+              <span
+                className="sensor-tooltip-color-dot"
+                style={{
+                  backgroundColor: item.color || "#64748b",
+                }}
+                aria-hidden="true"
+              />
+
+              <span>
+                {streamLabels[stream] || stream}
+              </span>
             </span>
 
             <strong>
@@ -244,6 +247,7 @@ const Chart = ({
   selectedStreams,
   streamLabels = {},
   alerts = [],
+  highlightedStream = null,
 }) => {
   if (selectedStreams.length === 0) {
     return (
@@ -522,23 +526,18 @@ const Chart = ({
                 key={stream}
                 type="monotone"
                 dataKey={stream}
-                name={
-                  streamLabels[stream] ||
-                  stream
+                name={streamLabels[stream] || stream}
+                stroke={getChartColor(index)}
+                strokeWidth={
+                  highlightedStream === stream ? 4 : 2.5
                 }
-                stroke={
-                  colors[
-                    index %
-                      colors.length
-                  ]
+                strokeOpacity={
+                  highlightedStream && highlightedStream !== stream
+                    ? 0.2
+                    : 1
                 }
-                strokeWidth={2.5}
-                dot={renderAnomalyDot(
-                  stream
-                )}
-                activeDot={{
-                  r: 4,
-                }}
+                dot={renderAnomalyDot(stream)}
+                activeDot={{ r: 4 }}
                 connectNulls
               />
             )
