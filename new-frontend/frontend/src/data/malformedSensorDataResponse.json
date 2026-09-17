@@ -1,0 +1,12 @@
+{
+  "dataset": "sensor1",
+  "metadata": {
+    "streams": [
+      {
+        "id": "temperature",
+        "name": "Temperature"
+      }
+    ]
+  },
+  "rows": "invalid"
+}

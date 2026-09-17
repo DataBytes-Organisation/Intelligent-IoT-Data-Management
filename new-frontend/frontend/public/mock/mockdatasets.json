@@ -1,0 +1,11 @@
+[
+  {
+    "id": "thingspeak-live",
+    "name": "ThingSpeak Live",
+    "icon": "📡",
+    "description": "Live IoT sensor dataset for dashboard monitoring and analysis.",
+    "streams": 0,
+    "lastUpdated": "Live",
+    "status": "Available"
+  }
+]

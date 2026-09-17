@@ -1,0 +1,252 @@
+/* Block 19 - Active Alerts Panel */
+.active-alerts-panel {
+  background: #fff7f7;
+  border: 1px solid #fecaca;
+  border-radius: 20px;
+  padding: 1.25rem;
+  color: #0f172a;
+}
+
+.active-alerts-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.active-alerts-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #991b1b;
+}
+
+.active-alerts-count {
+  border-radius: 999px;
+  padding: 0.35rem 0.7rem;
+  background: #fee2e2;
+  color: #991b1b;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.active-alerts-list {
+  display: grid;
+  gap: 1rem;
+}
+
+/* Block 20 - Alert Cards and Severity */
+.alert-card {
+  background: #ffffff;
+  border: 1px solid #fecaca;
+  border-left: 5px solid #dc2626;
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: 0 8px 20px rgba(127, 29, 29, 0.08);
+}
+
+.alert-card--high {
+  border-left-color: #dc2626;
+}
+
+.alert-card--medium {
+  border-left-color: #d97706;
+}
+
+.alert-card--low {
+  border-left-color: #2563eb;
+}
+
+.alert-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
+}
+
+.alert-severity {
+  border-radius: 999px;
+  padding: 0.3rem 0.65rem;
+  background: #fee2e2;
+  color: #991b1b;
+  font-size: 0.75rem;
+  font-weight: 850;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.alert-card--medium .alert-severity {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.alert-card--low .alert-severity {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.alert-timestamp {
+  color: #64748b;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.alert-type {
+  margin: 0 0 0.45rem;
+  color: #b91c1c;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.alert-target {
+  margin: 0 0 0.55rem;
+  color: #0f172a;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.alert-message {
+  margin: 0 0 1rem;
+  color: #475569;
+  line-height: 1.55;
+}
+
+/* Block 21 - Alert Details */
+.alert-metadata {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0 0 1rem;
+}
+
+.alert-metadata-item {
+  background: #fff7f7;
+  border: 1px solid #fee2e2;
+  border-radius: 12px;
+  padding: 0.7rem;
+}
+
+.alert-metadata-item dt {
+  margin-bottom: 0.25rem;
+  color: #64748b;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.alert-metadata-item dd {
+  margin: 0;
+  color: #0f172a;
+  font-size: 0.88rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.alert-supporting-values,
+.alert-time-window {
+  margin-top: 0.85rem;
+  border-top: 1px solid #fee2e2;
+  padding-top: 0.85rem;
+}
+
+.alert-supporting-values h4,
+.alert-time-window h4 {
+  margin: 0 0 0.55rem;
+  color: #334155;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.alert-supporting-values ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.alert-supporting-values li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: #475569;
+  font-size: 0.88rem;
+}
+
+.alert-supporting-values strong {
+  color: #0f172a;
+}
+
+.alert-time-window p {
+  margin: 0;
+  color: #475569;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.alert-id {
+  margin: 0.9rem 0 0;
+  color: #64748b;
+  font-size: 0.76rem;
+}
+
+.alert-id code {
+  color: #475569;
+  font-family: monospace;
+}
+
+/* Block 22 - Status States and Responsive Layout */
+.active-alerts-status {
+  margin: 0.75rem 0 0;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.active-alerts-panel--error {
+  background: #fef2f2;
+  border-color: #fca5a5;
+}
+
+.active-alerts-error-detail {
+  margin: 0.65rem 0 0;
+  border-radius: 10px;
+  padding: 0.7rem;
+  background: #fee2e2;
+  color: #991b1b;
+  font-size: 0.82rem;
+  overflow-wrap: anywhere;
+}
+
+.active-alerts-panel--empty {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.active-alerts-panel--empty .active-alerts-title {
+  color: #334155;
+}
+
+@media (max-width: 640px) {
+  .active-alerts-panel {
+    padding: 1rem;
+    border-radius: 16px;
+  }
+
+  .active-alerts-heading,
+  .alert-card-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .alert-metadata {
+    grid-template-columns: 1fr;
+  }
+
+  .alert-time-window span {
+    display: block;
+    height: 0.35rem;
+    color: transparent;
+  }
+}

@@ -3,66 +3,95 @@ import axios from "axios";
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api";
 
+let accessToken = null;
+
 const authClient = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true,
 });
 
-export const loginUser = async ({ email, password }) => {
+export const getAccessToken = () => accessToken;
+
+export const setAccessToken = (token) => {
+  accessToken = token || null;
+};
+
+export const clearAccessToken = () => {
+  accessToken = null;
+};
+
+export const registerUser = async ({ email, password, confirmPassword }) => {
+  const response = await authClient.post("/auth/register", {
+    email,
+    password,
+    confirmPassword,
+  });
+
+  return response.data;
+};
+
+export const loginUser = async ({ email, password, rememberMe }) => {
   const response = await authClient.post("/auth/login", {
     email,
     password,
+    rememberMe,
   });
 
-  return response.data;
+  return {
+    status: response.status,
+    ...response.data,
+  };
 };
 
-export const verifyTwoFactorCode = async ({ email, otp, tempToken }) => {
-  const response = await authClient.post("/auth/verify-2fa", {
-    email,
+export const verifyTwoFactorCode = async ({
+  mfaChallengeId,
+  otp,
+  rememberMe,
+}) => {
+  const response = await authClient.post("/auth/mfa/verify", {
+    mfaChallengeId,
     otp,
-    tempToken,
+    rememberMe,
   });
 
   return response.data;
 };
 
-export const resendTwoFactorCode = async ({ email, tempToken }) => {
-  const response = await authClient.post("/auth/resend-2fa", {
-    email,
-    tempToken,
+export const resendTwoFactorCode = async ({ mfaChallengeId }) => {
+  const response = await authClient.post("/auth/mfa/resend", {
+    mfaChallengeId,
   });
 
   return response.data;
 };
 
-export const registerUser = async ({ fullName, email, password }) => {
-  const response = await authClient.post("/auth/register", {
-    fullName,
-    email,
-    password,
-  });
+export const refreshSession = async () => {
+  const response = await authClient.post("/auth/refresh");
+
+  const token = response.data?.data?.accessToken;
+  setAccessToken(token);
 
   return response.data;
 };
 
-export const saveAuthSession = ({ token, user }) => {
-  sessionStorage.setItem("iot_auth", "true");
-
-  if (token) {
-    sessionStorage.setItem("iot_token", token);
-  }
-
-  if (user) {
-    sessionStorage.setItem("iot_user", JSON.stringify(user));
+export const logoutUser = async () => {
+  try {
+    await authClient.post("/auth/logout", null, {
+      headers: accessToken
+        ? { Authorization: `Bearer ${accessToken}` }
+        : undefined,
+    });
+  } finally {
+    clearAccessToken();
   }
 };
 
-export const clearAuthSession = () => {
-  sessionStorage.removeItem("iot_auth");
-  sessionStorage.removeItem("iot_token");
-  sessionStorage.removeItem("iot_user");
-  localStorage.removeItem("isAuthenticated");
-};
+export const getAuthHeaders = () =>
+  accessToken
+    ? {
+        Authorization: `Bearer ${accessToken}`,
+      }
+    : {};

@@ -1,0 +1,10 @@
+{
+  "status": "success",
+  "code": 200,
+  "message": "Alerts retrieved successfully",
+  "metadata": {
+    "contract_version": "Draft V0.1",
+    "total_alerts": 0
+  },
+  "alerts": []
+}

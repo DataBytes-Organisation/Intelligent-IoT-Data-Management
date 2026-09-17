@@ -1,6 +1,17 @@
 import { useState, useRef, useEffect } from "react";
 import "./StreamSelector.css";
 
+export const STREAM_LABELS = {
+  field1: "eCO2",
+  field2: "eTVOC",
+  field3: "Temperature",
+  field4: "Air Pressure",
+  field5: "Humidity",
+  field6: "Secondary Temperature",
+  field7: "Controller Temperature",
+  field8: "Conductance",
+};
+
 /**
  * StreamDropdownSelector Component
  * --------------------------------
@@ -12,8 +23,12 @@ import "./StreamSelector.css";
  * - Closes automatically when clicking outside the dropdown.
  * - Updates the selectedStreams state in the parent component.
  */
-const StreamDropdownSelector = ({ streams, selectedStreams, setSelectedStreams }) => {
-
+const StreamDropdownSelector = ({
+  streams,
+  streamLabels = {},
+  selectedStreams,
+  setSelectedStreams,
+}) => {
   // Controls whether the dropdown menu is open or closed
   const [open, setOpen] = useState(false);
 
@@ -115,7 +130,7 @@ const StreamDropdownSelector = ({ streams, selectedStreams, setSelectedStreams }
               />
 
               {/* Stream name */}
-              {stream}
+              {streamLabels[stream] || STREAM_LABELS[stream] || stream}
             </label>
           ))}
         </div>

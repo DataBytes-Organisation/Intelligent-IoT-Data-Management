@@ -1,0 +1,13 @@
+{
+  "status": "insufficient_data",
+  "code": 200,
+  "message": "Not enough valid data points to compute a reliable correlation for the requested streams and time window",
+  "metadata": {
+    "streams": ["Stream Alpha", "Sensor 2"],
+    "time_window": "2026-08-07T08:00:00Z/2026-08-07T08:15:00Z",
+    "required_min_points": 10,
+    "available_points": 3
+  },
+  "correlation": null,
+  "data": []
+}

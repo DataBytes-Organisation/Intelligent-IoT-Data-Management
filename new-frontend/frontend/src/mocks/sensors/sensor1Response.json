@@ -1,0 +1,87 @@
+{
+  "dataset": "sensor1",
+  "rowCount": 5,
+  "metadata": {
+    "display_name": "Environmental Sensor",
+    "streams": [
+      {
+        "id": "temperature",
+        "name": "Temperature",
+        "unit": null
+      },
+      {
+        "id": "humidity",
+        "name": "Humidity",
+        "unit": null
+      },
+      {
+        "id": "pressure",
+        "name": "Pressure",
+        "unit": null
+      }
+    ],
+    "statistics": {
+      "temperature": {
+        "latest": 23.8,
+        "min": 22.4,
+        "max": 23.8,
+        "average": 23.12,
+        "valid_count": 5,
+        "missing_count": 0
+      },
+      "humidity": {
+        "latest": 54,
+        "min": 54,
+        "max": 58,
+        "average": 56,
+        "valid_count": 5,
+        "missing_count": 0
+      },
+      "pressure": {
+        "latest": 1011.5,
+        "min": 1011.5,
+        "max": 1012.3,
+        "average": 1011.9,
+        "valid_count": 5,
+        "missing_count": 0
+      }
+    }
+  },
+  "rows": [
+    {
+      "entry_id": 1,
+      "created_at": "2026-08-07T06:00:00.000Z",
+      "temperature": 22.4,
+      "humidity": 58,
+      "pressure": 1012.3
+    },
+    {
+      "entry_id": 2,
+      "created_at": "2026-08-07T06:05:00.000Z",
+      "temperature": 22.8,
+      "humidity": 57,
+      "pressure": 1012.1
+    },
+    {
+      "entry_id": 3,
+      "created_at": "2026-08-07T06:10:00.000Z",
+      "temperature": 23.1,
+      "humidity": 56,
+      "pressure": 1011.9
+    },
+    {
+      "entry_id": 4,
+      "created_at": "2026-08-07T06:15:00.000Z",
+      "temperature": 23.5,
+      "humidity": 55,
+      "pressure": 1011.7
+    },
+    {
+      "entry_id": 5,
+      "created_at": "2026-08-07T06:20:00.000Z",
+      "temperature": 23.8,
+      "humidity": 54,
+      "pressure": 1011.5
+    }
+  ]
+}

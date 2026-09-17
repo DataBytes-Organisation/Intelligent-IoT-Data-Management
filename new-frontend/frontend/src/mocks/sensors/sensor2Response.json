@@ -1,0 +1,87 @@
+{
+  "dataset": "sensor2",
+  "rowCount": 5,
+  "metadata": {
+    "display_name": "Multi-Stream Sensor",
+    "streams": [
+      {
+        "id": "metric_a",
+        "name": "Metric A",
+        "unit": null
+      },
+      {
+        "id": "metric_b",
+        "name": "Metric B",
+        "unit": null
+      },
+      {
+        "id": "metric_c",
+        "name": "Metric C",
+        "unit": null
+      }
+    ],
+    "statistics": {
+      "metric_a": {
+        "latest": 16.5,
+        "min": 12.5,
+        "max": 16.5,
+        "average": 14.46,
+        "valid_count": 5,
+        "missing_count": 0
+      },
+      "metric_b": {
+        "latest": 40.2,
+        "min": 40.2,
+        "max": 44.2,
+        "average": 42.24,
+        "valid_count": 5,
+        "missing_count": 0
+      },
+      "metric_c": {
+        "latest": 9.4,
+        "min": 7.8,
+        "max": 9.4,
+        "average": 8.58,
+        "valid_count": 5,
+        "missing_count": 0
+      }
+    }
+  },
+  "rows": [
+    {
+      "entry_id": 1,
+      "created_at": "2026-08-07T06:00:00.000Z",
+      "metric_a": 12.5,
+      "metric_b": 44.2,
+      "metric_c": 7.8
+    },
+    {
+      "entry_id": 2,
+      "created_at": "2026-08-07T06:05:00.000Z",
+      "metric_a": 13.4,
+      "metric_b": 43.2,
+      "metric_c": 8.1
+    },
+    {
+      "entry_id": 3,
+      "created_at": "2026-08-07T06:10:00.000Z",
+      "metric_a": 14.5,
+      "metric_b": 42.1,
+      "metric_c": 8.6
+    },
+    {
+      "entry_id": 4,
+      "created_at": "2026-08-07T06:15:00.000Z",
+      "metric_a": 15.4,
+      "metric_b": 41.5,
+      "metric_c": 9.0
+    },
+    {
+      "entry_id": 5,
+      "created_at": "2026-08-07T06:20:00.000Z",
+      "metric_a": 16.5,
+      "metric_b": 40.2,
+      "metric_c": 9.4
+    }
+  ]
+}

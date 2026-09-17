@@ -1,113 +1,126 @@
-const authService = require("../services/authService");
-
+const auth = require("../services/authService");
+const crypto = require("crypto");
+const cookieOptions = (rememberMe) => ({
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "lax",
+  path: "/api/auth",
+  ...(rememberMe ? { maxAge: 30 * 24 * 60 * 60 * 1000 } : {}),
+});
+const requestId = (req) =>
+  req.get("x-request-id") || `req_${crypto.randomUUID()}`;
+function success(res, req, status, data) {
+  res.set("Cache-Control", "no-store");
+  return res.status(status).json({ data, meta: { requestId: requestId(req) } });
+}
+function error(res, req, err) {
+  const status = err.status || 500;
+  const code = err.code || "INTERNAL_ERROR";
+  if (status >= 500) {
+    console.error("Authentication request failed", {
+      requestId: requestId(req),
+      route: req.originalUrl,
+      method: req.method,
+      error: err.message,
+    });
+  }
+  const body = {
+    error: {
+      code,
+      message: status === 500 ? "An unexpected error occurred." : err.message,
+    },
+    meta: { requestId: requestId(req) },
+  };
+  if (err.fields) body.error.fields = err.fields;
+  if (err.retryAfterSeconds)
+    body.error.retryAfterSeconds = err.retryAfterSeconds;
+  return res.status(status).json(body);
+}
+function setSession(res, req, session) {
+  res.cookie(
+    "iot_refresh",
+    session.refreshToken,
+    cookieOptions(session.rememberMe),
+  );
+  return success(res, req, 200, session.data);
+}
 async function register(req, res) {
   try {
-    const { username, password, role } = req.body;
-
-    if (!username || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "Username and password are required"
-      });
-    }
-
-    const user = await authService.registerUser(username, password, role);
-
-    return res.status(201).json({
-      success: true,
-      message: "User registered successfully",
-      user
-    });
-  } catch (error) {
-    return res.status(400).json({
-      success: false,
-      message: error.message
-    });
+    return success(res, req, 201, { user: await auth.register(req.body) });
+  } catch (err) {
+    return error(res, req, err);
   }
 }
-
 async function login(req, res) {
   try {
-    const { username, password } = req.body;
-
-    if (!username || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "Username and password are required"
-      });
-    }
-
-    const result = await authService.loginUser(username, password);
-
-    return res.status(200).json({
-      success: true,
-      ...result
-    });
-  } catch (error) {
-    return res.status(401).json({
-      success: false,
-      message: error.message
-    });
+    const result = await auth.login(req.body);
+    if (result.mfa) return success(res, req, 202, result.mfa);
+    return setSession(res, req, result.session);
+  } catch (err) {
+    return error(res, req, err);
   }
 }
-
-function refreshToken(req, res) {
+async function verifyMfa(req, res) {
   try {
-    const { refreshToken } = req.body;
-
-    const result = authService.refreshAccessToken(refreshToken);
-
-    return res.status(200).json({
-      success: true,
-      ...result
-    });
-  } catch (error) {
-    return res.status(403).json({
-      success: false,
-      message: error.message
-    });
+    return setSession(res, req, await auth.verifyMfa(req.body));
+  } catch (err) {
+    return error(res, req, err);
   }
 }
-
-function logout(req, res) {
+async function resendMfa(req, res) {
   try {
-    const { refreshToken } = req.body;
-
-    const result = authService.logoutUser(refreshToken);
-
-    return res.status(200).json({
-      success: true,
-      ...result
-    });
-  } catch (error) {
-    return res.status(400).json({
-      success: false,
-      message: error.message
-    });
+    const data = await auth.resendMfa(req.body);
+    delete data.otp;
+    return success(res, req, 202, data);
+  } catch (err) {
+    return error(res, req, err);
   }
 }
-
-function getUsers(req, res) {
+async function refresh(req, res) {
   try {
-    const users = authService.getAllUsers();
-
-    return res.status(200).json({
-      success: true,
-      message: "Users retrieved successfully",
-      users
-    });
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message
-    });
+    return setSession(res, req, await auth.refresh(req.cookies?.iot_refresh));
+  } catch (err) {
+    return error(res, req, err);
   }
 }
-
+async function logout(req, res) {
+  try {
+    await auth.logout(req.cookies?.iot_refresh);
+    res.clearCookie("iot_refresh", cookieOptions(false));
+    return res.status(204).end();
+  } catch (err) {
+    return error(res, req, err);
+  }
+}
+async function requestReset(req, res) {
+  try {
+    await auth.requestReset(req.body);
+    return success(res, req, 202, {
+      message: "If the account exists, reset instructions have been sent.",
+    });
+  } catch (err) {
+    return error(res, req, err);
+  }
+}
+async function confirmReset(req, res) {
+  try {
+    await auth.confirmReset(req.body);
+    return res.status(204).end();
+  } catch (err) {
+    return error(res, req, err);
+  }
+}
+async function getUsers(req, res) {
+  return success(res, req, 200, { users: await auth.getAllUsers() });
+}
 module.exports = {
   register,
   login,
-  refreshToken,
+  verifyMfa,
+  resendMfa,
+  refresh,
   logout,
-  getUsers
+  requestReset,
+  confirmReset,
+  getUsers,
 };

@@ -1,38 +1,11 @@
+import { useState } from "react";
 import DatasetCard from "../components/DatasetCard";
+import UploadDatasetCard from "../components/UploadDatasetCard";
+import UploadDatasetDialog from "../components/UploadDatasetDialog";
+import { useDatasets } from "../hooks/useDatasets";
+import { deleteDataset } from "../services/datasetService";
+import ConfirmDeleteDialog from "../components/ConfirmDeleteDialog";
 import "./HomePage.css";
-
-const datasets = [
-  {
-    id: "sensor1",
-    name: "Environmental Sensor",
-    icon: "🌡️",
-    description:
-      "Collects temperature and humidity data over time, enabling analysis of environmental trends and conditions.",
-    streams: 3,
-    lastUpdated: "Today",
-    status: "Available",
-  },
-  {
-    id: "sensor2",
-    name: "Multi-Stream Sensor",
-    icon: "📊",
-    description:
-      "Captures multiple sensor streams simultaneously, supporting comparison and correlation between different variables.",
-    streams: 4,
-    lastUpdated: "Today",
-    status: "Available",
-  },
-  {
-    id: "sensor3",
-    name: "IoT Monitoring Sensor",
-    icon: "📡",
-    description:
-      "Provides real-time IoT sensor data used for dashboard testing, system validation, and visualisation of streaming data.",
-    streams: 3,
-    lastUpdated: "Today",
-    status: "Available",
-  },
-];
 
 const features = [
   {
@@ -53,6 +26,98 @@ const features = [
 ];
 
 const HomePage = () => {
+  const {
+  datasets,
+  loading,
+  error,
+  refreshDatasets,
+  removeDataset,
+} = useDatasets();
+  const [showUploadDialog, setShowUploadDialog] = useState(false);
+  const [showRecentlyDeleted, setShowRecentlyDeleted] = useState(false);
+
+  const [pendingDelete, setPendingDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState(null);
+
+  const handleDeleteClick = (dataset) => {
+    setPendingDelete(dataset);
+    setDeleteError(null);
+  };
+
+  const handleCancelDelete = () => {
+    if (isDeleting) return;
+    setPendingDelete(null);
+    setDeleteError(null);
+  };
+
+  const handleConfirmDelete = async () => {
+    setIsDeleting(true);
+    setDeleteError(null);
+
+    try {
+      await deleteDataset(pendingDelete.id);
+      removeDataset(pendingDelete.id);
+      setPendingDelete(null);
+    } catch (err) {
+      setDeleteError(
+        err.message || "Something went wrong while deleting. Please try again."
+      );
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+  const streamCount = datasets.reduce(
+    (total, dataset) => total + Number(dataset.streams || 0),
+    0,
+  );
+
+  const renderDatasets = () => {
+    if (loading) {
+      return (
+        <div className="homepage__dataset-state" role="status">
+          <span className="homepage__spinner" aria-hidden="true"></span>
+          <h3>Loading datasets</h3>
+          <p>Please wait while the dataset library is prepared.</p>
+        </div>
+      );
+    }
+
+    if (error) {
+      return (
+        <div className="homepage__dataset-state homepage__dataset-state--error" role="alert">
+          <h3>Unable to load datasets</h3>
+          <p>Please refresh the page or try again later.</p>
+        </div>
+      );
+    }
+
+    if (datasets.length === 0) {
+      return (
+        <div className="homepage__dataset-state">
+          <h3>No datasets available</h3>
+          <p>New sensor datasets will appear here when they are added.</p>
+        </div>
+      );
+    }
+
+    return (
+      <div className="homepage__grid">
+        {datasets.map((dataset) => (
+          <DatasetCard
+            key={dataset.id}
+            {...dataset}
+            onDeleteClick={handleDeleteClick}
+          />
+        ))}
+
+        <UploadDatasetCard
+        onClick={() => setShowUploadDialog(true)}
+         />
+      </div>
+    );
+  };
+
   return (
     <>
       <main className="homepage">
@@ -90,11 +155,11 @@ const HomePage = () => {
 
             <div className="homepage__stats-grid">
               <div className="homepage__stat-card">
-                <strong>3</strong>
+                <strong>{loading ? "—" : datasets.length}</strong>
                 <span>Datasets</span>
               </div>
               <div className="homepage__stat-card">
-                <strong>10+</strong>
+                <strong>{loading ? "—" : streamCount}</strong>
                 <span>Streams</span>
               </div>
               <div className="homepage__stat-card">
@@ -115,21 +180,61 @@ const HomePage = () => {
           </div>
         </section>
 
-        <section className="homepage__datasets" id="datasets">
+                <section className="homepage__datasets" id="datasets">
           <div className="homepage__section-header">
             <p className="homepage__section-label">Dataset Library</p>
-            <h2>Available Sensor Datasets</h2>
+
+            <div className="homepage__dataset-tabs">
+              <button
+                type="button"
+                className={`homepage__dataset-tab ${
+                  !showRecentlyDeleted
+                    ? "homepage__dataset-tab--active"
+                    : ""
+                }`}
+                onClick={() => setShowRecentlyDeleted(false)}
+              >
+                Available Sensor Datasets
+              </button>
+
+              <button
+                type="button"
+                className={`homepage__dataset-tab ${
+                  showRecentlyDeleted
+                    ? "homepage__dataset-tab--active"
+                    : ""
+                }`}
+                onClick={() => setShowRecentlyDeleted(true)}
+              >
+                Recently Deleted
+              </button>
+            </div>
+
             <p>
-              Select a dataset to open its dashboard and explore available
-              streams, trends, and analytical outputs.
+              {showRecentlyDeleted
+                ? "View datasets that have been recently deleted."
+                : "Select a dataset to open its dashboard and explore available streams, trends, and analytical outputs."}
             </p>
           </div>
 
-          <div className="homepage__grid">
-            {datasets.map((dataset) => (
-              <DatasetCard key={dataset.id} {...dataset} />
-            ))}
-          </div>
+          {showRecentlyDeleted ? (
+            <div className="homepage__dataset-state">
+                <div className="homepage__deleted-icon" aria-hidden="true">
+                <span className="homepage__bin-handle"></span>
+                <span className="homepage__bin-lid"></span>
+                <span className="homepage__bin-body">
+                  <span></span>
+                  <span></span>
+                </span>
+              </div>
+
+              <h3>No deleted datasets</h3>
+
+              <p>There are currently no deleted datasets available.</p>
+            </div>
+          ) : (
+            renderDatasets()
+          )}
         </section>
 
         <section className="homepage__features" id="platform-info">
@@ -140,6 +245,25 @@ const HomePage = () => {
             </div>
           ))}
         </section>
+
+        {showUploadDialog && (
+          <UploadDatasetDialog
+            onClose={() => {
+              setShowUploadDialog(false);
+              refreshDatasets();
+            }}
+          />
+          )}
+
+        {pendingDelete && (
+          <ConfirmDeleteDialog
+            datasetName={pendingDelete.name}
+            isDeleting={isDeleting}
+            error={deleteError}
+            onCancel={handleCancelDelete}
+            onConfirm={handleConfirmDelete}
+          />
+        )}
       </main>
     </>
   );

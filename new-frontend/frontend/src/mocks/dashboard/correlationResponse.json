@@ -1,0 +1,19 @@
+{
+  "status": "success",
+  "code": 200,
+  "message": "Correlation computed successfully",
+  "metadata": {
+    "contract_version": "Draft V0.1"
+  },
+  "correlation": {
+    "stream_a": "Stream Alpha",
+    "stream_b": "Sensor 2",
+    "method": "pearson",
+    "previous_correlation": 0.62,
+    "current_correlation": 0.81,
+    "correlation_change": 0.19,
+    "time_window": "2026-08-07T08:00:00Z/2026-08-07T09:10:00Z",
+    "severity": "moderate",
+    "message": "Correlation between Stream Alpha and Sensor 2 increased notably over the selected time window"
+  }
+}
