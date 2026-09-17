@@ -995,3 +995,139 @@
   margin-top: 4px;
   
 } 
+
+.developer-metrics-content {
+  margin-top: 1rem;
+}
+
+.api-metrics-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.api-chart-area {
+  min-width: 0;
+}
+
+.api-chart-area h3 {
+  margin-bottom: 0.4rem;
+}
+
+.api-chart-description {
+  margin: 0 0 0.8rem;
+  color: #64748b;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.api-response-chart {
+  width: 100%;
+  max-width: 760px;
+  height: auto;
+}
+
+.api-insights-panel {
+  background: #f8fbff;
+  border: 1px solid #dbe7f5;
+  border-radius: 16px;
+  padding: 1rem;
+}
+
+.api-insights-panel h3 {
+  margin: 0 0 1rem;
+  color: #0f172a;
+}
+
+.api-insight-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.api-insight-item span {
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+.api-insight-item strong {
+  color: #1d4ed8;
+  font-size: 0.9rem;
+}
+
+.api-performance-message {
+  margin-top: 1rem;
+  padding: 0.9rem;
+  background: #ecfdf5;
+  border-radius: 12px;
+}
+
+.api-performance-message strong {
+  color: #166534;
+}
+
+.api-performance-message p {
+  margin: 0.35rem 0 0;
+  color: #334155;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 900px) {
+  .api-metrics-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.developer-back-btn {
+  border: none;
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  margin: 1rem 0 0 1rem;
+  background: #f1f5f9;
+  color: #0f172a;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.developer-back-btn:hover {
+  background: #e2e8f0;
+  transform: translateX(-2px);
+}
+
+
+.server-status-display {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 1rem;
+}
+
+.server-status-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-good {
+  background: #22c55e;
+}
+
+.status-down {
+  background: #ef4444;
+}
+
+
+.developer-metrics-toggle {
+  border: none;
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  background: #0f172a;
+  color: #ffffff;
+  font-weight: 700;
+  cursor: pointer;
+}

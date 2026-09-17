@@ -1,4 +1,5 @@
 import React, { useMemo, useState, useCallback, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSensorData } from '../hooks/useSensorData.js';
 import { useFilteredData } from '../hooks/useFilteredData.js';
 import { useStreamNames } from '../hooks/useStreamNames.js';
@@ -14,6 +15,7 @@ import { runAnalysis } from '../services/analysisService.js';
 import AnalysisSummary from './AnalysisSummary.jsx';
 
 const Dashboard = ({ datasetId }) => {
+  const navigate = useNavigate();
   // --- ALL HOOKS FIRST ---
   const { data: sensorData, loading, error, isEmpty, isValid } = useSensorData(datasetId);
 
@@ -394,6 +396,25 @@ const Dashboard = ({ datasetId }) => {
           </div>
         </div>
       </section>
+
+      
+      <section className="dashboard-section server-status-section">
+  <h3 className="section-title">Server Status</h3>
+
+  <div className="server-status-display">
+    <span className="server-status-dot status-good"></span>
+    <strong>Good</strong>
+  </div>
+</section>
+
+<section className="dashboard-section">
+  <button
+    className="developer-metrics-toggle"
+    onClick={() => navigate(`/developer-metrics/${datasetId}`)}
+  >
+    View Developer Metrics
+  </button>
+</section>
 
       {/* ✅ THIS IS THE FIXED SECTION THAT READS DIRECTLY FROM BACKEND ✅ */}
       <section className="dashboard-section stream-panel">
