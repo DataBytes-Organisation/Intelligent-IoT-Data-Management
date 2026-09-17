@@ -189,21 +189,44 @@ def adapt_models_output(
             f"scores={len(scores)}."
         )
 
+
     sensor_values = input_context.get(
-        "sensor_values"
+    "sensor_values"
     )
 
     if sensor_values is not None:
 
-        sensor_values = _to_python_list(
-            sensor_values
-        )
+        if isinstance(sensor_values, dict):
 
-        if len(sensor_values) != len(scores):
-            raise ValueError(
-                "sensor_values length does not "
-                "match detector output."
+            for metric in metrics:
+
+                if metric not in sensor_values:
+                    raise ValueError(
+                        f"Missing sensor values for metric '{metric}'."
+                    )
+
+                sensor_values[metric] = _to_python_list(
+                    sensor_values[metric]
+                )
+
+                if len(sensor_values[metric]) != len(scores):
+                    raise ValueError(
+                        f"sensor_values length for '{metric}' "
+                        "does not match detector output."
+                    )
+
+        else:
+            # Backward compatibility with the existing
+            # single-metric format.
+            sensor_values = _to_python_list(
+                sensor_values
             )
+
+            if len(sensor_values) != len(scores):
+                raise ValueError(
+                    "sensor_values length does not "
+                    "match detector output."
+                )
 
     alerts = []
 
@@ -260,8 +283,8 @@ def adapt_models_output(
             },
             "severity": None,
             "message": (
-                f"Anomaly detected in "
-                f"{metrics[0]} "
+                f"Anomaly detected across "
+                f"{', '.join(metrics)} "
                 f"using "
                 f"{model_name}."
             ),
@@ -275,10 +298,23 @@ def adapt_models_output(
             "alert_id": None,
         }
 
+
         if sensor_values is not None:
-            alert["supporting_values"][
-                "sensor_value"
-            ] = sensor_values[index]
+
+            if isinstance(sensor_values, dict):
+
+                alert["supporting_values"][
+                    "sensor_values"
+                ] = {
+                    metric: sensor_values[metric][index]
+                    for metric in metrics
+                }
+
+            else:
+                # Backward-compatible single-metric output.
+                alert["supporting_values"][
+                    "sensor_value"
+                ] = sensor_values[index]
 
         if "threshold" in model_result:
             alert["supporting_values"][
