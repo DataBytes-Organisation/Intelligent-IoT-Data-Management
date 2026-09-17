@@ -5,7 +5,7 @@ const TimeseriesRepository = require("../repositories/timeseriesRepository.js");
 
 const repo = new TimeseriesRepository();
 
-async function ingestThingSpeak(datasetName, apiUrl) {
+async function ingestThingSpeak(datasetName, apiUrl, ownerUserId) {
   console.log("--------------------------------------------------");
   console.log("ThingSpeak Ingestion Started");
   console.log(`Dataset: ${datasetName}`);
@@ -33,11 +33,13 @@ async function ingestThingSpeak(datasetName, apiUrl) {
 
     // 1. Create or retrieve dataset
     const datasetResult = await pool.query(
-      `INSERT INTO datasets (name)
-      VALUES ($1)
-      ON CONFLICT (name) DO UPDATE SET name = EXCLUDED.name
+      `INSERT INTO datasets (name, created_by, updated_by)
+      VALUES ($1, $2, $2)
+      ON CONFLICT (created_by, name) WHERE deleted_at IS NULL
+      DO UPDATE SET updated_by = EXCLUDED.updated_by,
+                    updated_at = CURRENT_TIMESTAMP
       RETURNING id`,
-      [datasetName]
+      [datasetName, ownerUserId]
     );
 
     const datasetId = datasetResult.rows[0].id;
@@ -80,10 +82,11 @@ async function ingestThingSpeak(datasetName, apiUrl) {
 
 const datasetName = process.argv[2];
 const apiUrl = process.argv[3];
+const ownerUserId = process.argv[4];
 
-if (!datasetName || !apiUrl) {
-  console.error("Usage: node thingSpeakInjest.js <datasetName> <apiUrl>");
+if (!datasetName || !apiUrl || !ownerUserId) {
+  console.error("Usage: node thingSpeakInjest.js <datasetName> <apiUrl> <ownerUserId>");
   process.exit(1);
 }
 
-ingestThingSpeak(datasetName, apiUrl);
+ingestThingSpeak(datasetName, apiUrl, ownerUserId);

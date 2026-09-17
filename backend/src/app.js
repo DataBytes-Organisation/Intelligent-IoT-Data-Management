@@ -2,12 +2,13 @@ const express = require("express");
 const cors = require("cors");
 
 const { assertProductionAuthConfig } = require("./config/authConfig");
-
+const { MAX_REQUEST_BODY_BYTES } = require("./config/uploadLimits");
+const {
+  requestBodyLimitErrorHandler,
+} = require("./middleware/uploadLimitMiddleware");
 const apiRoutes = require("./routes");
 const authRoutes = require("./routes/auth");
 const thingSpeakRoutes = require("./routes/thingspeak");
-
-const jsonLimit = process.env.JSON_BODY_LIMIT || "25mb";
 
 function cookieParser(req, _res, next) {
   req.cookies = Object.fromEntries(
@@ -39,8 +40,7 @@ function createApp() {
       credentials: true,
     }),
   );
-
-  app.use(express.json({ limit: jsonLimit }));
+  app.use(express.json({ limit: MAX_REQUEST_BODY_BYTES }));
   app.use(cookieParser);
 
   app.get("/", (_req, res) => {
@@ -76,6 +76,7 @@ function createApp() {
   // ThingSpeak live-data routes
   app.use("/api", thingSpeakRoutes);
 
+  app.use(requestBodyLimitErrorHandler);
   return app;
 }
 

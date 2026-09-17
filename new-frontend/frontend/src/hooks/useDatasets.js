@@ -16,7 +16,8 @@ const formatUpdatedTime = (value) => {
 };
 
 const buildDatasetCard = (dataset) => ({
-  id: dataset.name,
+  id: dataset.name,       // keep for existing dashboard routing
+  datasetId: dataset.id,  // numeric DB ID for delete/restore/API operations
   name:
     dataset.name === "thingspeak-live"
       ? "ThingSpeak Live"
@@ -35,6 +36,7 @@ const buildDatasetCard = (dataset) => ({
       ? "Live"
       : formatUpdatedTime(dataset.updatedAt),
   status: "Available",
+  isSystemDataset: dataset.name === "thingspeak-live",
 });
 
 export const useDatasets = () => {
@@ -88,10 +90,17 @@ export const useDatasets = () => {
     loadDatasets();
   }, [loadDatasets]);
 
+  const removeDataset = useCallback((datasetId) => {
+    setDatasets((prev) =>
+      prev.filter((dataset) => dataset.datasetId !== datasetId)
+    );
+  }, []);
+
   return {
     datasets,
     loading,
     error,
     refreshDatasets: loadDatasets,
+    removeDataset,
   };
 };

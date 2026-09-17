@@ -51,3 +51,87 @@ export const createDataset = async (payload) => {
     throw error;
   }
 };
+
+export const deleteDataset = async (datasetId) => {
+  let token = getAccessToken();
+
+  if (!token) {
+    const refreshed = await refreshSession();
+    token = refreshed.data?.accessToken;
+  }
+
+  try {
+    const response = await datasetClient.delete(`/datasets/${datasetId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    if (
+      error.response?.status === 401 &&
+      error.response?.data?.error?.code === "ACCESS_TOKEN_EXPIRED"
+    ) {
+      const refreshed = await refreshSession();
+      const refreshedToken = refreshed.data?.accessToken;
+
+      const retryResponse = await datasetClient.delete(
+        `/datasets/${datasetId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${refreshedToken}`,
+          },
+        },
+      );
+
+      return retryResponse.data;
+    }
+
+    throw error;
+  }
+};
+
+// function to get deleted datasets, so we can show it on the recently deleted tab
+export const getDeletedDatasets = async () => {
+  let token = getAccessToken();
+
+  if (!token) {
+    const refreshed = await refreshSession();
+    token = refreshed.data?.accessToken;
+  }
+
+  try {
+    const response = await datasetClient.get("/datasets", {
+      params: {
+        status: "deleted",
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    if (
+      error.response?.status === 401 &&
+      error.response?.data?.error?.code === "ACCESS_TOKEN_EXPIRED"
+    ) {
+      const refreshed = await refreshSession();
+      const refreshedToken = refreshed.data?.accessToken;
+
+      const retryResponse = await datasetClient.get("/datasets", {
+        params: {
+          status: "deleted",
+        },
+        headers: {
+          Authorization: `Bearer ${refreshedToken}`,
+        },
+      });
+
+      return retryResponse.data;
+    }
+
+    throw error;
+  }
+};

@@ -1,0 +1,7 @@
+const MAX_REQUEST_BODY_BYTES = 10 * 1024 * 1024;
+const MAX_CSV_UPLOAD_ROWS = 10_000;
+
+module.exports = {
+  MAX_REQUEST_BODY_BYTES,
+  MAX_CSV_UPLOAD_ROWS,
+};
