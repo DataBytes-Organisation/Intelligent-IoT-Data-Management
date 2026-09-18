@@ -1,13 +1,13 @@
 :root {
-  --bg-base: #f8fbff;
+  --bg-base: #f1f5f9;
   --bg-card: #ffffff;
   --primary: #2563eb;
   --primary-dark: #1d4ed8;
-  --border: #dbe7f5;
+  --border: #cbd5e1;
   --text-primary: #0f172a;
-  --text-secondary: #334155;
-  --text-muted: #64748b;
-  --text-label: #334155;
+  --text-secondary: #475569;
+  --text-muted: #475569;
+  --text-label: #0f172a;
   --radius-md: 14px;
   --radius-lg: 20px;
   --radius-xl: 28px;
@@ -286,6 +286,19 @@
   display: flex;
   justify-content: space-between;
   gap: 12px;
+}
+
+.mfa-resend-timer {
+  margin: 20px 0 0;
+  color: var(--text-muted);
+  font-size: 13.5px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.mfa-resend-timer strong {
+  color: var(--primary-dark);
+  font-variant-numeric: tabular-nums;
 }
 
 .text-button {

@@ -121,7 +121,7 @@
 }
 
 .control-label {
-  color: #111827;
+  color: #0f172a;
   font-size: 13px;
   font-weight: 600;
   line-height: 1;
@@ -148,8 +148,8 @@
   min-height: 40px !important;
   padding: 0 12px !important;
   background: #ffffff !important;
-  color: #111827 !important;
-  border: 1px solid #1f2937 !important;
+  color: #0f172a !important;
+  border: 1px solid #cbd5e1 !important;
   border-radius: 6px !important;
   box-shadow: none !important;
   font-family: inherit !important;
@@ -211,8 +211,8 @@
   align-items: center;
   gap: 8px;
   background: #ffffff;
-  color: #111827;
-  border: 1px solid #1f2937;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
   border-radius: 6px;
   box-shadow: none;
   font-family: inherit;
@@ -273,8 +273,8 @@
   align-items: center;
   justify-content: center;
   gap: 7px;
-  background: #a8bfff;
-  color: #1554e8;
+  background: #dbeafe;
+  color: #1d4ed8;
   border: none;
   border-radius: 8px;
   box-shadow: none;
@@ -288,7 +288,7 @@
 }
 
 .refresh-control-button:hover {
-  background: #96b0fb;
+  background: #dbeafe;
 }
 
 .refresh-control-button:active {
@@ -902,10 +902,8 @@
 }
 
 .stream-chip {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  /* OR use a simpler background if Figma shows plain */
-  background: #f3f4f6;
-  border: 1px solid #e5e7eb;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
   border-radius: 20px; /* Pill shape */
   padding: 8px 16px;
   display: flex;
@@ -919,18 +917,18 @@
 .stream-chip:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-color: #667eea;
+  border-color: #2563eb;
 }
 
 .stream-name {
   font-size: 14px;
   font-weight: 500;
-  color: #1f2937;
+  color: #0f172a;
 }
 
 .stream-unit {
   font-size: 12px;
-  color: #6b7280;
+  color: #475569;
   font-weight: 400;
 }
 

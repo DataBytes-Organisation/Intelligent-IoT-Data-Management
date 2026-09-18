@@ -1,30 +1,38 @@
 /* -----------------------------------------------------------
-   TIME RANGE PANEL — Modern Grafana-style floating panel
+   TIME RANGE PANEL
 ----------------------------------------------------------- */
 
 .time-range-panel {
-  width: 420px;
+  width: 720px;
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 20px;
-  padding: 20px;
+  padding: 24px;
   box-shadow: 0 10px 28px rgba(15, 23, 42, 0.12);
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  font-family: 'Segoe UI', sans-serif;
+  gap: 22px;
+  font-family: "Segoe UI", sans-serif;
   animation: fadeIn 0.15s ease-out;
 }
 
-/* Smooth fade-in animation */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
+
 
 /* -----------------------------------------------------------
    HEADER
 ----------------------------------------------------------- */
+
 .time-range-header {
   display: flex;
   justify-content: space-between;
@@ -32,24 +40,36 @@
 }
 
 .time-range-title {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: #0f172a;
 }
 
+
 /* -----------------------------------------------------------
-   MODE TOGGLE BUTTONS
+   ABSOLUTE / RELATIVE TOGGLE
 ----------------------------------------------------------- */
+
+.time-mode-toggle {
+  display: flex;
+}
+
 .time-mode-toggle button {
-  padding: 6px 14px;
-  border-radius: 12px;
+  padding: 8px 18px;
   border: 1px solid #cbd5e1;
   background: #f1f5f9;
   cursor: pointer;
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: 600;
   color: #334155;
-  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.time-mode-toggle button:first-child {
+  border-radius: 10px 0 0 10px;
+}
+
+.time-mode-toggle button:last-child {
+  border-radius: 0 10px 10px 0;
 }
 
 .time-mode-toggle button:hover {
@@ -57,29 +77,128 @@
 }
 
 .time-mode-toggle .active {
-  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  background: #2563eb;
   color: white;
   border-color: #2563eb;
-  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
 }
+
 
 /* -----------------------------------------------------------
-   TWO-COLUMN LAYOUT
+   ABSOLUTE DATE RANGE
 ----------------------------------------------------------- */
-.time-range-grid {
+
+.absolute-date-range {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 18px;
+  gap: 24px;
 }
 
-.absolute-section,
+.date-time-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.date-time-column label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.date-time-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+
+/* -----------------------------------------------------------
+   DATE PICKER
+----------------------------------------------------------- */
+
+.react-datepicker {
+  width: 100%;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  font-family: "Segoe UI", sans-serif !important;
+}
+
+.react-datepicker__month-container {
+  width: 100%;
+}
+
+.react-datepicker__header {
+  background: #ffffff !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  border-radius: 12px 12px 0 0 !important;
+}
+
+.react-datepicker__current-month {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+}
+
+.react-datepicker__day-names,
+.react-datepicker__week {
+  display: flex;
+  justify-content: space-around;
+}
+
+.react-datepicker__day-name,
+.react-datepicker__day {
+  width: 2rem !important;
+  line-height: 2rem !important;
+  margin: 0.15rem !important;
+}
+
+.react-datepicker__day--selected {
+  background: #2563eb !important;
+  color: white !important;
+  border-radius: 8px !important;
+}
+
+.react-datepicker__day:hover {
+  border-radius: 8px !important;
+}
+
+
+/* -----------------------------------------------------------
+   TIME DROPDOWN
+----------------------------------------------------------- */
+
+.time-dropdown {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.time-dropdown:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.time-dropdown:disabled {
+  background: #f1f5f9;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+
+/* -----------------------------------------------------------
+   RELATIVE RANGE
+----------------------------------------------------------- */
+
 .relative-section {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.absolute-section h4,
 .relative-section h4 {
   margin: 0;
   font-size: 0.95rem;
@@ -87,38 +206,39 @@
   color: #0f172a;
 }
 
-/* Disabled state */
-.disabled {
-  opacity: 0.45;
+.relative-section select {
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #ffffff;
+  font-size: 0.9rem;
 }
 
+
 /* -----------------------------------------------------------
-   FOOTER BUTTONS
+   FOOTER
 ----------------------------------------------------------- */
+
 .time-range-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-/* Analyze button */
 .analyze-btn {
-  padding: 10px 16px;
-  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  padding: 11px 20px;
+  background: #2563eb;
   color: white;
   border: none;
-  border-radius: 12px;
+  border-radius: 10px;
   cursor: pointer;
   font-weight: 700;
-  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .analyze-btn:hover {
-  opacity: 0.95;
-  transform: translateY(-1px);
+  background: #1d4ed8;
 }
 
-/* Settings link */
 .settings-btn {
   padding: 6px 10px;
   background: transparent;
@@ -126,9 +246,23 @@
   color: #2563eb;
   cursor: pointer;
   font-weight: 600;
-  transition: color 0.2s ease;
 }
 
 .settings-btn:hover {
   color: #1e40af;
+}
+
+
+/* -----------------------------------------------------------
+   RESPONSIVE
+----------------------------------------------------------- */
+
+@media (max-width: 800px) {
+  .time-range-panel {
+    width: 90vw;
+  }
+
+  .absolute-date-range {
+    grid-template-columns: 1fr;
+  }
 }

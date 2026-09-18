@@ -375,39 +375,36 @@ const Dashboard = ({ datasetId }) => {
 
         <ol className="note-list">
           <li>
-            Select at least one stream to view the line chart.
+            Select one or more streams to view their sensor data and insight cards.
           </li>
 
           <li>
-            Select two streams to view their scatter plot,
-            correlation coefficient, and rolling correlation
-            using the selected time window.
+            Select at least two streams to enable Run Analysis and analyse unusual readings and relationship changes.
           </li>
 
           <li>
-            Select at least three streams to identify the most
-            correlated pair in the selected time range.
+            Use the Time Interval selector to change the rolling window used for the selected data.
+
           </li>
 
           <li>
-            If no scatter plot is shown, the selected data may
-            not have enough variance.
+            Use Time Range to analyse a specific absolute period or a relative period such as the last 5 minutes, 15 minutes, 1 hour, 6 hours, or 24 hours.
+
           </li>
 
           <li>
-            If no rolling correlation line is shown, the
-            selected data may not have enough variance.
+            The Analysis Summary reports unusual sensor readings and changes in relationships between selected streams.
+
           </li>
 
           <li>
-            If no meaningful scatter plot is available for the
-            most correlated pair, one or both streams may lack
-            variance.
+            When two or more streams are selected, the Sensor Timeline uses a normalised view to make their patterns easier to compare.
+
           </li>
 
           <li>
-            If no time range is selected, the entire dataset is
-            used.
+            Relationship Changes highlights periods when the relationship between selected sensor pairs changes within the selected time range.
+
           </li>
         </ol>
 
@@ -560,7 +557,7 @@ const Dashboard = ({ datasetId }) => {
               </span>
 
               <span>
-                Refresh
+                Reset
               </span>
             </button>
 

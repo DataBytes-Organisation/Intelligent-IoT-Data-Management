@@ -9,6 +9,7 @@
 .analysis-summary-title {
   margin: 0;
   font-size: 1.25rem;
+  color: #0f172a;
 }
 
 .analysis-summary-heading {
@@ -22,6 +23,7 @@
   display: inline-block;
   margin-top: 0.4rem;
   font-size: 1rem;
+  color: #0f172a;
 }
 
 .analysis-summary-count {
@@ -40,7 +42,7 @@
 .analysis-summary-overall p,
 .analysis-summary-intro {
   margin-bottom: 0;
-  color: #4b5563;
+  color: #475569;
   line-height: 1.5;
 }
 
@@ -69,7 +71,7 @@
 }
 
 .analysis-summary-metric span {
-  color: #6b7280;
+  color: #475569;
   font-size: 0.85rem;
 }
 
@@ -92,7 +94,7 @@
   margin-bottom: 0.45rem;
   font-size: 0.8rem;
   font-weight: 600;
-  color: #6b7280;
+  color: #475569;
 }
 
 .analysis-summary-card h4 {
@@ -102,7 +104,7 @@
 
 .analysis-summary-card p {
   margin: 0 0 0.9rem;
-  color: #4b5563;
+  color: #475569;
   line-height: 1.45;
 }
 
@@ -116,7 +118,7 @@
 }
 
 .analysis-summary-card-row span {
-  color: #6b7280;
+  color: #475569;
 }
 
 .analysis-summary-card-row strong {
