@@ -14,6 +14,11 @@ const predefinedFields = [
 ];
 
 
+const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
+const MAX_FILE_SIZE_LABEL = "10 MB";
+const BYTES_PER_MB = 1024 * 1024;
+
+
 const UploadDatasetDialog = ({ onClose }) => {
     const [file, setFile] = useState(null);
     const [datasetName, setDatasetName] = useState("");
@@ -143,6 +148,31 @@ const UploadDatasetDialog = ({ onClose }) => {
             setTimestampColumn("");
             setColumnConfig([]);
             setSuccessMessage("");
+
+            return;
+        }
+
+
+
+        if (selectedFile.size > MAX_FILE_SIZE_BYTES) {
+    const selectedFileSizeMb = (
+        selectedFile.size / BYTES_PER_MB
+    ).toFixed(1);
+
+    setError(
+        `File is ${selectedFileSizeMb} MB; limit is ${MAX_FILE_SIZE_LABEL}.`
+    );
+
+            setFile(null);
+            setDatasetName("");
+            setColumns([]);
+            setPreviewData([]);
+            setAllRows([]);
+            setTimestampColumn("");
+            setColumnConfig([]);
+            setSuccessMessage("");
+
+            event.target.value = "";
 
             return;
         }

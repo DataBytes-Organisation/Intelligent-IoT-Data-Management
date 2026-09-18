@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
 import { validateEmail, validateLoginPassword } from "../utils/validation";
@@ -8,6 +8,15 @@ import {
   resendTwoFactorCode,
   setAccessToken,
 } from "../services/authClient";
+
+const MFA_RESEND_WAIT_SECONDS = 60;
+
+const formatCountdown = (totalSeconds) => {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+};
 
 function Login() {
   const navigate = useNavigate();
@@ -23,6 +32,8 @@ function Login() {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
+  const [resendSecondsRemaining, setResendSecondsRemaining] = useState(0);
+  const [isResending, setIsResending] = useState(false);
 
   const [fieldErrors, setFieldErrors] = useState({
     email: "",
@@ -37,6 +48,18 @@ function Login() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const inputRefs = useRef([]);
+
+  useEffect(() => {
+    if (resendSecondsRemaining <= 0) return undefined;
+
+    const timerId = window.setInterval(() => {
+      setResendSecondsRemaining((currentSeconds) =>
+        currentSeconds > 1 ? currentSeconds - 1 : 0
+      );
+    }, 1000);
+
+    return () => window.clearInterval(timerId);
+  }, [resendSecondsRemaining]);
 
   const handleFieldChange = (name, value) => {
     if (name === "email") setEmail(value);
@@ -109,6 +132,7 @@ function Login() {
 
         setMfaChallengeId(challengeId);
         setOtp(["", "", "", "", "", ""]);
+        setResendSecondsRemaining(MFA_RESEND_WAIT_SECONDS);
         setStep(2);
         return;
       }
@@ -216,6 +240,10 @@ function Login() {
   };
 
   const handleResendCode = async () => {
+    if (resendSecondsRemaining > 0 || isResending) {
+      return;
+    }
+
     if (!mfaChallengeId) {
       setMessage("Please return to login and try again.");
       setMessageType("error");
@@ -223,6 +251,7 @@ function Login() {
     }
 
     try {
+      setIsResending(true);
       setMessage("");
 
       const response = await resendTwoFactorCode({
@@ -236,6 +265,7 @@ function Login() {
       }
 
       setOtp(["", "", "", "", "", ""]);
+      setResendSecondsRemaining(MFA_RESEND_WAIT_SECONDS);
       setMessage("A new verification code has been sent.");
       setMessageType("success");
     } catch (error) {
@@ -247,6 +277,8 @@ function Login() {
       );
 
       setMessageType("error");
+    } finally {
+      setIsResending(false);
     }
   };
 
@@ -254,6 +286,8 @@ function Login() {
     setStep(1);
     setOtp(["", "", "", "", "", ""]);
     setMfaChallengeId(null);
+    setResendSecondsRemaining(0);
+    setIsResending(false);
     setMessage("");
   };
 
@@ -451,13 +485,29 @@ function Login() {
               </button>
             </form>
 
+            <p className="mfa-resend-timer" aria-live="polite">
+              {resendSecondsRemaining > 0 ? (
+                <>
+                  Resend code available in{" "}
+                  <strong>
+                    {formatCountdown(resendSecondsRemaining)}
+                  </strong>
+                </>
+              ) : (
+                "Didn't receive a code? You can resend it now."
+              )}
+            </p>
+
             <div className="twofactor-actions">
               <button
                 type="button"
                 className="text-button"
                 onClick={handleResendCode}
+                disabled={
+                  resendSecondsRemaining > 0 || isResending
+                }
               >
-                Resend Code
+                {isResending ? "Sending..." : "Resend Code"}
               </button>
 
               <button

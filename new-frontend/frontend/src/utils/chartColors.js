@@ -1,10 +1,12 @@
 export const CHART_COLORS = [
-  "#2563eb",
-  "#16a34a",
-  "#9333ea",
-  "#ea580c",
-  "#0891b2",
-  "#7c3aed",
+  "#0072B2",
+  "#E69F00",
+  "#009E73",
+  "#CC79A7",
+  "#56B4E9",
+  "#D55E00",
+  "#F0E442",
+  "#000000",
 ];
 
 export const getChartColor = (index = 0) =>
