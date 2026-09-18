@@ -1,45 +1,81 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { useSensorData } from '../hooks/useSensorData.js';
 import { useFilteredData } from '../hooks/useFilteredData.js';
 import { useStreamNames } from '../hooks/useStreamNames.js';
 import { useTimeRange } from '../hooks/useTimeRange.js';
-import TimeSelector from './TimeSelector.jsx';
-import StreamSelector from './StreamSelector.jsx';
+import StreamSelector, { STREAM_LABELS } from './StreamSelector.jsx';
 import IntervalSelector from './IntervalSelector.jsx';
 import StreamStats from './StreamStats.jsx';
 import './Dashboard.css';
 import Chart from './Chart.jsx';
-import MostCorrelatedPair from './MostCorrelatedPair.jsx';
-import ScatterPlot from './ScatterPlot.jsx';
-import { calculateCorrelation } from '../utils/correlationUtils.js';
+import RelationshipChangesTimeline from './RelationshipChangesTimeline.jsx';
 import TimeRangePanel from './TimeRangePanel.jsx';
+import { runAnalysis } from '../services/analysisService.js';
+import AnalysisSummary from './AnalysisSummary.jsx';
 
-const Dashboard = () => {
-  const { data, loading, error } = useSensorData(true);
+const Dashboard = ({ datasetId }) => {
+  // --- ALL HOOKS FIRST ---
+  const { data: sensorData, loading, error, isEmpty, isValid } = useSensorData(datasetId);
+
+  const data = useMemo(() => {
+    if (!sensorData || !sensorData.rows) return [];
+
+    const streamIds = sensorData.metadata?.streams?.map(s => s.id) || [];
+
+    return sensorData.rows.map((row) => {
+      const entry = {
+        created_at: row.created_at,
+        entry_id: row.entry_id,
+      };
+
+      streamIds.forEach((id) => {
+        entry[id] = row[id] !== undefined ? row[id] : null;
+      });
+
+      return entry;
+    });
+  }, [sensorData]);
+
   const streamNames = useStreamNames(data);
-  const { timeOptions, minTime, maxTime } = useTimeRange(data);
+  
+  // Keep Rimzim's new streamLabels feature
+  const streamLabels = useMemo(() => {
+    return Object.fromEntries(
+      (sensorData?.metadata?.streams || []).map((stream) => [
+        stream.id,
+        stream.name && stream.name !== stream.id
+          ? stream.name
+          : STREAM_LABELS[stream.id] || stream.id,
+      ])
+    );
+  }, [sensorData]);
+
+  const { timeOptions } = useTimeRange(data);
 
   const [selectedTimeStart, setSelectedTimeStart] = useState('');
   const [selectedTimeEnd, setSelectedTimeEnd] = useState('');
   const [selectedStreams, setSelectedStreams] = useState([]);
+  const [selectedStream, setSelectedStream] = useState(null); // Added for chip highlighting
+
+  const [analysisResult, setAnalysisResult] = useState(null);
+  const [analysisLoading, setAnalysisLoading] = useState(false);
+  const [analysisError, setAnalysisError] = useState(null);
+  const [hasAnalysed, setHasAnalysed] = useState(false);
+
+  useEffect(() => {
+    setAnalysisResult(null);
+    setAnalysisError(null);
+    setHasAnalysed(false);
+  }, [datasetId, selectedStreams]);
 
   const intervals = ['5min', '15min', '1h', '6h'];
   const [selectedInterval, setSelectedInterval] = useState(intervals[0]);
 
-  // Time range panel state
   const [showTimePanel, setShowTimePanel] = useState(false);
-  const [timeMode, setTimeMode] = useState("absolute"); // "absolute" or "relative"
+  const [timeMode, setTimeMode] = useState("absolute");
   const [relativeRange, setRelativeRange] = useState("5min");
   const [finalStartTime, setFinalStartTime] = useState(null);
   const [finalEndTime, setFinalEndTime] = useState(null);
-  // End of time range panel state
-
-  // const filteredData = useFilteredData(data, {
-  //   startTime: selectedTimeStart,
-  //   endTime: selectedTimeEnd,
-  //   selectedStreams,
-  //   interval: selectedInterval,
-  // });
 
   const filteredData = useFilteredData(data, {
     startTime: finalStartTime,
@@ -48,87 +84,37 @@ const Dashboard = () => {
     interval: selectedInterval
   });
 
+  const visibleStartTime = filteredData.length > 0 ? new Date(filteredData[0].created_at).getTime(): null;
+  const visibleEndTime = filteredData.length > 0 ? new Date(filteredData[filteredData.length - 1].created_at).getTime(): null;
+
   const streamCount = selectedStreams.length;
 
-  const correlationSummary = useMemo(() => {
-    if (selectedStreams.length !== 2 || filteredData.length === 0) return null;
-
-    const [streamA, streamB] = selectedStreams;
-
-    const x = filteredData
-      .map((d) => parseFloat(d[streamA]))
-      .filter((v) => !isNaN(v));
-
-    const y = filteredData
-      .map((d) => parseFloat(d[streamB]))
-      .filter((v) => !isNaN(v));
-
-    if (x.length === 0 || y.length === 0 || x.length !== y.length) return null;
-
-    const correlation = calculateCorrelation(x, y);
-
-    if (Number.isNaN(correlation) || !Number.isFinite(correlation)) return null;
-
-    let strengthLabel = 'Weak relationship';
-
-    if (correlation >= 0.7) strengthLabel = 'Strong positive relationship';
-    else if (correlation >= 0.3) strengthLabel = 'Moderate positive relationship';
-    else if (correlation <= -0.7) strengthLabel = 'Strong negative relationship';
-    else if (correlation <= -0.3) strengthLabel = 'Moderate negative relationship';
-
-    return {
-      streams: `${streamA} vs ${streamB}`,
-      value: correlation.toFixed(2),
-      label: strengthLabel,
-    };
-  }, [selectedStreams, filteredData]);
-
-  // const handleSubmit = () => {
-  //   console.log('Selected Time Range:', selectedTimeStart, '→', selectedTimeEnd);
-  //   console.log('selectedInterval:', selectedInterval);
-  //   console.log('Filtered Data:', filteredData);
-  // };
-
-  // Time range selection logic:
-  const handleSubmit = React.useCallback(() => {
-    console.log("Dashboard timeMode:", timeMode, "relativeRange:", relativeRange);
+  const handleSubmit = useCallback(() => {
+    console.log(
+      "Dashboard timeMode:",
+      timeMode,
+      "relativeRange:",
+      relativeRange
+    );
 
     if (timeMode === "absolute") {
       setFinalStartTime(
-        selectedTimeStart ? new Date(selectedTimeStart).getTime() : null
+        selectedTimeStart
+          ? new Date(selectedTimeStart).getTime()
+          : null
       );
+
       setFinalEndTime(
-        selectedTimeEnd ? new Date(selectedTimeEnd).getTime() : null
+        selectedTimeEnd
+          ? new Date(selectedTimeEnd).getTime()
+          : null
       );
     }
 
     if (timeMode === "relative") {
-      // const now = Date.now();
-      const now = new Date(data[data.length - 1].created_at).getTime();
-
-
-      const ranges = {
-        "5min": 5 * 60 * 1000,
-        "15min": 15 * 60 * 1000,
-        "1h": 60 * 60 * 1000,
-        "6h": 6 * 60 * 1000,
-        "24h": 24 * 60 * 1000
-      };
-
-      const duration = ranges[relativeRange] || 0;
-
-      setFinalEndTime(now);
-      setFinalStartTime(now - duration);
-    }
-
-    setShowTimePanel(false);
-  }, [timeMode, relativeRange, selectedTimeStart, selectedTimeEnd]);
-  // End of time range selection logic
-
-  // Refresh button logic: re-apply the current time range selection
-  const handleRefresh = () => {
-    if (timeMode === "relative") {
-      const now = new Date(data[data.length - 1].created_at).getTime();
+      const now = new Date(
+        data[data.length - 1].created_at
+      ).getTime();
 
       const ranges = {
         "5min": 5 * 60 * 1000,
@@ -138,66 +124,262 @@ const Dashboard = () => {
         "24h": 24 * 60 * 60 * 1000
       };
 
-      const duration = ranges[relativeRange];
+      const duration = ranges[relativeRange] || 0;
 
       setFinalEndTime(now);
       setFinalStartTime(now - duration);
-
-      console.log("Refreshed relative time range");
-      return;
     }
 
-    // Absolute mode
-    setFinalStartTime(finalStartTime);
-    setFinalEndTime(finalEndTime);
-    console.log("Refreshed absolute time range");
-  };
-  // End of refresh button logic
+    setShowTimePanel(false);
+  }, [
+    timeMode,
+    relativeRange,
+    selectedTimeStart,
+    selectedTimeEnd,
+    data
+  ]);
 
-  // formatTimeRange function to display the selected time range in a user-friendly format
-  const formatTimeRange = (start, end, mode, relativeRange) => {
+  const handleRefresh = useCallback(() => {
+  // Clear selected streams
+  setSelectedStreams([]);
+
+  // Reset interval
+  setSelectedInterval(intervals[0]);
+
+  // Clear time range selections
+  setSelectedTimeStart('');
+  setSelectedTimeEnd('');
+  setFinalStartTime(null);
+  setFinalEndTime(null);
+
+  // Reset time range controls
+  setTimeMode("absolute");
+  setRelativeRange("5min");
+  setShowTimePanel(false);
+
+  // Clear analysis results
+  setAnalysisResult(null);
+  setAnalysisError(null);
+  setHasAnalysed(false);
+}, []);
+
+  const handleRunAnalysis = useCallback(async () => {
+    setAnalysisLoading(true);
+    setAnalysisError(null);
+    setHasAnalysed(false);
+
+    try {
+      const result = await runAnalysis({
+        datasetId,
+        selectedStreams,
+      });
+      console.log('Analysis result:', result);
+      setAnalysisResult(result);
+      setHasAnalysed(true);
+    } catch (err) {
+      setAnalysisResult(null);
+      setAnalysisError(err);
+      setHasAnalysed(true);
+    } finally {
+      setAnalysisLoading(false);
+    }
+  }, [datasetId, selectedStreams]);
+
+  const formatTimeRange = (start, end, mode, range) => {
     if (mode === "relative") {
-      return `Last ${relativeRange}`;
+      return `Last ${range}`;
     }
 
-    // Absolute mode
-    const startStr = new Date(start).toLocaleString();
-    const endStr = new Date(end).toLocaleString();
-    return `${startStr} → ${endStr}`;
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+
+    /*
+      If both dates are the same, show the compact Figma-style date.
+      Example: August 24, 2025
+    */
+    if (startDate.toDateString() === endDate.toDateString()) {
+      return startDate.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+    }
+
+    const startStr = startDate.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+
+    const endStr = endDate.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+
+    return `${startStr} - ${endStr}`;
   };
 
+  // --- CONDITIONAL RETURNS ---
+  if (loading) {
+    return (
+      <div
+        className="dashboard-state"
+        style={{
+          textAlign: "center",
+          padding: "3rem"
+        }}
+      >
+        <div
+          className="spinner"
+          style={{
+            border: "4px solid #e2e8f0",
+            borderTop: "4px solid #2563eb",
+            borderRadius: "50%",
+            width: "40px",
+            height: "40px",
+            animation: "spin 1s linear infinite",
+            margin: "0 auto 1rem",
+          }}
+        />
 
+        <p>Loading sensor data for {datasetId}...</p>
 
-  if (loading) return <p>Loading dataset...</p>;
-  if (error) return <p>Error loading data</p>;
+        <style>{`
+          @keyframes spin {
+            0% {
+              transform: rotate(0deg);
+            }
 
+            100% {
+              transform: rotate(360deg);
+            }
+          }
+        `}</style>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div
+        className="dashboard-state"
+        style={{
+          textAlign: "center",
+          padding: "3rem",
+          color: "#dc2626"
+        }}
+      >
+        <p>
+          ⚠️ {error.message || "An unexpected error occurred."}
+        </p>
+
+        <button
+          onClick={() => window.location.reload()}
+          style={{
+            marginTop: "1rem",
+            padding: "0.5rem 1.5rem",
+            background: "#2563eb",
+            color: "white",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer"
+          }}
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  if (!isValid) {
+    return (
+      <div
+        className="dashboard-state"
+        style={{
+          textAlign: "center",
+          padding: "3rem",
+          color: "#dc2626"
+        }}
+      >
+        <p>
+          ⚠️ The data format is invalid and cannot be displayed.
+        </p>
+      </div>
+    );
+  }
+
+  if (
+    isEmpty ||
+    !sensorData ||
+    !sensorData.rows ||
+    sensorData.rows.length === 0
+  ) {
+    return (
+      <div
+        className="dashboard-state"
+        style={{
+          textAlign: "center",
+          padding: "3rem",
+          color: "#64748b"
+        }}
+      >
+        <p>
+          📭 No sensor records found for this dataset.
+        </p>
+      </div>
+    );
+  }
+
+  // --- REST OF THE COMPONENT ---
   return (
     <div className="dashboard-page">
+
+      {/* =====================================================
+          DASHBOARD NOTES
+          ===================================================== */}
+
       <section className="dashboard-section info-panel">
-        <h3 className="section-title">Dashboard Notes</h3>
+        <h3 className="section-title">
+          Dashboard Notes
+        </h3>
+
         <ol className="note-list">
-          <li>Select at least one stream to view the line chart.</li>
           <li>
-            Select two streams to view their scatter plot, correlation coefficient,
-            and rolling correlation using the selected time window.
+            Select at least one stream to view the line chart.
           </li>
+
           <li>
-            Select at least three streams to identify the most correlated pair in
-            the selected time range.
+            Select two streams to view their scatter plot,
+            correlation coefficient, and rolling correlation
+            using the selected time window.
           </li>
+
           <li>
-            If no scatter plot is shown, the selected data may not have enough
+            Select at least three streams to identify the most
+            correlated pair in the selected time range.
+          </li>
+
+          <li>
+            If no scatter plot is shown, the selected data may
+            not have enough variance.
+          </li>
+
+          <li>
+            If no rolling correlation line is shown, the
+            selected data may not have enough variance.
+          </li>
+
+          <li>
+            If no meaningful scatter plot is available for the
+            most correlated pair, one or both streams may lack
             variance.
           </li>
+
           <li>
-            If no rolling correlation line is shown, the selected data may not have
-            enough variance.
+            If no time range is selected, the entire dataset is
+            used.
           </li>
-          <li>
-            If no meaningful scatter plot is available for the most correlated pair,
-            one or both streams may lack variance.
-          </li>
-          <li>If no time range is selected, the entire dataset is used.</li>
         </ol>
 
         <div className="dataset-summary">
@@ -205,6 +387,7 @@ const Dashboard = () => {
             <span>Total Data Points</span>
             <strong>{data.length}</strong>
           </div>
+
           <div className="summary-pill">
             <span>Selected Range Points</span>
             <strong>{filteredData.length}</strong>
@@ -212,25 +395,64 @@ const Dashboard = () => {
         </div>
       </section>
 
+      {/* ✅ THIS IS THE FIXED SECTION THAT READS DIRECTLY FROM BACKEND ✅ */}
       <section className="dashboard-section stream-panel">
         <h3 className="section-title">Available Streams</h3>
-        <p className="stream-list">{streamNames.map((s) => s.name).join(', ')}</p>
+        <div className="streams-container">
+          {sensorData.metadata?.streams?.map((stream, index) => {
+            // ✅ USE THE EXACT SAME streamLabels FALLBACK AS THE DROPDOWN ✅
+            const displayName = streamLabels[stream.id] || stream.id;
+    
+            return (
+              <div 
+                key={index} 
+                className={`stream-chip ${selectedStream === stream.id ? 'selected' : ''}`}
+                onClick={() => setSelectedStream(stream.id)}
+                tabIndex={0}
+              >
+                <span className="stream-name">{displayName}</span>
+                {stream.unit && <span className="stream-unit">({stream.unit})</span>}
+              </div>
+            );
+          })}
+        </div>
       </section>
 
-      <section className="dashboard-section controls-panel">
-        <h3 className="section-title">Controls</h3>
+      {/* =====================================================
+          CONTROL PANEL
+          ===================================================== */}
 
-        <div className="selector-grid">
-          <div className="selector-group">
+      <section className="dashboard-section controls-panel">
+
+        <h3 className="section-title">
+          Stream Selector
+        </h3>
+
+        <div className="controls-row">
+
+          {/* SELECT STREAMS */}
+          <div className="control-item streams-control">
+
+            <div className="control-label">
+              Select Streams
+            </div>
 
             <StreamSelector
-              streams={streamNames.map(s => s.name)}
+              streams={streamNames.map(s => s.id)}
+              streamLabels={streamLabels}
               selectedStreams={selectedStreams}
               setSelectedStreams={setSelectedStreams}
             />
-            {/* end streamdropdown */}
+
           </div>
-          <div className="selector-group">
+
+          {/* TIME INTERVAL */}
+          <div className="control-item interval-control">
+
+            <div className="control-label">
+              Time Interval
+            </div>
+
             <IntervalSelector
               intervals={intervals}
               selectedInterval={selectedInterval}
@@ -239,117 +461,182 @@ const Dashboard = () => {
 
           </div>
 
-          {/* <div className="selector-card selector-card-wide"> */}
-          {/* <h4 className="subsection-title">Time Range Selection</h4> */}
+          {/* TIME RANGE */}
+          <div className="control-item range-control">
 
-          <div className="time-controls-wrapper">
-            <div className='time-controls'>
+            <div className="control-label">
+              Time Range
+            </div>
+
+            <div className="time-range-container">
 
               <button
-                className="time-range-toggle"
-                onClick={() => setShowTimePanel(prev => !prev)}>
-                {/* Select Time Range ▼ */}
-                {finalStartTime && finalEndTime
-                  ? formatTimeRange(finalStartTime, finalEndTime, timeMode, relativeRange)
-                  : "Select Time Range ▼"}
+                type="button"
+                className="time-range-button"
+                onClick={() => setShowTimePanel((prev) => !prev)}
+              >
+                <span className="calendar-icon">
+                  ▣
+                </span>
+
+                <span className="time-range-text">
+                  {finalStartTime && finalEndTime
+                    ? formatTimeRange(
+                        finalStartTime,
+                        finalEndTime,
+                        timeMode,
+                        relativeRange
+                      )
+                    : "Select Time Range"}
+                </span>
+
+                <span className="range-arrow">
+                  ▼
+                </span>
               </button>
 
-              <button className="refresh-btn" onClick={handleRefresh}>
-                ⟳
-              </button>
+              {showTimePanel && (
+                <div className="time-range-overlay">
+
+                  <TimeRangePanel
+                    timeOptions={timeOptions}
+                    selectedTimeStart={selectedTimeStart}
+                    setSelectedTimeStart={setSelectedTimeStart}
+                    selectedTimeEnd={selectedTimeEnd}
+                    setSelectedTimeEnd={setSelectedTimeEnd}
+                    timeMode={timeMode}
+                    setTimeMode={setTimeMode}
+                    relativeRange={relativeRange}
+                    setRelativeRange={setRelativeRange}
+                    onAnalyze={handleSubmit}
+                  />
+
+                </div>
+              )}
 
             </div>
+
           </div>
-          {showTimePanel && (
-            <div className="time-range-overlay">
-              <TimeRangePanel
-                timeOptions={timeOptions}
-                selectedTimeStart={selectedTimeStart}
-                setSelectedTimeStart={setSelectedTimeStart}
-                selectedTimeEnd={selectedTimeEnd}
-                setSelectedTimeEnd={setSelectedTimeEnd}
-                timeMode={timeMode}
-                setTimeMode={setTimeMode}
-                relativeRange={relativeRange}
-                setRelativeRange={setRelativeRange}
-                onAnalyze={handleSubmit}
-              />
-            </div>
-          )}
+
+          {/* REFRESH */}
+          <div className="refresh-control">
+
+            <button
+              type="button"
+              className="refresh-control-button"
+              onClick={handleRefresh}
+            >
+              <span className="refresh-icon">
+                ⟳
+              </span>
+
+              <span>
+                Refresh
+              </span>
+            </button>
+
+          </div>
+
+          {/* RUN ANALYSIS */}
+          <div className="run-analysis-control">
+
+            <button
+              type="button"
+              className="run-analysis-btn"
+              onClick={handleRunAnalysis}
+              disabled={
+                analysisLoading ||
+                selectedStreams.length < 2
+              }
+            >
+              {analysisLoading
+                ? "Running Analysis..."
+                : "Run Analysis"}
+            </button>
+
+          </div>
+
         </div>
+
       </section>
 
-      <section className="dashboard-section insights-panel">
-        <h3 className="section-title">Insight Cards</h3>
+      {/* =====================================================
+          INSIGHT CARDS
+          ===================================================== */}
 
-        {streamCount === 0 && (
+      <section className="dashboard-section insights-panel">
+        <h3 className="section-title">
+          Insight Cards
+        </h3>
+
+        {streamCount === 0 ? (
           <div className="empty-state">
             Please select one or more streams to view summary insights and charts.
           </div>
-        )}
-
-        {streamCount > 0 && (
+        ) : (
           <div className="stream-stats">
-            {selectedStreams.map((stream) => (
-              <StreamStats key={stream} data={filteredData} stream={stream} />
-            ))}
-
-            {correlationSummary && (
-              <div className="insight-card correlation-card">
-                <div className="insight-card-header">
-                  <span className="insight-label">Correlation</span>
-                  <h3 className="insight-stream-name">{correlationSummary.streams}</h3>
-                </div>
-
-                <div className="correlation-value">{correlationSummary.value}</div>
-                <p className="correlation-text">{correlationSummary.label}</p>
-              </div>
-            )}
-          </div>
-        )}
-      </section>
-
-      <section className="dashboard-section analysis-panel">
-        <h3 className="section-title">Analysis Summary</h3>
-
-        {streamCount === 1 && (
-          <div className="status-message">
-            One stream selected. Add another stream to view correlation analysis.
-          </div>
-        )}
-
-        {streamCount === 2 && (
-          <div className="pair-stream-block">
-            <div className="status-message">
-              Two streams selected. Scatter plot and rolling correlation analysis are
-              now available.
-            </div>
-
-            <ScatterPlot
+           {selectedStreams.map((stream) => (
+            <StreamStats
+              key={stream}
               data={filteredData}
-              streams={selectedStreams}
-              title="Scatter Plot of Selected Streams"
+              stream={stream}
+              displayName={
+                streamLabels[stream] ||
+                STREAM_LABELS[stream] ||
+                stream
+              }
             />
-          </div>
-        )}
-
-        {streamCount > 2 && (
-          <div className="multi-stream-block">
-            <div className="status-message">
-              {streamCount} streams selected. Showing the most correlated pair from
-              the chosen streams.
-            </div>
-
-            <MostCorrelatedPair data={filteredData} streams={selectedStreams} />
+            ))}
           </div>
         )}
       </section>
 
-      <section className="dashboard-section chart-panel">
-        <h3 className="section-title">Chart View</h3>
-        <div className="chart-container">
-          <Chart data={filteredData} selectedStreams={selectedStreams} />
-        </div>
+      {/* Analysis Summary */}
+
+      <AnalysisSummary
+        alerts={analysisResult?.alerts ?? []}
+        loading={analysisLoading}
+        error={analysisError}
+        hasAnalysed={hasAnalysed}
+        streamLabels={streamLabels}
+        summary={analysisResult?.summary ?? null}
+      />
+      <div className="chart-analysis-grid">
+        <section className="dashboard-section chart-analysis-card sensor-timeline-card">
+          <h3 className="section-title chart-section-title">
+            Sensor Timeline
+            {selectedStreams.length >= 2 && (
+              <span> (normalised view)</span>
+            )}
+          </h3>
+
+          <p className="sensor-timeline-description">
+            {selectedStreams.length >= 2
+              ? 'All selected streams are normalised for easy comparison.'
+              : 'Sensor readings over time.'}
+          </p>
+
+          <Chart
+            data={filteredData}
+            selectedStreams={selectedStreams}
+            streamLabels={streamLabels}
+            alerts={analysisResult?.alerts ?? []}
+          />
+        </section>
+
+      </div>
+      <section className="dashboard-section">
+        <RelationshipChangesTimeline 
+
+        selectedStreams={selectedStreams}
+        alerts={analysisResult?.alerts ?? []}
+        streamLabels={streamLabels}
+        startTime={visibleStartTime}
+        endTime={visibleEndTime}
+        
+        
+        />
+
       </section>
     </div>
   );

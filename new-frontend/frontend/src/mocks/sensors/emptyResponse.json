@@ -1,0 +1,9 @@
+{
+  "dataset": "sensor1",
+  "rowCount": 0,
+  "metadata": {
+    "display_name": "Environmental Sensor",
+    "streams": []
+  },
+  "rows": []
+}

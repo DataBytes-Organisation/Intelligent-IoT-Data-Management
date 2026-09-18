@@ -1,0 +1,47 @@
+{
+  "status": "success",
+  "generated_at": "2026-08-29T05:20:31Z",
+
+  "alerts": [
+    {
+      "alert_id": "alert-001",
+      "timestamp": "2026-08-29T05:18:00Z",
+      "alert_type": "POINTWISE_ANOMALY",
+      "target": "temperature",
+      "method": "isolationforest",
+      "message": "Unusual temperature reading detected.",
+      "source": "models",
+      "score": -0.82,
+      "severity": "high",
+      "supporting_values": {
+        "temperature": 47.3
+      }
+    },
+
+    {
+      "alert_id": "alert-002",
+      "timestamp": "2026-08-29T05:19:00Z",
+      "alert_type": "CORRELATION_CHANGE",
+      "target": [
+        "temperature",
+        "humidity"
+      ],
+      "method": "pearson",
+      "message": "Significant correlation change detected.",
+      "source": "correlation",
+      "severity": "medium",
+      "score": 0.34,
+      "time_window": {
+        "start": "2026-08-29T05:00:00Z",
+        "end": "2026-08-29T05:19:00Z"
+      }
+    }
+  ],
+
+  "summary": {
+    "processed_items": 300,
+    "alert_count": 2
+  },
+
+  "errors": []
+}

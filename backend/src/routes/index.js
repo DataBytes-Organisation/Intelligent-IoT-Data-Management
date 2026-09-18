@@ -10,9 +10,9 @@ router.use(require('./analyseRoutes'));      // POST /api/analyse
 router.use(require('./datasetRoutes'));     // GET/POST /api/datasets
 
 // Time‑series routes
-router.use(require('./seriesRoutes'));       // GET/POST /api/datasets/:name/series
+router.use(require('./seriesRoutes'));       // GET/POST /api/datasets/:datasetId/series
 
 // Timestamp routes
-router.use(require('./timestampsRoutes'));   // GET /api/datasets/:name/timestamps
+router.use(require('./timestampsRoutes'));   // GET /api/datasets/:datasetId/timestamps
 
 module.exports = router;

@@ -8,22 +8,59 @@
  *   - Creating a new dataset
  *
  * This controller does NOT deal with time‑series rows.
- * It only manages dataset metadata (name, description, etc.).
+ * It manages dataset metadata and the reviewed CSV import endpoint.
  */
 
-const datasetService = require('../services/datasetService');
+const datasetService = require("../services/datasetService");
+const crypto = require("crypto");
+
+const requestId = (req) =>
+  req.get("x-request-id") || `req_${crypto.randomUUID()}`;
+const datasetError = (res, req, err) => {
+  const status = err.status || (err.code === "23505" ? 409 : 500);
+  const code =
+    err.code === "23505" ? "DATASET_NAME_EXISTS" : err.code || "INTERNAL_ERROR";
+  if (status >= 500) console.error("Dataset request failed:", err);
+  const error = {
+    code,
+    message: status === 500 ? "An unexpected error occurred." : err.message,
+  };
+  if (err.fields) error.fields = err.fields;
+  return res
+    .status(status)
+    .json({ error, meta: { requestId: requestId(req) } });
+};
 
 /**
  * GET /api/datasets
- * Returns a list of all datasets.
+ * Temporarily returns active datasets for the legacy unauthenticated frontend.
+ * Deleted datasets remain unavailable until the frontend read-auth migration.
+ * Optional ?status=active|deleted (default: active).
  */
 const getAllDatasets = async (req, res) => {
   try {
-    const datasets = await datasetService.getAllDatasets();
+    const status = req.query.status || "active";
+    if (!["active", "deleted"].includes(status)) {
+      return res.status(400).json({
+        error: {
+          code: "VALIDATION_ERROR",
+          message: "status must be one of: active, deleted",
+        },
+      });
+    }
+    if (status === "deleted" && !req.user?.sub) {
+      return res.status(401).json({
+        error: {
+          code: "UNAUTHENTICATED",
+          message: "Authentication is required to view deleted datasets.",
+        },
+      });
+    }
+    const datasets = await datasetService.getAllDatasets(status, req.user?.sub);
     return res.status(200).json(datasets);
   } catch (err) {
-    console.error('Error getting datasets:', err);
-    return res.status(500).json({ error: 'Failed to load datasets' });
+    console.error("Error getting datasets:", err);
+    return res.status(500).json({ error: "Failed to load datasets" });
   }
 };
 
@@ -34,31 +71,99 @@ const getAllDatasets = async (req, res) => {
 const getDatasetById = async (req, res) => {
   try {
     const { id } = req.params;
-    const dataset = await datasetService.getDatasetById(id);
+    if (!/^\d+$/.test(id) || Number(id) < 1) {
+      return res
+        .status(400)
+        .json({ error: "Dataset ID must be a positive integer" });
+    }
+    const dataset = await datasetService.getDatasetById(id, req.user?.sub);
 
     if (!dataset) {
-      return res.status(404).json({ error: 'Dataset not found' });
+      return res.status(404).json({ error: "Dataset not found" });
     }
 
     return res.status(200).json(dataset);
   } catch (err) {
-    console.error('Error getting dataset by ID:', err);
-    return res.status(500).json({ error: 'Failed to load dataset' });
+    console.error("Error getting dataset by ID:", err);
+    return res.status(500).json({ error: "Failed to load dataset" });
   }
 };
 
 /**
  * POST /api/datasets
- * Creates a new dataset.
- * Disabled — datasets are created automatically by ingestion.
+ * Imports the reviewed CSV rows and their saved field mappings.
  */
 const createDataset = async (req, res) => {
   try {
-    const dataset = await datasetService.createDataset(req.body);
-    return res.status(201).json(dataset);
+    const dataset = await datasetService.importDataset(req.body, req.user.sub);
+    return res
+      .status(201)
+      .json({ data: dataset, meta: { requestId: requestId(req) } });
   } catch (err) {
-    console.error('Error creating dataset:', err);
-    return res.status(500).json({ error: 'Failed to create dataset' });
+    return datasetError(res, req, err);
+  }
+};
+
+/**
+ * PUT /api/datasets/:id
+ * Replaces dataset mapping metadata and/or appends canonical wide rows.
+ */
+const updateDataset = async (req, res) => {
+  try {
+    const dataset = await datasetService.updateDataset(
+      req.params.id,
+      req.body,
+      req.user,
+    );
+    return res
+      .status(200)
+      .json({ data: dataset, meta: { requestId: requestId(req) } });
+  } catch (err) {
+    return datasetError(res, req, err);
+  }
+};
+
+/**
+ * DELETE /api/datasets/:id
+ * Soft-deletes the dataset configuration after removing synced data.
+ */
+const deleteDataset = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!/^\d+$/.test(id) || Number(id) < 1) {
+      return res
+        .status(400)
+        .json({ error: "Dataset ID must be a positive integer" });
+    }
+
+    const dataset = await datasetService.deleteDataset(id, req.user);
+    return res
+      .status(200)
+      .json({ data: dataset, meta: { requestId: requestId(req) } });
+  } catch (err) {
+    return datasetError(res, req, err);
+  }
+};
+const restoreDataset = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!/^\d+$/.test(id) || Number(id) < 1) {
+      return res.status(400).json({
+        error: "Dataset ID must be a positive integer",
+      });
+    }
+
+    const dataset = await datasetService.restoreDataset(id, req.user);
+
+    return res.status(200).json({
+      data: dataset,
+      meta: {
+        requestId: requestId(req),
+      },
+    });
+  } catch (error) {
+    return datasetError(res, req, error);
   }
 };
 
@@ -66,4 +171,7 @@ module.exports = {
   getAllDatasets,
   getDatasetById,
   createDataset,
+  updateDataset,
+  deleteDataset,
+  restoreDataset
 };

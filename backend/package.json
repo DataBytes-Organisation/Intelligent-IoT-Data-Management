@@ -6,7 +6,14 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "migrate:auth": "node scripts/migrate-auth.js",
+    "migrate:dataset-import": "node scripts/migrate-dataset-import.js",
+    "migrate:timeseries-utc": "node scripts/migrate-timeseries-utc.js",
+    "migrate:soft-delete": "node scripts/migrate-soft-delete.js",
+    "migrate:thingspeak-owner": "node scripts/migrate-thingspeak-owner.js",
+    "cleanup:expired-datasets": "node scripts/cleanup-expired-datasets.js",
+    "test:integration": "node --test test/integration/*.test.js",
+    "test": "node --test test/*.test.js"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +26,7 @@
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
+    "nodemailer": "^9.0.5",
     "pg": "^8.20.0"
   },
   "devDependencies": {

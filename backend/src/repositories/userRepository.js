@@ -1,131 +1,66 @@
-const fs = require("fs");
-const path = require("path");
+const db = require("../db/pool");
 
-const usersFilePath = path.join(__dirname, "../mock_data/users.json");
+const normaliseEmail = (email) =>
+  String(email || "")
+    .trim()
+    .toLowerCase();
+const publicColumns = "id, email, role";
 
-function ensureUsersFileExists() {
-  const directoryPath = path.dirname(usersFilePath);
-
-  if (!fs.existsSync(directoryPath)) {
-    fs.mkdirSync(directoryPath, { recursive: true });
-  }
-
-  if (!fs.existsSync(usersFilePath)) {
-    fs.writeFileSync(usersFilePath, JSON.stringify([], null, 2));
-  }
+async function findUserByEmail(email) {
+  const result = await db.query(
+    `SELECT id, email, password_hash, role, mfa_enabled AS "mfaEnabled"
+     FROM auth_users WHERE email = $1`,
+    [normaliseEmail(email)],
+  );
+  return result.rows[0] || null;
 }
 
-function readUsers() {
-  ensureUsersFileExists();
-
-  const data = fs.readFileSync(usersFilePath, "utf-8");
-
-  if (!data.trim()) {
-    return [];
-  }
-
-  return JSON.parse(data);
+async function findUserById(id) {
+  const result = await db.query(
+    `SELECT id, email, password_hash, role, mfa_enabled AS "mfaEnabled"
+     FROM auth_users WHERE id = $1`,
+    [id],
+  );
+  return result.rows[0] || null;
 }
 
-function writeUsers(users) {
-  ensureUsersFileExists();
-  fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
+async function createUser({
+  id,
+  email,
+  password_hash,
+  role = "user",
+  mfaEnabled = true,
+}) {
+  const result = await db.query(
+    `INSERT INTO auth_users (id, email, password_hash, role, mfa_enabled)
+     VALUES ($1, $2, $3, $4, $5)
+     RETURNING ${publicColumns}`,
+    [id, normaliseEmail(email), password_hash, role, mfaEnabled],
+  );
+  return result.rows[0];
 }
 
-function findUserByUsername(username) {
-  const users = readUsers();
-  return users.find((user) => user.username === username);
+async function updateUserById(id, changes) {
+  const result = await db.query(
+    `UPDATE auth_users SET password_hash = COALESCE($2, password_hash), updated_at = NOW()
+     WHERE id = $1 RETURNING id, email, password_hash, role, mfa_enabled AS "mfaEnabled"`,
+    [id, changes.password_hash || null],
+  );
+  return result.rows[0] || null;
 }
 
-function findUserById(id) {
-  const users = readUsers();
-  return users.find((user) => user.id === id);
-}
-
-function findUserByRefreshToken(refreshToken) {
-  const users = readUsers();
-  return users.find((user) => user.refreshToken === refreshToken);
-}
-
-function createUser(newUser) {
-  const users = readUsers();
-
-  const existingUser = users.find((user) => user.username === newUser.username);
-
-  if (existingUser) {
-    throw new Error("Username already exists");
-  }
-
-  const userWithDefaults = {
-    id: Date.now().toString(),
-    username: newUser.username,
-    password_hash: newUser.password_hash,
-    role: newUser.role || "user",
-    refreshToken: null,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  };
-
-  users.push(userWithDefaults);
-  writeUsers(users);
-
-  return userWithDefaults;
-}
-
-function updateUser(username, updatedData) {
-  const users = readUsers();
-
-  const userIndex = users.findIndex((user) => user.username === username);
-
-  if (userIndex === -1) {
-    throw new Error("User not found");
-  }
-
-  users[userIndex] = {
-    ...users[userIndex],
-    ...updatedData,
-    updatedAt: new Date().toISOString()
-  };
-
-  writeUsers(users);
-
-  return users[userIndex];
-}
-
-function updateUserById(id, updatedData) {
-  const users = readUsers();
-
-  const userIndex = users.findIndex((user) => user.id === id);
-
-  if (userIndex === -1) {
-    throw new Error("User not found");
-  }
-
-  users[userIndex] = {
-    ...users[userIndex],
-    ...updatedData,
-    updatedAt: new Date().toISOString()
-  };
-
-  writeUsers(users);
-
-  return users[userIndex];
-}
-
-function getSafeUsers() {
-  const users = readUsers();
-
-  return users.map(({ password_hash, refreshToken, ...safeUser }) => safeUser);
+async function getSafeUsers() {
+  const result = await db.query(
+    `SELECT ${publicColumns} FROM auth_users ORDER BY created_at ASC`,
+  );
+  return result.rows;
 }
 
 module.exports = {
-  readUsers,
-  writeUsers,
-  findUserByUsername,
+  findUserByEmail,
   findUserById,
-  findUserByRefreshToken,
   createUser,
-  updateUser,
   updateUserById,
-  getSafeUsers
+  getSafeUsers,
+  normaliseEmail,
 };

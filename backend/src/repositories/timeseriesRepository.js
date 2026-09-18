@@ -11,18 +11,36 @@
  *   - timeseries        (wide format)
  */
 
-const pool = require('../db/pool');
+const pool = require("../db/pool");
 const TimeSeriesWide = require("../models/timeSeriesWide");
 
 class TimeseriesRepository {
-
   /* -----------------------------
    * SHARED: Dataset lookup
    * ----------------------------- */
-  async getDatasetIdByName(name) {
+  async getAccessibleDatasetId(datasetId, userId, thingspeakOwnerId) {
     const result = await pool.query(
-      `SELECT id FROM datasets WHERE name = $1`,
-      [name]
+      `SELECT id
+       FROM datasets
+         WHERE id = $1
+         AND deleted_at IS NULL
+         AND (created_by = $2 OR created_by = $3)
+       LIMIT 1`,
+      [datasetId, userId, thingspeakOwnerId],
+    );
+    return result.rows[0]?.id ?? null;
+  }
+
+  async getAccessibleDatasetIdByName(name, userId, thingspeakOwnerId) {
+    const result = await pool.query(
+      `SELECT id
+       FROM datasets
+       WHERE name = $1
+         AND deleted_at IS NULL
+         AND (created_by = $2 OR created_by = $3)
+       ORDER BY id ASC
+       LIMIT 1`,
+      [name, userId, thingspeakOwnerId],
     );
     return result.rows[0]?.id ?? null;
   }
@@ -35,7 +53,7 @@ class TimeseriesRepository {
       `SELECT COUNT(*) AS count
        FROM timeseries_long
        WHERE dataset_id = $1`,
-      [datasetId]
+      [datasetId],
     );
     return Number(result.rows[0].count);
   }
@@ -46,7 +64,7 @@ class TimeseriesRepository {
        FROM timeseries_long
        WHERE dataset_id = $1
        ORDER BY ts ASC`,
-      [datasetId]
+      [datasetId],
     );
     return result.rows;
   }
@@ -57,9 +75,9 @@ class TimeseriesRepository {
        FROM timeseries_long
        WHERE dataset_id = $1
        ORDER BY metric ASC`,
-      [datasetId]
+      [datasetId],
     );
-    return result.rows.map(r => r.metric);
+    return result.rows.map((r) => r.metric);
   }
 
   /* -----------------------------
@@ -77,7 +95,7 @@ class TimeseriesRepository {
       datasetId,
       createdAt,
       entryId,
-      ...metricKeys.map(k => fields[k] ?? null)
+      ...metricKeys.map((k) => fields[k] ?? null),
     ];
 
     const query = `
@@ -97,11 +115,11 @@ class TimeseriesRepository {
        FROM timeseries
        WHERE dataset_id = $1
        ORDER BY created_at ASC`,
-      [datasetId]
+      [datasetId],
     );
 
     // Convert each row into a TimeSeriesWide model instance
-    return result.rows.map(row => new TimeSeriesWide(row));
+    return result.rows.map((row) => new TimeSeriesWide(row));
   }
 }
 

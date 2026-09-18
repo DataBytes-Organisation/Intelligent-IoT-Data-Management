@@ -1,0 +1,29 @@
+[
+  {
+    "id": "sensor1",
+    "name": "Environmental Sensor",
+    "icon": "🌡️",
+    "description": "Collects temperature and humidity data over time, enabling analysis of environmental trends and conditions.",
+    "streams": 3,
+    "lastUpdated": "Today",
+    "status": "Available"
+  },
+  {
+    "id": "sensor2",
+    "name": "Multi-Stream Sensor",
+    "icon": "📊",
+    "description": "Captures multiple sensor streams simultaneously, supporting comparison and correlation between different variables.",
+    "streams": 4,
+    "lastUpdated": "Today",
+    "status": "Available"
+  },
+  {
+    "id": "sensor3",
+    "name": "IoT Monitoring Sensor",
+    "icon": "📡",
+    "description": "Provides real-time IoT sensor data used for dashboard testing, system validation, and visualisation of streaming data.",
+    "streams": 3,
+    "lastUpdated": "Today",
+    "status": "Available"
+  }
+]

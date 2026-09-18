@@ -46,14 +46,15 @@
   line-height: 1.7;
   font-size: 1.02rem;
 }
+.dashboard-page-hero {
+    padding: 1.5rem;
+    border-radius: 22px;
+  }
 
 @media (max-width: 640px) {
   .dashboard-page-shell {
     padding: 1rem;
   }
 
-  .dashboard-page-hero {
-    padding: 1.5rem;
-    border-radius: 22px;
-  }
+
 }

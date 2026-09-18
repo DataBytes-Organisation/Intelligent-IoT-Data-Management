@@ -1,0 +1,314 @@
+.relationship-timeline {
+    width: 100%;
+}
+
+.relationship-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    margin-bottom: 2rem;
+}
+
+.relationship-title {
+    margin: 0;
+
+    color: #172033;
+
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.relationship-description {
+    margin: 0.35rem 0 0;
+
+    color: #64748b;
+
+    font-size: 0.9rem;
+}
+
+.relationship-chart {
+    width: 100%;
+}
+
+.relationship-rows {
+    display: flex;
+    flex-direction: column;
+
+    gap: 1.25rem;
+}
+
+.relationship-row {
+    display: grid;
+
+    grid-template-columns:
+        165px minmax(0, 1fr);
+
+    align-items: center;
+
+    gap: 1rem;
+}
+
+.relationship-label {
+    color: #526b8c;
+
+    font-size: 0.83rem;
+    font-weight: 600;
+}
+
+.relationship-track {
+    position: relative;
+
+    height: 34px;
+
+    background: #f4f8fc;
+
+    border-left: 2px solid #bdd0e5;
+
+    border-radius: 2px;
+}
+
+/* Vertical timeline grid */
+
+.relationship-grid-line {
+    position: absolute;
+
+    top: 0;
+    bottom: 0;
+
+    width: 1px;
+
+    background: #e5edf6;
+
+    pointer-events: none;
+}
+
+/* Highlighted correlation-change area */
+
+.relationship-change {
+    position: absolute;
+
+    top: 0;
+    bottom: 0;
+
+    min-width: 5px;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(251, 113, 133, 0.25),
+            rgba(251, 113, 133, 0.4)
+        );
+
+    cursor: pointer;
+
+    z-index: 2;
+
+    transition:
+        background 0.15s ease;
+}
+
+.relationship-change:hover,
+.relationship-change:focus {
+    background:
+        rgba(251, 113, 133, 0.5);
+
+    outline: none;
+}
+
+/* Small point shown on hover */
+
+.relationship-change::after {
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+    bottom: 3px;
+
+    width: 4px;
+    height: 4px;
+
+    border-radius: 50%;
+
+    background: #334155;
+
+    transform: translateX(-50%);
+
+    opacity: 0;
+}
+
+.relationship-change:hover::after,
+.relationship-change:focus::after {
+    opacity: 1;
+}
+
+
+/* Tooltip */
+
+.relationship-tooltip {
+    position: absolute;
+
+    left: 50%;
+    bottom: calc(100% + 8px);
+
+    transform: translateX(-50%);
+
+    display: none;
+
+    width: 200px;
+
+    padding: 0.65rem 0.75rem;
+
+    border: 1px solid #d7e2ee;
+    border-radius: 6px;
+
+    background: white;
+
+    box-shadow:
+        0 5px 15px
+        rgba(15, 23, 42, 0.12);
+
+    color: #52637a;
+
+    font-size: 0.75rem;
+    line-height: 1.35;
+
+    z-index: 30;
+}
+
+.relationship-tooltip strong,
+.relationship-tooltip span,
+.relationship-tooltip p {
+    display: block;
+}
+
+.relationship-tooltip strong {
+    margin-bottom: 0.15rem;
+
+    color: #25344a;
+
+    font-size: 0.77rem;
+}
+
+.tooltip-pair {
+    font-weight: 600;
+}
+
+.relationship-tooltip p {
+    margin:
+        0.15rem
+        0
+        0;
+}
+
+.relationship-change:hover
+.relationship-tooltip,
+.relationship-change:focus
+.relationship-tooltip {
+    display: block;
+}
+
+
+/* Bottom time axis */
+
+.relationship-axis {
+    display: grid;
+
+    grid-template-columns:
+        165px minmax(0, 1fr);
+
+    gap: 1rem;
+
+    margin-top: 0.5rem;
+}
+
+.relationship-axis-track {
+    position: relative;
+
+    height: 30px;
+
+    border-top: 1px solid #aebed1;
+}
+
+.relationship-time-label {
+    position: absolute;
+
+    top: 7px;
+
+    color: #66809f;
+
+    font-size: 0.72rem;
+
+    white-space: nowrap;
+
+    transform: translateX(-50%);
+}
+
+.relationship-time-label:first-child {
+    transform: translateX(0);
+}
+
+.relationship-time-label:last-child {
+    transform: translateX(-100%);
+}
+
+
+/* Legend */
+
+.relationship-legend {
+    display: flex;
+
+    align-items: center;
+
+    gap: 0.55rem;
+
+    margin-top: 1.5rem;
+
+    color: #526b8c;
+
+    font-size: 0.78rem;
+}
+
+.relationship-legend-block {
+    display: inline-block;
+
+    width: 40px;
+    height: 18px;
+
+    border-radius: 4px;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(251, 113, 133, 0.45),
+            rgba(251, 113, 133, 0.65)
+        );
+}
+
+
+/* Mobile */
+
+@media (max-width: 700px) {
+
+    .relationship-row {
+        grid-template-columns: 1fr;
+        gap: 0.4rem;
+    }
+
+    .relationship-axis {
+        grid-template-columns: 1fr;
+    }
+
+    .relationship-axis-spacer {
+        display: none;
+    }
+
+    .relationship-label {
+        margin-bottom: 0.2rem;
+    }
+
+    .relationship-tooltip {
+        width: 180px;
+    }
+}

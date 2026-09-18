@@ -1,3 +1,5 @@
+// pages/DashboardPage.jsx
+
 import { useParams } from "react-router-dom";
 import Dashboard from "../components/Dashboard";
 import "./DashboardPage.css";
