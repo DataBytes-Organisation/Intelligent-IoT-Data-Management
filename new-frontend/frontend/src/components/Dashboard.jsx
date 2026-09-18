@@ -1,4 +1,10 @@
-import React, { useMemo, useState, useCallback, useEffect } from 'react';
+import React, {
+  useMemo,
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+} from "react";
 import { useSensorData } from '../hooks/useSensorData.js';
 import { useFilteredData } from '../hooks/useFilteredData.js';
 import { useStreamNames } from '../hooks/useStreamNames.js';
@@ -61,6 +67,29 @@ const Dashboard = ({ datasetId }) => {
   const [analysisLoading, setAnalysisLoading] = useState(false);
   const [analysisError, setAnalysisError] = useState(null);
   const [hasAnalysed, setHasAnalysed] = useState(false);
+
+  // redirect from line individual line chart, to general timeline, and highlight it
+  const [focusedStream, setFocusedStream] = useState(null);
+  const sensorTimelineRef = useRef(null);
+
+  const handleInsightChartClick = useCallback((stream) => {
+  setFocusedStream(stream);
+
+  sensorTimelineRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+  }, []);
+
+  useEffect(() => {
+    if (
+      focusedStream &&
+      !selectedStreams.includes(focusedStream)
+    ) {
+      setFocusedStream(null);
+    }
+  }, [focusedStream, selectedStreams]);
+
 
   useEffect(() => {
     setAnalysisResult(null);
@@ -346,39 +375,36 @@ const Dashboard = ({ datasetId }) => {
 
         <ol className="note-list">
           <li>
-            Select at least one stream to view the line chart.
+            Select one or more streams to view their sensor data and insight cards.
           </li>
 
           <li>
-            Select two streams to view their scatter plot,
-            correlation coefficient, and rolling correlation
-            using the selected time window.
+            Select at least two streams to enable Run Analysis and analyse unusual readings and relationship changes.
           </li>
 
           <li>
-            Select at least three streams to identify the most
-            correlated pair in the selected time range.
+            Use the Time Interval selector to change the rolling window used for the selected data.
+
           </li>
 
           <li>
-            If no scatter plot is shown, the selected data may
-            not have enough variance.
+            Use Time Range to analyse a specific absolute period or a relative period such as the last 5 minutes, 15 minutes, 1 hour, 6 hours, or 24 hours.
+
           </li>
 
           <li>
-            If no rolling correlation line is shown, the
-            selected data may not have enough variance.
+            The Analysis Summary reports unusual sensor readings and changes in relationships between selected streams.
+
           </li>
 
           <li>
-            If no meaningful scatter plot is available for the
-            most correlated pair, one or both streams may lack
-            variance.
+            When two or more streams are selected, the Sensor Timeline uses a normalised view to make their patterns easier to compare.
+
           </li>
 
           <li>
-            If no time range is selected, the entire dataset is
-            used.
+            Relationship Changes highlights periods when the relationship between selected sensor pairs changes within the selected time range.
+
           </li>
         </ol>
 
@@ -531,7 +557,7 @@ const Dashboard = ({ datasetId }) => {
               </span>
 
               <span>
-                Refresh
+                Reset
               </span>
             </button>
 
@@ -575,17 +601,19 @@ const Dashboard = ({ datasetId }) => {
           </div>
         ) : (
           <div className="stream-stats">
-           {selectedStreams.map((stream) => (
-            <StreamStats
-              key={stream}
-              data={filteredData}
-              stream={stream}
-              displayName={
-                streamLabels[stream] ||
-                STREAM_LABELS[stream] ||
-                stream
-              }
-            />
+            {selectedStreams.map((stream, index) => (
+              <StreamStats
+                key={stream}
+                data={filteredData}
+                stream={stream}
+                colorIndex={index}
+                displayName={
+                  streamLabels[stream] ||
+                  STREAM_LABELS[stream] ||
+                  stream
+                }
+                onChartClick={() => handleInsightChartClick(stream)}
+              />
             ))}
           </div>
         )}
@@ -602,13 +630,28 @@ const Dashboard = ({ datasetId }) => {
         summary={analysisResult?.summary ?? null}
       />
       <div className="chart-analysis-grid">
-        <section className="dashboard-section chart-analysis-card sensor-timeline-card">
-          <h3 className="section-title chart-section-title">
-            Sensor Timeline
-            {selectedStreams.length >= 2 && (
-              <span> (normalised view)</span>
+        <section
+          ref={sensorTimelineRef}
+          className="dashboard-section chart-analysis-card sensor-timeline-card"
+        >
+          <div className="sensor-timeline-header">
+            <h3 className="section-title chart-section-title">
+              Sensor Timeline
+              {selectedStreams.length >= 2 && (
+                <span> (normalised view)</span>
+              )}
+            </h3>
+
+            {focusedStream && (
+              <button
+                type="button"
+                className="clear-highlight-btn"
+                onClick={() => setFocusedStream(null)}
+              >
+                Clear {streamLabels[focusedStream] || focusedStream} highlight
+              </button>
             )}
-          </h3>
+          </div>
 
           <p className="sensor-timeline-description">
             {selectedStreams.length >= 2
@@ -621,6 +664,7 @@ const Dashboard = ({ datasetId }) => {
             selectedStreams={selectedStreams}
             streamLabels={streamLabels}
             alerts={analysisResult?.alerts ?? []}
+            highlightedStream={focusedStream}
           />
         </section>
 

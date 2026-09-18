@@ -1,164 +1,249 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 
-def load_sensor_data(filepath: str = "datasets/complex.csv") -> pd.DataFrame:
-    df = pd.read_csv(filepath)
-    df.columns = df.columns.str.strip()
-
-    if "time" not in df.columns:
-        raise ValueError("The dataset must contain a 'time' column.")
-
-    print(f"[LOAD] Loaded {len(df)} rows")
-    print(f"[LOAD] Columns: {list(df.columns)}")
-    return df
+class InputValidationError(ValueError):
+    """Raised when caller input cannot be processed safely."""
 
 
-def fix_timestamps(df: pd.DataFrame, time_col: str = "time") -> pd.DataFrame:
-    df = df.copy()
+def _validate_columns(df, timestamp_col, selected_streams):
+    if not isinstance(df, pd.DataFrame):
+        raise InputValidationError("data must be a pandas DataFrame")
 
-    df[time_col] = pd.to_numeric(df[time_col], errors="coerce")
-    invalid_time = df[time_col].isna().sum()
-    if invalid_time > 0:
-        print(f"[TIMESTAMPS] Removed {invalid_time} rows with invalid time values")
+    if timestamp_col not in df.columns:
+        raise InputValidationError(
+            f"Timestamp column '{timestamp_col}' was not found. "
+            f"Available columns: {list(df.columns)}"
+        )
 
-    df = df.dropna(subset=[time_col])
+    streams = list(selected_streams or [])
+    if len(set(streams)) < 2:
+        raise InputValidationError("At least 2 unique streams are required")
+    if len(streams) != len(set(streams)):
+        raise InputValidationError("selected_streams must not contain duplicates")
+    if timestamp_col in streams:
+        raise InputValidationError("timestamp_col cannot also be a selected stream")
 
-    duplicate_count = df.duplicated(subset=[time_col]).sum()
-    if duplicate_count > 0:
-        print(f"[TIMESTAMPS] Removed {duplicate_count} duplicate timestamps")
-
-    df = df.drop_duplicates(subset=[time_col])
-    df = df.sort_values(by=time_col).reset_index(drop=True)
-
-    print(f"[TIMESTAMPS] Sorted by '{time_col}'")
-    return df
-
-
-def convert_sensor_columns_to_numeric(df: pd.DataFrame, time_col: str = "time") -> pd.DataFrame:
-    df = df.copy()
-    sensor_cols = [col for col in df.columns if col != time_col]
-
-    for col in sensor_cols:
-        df[col] = pd.to_numeric(df[col], errors="coerce")
-
-    print(f"[NUMERIC] Converted sensor columns to numeric: {sensor_cols}")
-    return df
+    missing = [stream for stream in streams if stream not in df.columns]
+    if missing:
+        raise InputValidationError(
+            f"Selected streams were not found: {missing}. "
+            f"Available columns: {list(df.columns)}"
+        )
+    return streams
 
 
-def handle_missing_values(df: pd.DataFrame, method: str = "interpolate") -> pd.DataFrame:
-    df = df.copy()
-    missing_before = df.isnull().sum().sum()
+def fix_timestamps(df, time_col="time"):
+    """Parse numeric counters or datetimes, then sort and deduplicate."""
+    if time_col not in df.columns:
+        raise InputValidationError(f"Timestamp column '{time_col}' was not found")
+
+    result = df.copy()
+    original_attrs = dict(result.attrs)
+    original = result[time_col]
+    total_rows = len(result)
+
+    parsed_datetime = pd.to_datetime(
+        original,
+        errors="coerce",
+        utc=True,
+        format="mixed",
+    )
+    parsed_datetime = parsed_datetime.dt.tz_convert("UTC").dt.tz_localize(None)
+    parsed_numeric = pd.to_numeric(original, errors="coerce")
+
+    datetime_valid = int(parsed_datetime.notna().sum())
+    numeric_valid = int(parsed_numeric.notna().sum())
+    if datetime_valid > numeric_valid:
+        result[time_col] = parsed_datetime
+        timestamp_kind = "datetime"
+    else:
+        result[time_col] = parsed_numeric
+        timestamp_kind = "numeric"
+
+    invalid_count = int(result[time_col].isna().sum())
+    result = result.dropna(subset=[time_col])
+    duplicate_count = int(result.duplicated(subset=[time_col]).sum())
+    result = result.drop_duplicates(subset=[time_col])
+    result = result.sort_values(time_col).reset_index(drop=True)
+
+    if result.empty:
+        raise InputValidationError(
+            f"No usable timestamps remain in '{time_col}' after checking {total_rows} rows"
+        )
+
+    result.attrs.update(original_attrs)
+    result.attrs.update(
+        {
+            "timestamp_kind": timestamp_kind,
+            "invalid_timestamps_removed": invalid_count,
+            "duplicate_timestamps_removed": duplicate_count,
+        }
+    )
+    return result
+
+
+def convert_sensor_columns_to_numeric(df, time_col="time"):
+    """Coerce sensor columns to numeric values and record affected cells."""
+    result = df.copy()
+    coerced_by_column = {}
+
+    for column in result.columns:
+        if column == time_col:
+            continue
+        missing_before = int(result[column].isna().sum())
+        result[column] = pd.to_numeric(result[column], errors="coerce")
+        coerced = int(result[column].isna().sum()) - missing_before
+        if coerced:
+            coerced_by_column[column] = coerced
+
+    result.attrs["non_numeric_by_column"] = coerced_by_column
+    result.attrs["non_numeric_coerced"] = sum(coerced_by_column.values())
+    return result
+
+
+def align_to_common_index(df, time_col="time", frequency=None):
+    """Insert missing timestamps on an explicitly requested regular grid."""
+    if frequency is None:
+        return df.copy()
+
+    result = df.copy()
+    original_attrs = dict(result.attrs)
+    result = result.set_index(time_col)
+
+    if isinstance(result.index, pd.DatetimeIndex):
+        try:
+            full_index = pd.date_range(
+                start=result.index.min(),
+                end=result.index.max(),
+                freq=frequency,
+            )
+        except (TypeError, ValueError) as exc:
+            raise InputValidationError(f"Invalid datetime sampling_frequency: {frequency}") from exc
+    else:
+        try:
+            step = float(frequency)
+        except (TypeError, ValueError) as exc:
+            raise InputValidationError(f"Invalid numeric sampling_frequency: {frequency}") from exc
+        if step <= 0:
+            raise InputValidationError("sampling_frequency must be positive")
+
+        start = float(result.index.min())
+        end = float(result.index.max())
+        values = np.arange(start, end + step * 0.5, step)
+        if all(float(value).is_integer() for value in values):
+            values = values.astype(int)
+        full_index = pd.Index(values, name=time_col)
+
+    rows_before = len(result)
+    result = result.reindex(full_index)
+    result = result.reset_index().rename(columns={"index": time_col})
+    result.attrs.update(original_attrs)
+    result.attrs["rows_added_by_alignment"] = len(result) - rows_before
+    return result
+
+
+def handle_missing_values(df, time_col="time", method="interpolate"):
+    """Fill or remove missing sensor values using one configured strategy."""
+    result = df.copy()
+    sensor_columns = [column for column in result.columns if column != time_col]
+    missing_before = int(result[sensor_columns].isna().sum().sum())
 
     if method == "interpolate":
-        df = df.interpolate(method="linear", limit_direction="both")
+        result[sensor_columns] = result[sensor_columns].interpolate(
+            method="linear",
+            limit_direction="both",
+        )
     elif method == "ffill":
-        df = df.ffill().bfill()
+        result[sensor_columns] = result[sensor_columns].ffill().bfill()
     elif method == "drop":
-        df = df.dropna()
+        result = result.dropna(subset=sensor_columns)
     else:
-        raise ValueError(f"Unknown method: {method}")
+        raise InputValidationError(f"Unknown missing value method: {method}")
 
-    missing_after = df.isnull().sum().sum()
-    print(f"[MISSING] Missing values before: {missing_before}")
-    print(f"[MISSING] Missing values after: {missing_after}")
-    return df
+    missing_after = int(result[sensor_columns].isna().sum().sum())
+    result.attrs["missing_imputed"] = missing_before - missing_after
+    return result
 
 
-def remove_outliers(df: pd.DataFrame, sensor_cols: list, iqr_factor: float = 3.0) -> pd.DataFrame:
-    df = df.copy()
-    total_outliers = 0
+def remove_outliers(df, sensor_cols, iqr_factor=3.0):
+    """Replace IQR outliers and interpolate the removed sensor values."""
+    if iqr_factor <= 0:
+        raise InputValidationError("iqr_factor must be positive")
 
-    for col in sensor_cols:
-        if df[col].isna().all():
+    result = df.copy()
+    outlier_count = 0
+    for column in sensor_cols:
+        if result[column].isna().all():
             continue
-
-        q1 = df[col].quantile(0.25)
-        q3 = df[col].quantile(0.75)
+        q1 = result[column].quantile(0.25)
+        q3 = result[column].quantile(0.75)
         iqr = q3 - q1
-
         if iqr == 0:
             continue
 
-        lower_bound = q1 - iqr_factor * iqr
-        upper_bound = q3 + iqr_factor * iqr
+        lower = q1 - iqr_factor * iqr
+        upper = q3 + iqr_factor * iqr
+        mask = (result[column] < lower) | (result[column] > upper)
+        outlier_count += int(mask.sum())
+        result.loc[mask, column] = np.nan
 
-        outlier_mask = (df[col] < lower_bound) | (df[col] > upper_bound)
-        outlier_count = outlier_mask.sum()
-
-        if outlier_count > 0:
-            df.loc[outlier_mask, col] = np.nan
-            total_outliers += outlier_count
-
-    df[sensor_cols] = df[sensor_cols].interpolate(method="linear", limit_direction="both")
-
-    print(f"[OUTLIERS] Replaced {total_outliers} outlier values")
-    return df
+    result[sensor_cols] = result[sensor_cols].interpolate(
+        method="linear",
+        limit_direction="both",
+    )
+    result.attrs["outliers_replaced"] = outlier_count
+    return result
 
 
-def align_to_common_index(df: pd.DataFrame, time_col: str = "time", freq: int = 1) -> pd.DataFrame:
-    df = df.copy()
-    df = df.set_index(time_col)
-
-    start_time = int(df.index.min())
-    end_time = int(df.index.max())
-
-    full_time_index = range(start_time, end_time + 1, freq)
-    df = df.reindex(full_time_index)
-
-    df = df.interpolate(method="linear", limit_direction="both")
-    df = df.reset_index().rename(columns={"index": time_col})
-
-    print(f"[ALIGN] Reindexed time from {start_time} to {end_time} with freq={freq}")
-    print(f"[ALIGN] Output rows after alignment: {len(df)}")
-    return df
-
-
-def validate_output(df: pd.DataFrame, time_col: str = "time") -> pd.DataFrame:
-    df = df.copy()
-
+def validate_output(df, time_col="time"):
+    """Require sorted timestamps and complete numeric sensor values."""
+    if df.empty:
+        raise InputValidationError("No rows remain after preprocessing")
     if not df[time_col].is_monotonic_increasing:
-        raise ValueError("Time column is not sorted in increasing order.")
+        raise InputValidationError("Timestamp values are not sorted")
+    if int(df.isna().sum().sum()):
+        raise InputValidationError("Missing values remain after preprocessing")
 
-    if df.isnull().sum().sum() != 0:
-        raise ValueError("Data still contains missing values after preprocessing.")
-
-    sensor_cols = [col for col in df.columns if col != time_col]
-    for col in sensor_cols:
-        df[col] = df[col].astype(np.float64)
-
-    print(f"[VALIDATE] Output shape: {df.shape}")
-    print("[VALIDATE] Dataset is sorted, clean, and ready for correlation analysis")
-    return df
+    result = df.copy()
+    sensor_columns = [column for column in result.columns if column != time_col]
+    result[sensor_columns] = result[sensor_columns].astype(np.float64)
+    return result
 
 
-def run_pipeline(
-    input_path: str = "datasets/complex.csv",
-    output_path: str = "datasets/clean_sensor_data.csv"
-) -> pd.DataFrame:
-    print("=" * 60)
-    print("SENSOR DATA PREPROCESSING PIPELINE")
-    print("=" * 60)
+def run_preprocessing_pipeline(
+    df,
+    timestamp_col,
+    selected_streams: list[str],
+    missing_method="interpolate",
+    iqr_factor=3.0,
+    sampling_frequency=None,
+):
+    """Run the single preprocessing flow used by API and direct callers."""
+    streams = _validate_columns(df, timestamp_col, selected_streams)
+    rows_in = len(df)
+    result = df[[timestamp_col, *streams]].copy()
+    result = fix_timestamps(result, timestamp_col)
+    result = convert_sensor_columns_to_numeric(result, timestamp_col)
+    result = align_to_common_index(result, timestamp_col, sampling_frequency)
+    result = handle_missing_values(result, timestamp_col, missing_method)
+    result = remove_outliers(result, streams, iqr_factor)
+    result = validate_output(result, timestamp_col)
 
-    df = load_sensor_data(input_path)
-    df = fix_timestamps(df, time_col="time")
-    df = convert_sensor_columns_to_numeric(df, time_col="time")
-    df = handle_missing_values(df, method="interpolate")
+    quality = {
+        "rows_in": rows_in,
+        "rows_out": len(result),
+        "invalid_timestamps_removed": result.attrs.get("invalid_timestamps_removed", 0),
+        "duplicate_timestamps_removed": result.attrs.get("duplicate_timestamps_removed", 0),
+        "non_numeric_coerced": result.attrs.get("non_numeric_coerced", 0),
+        "non_numeric_by_column": result.attrs.get("non_numeric_by_column", {}),
+        "rows_added_by_alignment": result.attrs.get("rows_added_by_alignment", 0),
+        "missing_imputed": result.attrs.get("missing_imputed", 0),
+        "outliers_replaced": result.attrs.get("outliers_replaced", 0),
+    }
 
-    sensor_cols = [col for col in df.columns if col != "time"]
-    print(f"[INFO] Sensor columns: {sensor_cols}")
-
-    df = remove_outliers(df, sensor_cols=sensor_cols, iqr_factor=3.0)
-    df = align_to_common_index(df, time_col="time", freq=1)
-    df = validate_output(df, time_col="time")
-
-    df.to_csv(output_path, index=False)
-    print(f"[DONE] Cleaned data saved to: {output_path}")
-    print("=" * 60)
-
-    return df
-
-
-if __name__ == "__main__":
-    clean_df = run_pipeline()
-    print(clean_df.head())
+    timestamp_kind = result.attrs.get("timestamp_kind")
+    result = result.set_index(timestamp_col)
+    result.attrs["timestamp_kind"] = timestamp_kind
+    result.attrs["data_quality"] = quality
+    return result

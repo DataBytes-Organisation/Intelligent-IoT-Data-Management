@@ -1,0 +1,24 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.9, pytest-8.4.2, pluggy-1.5.0 -- /opt/anaconda3/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/vishnuvardhanreddypulluru/Documents/Capstone/Intelligent-IoT-Data-Management
+plugins: anyio-4.10.0
+collecting ... collected 15 items
+
+correlation_alert/testing/test_cca115_configuration.py::test_documented_defaults PASSED [  6%]
+correlation_alert/testing/test_cca115_configuration.py::test_invalid_configuration_returns_400[window_size-0] PASSED [ 13%]
+correlation_alert/testing/test_cca115_configuration.py::test_invalid_configuration_returns_400[window_size--1] PASSED [ 20%]
+correlation_alert/testing/test_cca115_configuration.py::test_invalid_configuration_returns_400[window_size-abc] PASSED [ 26%]
+correlation_alert/testing/test_cca115_configuration.py::test_invalid_configuration_returns_400[step_size-0] PASSED [ 33%]
+correlation_alert/testing/test_cca115_configuration.py::test_invalid_configuration_returns_400[step_size--5] PASSED [ 40%]
+correlation_alert/testing/test_cca115_configuration.py::test_invalid_configuration_returns_400[step_size-abc] PASSED [ 46%]
+correlation_alert/testing/test_cca115_configuration.py::test_invalid_configuration_returns_400[strong_corr_threshold-1.1] PASSED [ 53%]
+correlation_alert/testing/test_cca115_configuration.py::test_invalid_configuration_returns_400[strong_corr_threshold--1.1] PASSED [ 60%]
+correlation_alert/testing/test_cca115_configuration.py::test_invalid_configuration_returns_400[weak_corr_threshold-1.1] PASSED [ 66%]
+correlation_alert/testing/test_cca115_configuration.py::test_invalid_configuration_returns_400[weak_corr_threshold--1.1] PASSED [ 73%]
+correlation_alert/testing/test_cca115_configuration.py::test_invalid_configuration_returns_400[delta_threshold-1.1] PASSED [ 80%]
+correlation_alert/testing/test_cca115_configuration.py::test_invalid_configuration_returns_400[delta_threshold--1.1] PASSED [ 86%]
+correlation_alert/testing/test_cca115_configuration.py::test_weak_threshold_must_be_less_than_strong PASSED [ 93%]
+correlation_alert/testing/test_cca115_configuration.py::test_custom_thresholds_are_accepted PASSED [100%]
+
+============================== 15 passed in 0.74s ==============================

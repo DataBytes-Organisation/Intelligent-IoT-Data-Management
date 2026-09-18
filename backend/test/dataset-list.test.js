@@ -103,3 +103,57 @@ test("findById returns dataset detail with its total persisted row count", async
     db.query = originalQuery;
   }
 });
+
+test("legacy public dataset reads keep active-dataset filtering without owner parameters", async () => {
+  const originalQuery = db.query;
+  const calls = [];
+  db.query = async (sql, values) => {
+    calls.push({ sql, values });
+    return { rows: [] };
+  };
+
+  try {
+    await datasetRepository.findAll("active");
+    await datasetRepository.findById(42);
+
+    assert.equal(calls[0].values.length, 0);
+    assert.match(calls[0].sql, /d\.deleted_at IS NULL/);
+    assert.doesNotMatch(calls[0].sql, /d\.created_by = \$1/);
+    assert.deepEqual(calls[1].values, [42]);
+    assert.match(calls[1].sql, /d\.deleted_at IS NULL/);
+    assert.doesNotMatch(calls[1].sql, /d\.created_by = \$2/);
+  } finally {
+    db.query = originalQuery;
+  }
+});
+
+test("findMappingsByName returns storage fields with their logical source fields", async () => {
+  const originalQuery = db.query;
+  let query;
+  let params;
+  db.query = async (sql, values) => {
+    query = sql;
+    params = values;
+    return {
+      rows: [
+        { storageField: "field1", sourceField: "AirTemperature" },
+        { storageField: "field2", sourceField: "RelativeHumidity" },
+      ],
+    };
+  };
+
+  try {
+    const mappings = await datasetRepository.findMappingsByName("microclimate-april");
+
+    assert.deepEqual(mappings, [
+      { storageField: "field1", sourceField: "AirTemperature" },
+      { storageField: "field2", sourceField: "RelativeHumidity" },
+    ]);
+    assert.deepEqual(params, ["microclimate-april"]);
+    assert.match(query, /INNER JOIN dataset_field_mappings m/);
+    assert.match(query, /m\.source_field AS "sourceField"/);
+    assert.match(query, /m\.storage_field AS "storageField"/);
+  } finally {
+    db.query = originalQuery;
+  }
+});

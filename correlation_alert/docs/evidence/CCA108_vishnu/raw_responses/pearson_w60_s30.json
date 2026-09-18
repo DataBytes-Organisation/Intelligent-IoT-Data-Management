@@ -1,0 +1,1922 @@
+{
+  "alerts": [
+    {
+      "alert_level": "MEDIUM",
+      "current_corr": 0.9408,
+      "delta": 1.6359,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.6951,
+      "reason": "Weak-to-strong rise: correlation went from -0.70 to 0.94",
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 5
+    },
+    {
+      "alert_level": "MEDIUM",
+      "current_corr": 0.9408,
+      "delta": 1.6359,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.6951,
+      "reason": "Weak-to-strong rise: correlation went from -0.70 to 0.94",
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 5
+    },
+    {
+      "alert_level": "MEDIUM",
+      "current_corr": -0.8883,
+      "delta": 1.7831,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.8948,
+      "reason": "Strong-to-weak drop: correlation went from 0.89 to -0.89",
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 10
+    },
+    {
+      "alert_level": "MEDIUM",
+      "current_corr": -0.8883,
+      "delta": 1.768,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.8798,
+      "reason": "Strong-to-weak drop: correlation went from 0.88 to -0.89",
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 10
+    },
+    {
+      "alert_level": "MEDIUM",
+      "current_corr": 0.2099,
+      "delta": 0.7901,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "reason": "Strong-to-weak drop: correlation went from 1.00 to 0.21",
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 12
+    },
+    {
+      "alert_level": "MEDIUM",
+      "current_corr": -0.3497,
+      "delta": 0.6312,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.9809,
+      "reason": "Correlation changed by 0.63, classified as MEDIUM severity",
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 12
+    },
+    {
+      "alert_level": "HIGH",
+      "current_corr": -0.9849,
+      "delta": 1.1947,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.2099,
+      "reason": "Correlation changed by 1.19, classified as HIGH severity",
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 13
+    },
+    {
+      "alert_level": "MEDIUM",
+      "current_corr": 0.9984,
+      "delta": 1.3481,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.3497,
+      "reason": "Weak-to-strong rise: correlation went from -0.35 to 1.00",
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 13
+    },
+    {
+      "alert_level": "MEDIUM",
+      "current_corr": 0.7252,
+      "delta": 1.6628,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.9376,
+      "reason": "Weak-to-strong rise: correlation went from -0.94 to 0.73",
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 15
+    },
+    {
+      "alert_level": "MEDIUM",
+      "current_corr": 0.7252,
+      "delta": 1.6628,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.9376,
+      "reason": "Weak-to-strong rise: correlation went from -0.94 to 0.73",
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 15
+    },
+    {
+      "alert_level": "MEDIUM",
+      "current_corr": -0.1496,
+      "delta": 1.1109,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.9613,
+      "reason": "Strong-to-weak drop: correlation went from 0.96 to -0.15",
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 20
+    },
+    {
+      "alert_level": "MEDIUM",
+      "current_corr": -0.1496,
+      "delta": 1.1109,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.9613,
+      "reason": "Strong-to-weak drop: correlation went from 0.96 to -0.15",
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 20
+    },
+    {
+      "alert_level": "HIGH",
+      "current_corr": -0.9661,
+      "delta": 0.8165,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.1496,
+      "reason": "Correlation changed by 0.82, classified as HIGH severity",
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 21
+    },
+    {
+      "alert_level": "HIGH",
+      "current_corr": -0.9661,
+      "delta": 0.8165,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.1496,
+      "reason": "Correlation changed by 0.82, classified as HIGH severity",
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 21
+    },
+    {
+      "alert_level": "LOW",
+      "current_corr": -0.6018,
+      "delta": 0.3711,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.973,
+      "reason": "Correlation changed by 0.37, classified as LOW severity",
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 25
+    },
+    {
+      "alert_level": "LOW",
+      "current_corr": -0.6018,
+      "delta": 0.3711,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.973,
+      "reason": "Correlation changed by 0.37, classified as LOW severity",
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 25
+    },
+    {
+      "alert_level": "MEDIUM",
+      "current_corr": 0.9477,
+      "delta": 1.5495,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.6018,
+      "reason": "Weak-to-strong rise: correlation went from -0.60 to 0.95",
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 26
+    },
+    {
+      "alert_level": "MEDIUM",
+      "current_corr": 0.9477,
+      "delta": 1.5495,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.6018,
+      "reason": "Weak-to-strong rise: correlation went from -0.60 to 0.95",
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 26
+    },
+    {
+      "alert_level": "MEDIUM",
+      "current_corr": -0.9058,
+      "delta": 1.7601,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.8543,
+      "reason": "Strong-to-weak drop: correlation went from 0.85 to -0.91",
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 31
+    },
+    {
+      "alert_level": "MEDIUM",
+      "current_corr": -0.9058,
+      "delta": 1.7601,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.8543,
+      "reason": "Strong-to-weak drop: correlation went from 0.85 to -0.91",
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 31
+    }
+  ],
+  "changes": [
+    {
+      "current_corr": -0.9861,
+      "delta": 0.0234,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.9628,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 1
+    },
+    {
+      "current_corr": 1.0,
+      "delta": 0.0,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 1
+    },
+    {
+      "current_corr": -0.9861,
+      "delta": 0.0234,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.9628,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 1
+    },
+    {
+      "current_corr": -0.9874,
+      "delta": 0.0013,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.9861,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 2
+    },
+    {
+      "current_corr": 1.0,
+      "delta": 0.0,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 2
+    },
+    {
+      "current_corr": -0.9874,
+      "delta": 0.0013,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.9861,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 2
+    },
+    {
+      "current_corr": -0.9748,
+      "delta": 0.0126,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.9874,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 3
+    },
+    {
+      "current_corr": 1.0,
+      "delta": 0.0,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 3
+    },
+    {
+      "current_corr": -0.9748,
+      "delta": 0.0126,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.9874,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 3
+    },
+    {
+      "current_corr": -0.6951,
+      "delta": 0.2797,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.9748,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 4
+    },
+    {
+      "current_corr": 1.0,
+      "delta": 0.0,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 4
+    },
+    {
+      "current_corr": -0.6951,
+      "delta": 0.2797,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.9748,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 4
+    },
+    {
+      "current_corr": 0.9408,
+      "delta": 1.6359,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.6951,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 5
+    },
+    {
+      "current_corr": 1.0,
+      "delta": 0.0,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 5
+    },
+    {
+      "current_corr": 0.9408,
+      "delta": 1.6359,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.6951,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 5
+    },
+    {
+      "current_corr": 0.9841,
+      "delta": 0.0433,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.9408,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 6
+    },
+    {
+      "current_corr": 1.0,
+      "delta": 0.0,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 6
+    },
+    {
+      "current_corr": 0.9841,
+      "delta": 0.0433,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.9408,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 6
+    },
+    {
+      "current_corr": 0.988,
+      "delta": 0.0038,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.9841,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 7
+    },
+    {
+      "current_corr": 1.0,
+      "delta": 0.0,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 7
+    },
+    {
+      "current_corr": 0.988,
+      "delta": 0.0038,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.9841,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 7
+    },
+    {
+      "current_corr": 0.9805,
+      "delta": 0.0075,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.988,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 8
+    },
+    {
+      "current_corr": 1.0,
+      "delta": 0.0,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 8
+    },
+    {
+      "current_corr": 0.9805,
+      "delta": 0.0075,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.988,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 8
+    },
+    {
+      "current_corr": 0.8218,
+      "delta": 0.1587,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.9805,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 9
+    },
+    {
+      "current_corr": 0.8948,
+      "delta": 0.1052,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 9
+    },
+    {
+      "current_corr": 0.8798,
+      "delta": 0.1007,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.9805,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 9
+    },
+    {
+      "current_corr": 1.0,
+      "delta": 0.1782,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.8218,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 10
+    },
+    {
+      "current_corr": -0.8883,
+      "delta": 1.7831,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.8948,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 10
+    },
+    {
+      "current_corr": -0.8883,
+      "delta": 1.768,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.8798,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 10
+    },
+    {
+      "current_corr": 1.0,
+      "delta": 0.0,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 11
+    },
+    {
+      "current_corr": -0.9809,
+      "delta": 0.0926,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.8883,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 11
+    },
+    {
+      "current_corr": -0.9809,
+      "delta": 0.0926,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.8883,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 11
+    },
+    {
+      "current_corr": 0.2099,
+      "delta": 0.7901,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 12
+    },
+    {
+      "current_corr": -0.3497,
+      "delta": 0.6312,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.9809,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 12
+    },
+    {
+      "current_corr": -0.988,
+      "delta": 0.0071,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.9809,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 12
+    },
+    {
+      "current_corr": -0.9849,
+      "delta": 1.1947,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.2099,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 13
+    },
+    {
+      "current_corr": 0.9984,
+      "delta": 1.3481,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.3497,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 13
+    },
+    {
+      "current_corr": -0.9839,
+      "delta": 0.0041,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.988,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 13
+    },
+    {
+      "current_corr": -0.9376,
+      "delta": 0.0473,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.9849,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 14
+    },
+    {
+      "current_corr": 1.0,
+      "delta": 0.0016,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.9984,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 14
+    },
+    {
+      "current_corr": -0.9376,
+      "delta": 0.0463,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.9839,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 14
+    },
+    {
+      "current_corr": 0.7252,
+      "delta": 1.6628,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.9376,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 15
+    },
+    {
+      "current_corr": 1.0,
+      "delta": 0.0,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 15
+    },
+    {
+      "current_corr": 0.7252,
+      "delta": 1.6628,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.9376,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 15
+    },
+    {
+      "current_corr": 0.9755,
+      "delta": 0.2504,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.7252,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 16
+    },
+    {
+      "current_corr": 1.0,
+      "delta": 0.0,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 16
+    },
+    {
+      "current_corr": 0.9755,
+      "delta": 0.2504,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.7252,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 16
+    },
+    {
+      "current_corr": 0.9875,
+      "delta": 0.012,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.9755,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 17
+    },
+    {
+      "current_corr": 1.0,
+      "delta": 0.0,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 17
+    },
+    {
+      "current_corr": 0.9875,
+      "delta": 0.012,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.9755,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 17
+    },
+    {
+      "current_corr": 0.986,
+      "delta": 0.0015,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.9875,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 18
+    },
+    {
+      "current_corr": 1.0,
+      "delta": 0.0,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 18
+    },
+    {
+      "current_corr": 0.986,
+      "delta": 0.0015,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.9875,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 18
+    },
+    {
+      "current_corr": 0.9613,
+      "delta": 0.0247,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.986,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 19
+    },
+    {
+      "current_corr": 1.0,
+      "delta": 0.0,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 19
+    },
+    {
+      "current_corr": 0.9613,
+      "delta": 0.0247,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.986,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 19
+    },
+    {
+      "current_corr": -0.1496,
+      "delta": 1.1109,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.9613,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 20
+    },
+    {
+      "current_corr": 1.0,
+      "delta": 0.0,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 20
+    },
+    {
+      "current_corr": -0.1496,
+      "delta": 1.1109,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.9613,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 20
+    },
+    {
+      "current_corr": -0.9661,
+      "delta": 0.8165,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.1496,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 21
+    },
+    {
+      "current_corr": 1.0,
+      "delta": 0.0,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 21
+    },
+    {
+      "current_corr": -0.9661,
+      "delta": 0.8165,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.1496,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 21
+    },
+    {
+      "current_corr": -0.9865,
+      "delta": 0.0204,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.9661,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 22
+    },
+    {
+      "current_corr": 1.0,
+      "delta": 0.0,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 22
+    },
+    {
+      "current_corr": -0.9865,
+      "delta": 0.0204,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.9661,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 22
+    },
+    {
+      "current_corr": -0.9872,
+      "delta": 0.0008,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.9865,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 23
+    },
+    {
+      "current_corr": 1.0,
+      "delta": 0.0,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 23
+    },
+    {
+      "current_corr": -0.9872,
+      "delta": 0.0008,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.9865,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 23
+    },
+    {
+      "current_corr": -0.973,
+      "delta": 0.0143,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.9872,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 24
+    },
+    {
+      "current_corr": 1.0,
+      "delta": 0.0,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 24
+    },
+    {
+      "current_corr": -0.973,
+      "delta": 0.0143,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.9872,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 24
+    },
+    {
+      "current_corr": -0.6018,
+      "delta": 0.3711,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.973,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 25
+    },
+    {
+      "current_corr": 1.0,
+      "delta": 0.0,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 25
+    },
+    {
+      "current_corr": -0.6018,
+      "delta": 0.3711,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.973,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 25
+    },
+    {
+      "current_corr": 0.9477,
+      "delta": 1.5495,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.6018,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 26
+    },
+    {
+      "current_corr": 1.0,
+      "delta": 0.0,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 26
+    },
+    {
+      "current_corr": 0.9477,
+      "delta": 1.5495,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": -0.6018,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 26
+    },
+    {
+      "current_corr": 0.9847,
+      "delta": 0.037,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.9477,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 27
+    },
+    {
+      "current_corr": 1.0,
+      "delta": 0.0,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 27
+    },
+    {
+      "current_corr": 0.9847,
+      "delta": 0.037,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.9477,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 27
+    },
+    {
+      "current_corr": 0.9879,
+      "delta": 0.0032,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.9847,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 28
+    },
+    {
+      "current_corr": 1.0,
+      "delta": 0.0,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 28
+    },
+    {
+      "current_corr": 0.9879,
+      "delta": 0.0032,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.9847,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 28
+    },
+    {
+      "current_corr": 0.9794,
+      "delta": 0.0085,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.9879,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 29
+    },
+    {
+      "current_corr": 1.0,
+      "delta": 0.0,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 29
+    },
+    {
+      "current_corr": 0.9794,
+      "delta": 0.0085,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.9879,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 29
+    },
+    {
+      "current_corr": 0.8543,
+      "delta": 0.1251,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.9794,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 30
+    },
+    {
+      "current_corr": 1.0,
+      "delta": 0.0,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 30
+    },
+    {
+      "current_corr": 0.8543,
+      "delta": 0.1251,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.9794,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 30
+    },
+    {
+      "current_corr": -0.9058,
+      "delta": 1.7601,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.8543,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s2",
+      "window_index": 31
+    },
+    {
+      "current_corr": 1.0,
+      "delta": 0.0,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 1.0,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s1",
+      "stream_2": "s3",
+      "window_index": 31
+    },
+    {
+      "current_corr": -0.9058,
+      "delta": 1.7601,
+      "end_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "previous_corr": 0.8543,
+      "start_time": "Thu, 01 Jan 1970 00:00:00 GMT",
+      "stream_1": "s2",
+      "stream_2": "s3",
+      "window_index": 31
+    }
+  ],
+  "correlations": [
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": -0.9628,
+          "s3": 1.0
+        },
+        "s2": {
+          "s1": -0.9628,
+          "s2": 1.0,
+          "s3": -0.9628
+        },
+        "s3": {
+          "s1": 1.0,
+          "s2": -0.9628,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000059",
+      "start_time": "1970-01-01 00:00:00",
+      "window_index": 0,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": -0.9861,
+          "s3": 1.0
+        },
+        "s2": {
+          "s1": -0.9861,
+          "s2": 1.0,
+          "s3": -0.9861
+        },
+        "s3": {
+          "s1": 1.0,
+          "s2": -0.9861,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000089",
+      "start_time": "1970-01-01 00:00:00.000000030",
+      "window_index": 1,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": -0.9874,
+          "s3": 1.0
+        },
+        "s2": {
+          "s1": -0.9874,
+          "s2": 1.0,
+          "s3": -0.9874
+        },
+        "s3": {
+          "s1": 1.0,
+          "s2": -0.9874,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000119",
+      "start_time": "1970-01-01 00:00:00.000000060",
+      "window_index": 2,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": -0.9748,
+          "s3": 1.0
+        },
+        "s2": {
+          "s1": -0.9748,
+          "s2": 1.0,
+          "s3": -0.9748
+        },
+        "s3": {
+          "s1": 1.0,
+          "s2": -0.9748,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000149",
+      "start_time": "1970-01-01 00:00:00.000000090",
+      "window_index": 3,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": -0.6951,
+          "s3": 1.0
+        },
+        "s2": {
+          "s1": -0.6951,
+          "s2": 1.0,
+          "s3": -0.6951
+        },
+        "s3": {
+          "s1": 1.0,
+          "s2": -0.6951,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000179",
+      "start_time": "1970-01-01 00:00:00.000000120",
+      "window_index": 4,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": 0.9408,
+          "s3": 1.0
+        },
+        "s2": {
+          "s1": 0.9408,
+          "s2": 1.0,
+          "s3": 0.9408
+        },
+        "s3": {
+          "s1": 1.0,
+          "s2": 0.9408,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000209",
+      "start_time": "1970-01-01 00:00:00.000000150",
+      "window_index": 5,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": 0.9841,
+          "s3": 1.0
+        },
+        "s2": {
+          "s1": 0.9841,
+          "s2": 1.0,
+          "s3": 0.9841
+        },
+        "s3": {
+          "s1": 1.0,
+          "s2": 0.9841,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000239",
+      "start_time": "1970-01-01 00:00:00.000000180",
+      "window_index": 6,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": 0.988,
+          "s3": 1.0
+        },
+        "s2": {
+          "s1": 0.988,
+          "s2": 1.0,
+          "s3": 0.988
+        },
+        "s3": {
+          "s1": 1.0,
+          "s2": 0.988,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000269",
+      "start_time": "1970-01-01 00:00:00.000000210",
+      "window_index": 7,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": 0.9805,
+          "s3": 1.0
+        },
+        "s2": {
+          "s1": 0.9805,
+          "s2": 1.0,
+          "s3": 0.9805
+        },
+        "s3": {
+          "s1": 1.0,
+          "s2": 0.9805,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000299",
+      "start_time": "1970-01-01 00:00:00.000000240",
+      "window_index": 8,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": 0.8218,
+          "s3": 0.8948
+        },
+        "s2": {
+          "s1": 0.8218,
+          "s2": 1.0,
+          "s3": 0.8798
+        },
+        "s3": {
+          "s1": 0.8948,
+          "s2": 0.8798,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000329",
+      "start_time": "1970-01-01 00:00:00.000000270",
+      "window_index": 9,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": 1.0,
+          "s3": -0.8883
+        },
+        "s2": {
+          "s1": 1.0,
+          "s2": 1.0,
+          "s3": -0.8883
+        },
+        "s3": {
+          "s1": -0.8883,
+          "s2": -0.8883,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000359",
+      "start_time": "1970-01-01 00:00:00.000000300",
+      "window_index": 10,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": 1.0,
+          "s3": -0.9809
+        },
+        "s2": {
+          "s1": 1.0,
+          "s2": 1.0,
+          "s3": -0.9809
+        },
+        "s3": {
+          "s1": -0.9809,
+          "s2": -0.9809,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000389",
+      "start_time": "1970-01-01 00:00:00.000000330",
+      "window_index": 11,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": 0.2099,
+          "s3": -0.3497
+        },
+        "s2": {
+          "s1": 0.2099,
+          "s2": 1.0,
+          "s3": -0.988
+        },
+        "s3": {
+          "s1": -0.3497,
+          "s2": -0.988,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000419",
+      "start_time": "1970-01-01 00:00:00.000000360",
+      "window_index": 12,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": -0.9849,
+          "s3": 0.9984
+        },
+        "s2": {
+          "s1": -0.9849,
+          "s2": 1.0,
+          "s3": -0.9839
+        },
+        "s3": {
+          "s1": 0.9984,
+          "s2": -0.9839,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000449",
+      "start_time": "1970-01-01 00:00:00.000000390",
+      "window_index": 13,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": -0.9376,
+          "s3": 1.0
+        },
+        "s2": {
+          "s1": -0.9376,
+          "s2": 1.0,
+          "s3": -0.9376
+        },
+        "s3": {
+          "s1": 1.0,
+          "s2": -0.9376,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000479",
+      "start_time": "1970-01-01 00:00:00.000000420",
+      "window_index": 14,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": 0.7252,
+          "s3": 1.0
+        },
+        "s2": {
+          "s1": 0.7252,
+          "s2": 1.0,
+          "s3": 0.7252
+        },
+        "s3": {
+          "s1": 1.0,
+          "s2": 0.7252,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000509",
+      "start_time": "1970-01-01 00:00:00.000000450",
+      "window_index": 15,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": 0.9755,
+          "s3": 1.0
+        },
+        "s2": {
+          "s1": 0.9755,
+          "s2": 1.0,
+          "s3": 0.9755
+        },
+        "s3": {
+          "s1": 1.0,
+          "s2": 0.9755,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000539",
+      "start_time": "1970-01-01 00:00:00.000000480",
+      "window_index": 16,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": 0.9875,
+          "s3": 1.0
+        },
+        "s2": {
+          "s1": 0.9875,
+          "s2": 1.0,
+          "s3": 0.9875
+        },
+        "s3": {
+          "s1": 1.0,
+          "s2": 0.9875,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000569",
+      "start_time": "1970-01-01 00:00:00.000000510",
+      "window_index": 17,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": 0.986,
+          "s3": 1.0
+        },
+        "s2": {
+          "s1": 0.986,
+          "s2": 1.0,
+          "s3": 0.986
+        },
+        "s3": {
+          "s1": 1.0,
+          "s2": 0.986,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000599",
+      "start_time": "1970-01-01 00:00:00.000000540",
+      "window_index": 18,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": 0.9613,
+          "s3": 1.0
+        },
+        "s2": {
+          "s1": 0.9613,
+          "s2": 1.0,
+          "s3": 0.9613
+        },
+        "s3": {
+          "s1": 1.0,
+          "s2": 0.9613,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000629",
+      "start_time": "1970-01-01 00:00:00.000000570",
+      "window_index": 19,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": -0.1496,
+          "s3": 1.0
+        },
+        "s2": {
+          "s1": -0.1496,
+          "s2": 1.0,
+          "s3": -0.1496
+        },
+        "s3": {
+          "s1": 1.0,
+          "s2": -0.1496,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000659",
+      "start_time": "1970-01-01 00:00:00.000000600",
+      "window_index": 20,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": -0.9661,
+          "s3": 1.0
+        },
+        "s2": {
+          "s1": -0.9661,
+          "s2": 1.0,
+          "s3": -0.9661
+        },
+        "s3": {
+          "s1": 1.0,
+          "s2": -0.9661,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000689",
+      "start_time": "1970-01-01 00:00:00.000000630",
+      "window_index": 21,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": -0.9865,
+          "s3": 1.0
+        },
+        "s2": {
+          "s1": -0.9865,
+          "s2": 1.0,
+          "s3": -0.9865
+        },
+        "s3": {
+          "s1": 1.0,
+          "s2": -0.9865,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000719",
+      "start_time": "1970-01-01 00:00:00.000000660",
+      "window_index": 22,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": -0.9872,
+          "s3": 1.0
+        },
+        "s2": {
+          "s1": -0.9872,
+          "s2": 1.0,
+          "s3": -0.9872
+        },
+        "s3": {
+          "s1": 1.0,
+          "s2": -0.9872,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000749",
+      "start_time": "1970-01-01 00:00:00.000000690",
+      "window_index": 23,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": -0.973,
+          "s3": 1.0
+        },
+        "s2": {
+          "s1": -0.973,
+          "s2": 1.0,
+          "s3": -0.973
+        },
+        "s3": {
+          "s1": 1.0,
+          "s2": -0.973,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000779",
+      "start_time": "1970-01-01 00:00:00.000000720",
+      "window_index": 24,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": -0.6018,
+          "s3": 1.0
+        },
+        "s2": {
+          "s1": -0.6018,
+          "s2": 1.0,
+          "s3": -0.6018
+        },
+        "s3": {
+          "s1": 1.0,
+          "s2": -0.6018,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000809",
+      "start_time": "1970-01-01 00:00:00.000000750",
+      "window_index": 25,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": 0.9477,
+          "s3": 1.0
+        },
+        "s2": {
+          "s1": 0.9477,
+          "s2": 1.0,
+          "s3": 0.9477
+        },
+        "s3": {
+          "s1": 1.0,
+          "s2": 0.9477,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000839",
+      "start_time": "1970-01-01 00:00:00.000000780",
+      "window_index": 26,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": 0.9847,
+          "s3": 1.0
+        },
+        "s2": {
+          "s1": 0.9847,
+          "s2": 1.0,
+          "s3": 0.9847
+        },
+        "s3": {
+          "s1": 1.0,
+          "s2": 0.9847,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000869",
+      "start_time": "1970-01-01 00:00:00.000000810",
+      "window_index": 27,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": 0.9879,
+          "s3": 1.0
+        },
+        "s2": {
+          "s1": 0.9879,
+          "s2": 1.0,
+          "s3": 0.9879
+        },
+        "s3": {
+          "s1": 1.0,
+          "s2": 0.9879,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000899",
+      "start_time": "1970-01-01 00:00:00.000000840",
+      "window_index": 28,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": 0.9794,
+          "s3": 1.0
+        },
+        "s2": {
+          "s1": 0.9794,
+          "s2": 1.0,
+          "s3": 0.9794
+        },
+        "s3": {
+          "s1": 1.0,
+          "s2": 0.9794,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000929",
+      "start_time": "1970-01-01 00:00:00.000000870",
+      "window_index": 29,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": 0.8543,
+          "s3": 1.0
+        },
+        "s2": {
+          "s1": 0.8543,
+          "s2": 1.0,
+          "s3": 0.8543
+        },
+        "s3": {
+          "s1": 1.0,
+          "s2": 0.8543,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000959",
+      "start_time": "1970-01-01 00:00:00.000000900",
+      "window_index": 30,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "s1": {
+          "s1": 1.0,
+          "s2": -0.9058,
+          "s3": 1.0
+        },
+        "s2": {
+          "s1": -0.9058,
+          "s2": 1.0,
+          "s3": -0.9058
+        },
+        "s3": {
+          "s1": 1.0,
+          "s2": -0.9058,
+          "s3": 1.0
+        }
+      },
+      "end_time": "1970-01-01 00:00:00.000000989",
+      "start_time": "1970-01-01 00:00:00.000000930",
+      "window_index": 31,
+      "window_size": 60
+    }
+  ],
+  "status": "success",
+  "summary": {
+    "alerts": 20,
+    "changes": 93,
+    "correlation_results": 32,
+    "processed_rows": 1008,
+    "windows": 32
+  }
+}

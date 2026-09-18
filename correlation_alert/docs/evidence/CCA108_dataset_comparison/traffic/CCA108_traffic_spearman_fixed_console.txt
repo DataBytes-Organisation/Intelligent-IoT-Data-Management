@@ -1,0 +1,59 @@
+
+======================================================================
+Testing method=pearson, window_size=20, step_size=10
+======================================================================
+Run 1: HTTP 200 | JSON status=success | Runtime=64.788 ms
+Run 2: HTTP 200 | JSON status=success | Runtime=53.245 ms
+Run 3: HTTP 200 | JSON status=success | Runtime=54.151 ms
+
+======================================================================
+Testing method=spearman, window_size=20, step_size=10
+======================================================================
+Run 1: HTTP 200 | JSON status=success | Runtime=57.652 ms
+Run 2: HTTP 200 | JSON status=success | Runtime=71.880 ms
+Run 3: HTTP 200 | JSON status=success | Runtime=57.748 ms
+
+======================================================================
+Testing method=pearson, window_size=40, step_size=20
+======================================================================
+Run 1: HTTP 200 | JSON status=success | Runtime=32.745 ms
+Run 2: HTTP 200 | JSON status=success | Runtime=32.919 ms
+Run 3: HTTP 200 | JSON status=success | Runtime=31.416 ms
+
+======================================================================
+Testing method=spearman, window_size=40, step_size=20
+======================================================================
+Run 1: HTTP 200 | JSON status=success | Runtime=33.784 ms
+Run 2: HTTP 200 | JSON status=success | Runtime=33.420 ms
+Run 3: HTTP 200 | JSON status=success | Runtime=33.549 ms
+
+======================================================================
+Testing method=pearson, window_size=60, step_size=30
+======================================================================
+Run 1: HTTP 200 | JSON status=success | Runtime=24.067 ms
+Run 2: HTTP 200 | JSON status=success | Runtime=24.035 ms
+Run 3: HTTP 200 | JSON status=success | Runtime=24.078 ms
+
+======================================================================
+Testing method=spearman, window_size=60, step_size=30
+======================================================================
+Run 1: HTTP 200 | JSON status=success | Runtime=25.731 ms
+Run 2: HTTP 200 | JSON status=success | Runtime=25.153 ms
+Run 3: HTTP 200 | JSON status=success | Runtime=25.387 ms
+
+======================================================================================================================
+FINAL CONFIGURATION RESULTS
+======================================================================================================================
+Method      Window   Step              Status   Windows   Alerts    LOW   MEDIUM   HIGH     Avg ms
+----------------------------------------------------------------------------------------------------------------------
+Pearson         20     10             SUCCESS       184      282    200       63     19     57.395
+Spearman        20     10             SUCCESS       184      302    216       65     21     62.427
+Pearson         40     20             SUCCESS        91       91     68       19      4      32.36
+Spearman        40     20             SUCCESS        91       95     72       21      2     33.584
+Pearson         60     30             SUCCESS        60       43     38        4      1      24.06
+Spearman        60     30             SUCCESS        60       45     35       10      0     25.424
+
+Created:
+  CCA108_final_results.csv
+  CCA108_runtime_runs.csv
+  cca108_raw_evidence/

@@ -1,0 +1,7 @@
+method,window_size,step_size,status,windows,alerts,low,medium,high,average_runtime_ms,runtime_interpretation,http_codes,notes
+Pearson,20,10,SUCCESS,401,252,185,60,7,101.96,Average successful processing runtime,200|200|200,
+Spearman,20,10,SUCCESS,401,285,228,48,9,91.473,Average successful processing runtime,200|200|200,
+Pearson,40,20,SUCCESS,200,64,57,6,1,47.952,Average successful processing runtime,200|200|200,
+Spearman,40,20,SUCCESS,200,63,58,4,1,54.745,Average successful processing runtime,200|200|200,
+Pearson,60,30,SUCCESS,133,23,18,4,1,36.002,Average successful processing runtime,200|200|200,
+Spearman,60,30,SUCCESS,133,19,17,2,0,38.003,Average successful processing runtime,200|200|200,

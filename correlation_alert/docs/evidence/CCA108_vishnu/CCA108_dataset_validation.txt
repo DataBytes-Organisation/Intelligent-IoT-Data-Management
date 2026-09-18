@@ -1,0 +1,13 @@
+CCA108 DATASET VALIDATION
+=========================
+Dataset: ../datasets/complex.csv
+Rows: 1008
+Columns: ['time', 's1', 's2', 's3']
+Missing values: 0
+
+Data types:
+time      int64
+s1      float64
+s2      float64
+s3      float64
+dtype: object

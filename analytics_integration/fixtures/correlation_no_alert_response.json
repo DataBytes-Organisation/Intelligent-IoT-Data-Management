@@ -1,0 +1,19 @@
+{
+  "summary": {
+    "processed_rows": 100,
+    "windows": 12,
+    "correlation_results": 12,
+    "changes": 0,
+    "alerts": 0
+  },
+  "correlations": [
+    {
+      "window_index": 1,
+      "stream_1": "temperature",
+      "stream_2": "pressure",
+      "correlation": 0.89
+    }
+  ],
+  "changes": [],
+  "alerts": []
+}

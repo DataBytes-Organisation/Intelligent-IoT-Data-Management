@@ -1,0 +1,7313 @@
+{
+  "alerts": [
+    {
+      "alert_level": "LOW",
+      "current_corr": -0.1298,
+      "delta": 0.3291,
+      "end_time": "2014-04-10T15:09:00Z",
+      "previous_corr": 0.1993,
+      "reason": "Correlation changed by 0.33, classified as LOW severity",
+      "start_time": "2014-04-10T10:09:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 4
+    },
+    {
+      "alert_level": "MEDIUM",
+      "current_corr": 0.5568,
+      "delta": 0.6147,
+      "end_time": "2014-04-11T18:39:00Z",
+      "previous_corr": -0.0579,
+      "reason": "Correlation changed by 0.61, classified as MEDIUM severity",
+      "start_time": "2014-04-11T13:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 15
+    },
+    {
+      "alert_level": "MEDIUM",
+      "current_corr": -0.0825,
+      "delta": 0.6061,
+      "end_time": "2014-04-12T02:09:00Z",
+      "previous_corr": 0.5235,
+      "reason": "Correlation changed by 0.61, classified as MEDIUM severity",
+      "start_time": "2014-04-11T21:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 18
+    },
+    {
+      "alert_level": "LOW",
+      "current_corr": -0.2447,
+      "delta": 0.3065,
+      "end_time": "2014-04-12T04:39:00Z",
+      "previous_corr": 0.0618,
+      "reason": "Correlation changed by 0.31, classified as LOW severity",
+      "start_time": "2014-04-11T23:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 19
+    },
+    {
+      "alert_level": "LOW",
+      "current_corr": 0.0624,
+      "delta": 0.3071,
+      "end_time": "2014-04-12T07:09:00Z",
+      "previous_corr": -0.2447,
+      "reason": "Correlation changed by 0.31, classified as LOW severity",
+      "start_time": "2014-04-12T02:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 20
+    },
+    {
+      "alert_level": "LOW",
+      "current_corr": -0.1924,
+      "delta": 0.3209,
+      "end_time": "2014-04-13T00:39:00Z",
+      "previous_corr": 0.1285,
+      "reason": "Correlation changed by 0.32, classified as LOW severity",
+      "start_time": "2014-04-12T19:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 27
+    },
+    {
+      "alert_level": "LOW",
+      "current_corr": -0.036,
+      "delta": 0.3429,
+      "end_time": "2014-04-13T10:44:00Z",
+      "previous_corr": 0.3069,
+      "reason": "Correlation changed by 0.34, classified as LOW severity",
+      "start_time": "2014-04-13T05:49:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 31
+    },
+    {
+      "alert_level": "LOW",
+      "current_corr": 0.2101,
+      "delta": 0.34,
+      "end_time": "2014-04-14T14:24:00Z",
+      "previous_corr": -0.1299,
+      "reason": "Correlation changed by 0.34, classified as LOW severity",
+      "start_time": "2014-04-14T09:29:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 42
+    },
+    {
+      "alert_level": "LOW",
+      "current_corr": 0.0618,
+      "delta": 0.3116,
+      "end_time": "2014-04-15T02:54:00Z",
+      "previous_corr": -0.2498,
+      "reason": "Correlation changed by 0.31, classified as LOW severity",
+      "start_time": "2014-04-14T21:59:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 47
+    },
+    {
+      "alert_level": "LOW",
+      "current_corr": -0.3206,
+      "delta": 0.3869,
+      "end_time": "2014-04-15T07:54:00Z",
+      "previous_corr": 0.0663,
+      "reason": "Correlation changed by 0.39, classified as LOW severity",
+      "start_time": "2014-04-15T02:59:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 49
+    },
+    {
+      "alert_level": "LOW",
+      "current_corr": -0.1256,
+      "delta": 0.3248,
+      "end_time": "2014-04-16T03:54:00Z",
+      "previous_corr": -0.4503,
+      "reason": "Correlation changed by 0.32, classified as LOW severity",
+      "start_time": "2014-04-15T22:59:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 57
+    },
+    {
+      "alert_level": "HIGH",
+      "current_corr": -0.6155,
+      "delta": 0.9721,
+      "end_time": "2014-04-16T08:59:00Z",
+      "previous_corr": 0.3565,
+      "reason": "Correlation changed by 0.97, classified as HIGH severity",
+      "start_time": "2014-04-16T03:59:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 59
+    },
+    {
+      "alert_level": "LOW",
+      "current_corr": -0.2329,
+      "delta": 0.303,
+      "end_time": "2014-04-16T08:59:00Z",
+      "previous_corr": 0.0701,
+      "reason": "Correlation changed by 0.30, classified as LOW severity",
+      "start_time": "2014-04-16T03:59:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 59
+    },
+    {
+      "alert_level": "MEDIUM",
+      "current_corr": -0.0995,
+      "delta": 0.516,
+      "end_time": "2014-04-16T11:34:00Z",
+      "previous_corr": -0.6155,
+      "reason": "Correlation changed by 0.52, classified as MEDIUM severity",
+      "start_time": "2014-04-16T06:34:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 60
+    },
+    {
+      "alert_level": "LOW",
+      "current_corr": -0.2293,
+      "delta": 0.3289,
+      "end_time": "2014-04-16T11:34:00Z",
+      "previous_corr": 0.0996,
+      "reason": "Correlation changed by 0.33, classified as LOW severity",
+      "start_time": "2014-04-16T06:34:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 60
+    },
+    {
+      "alert_level": "LOW",
+      "current_corr": 0.0879,
+      "delta": 0.3172,
+      "end_time": "2014-04-16T14:04:00Z",
+      "previous_corr": -0.2293,
+      "reason": "Correlation changed by 0.32, classified as LOW severity",
+      "start_time": "2014-04-16T09:04:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 61
+    },
+    {
+      "alert_level": "LOW",
+      "current_corr": -0.1876,
+      "delta": 0.3433,
+      "end_time": "2014-04-16T19:04:00Z",
+      "previous_corr": 0.1557,
+      "reason": "Correlation changed by 0.34, classified as LOW severity",
+      "start_time": "2014-04-16T14:09:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 63
+    },
+    {
+      "alert_level": "LOW",
+      "current_corr": -0.111,
+      "delta": 0.3606,
+      "end_time": "2014-04-17T02:34:00Z",
+      "previous_corr": 0.2496,
+      "reason": "Correlation changed by 0.36, classified as LOW severity",
+      "start_time": "2014-04-16T21:39:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 66
+    },
+    {
+      "alert_level": "LOW",
+      "current_corr": 0.3931,
+      "delta": 0.4436,
+      "end_time": "2014-04-17T17:39:00Z",
+      "previous_corr": -0.0505,
+      "reason": "Correlation changed by 0.44, classified as LOW severity",
+      "start_time": "2014-04-17T12:39:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 72
+    },
+    {
+      "alert_level": "LOW",
+      "current_corr": 0.1961,
+      "delta": 0.3055,
+      "end_time": "2014-04-19T04:44:00Z",
+      "previous_corr": -0.1094,
+      "reason": "Correlation changed by 0.31, classified as LOW severity",
+      "start_time": "2014-04-18T23:49:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 86
+    },
+    {
+      "alert_level": "LOW",
+      "current_corr": 0.186,
+      "delta": 0.3429,
+      "end_time": "2014-04-21T14:19:00Z",
+      "previous_corr": -0.1568,
+      "reason": "Correlation changed by 0.34, classified as LOW severity",
+      "start_time": "2014-04-21T09:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 109
+    },
+    {
+      "alert_level": "LOW",
+      "current_corr": 0.2675,
+      "delta": 0.3708,
+      "end_time": "2014-04-22T22:49:00Z",
+      "previous_corr": -0.1033,
+      "reason": "Correlation changed by 0.37, classified as LOW severity",
+      "start_time": "2014-04-22T17:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 122
+    },
+    {
+      "alert_level": "MEDIUM",
+      "current_corr": 0.2547,
+      "delta": 0.5114,
+      "end_time": "2014-04-23T03:49:00Z",
+      "previous_corr": -0.2568,
+      "reason": "Correlation changed by 0.51, classified as MEDIUM severity",
+      "start_time": "2014-04-22T22:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 124
+    }
+  ],
+  "changes": [
+    {
+      "current_corr": -0.1029,
+      "delta": 0.2939,
+      "end_time": "2014-04-10T07:34:00Z",
+      "previous_corr": 0.1909,
+      "start_time": "2014-04-10T02:34:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 1
+    },
+    {
+      "current_corr": 0.0148,
+      "delta": 0.2193,
+      "end_time": "2014-04-10T07:34:00Z",
+      "previous_corr": -0.2045,
+      "start_time": "2014-04-10T02:34:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 1
+    },
+    {
+      "current_corr": 0.1385,
+      "delta": 0.0519,
+      "end_time": "2014-04-10T07:34:00Z",
+      "previous_corr": 0.0866,
+      "start_time": "2014-04-10T02:34:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 1
+    },
+    {
+      "current_corr": -0.0917,
+      "delta": 0.0113,
+      "end_time": "2014-04-10T10:04:00Z",
+      "previous_corr": -0.1029,
+      "start_time": "2014-04-10T05:09:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 2
+    },
+    {
+      "current_corr": 0.2425,
+      "delta": 0.2277,
+      "end_time": "2014-04-10T10:04:00Z",
+      "previous_corr": 0.0148,
+      "start_time": "2014-04-10T05:09:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 2
+    },
+    {
+      "current_corr": 0.0938,
+      "delta": 0.0447,
+      "end_time": "2014-04-10T10:04:00Z",
+      "previous_corr": 0.1385,
+      "start_time": "2014-04-10T05:09:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 2
+    },
+    {
+      "current_corr": 0.0663,
+      "delta": 0.1579,
+      "end_time": "2014-04-10T12:39:00Z",
+      "previous_corr": -0.0917,
+      "start_time": "2014-04-10T07:39:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 3
+    },
+    {
+      "current_corr": 0.1993,
+      "delta": 0.0433,
+      "end_time": "2014-04-10T12:39:00Z",
+      "previous_corr": 0.2425,
+      "start_time": "2014-04-10T07:39:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 3
+    },
+    {
+      "current_corr": -0.0579,
+      "delta": 0.1517,
+      "end_time": "2014-04-10T12:39:00Z",
+      "previous_corr": 0.0938,
+      "start_time": "2014-04-10T07:39:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 3
+    },
+    {
+      "current_corr": -0.1575,
+      "delta": 0.2238,
+      "end_time": "2014-04-10T15:09:00Z",
+      "previous_corr": 0.0663,
+      "start_time": "2014-04-10T10:09:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 4
+    },
+    {
+      "current_corr": -0.1298,
+      "delta": 0.3291,
+      "end_time": "2014-04-10T15:09:00Z",
+      "previous_corr": 0.1993,
+      "start_time": "2014-04-10T10:09:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 4
+    },
+    {
+      "current_corr": 0.0623,
+      "delta": 0.1202,
+      "end_time": "2014-04-10T15:09:00Z",
+      "previous_corr": -0.0579,
+      "start_time": "2014-04-10T10:09:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 4
+    },
+    {
+      "current_corr": 0.0436,
+      "delta": 0.2011,
+      "end_time": "2014-04-10T17:39:00Z",
+      "previous_corr": -0.1575,
+      "start_time": "2014-04-10T12:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 5
+    },
+    {
+      "current_corr": -0.1991,
+      "delta": 0.0693,
+      "end_time": "2014-04-10T17:39:00Z",
+      "previous_corr": -0.1298,
+      "start_time": "2014-04-10T12:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 5
+    },
+    {
+      "current_corr": 0.0378,
+      "delta": 0.0245,
+      "end_time": "2014-04-10T17:39:00Z",
+      "previous_corr": 0.0623,
+      "start_time": "2014-04-10T12:44:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 5
+    },
+    {
+      "current_corr": 0.3343,
+      "delta": 0.2907,
+      "end_time": "2014-04-10T20:09:00Z",
+      "previous_corr": 0.0436,
+      "start_time": "2014-04-10T15:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 6
+    },
+    {
+      "current_corr": -0.1196,
+      "delta": 0.0795,
+      "end_time": "2014-04-10T20:09:00Z",
+      "previous_corr": -0.1991,
+      "start_time": "2014-04-10T15:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 6
+    },
+    {
+      "current_corr": -0.025,
+      "delta": 0.0628,
+      "end_time": "2014-04-10T20:09:00Z",
+      "previous_corr": 0.0378,
+      "start_time": "2014-04-10T15:14:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 6
+    },
+    {
+      "current_corr": 0.2705,
+      "delta": 0.0639,
+      "end_time": "2014-04-10T22:39:00Z",
+      "previous_corr": 0.3343,
+      "start_time": "2014-04-10T17:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 7
+    },
+    {
+      "current_corr": 0.12,
+      "delta": 0.2396,
+      "end_time": "2014-04-10T22:39:00Z",
+      "previous_corr": -0.1196,
+      "start_time": "2014-04-10T17:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 7
+    },
+    {
+      "current_corr": 0.0391,
+      "delta": 0.0641,
+      "end_time": "2014-04-10T22:39:00Z",
+      "previous_corr": -0.025,
+      "start_time": "2014-04-10T17:44:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 7
+    },
+    {
+      "current_corr": 0.1124,
+      "delta": 0.1581,
+      "end_time": "2014-04-11T01:09:00Z",
+      "previous_corr": 0.2705,
+      "start_time": "2014-04-10T20:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 8
+    },
+    {
+      "current_corr": 0.1598,
+      "delta": 0.0397,
+      "end_time": "2014-04-11T01:09:00Z",
+      "previous_corr": 0.12,
+      "start_time": "2014-04-10T20:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 8
+    },
+    {
+      "current_corr": -0.0353,
+      "delta": 0.0744,
+      "end_time": "2014-04-11T01:09:00Z",
+      "previous_corr": 0.0391,
+      "start_time": "2014-04-10T20:14:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 8
+    },
+    {
+      "current_corr": -0.1154,
+      "delta": 0.2278,
+      "end_time": "2014-04-11T03:39:00Z",
+      "previous_corr": 0.1124,
+      "start_time": "2014-04-10T22:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 9
+    },
+    {
+      "current_corr": 0.0539,
+      "delta": 0.1059,
+      "end_time": "2014-04-11T03:39:00Z",
+      "previous_corr": 0.1598,
+      "start_time": "2014-04-10T22:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 9
+    },
+    {
+      "current_corr": -0.038,
+      "delta": 0.0027,
+      "end_time": "2014-04-11T03:39:00Z",
+      "previous_corr": -0.0353,
+      "start_time": "2014-04-10T22:44:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 9
+    },
+    {
+      "current_corr": -0.0263,
+      "delta": 0.0892,
+      "end_time": "2014-04-11T06:09:00Z",
+      "previous_corr": -0.1154,
+      "start_time": "2014-04-11T01:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 10
+    },
+    {
+      "current_corr": -0.0255,
+      "delta": 0.0794,
+      "end_time": "2014-04-11T06:09:00Z",
+      "previous_corr": 0.0539,
+      "start_time": "2014-04-11T01:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 10
+    },
+    {
+      "current_corr": -0.0584,
+      "delta": 0.0204,
+      "end_time": "2014-04-11T06:09:00Z",
+      "previous_corr": -0.038,
+      "start_time": "2014-04-11T01:14:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 10
+    },
+    {
+      "current_corr": 0.1624,
+      "delta": 0.1887,
+      "end_time": "2014-04-11T08:39:00Z",
+      "previous_corr": -0.0263,
+      "start_time": "2014-04-11T03:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 11
+    },
+    {
+      "current_corr": -0.0011,
+      "delta": 0.0244,
+      "end_time": "2014-04-11T08:39:00Z",
+      "previous_corr": -0.0255,
+      "start_time": "2014-04-11T03:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 11
+    },
+    {
+      "current_corr": -0.2362,
+      "delta": 0.1779,
+      "end_time": "2014-04-11T08:39:00Z",
+      "previous_corr": -0.0584,
+      "start_time": "2014-04-11T03:44:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 11
+    },
+    {
+      "current_corr": 0.1044,
+      "delta": 0.0581,
+      "end_time": "2014-04-11T11:09:00Z",
+      "previous_corr": 0.1624,
+      "start_time": "2014-04-11T06:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 12
+    },
+    {
+      "current_corr": 0.0552,
+      "delta": 0.0563,
+      "end_time": "2014-04-11T11:09:00Z",
+      "previous_corr": -0.0011,
+      "start_time": "2014-04-11T06:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 12
+    },
+    {
+      "current_corr": -0.0802,
+      "delta": 0.156,
+      "end_time": "2014-04-11T11:09:00Z",
+      "previous_corr": -0.2362,
+      "start_time": "2014-04-11T06:14:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 12
+    },
+    {
+      "current_corr": 0.0708,
+      "delta": 0.0336,
+      "end_time": "2014-04-11T13:39:00Z",
+      "previous_corr": 0.1044,
+      "start_time": "2014-04-11T08:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 13
+    },
+    {
+      "current_corr": 0.0395,
+      "delta": 0.0157,
+      "end_time": "2014-04-11T13:39:00Z",
+      "previous_corr": 0.0552,
+      "start_time": "2014-04-11T08:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 13
+    },
+    {
+      "current_corr": -0.0364,
+      "delta": 0.0438,
+      "end_time": "2014-04-11T13:39:00Z",
+      "previous_corr": -0.0802,
+      "start_time": "2014-04-11T08:44:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 13
+    },
+    {
+      "current_corr": -0.0579,
+      "delta": 0.1287,
+      "end_time": "2014-04-11T16:09:00Z",
+      "previous_corr": 0.0708,
+      "start_time": "2014-04-11T11:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 14
+    },
+    {
+      "current_corr": -0.1867,
+      "delta": 0.2262,
+      "end_time": "2014-04-11T16:09:00Z",
+      "previous_corr": 0.0395,
+      "start_time": "2014-04-11T11:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 14
+    },
+    {
+      "current_corr": 0.0,
+      "delta": 0.0364,
+      "end_time": "2014-04-11T16:09:00Z",
+      "previous_corr": -0.0364,
+      "start_time": "2014-04-11T11:14:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 14
+    },
+    {
+      "current_corr": 0.5568,
+      "delta": 0.6147,
+      "end_time": "2014-04-11T18:39:00Z",
+      "previous_corr": -0.0579,
+      "start_time": "2014-04-11T13:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 15
+    },
+    {
+      "current_corr": -0.0446,
+      "delta": 0.1421,
+      "end_time": "2014-04-11T18:39:00Z",
+      "previous_corr": -0.1867,
+      "start_time": "2014-04-11T13:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 15
+    },
+    {
+      "current_corr": -0.0426,
+      "delta": 0.0426,
+      "end_time": "2014-04-11T18:39:00Z",
+      "previous_corr": 0.0,
+      "start_time": "2014-04-11T13:44:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 15
+    },
+    {
+      "current_corr": 0.6047,
+      "delta": 0.0479,
+      "end_time": "2014-04-11T21:09:00Z",
+      "previous_corr": 0.5568,
+      "start_time": "2014-04-11T16:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 16
+    },
+    {
+      "current_corr": 0.0275,
+      "delta": 0.0722,
+      "end_time": "2014-04-11T21:09:00Z",
+      "previous_corr": -0.0446,
+      "start_time": "2014-04-11T16:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 16
+    },
+    {
+      "current_corr": -0.1272,
+      "delta": 0.0845,
+      "end_time": "2014-04-11T21:09:00Z",
+      "previous_corr": -0.0426,
+      "start_time": "2014-04-11T16:14:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 16
+    },
+    {
+      "current_corr": 0.5235,
+      "delta": 0.0811,
+      "end_time": "2014-04-11T23:39:00Z",
+      "previous_corr": 0.6047,
+      "start_time": "2014-04-11T18:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 17
+    },
+    {
+      "current_corr": 0.2843,
+      "delta": 0.2568,
+      "end_time": "2014-04-11T23:39:00Z",
+      "previous_corr": 0.0275,
+      "start_time": "2014-04-11T18:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 17
+    },
+    {
+      "current_corr": 0.0491,
+      "delta": 0.1762,
+      "end_time": "2014-04-11T23:39:00Z",
+      "previous_corr": -0.1272,
+      "start_time": "2014-04-11T18:44:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 17
+    },
+    {
+      "current_corr": -0.0825,
+      "delta": 0.6061,
+      "end_time": "2014-04-12T02:09:00Z",
+      "previous_corr": 0.5235,
+      "start_time": "2014-04-11T21:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 18
+    },
+    {
+      "current_corr": 0.0618,
+      "delta": 0.2226,
+      "end_time": "2014-04-12T02:09:00Z",
+      "previous_corr": 0.2843,
+      "start_time": "2014-04-11T21:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 18
+    },
+    {
+      "current_corr": -0.2438,
+      "delta": 0.2928,
+      "end_time": "2014-04-12T02:09:00Z",
+      "previous_corr": 0.0491,
+      "start_time": "2014-04-11T21:14:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 18
+    },
+    {
+      "current_corr": 0.0026,
+      "delta": 0.0851,
+      "end_time": "2014-04-12T04:39:00Z",
+      "previous_corr": -0.0825,
+      "start_time": "2014-04-11T23:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 19
+    },
+    {
+      "current_corr": -0.2447,
+      "delta": 0.3065,
+      "end_time": "2014-04-12T04:39:00Z",
+      "previous_corr": 0.0618,
+      "start_time": "2014-04-11T23:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 19
+    },
+    {
+      "current_corr": -0.0662,
+      "delta": 0.1776,
+      "end_time": "2014-04-12T04:39:00Z",
+      "previous_corr": -0.2438,
+      "start_time": "2014-04-11T23:44:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 19
+    },
+    {
+      "current_corr": 0.2323,
+      "delta": 0.2297,
+      "end_time": "2014-04-12T07:09:00Z",
+      "previous_corr": 0.0026,
+      "start_time": "2014-04-12T02:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 20
+    },
+    {
+      "current_corr": 0.0624,
+      "delta": 0.3071,
+      "end_time": "2014-04-12T07:09:00Z",
+      "previous_corr": -0.2447,
+      "start_time": "2014-04-12T02:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 20
+    },
+    {
+      "current_corr": -0.1002,
+      "delta": 0.034,
+      "end_time": "2014-04-12T07:09:00Z",
+      "previous_corr": -0.0662,
+      "start_time": "2014-04-12T02:14:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 20
+    },
+    {
+      "current_corr": 0.1704,
+      "delta": 0.062,
+      "end_time": "2014-04-12T09:39:00Z",
+      "previous_corr": 0.2323,
+      "start_time": "2014-04-12T04:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 21
+    },
+    {
+      "current_corr": 0.0653,
+      "delta": 0.0029,
+      "end_time": "2014-04-12T09:39:00Z",
+      "previous_corr": 0.0624,
+      "start_time": "2014-04-12T04:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 21
+    },
+    {
+      "current_corr": -0.0937,
+      "delta": 0.0065,
+      "end_time": "2014-04-12T09:39:00Z",
+      "previous_corr": -0.1002,
+      "start_time": "2014-04-12T04:44:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 21
+    },
+    {
+      "current_corr": 0.06,
+      "delta": 0.1104,
+      "end_time": "2014-04-12T12:09:00Z",
+      "previous_corr": 0.1704,
+      "start_time": "2014-04-12T07:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 22
+    },
+    {
+      "current_corr": 0.224,
+      "delta": 0.1587,
+      "end_time": "2014-04-12T12:09:00Z",
+      "previous_corr": 0.0653,
+      "start_time": "2014-04-12T07:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 22
+    },
+    {
+      "current_corr": 0.1266,
+      "delta": 0.2203,
+      "end_time": "2014-04-12T12:09:00Z",
+      "previous_corr": -0.0937,
+      "start_time": "2014-04-12T07:14:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 22
+    },
+    {
+      "current_corr": -0.0132,
+      "delta": 0.0732,
+      "end_time": "2014-04-12T14:39:00Z",
+      "previous_corr": 0.06,
+      "start_time": "2014-04-12T09:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 23
+    },
+    {
+      "current_corr": 0.295,
+      "delta": 0.071,
+      "end_time": "2014-04-12T14:39:00Z",
+      "previous_corr": 0.224,
+      "start_time": "2014-04-12T09:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 23
+    },
+    {
+      "current_corr": 0.0669,
+      "delta": 0.0597,
+      "end_time": "2014-04-12T14:39:00Z",
+      "previous_corr": 0.1266,
+      "start_time": "2014-04-12T09:44:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 23
+    },
+    {
+      "current_corr": -0.0133,
+      "delta": 0.0001,
+      "end_time": "2014-04-12T17:09:00Z",
+      "previous_corr": -0.0132,
+      "start_time": "2014-04-12T12:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 24
+    },
+    {
+      "current_corr": 0.2551,
+      "delta": 0.0399,
+      "end_time": "2014-04-12T17:09:00Z",
+      "previous_corr": 0.295,
+      "start_time": "2014-04-12T12:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 24
+    },
+    {
+      "current_corr": 0.0225,
+      "delta": 0.0444,
+      "end_time": "2014-04-12T17:09:00Z",
+      "previous_corr": 0.0669,
+      "start_time": "2014-04-12T12:14:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 24
+    },
+    {
+      "current_corr": 0.073,
+      "delta": 0.0863,
+      "end_time": "2014-04-12T19:39:00Z",
+      "previous_corr": -0.0133,
+      "start_time": "2014-04-12T14:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 25
+    },
+    {
+      "current_corr": 0.268,
+      "delta": 0.0129,
+      "end_time": "2014-04-12T19:39:00Z",
+      "previous_corr": 0.2551,
+      "start_time": "2014-04-12T14:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 25
+    },
+    {
+      "current_corr": -0.202,
+      "delta": 0.2245,
+      "end_time": "2014-04-12T19:39:00Z",
+      "previous_corr": 0.0225,
+      "start_time": "2014-04-12T14:44:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 25
+    },
+    {
+      "current_corr": -0.0029,
+      "delta": 0.0759,
+      "end_time": "2014-04-12T22:09:00Z",
+      "previous_corr": 0.073,
+      "start_time": "2014-04-12T17:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 26
+    },
+    {
+      "current_corr": 0.1285,
+      "delta": 0.1394,
+      "end_time": "2014-04-12T22:09:00Z",
+      "previous_corr": 0.268,
+      "start_time": "2014-04-12T17:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 26
+    },
+    {
+      "current_corr": -0.1809,
+      "delta": 0.0211,
+      "end_time": "2014-04-12T22:09:00Z",
+      "previous_corr": -0.202,
+      "start_time": "2014-04-12T17:14:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 26
+    },
+    {
+      "current_corr": 0.0325,
+      "delta": 0.0355,
+      "end_time": "2014-04-13T00:39:00Z",
+      "previous_corr": -0.0029,
+      "start_time": "2014-04-12T19:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 27
+    },
+    {
+      "current_corr": -0.1924,
+      "delta": 0.3209,
+      "end_time": "2014-04-13T00:39:00Z",
+      "previous_corr": 0.1285,
+      "start_time": "2014-04-12T19:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 27
+    },
+    {
+      "current_corr": 0.0474,
+      "delta": 0.2283,
+      "end_time": "2014-04-13T00:39:00Z",
+      "previous_corr": -0.1809,
+      "start_time": "2014-04-12T19:44:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 27
+    },
+    {
+      "current_corr": -0.0065,
+      "delta": 0.0391,
+      "end_time": "2014-04-13T03:09:00Z",
+      "previous_corr": 0.0325,
+      "start_time": "2014-04-12T22:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 28
+    },
+    {
+      "current_corr": -0.0429,
+      "delta": 0.1496,
+      "end_time": "2014-04-13T03:09:00Z",
+      "previous_corr": -0.1924,
+      "start_time": "2014-04-12T22:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 28
+    },
+    {
+      "current_corr": -0.0125,
+      "delta": 0.0599,
+      "end_time": "2014-04-13T03:09:00Z",
+      "previous_corr": 0.0474,
+      "start_time": "2014-04-12T22:14:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 28
+    },
+    {
+      "current_corr": -0.0663,
+      "delta": 0.0598,
+      "end_time": "2014-04-13T05:44:00Z",
+      "previous_corr": -0.0065,
+      "start_time": "2014-04-13T00:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 29
+    },
+    {
+      "current_corr": -0.1702,
+      "delta": 0.1273,
+      "end_time": "2014-04-13T05:44:00Z",
+      "previous_corr": -0.0429,
+      "start_time": "2014-04-13T00:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 29
+    },
+    {
+      "current_corr": 0.1288,
+      "delta": 0.1413,
+      "end_time": "2014-04-13T05:44:00Z",
+      "previous_corr": -0.0125,
+      "start_time": "2014-04-13T00:44:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 29
+    },
+    {
+      "current_corr": -0.0284,
+      "delta": 0.0379,
+      "end_time": "2014-04-13T08:14:00Z",
+      "previous_corr": -0.0663,
+      "start_time": "2014-04-13T03:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 30
+    },
+    {
+      "current_corr": -0.0988,
+      "delta": 0.0714,
+      "end_time": "2014-04-13T08:14:00Z",
+      "previous_corr": -0.1702,
+      "start_time": "2014-04-13T03:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 30
+    },
+    {
+      "current_corr": 0.3069,
+      "delta": 0.1782,
+      "end_time": "2014-04-13T08:14:00Z",
+      "previous_corr": 0.1288,
+      "start_time": "2014-04-13T03:14:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 30
+    },
+    {
+      "current_corr": -0.0301,
+      "delta": 0.0016,
+      "end_time": "2014-04-13T10:44:00Z",
+      "previous_corr": -0.0284,
+      "start_time": "2014-04-13T05:49:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 31
+    },
+    {
+      "current_corr": -0.0583,
+      "delta": 0.0404,
+      "end_time": "2014-04-13T10:44:00Z",
+      "previous_corr": -0.0988,
+      "start_time": "2014-04-13T05:49:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 31
+    },
+    {
+      "current_corr": -0.036,
+      "delta": 0.3429,
+      "end_time": "2014-04-13T10:44:00Z",
+      "previous_corr": 0.3069,
+      "start_time": "2014-04-13T05:49:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 31
+    },
+    {
+      "current_corr": 0.1579,
+      "delta": 0.188,
+      "end_time": "2014-04-13T13:14:00Z",
+      "previous_corr": -0.0301,
+      "start_time": "2014-04-13T08:19:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 32
+    },
+    {
+      "current_corr": -0.026,
+      "delta": 0.0323,
+      "end_time": "2014-04-13T13:14:00Z",
+      "previous_corr": -0.0583,
+      "start_time": "2014-04-13T08:19:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 32
+    },
+    {
+      "current_corr": -0.1274,
+      "delta": 0.0914,
+      "end_time": "2014-04-13T13:14:00Z",
+      "previous_corr": -0.036,
+      "start_time": "2014-04-13T08:19:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 32
+    },
+    {
+      "current_corr": 0.0396,
+      "delta": 0.1184,
+      "end_time": "2014-04-13T15:44:00Z",
+      "previous_corr": 0.1579,
+      "start_time": "2014-04-13T10:49:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 33
+    },
+    {
+      "current_corr": 0.1045,
+      "delta": 0.1305,
+      "end_time": "2014-04-13T15:44:00Z",
+      "previous_corr": -0.026,
+      "start_time": "2014-04-13T10:49:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 33
+    },
+    {
+      "current_corr": 0.0041,
+      "delta": 0.1316,
+      "end_time": "2014-04-13T15:44:00Z",
+      "previous_corr": -0.1274,
+      "start_time": "2014-04-13T10:49:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 33
+    },
+    {
+      "current_corr": 0.1392,
+      "delta": 0.0997,
+      "end_time": "2014-04-13T18:14:00Z",
+      "previous_corr": 0.0396,
+      "start_time": "2014-04-13T13:19:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 34
+    },
+    {
+      "current_corr": 0.1644,
+      "delta": 0.0599,
+      "end_time": "2014-04-13T18:14:00Z",
+      "previous_corr": 0.1045,
+      "start_time": "2014-04-13T13:19:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 34
+    },
+    {
+      "current_corr": -0.0242,
+      "delta": 0.0283,
+      "end_time": "2014-04-13T18:14:00Z",
+      "previous_corr": 0.0041,
+      "start_time": "2014-04-13T13:19:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 34
+    },
+    {
+      "current_corr": -0.0269,
+      "delta": 0.1662,
+      "end_time": "2014-04-13T20:44:00Z",
+      "previous_corr": 0.1392,
+      "start_time": "2014-04-13T15:49:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 35
+    },
+    {
+      "current_corr": -0.0366,
+      "delta": 0.201,
+      "end_time": "2014-04-13T20:44:00Z",
+      "previous_corr": 0.1644,
+      "start_time": "2014-04-13T15:49:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 35
+    },
+    {
+      "current_corr": -0.215,
+      "delta": 0.1908,
+      "end_time": "2014-04-13T20:44:00Z",
+      "previous_corr": -0.0242,
+      "start_time": "2014-04-13T15:49:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 35
+    },
+    {
+      "current_corr": -0.0199,
+      "delta": 0.007,
+      "end_time": "2014-04-13T23:19:00Z",
+      "previous_corr": -0.0269,
+      "start_time": "2014-04-13T18:19:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 36
+    },
+    {
+      "current_corr": -0.1615,
+      "delta": 0.1248,
+      "end_time": "2014-04-13T23:19:00Z",
+      "previous_corr": -0.0366,
+      "start_time": "2014-04-13T18:19:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 36
+    },
+    {
+      "current_corr": -0.0064,
+      "delta": 0.2086,
+      "end_time": "2014-04-13T23:19:00Z",
+      "previous_corr": -0.215,
+      "start_time": "2014-04-13T18:19:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 36
+    },
+    {
+      "current_corr": -0.2454,
+      "delta": 0.2255,
+      "end_time": "2014-04-14T01:54:00Z",
+      "previous_corr": -0.0199,
+      "start_time": "2014-04-13T20:49:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 37
+    },
+    {
+      "current_corr": -0.0873,
+      "delta": 0.0742,
+      "end_time": "2014-04-14T01:54:00Z",
+      "previous_corr": -0.1615,
+      "start_time": "2014-04-13T20:49:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 37
+    },
+    {
+      "current_corr": -0.0546,
+      "delta": 0.0483,
+      "end_time": "2014-04-14T01:54:00Z",
+      "previous_corr": -0.0064,
+      "start_time": "2014-04-13T20:49:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 37
+    },
+    {
+      "current_corr": -0.0583,
+      "delta": 0.1871,
+      "end_time": "2014-04-14T04:24:00Z",
+      "previous_corr": -0.2454,
+      "start_time": "2014-04-13T23:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 38
+    },
+    {
+      "current_corr": -0.1159,
+      "delta": 0.0285,
+      "end_time": "2014-04-14T04:24:00Z",
+      "previous_corr": -0.0873,
+      "start_time": "2014-04-13T23:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 38
+    },
+    {
+      "current_corr": 0.0258,
+      "delta": 0.0804,
+      "end_time": "2014-04-14T04:24:00Z",
+      "previous_corr": -0.0546,
+      "start_time": "2014-04-13T23:24:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 38
+    },
+    {
+      "current_corr": 0.0002,
+      "delta": 0.0585,
+      "end_time": "2014-04-14T06:54:00Z",
+      "previous_corr": -0.0583,
+      "start_time": "2014-04-14T01:59:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 39
+    },
+    {
+      "current_corr": -0.1712,
+      "delta": 0.0554,
+      "end_time": "2014-04-14T06:54:00Z",
+      "previous_corr": -0.1159,
+      "start_time": "2014-04-14T01:59:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 39
+    },
+    {
+      "current_corr": 0.1482,
+      "delta": 0.1224,
+      "end_time": "2014-04-14T06:54:00Z",
+      "previous_corr": 0.0258,
+      "start_time": "2014-04-14T01:59:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 39
+    },
+    {
+      "current_corr": -0.1773,
+      "delta": 0.1775,
+      "end_time": "2014-04-14T09:24:00Z",
+      "previous_corr": 0.0002,
+      "start_time": "2014-04-14T04:29:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 40
+    },
+    {
+      "current_corr": -0.0907,
+      "delta": 0.0805,
+      "end_time": "2014-04-14T09:24:00Z",
+      "previous_corr": -0.1712,
+      "start_time": "2014-04-14T04:29:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 40
+    },
+    {
+      "current_corr": -0.1238,
+      "delta": 0.272,
+      "end_time": "2014-04-14T09:24:00Z",
+      "previous_corr": 0.1482,
+      "start_time": "2014-04-14T04:29:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 40
+    },
+    {
+      "current_corr": -0.0336,
+      "delta": 0.1437,
+      "end_time": "2014-04-14T11:54:00Z",
+      "previous_corr": -0.1773,
+      "start_time": "2014-04-14T06:59:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 41
+    },
+    {
+      "current_corr": 0.1413,
+      "delta": 0.232,
+      "end_time": "2014-04-14T11:54:00Z",
+      "previous_corr": -0.0907,
+      "start_time": "2014-04-14T06:59:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 41
+    },
+    {
+      "current_corr": -0.1299,
+      "delta": 0.0061,
+      "end_time": "2014-04-14T11:54:00Z",
+      "previous_corr": -0.1238,
+      "start_time": "2014-04-14T06:59:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 41
+    },
+    {
+      "current_corr": 0.0182,
+      "delta": 0.0517,
+      "end_time": "2014-04-14T14:24:00Z",
+      "previous_corr": -0.0336,
+      "start_time": "2014-04-14T09:29:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 42
+    },
+    {
+      "current_corr": 0.3515,
+      "delta": 0.2102,
+      "end_time": "2014-04-14T14:24:00Z",
+      "previous_corr": 0.1413,
+      "start_time": "2014-04-14T09:29:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 42
+    },
+    {
+      "current_corr": 0.2101,
+      "delta": 0.34,
+      "end_time": "2014-04-14T14:24:00Z",
+      "previous_corr": -0.1299,
+      "start_time": "2014-04-14T09:29:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 42
+    },
+    {
+      "current_corr": -0.0925,
+      "delta": 0.1107,
+      "end_time": "2014-04-14T16:54:00Z",
+      "previous_corr": 0.0182,
+      "start_time": "2014-04-14T11:59:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 43
+    },
+    {
+      "current_corr": 0.2955,
+      "delta": 0.056,
+      "end_time": "2014-04-14T16:54:00Z",
+      "previous_corr": 0.3515,
+      "start_time": "2014-04-14T11:59:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 43
+    },
+    {
+      "current_corr": 0.0704,
+      "delta": 0.1397,
+      "end_time": "2014-04-14T16:54:00Z",
+      "previous_corr": 0.2101,
+      "start_time": "2014-04-14T11:59:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 43
+    },
+    {
+      "current_corr": -0.0091,
+      "delta": 0.0835,
+      "end_time": "2014-04-14T19:24:00Z",
+      "previous_corr": -0.0925,
+      "start_time": "2014-04-14T14:29:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 44
+    },
+    {
+      "current_corr": 0.1781,
+      "delta": 0.1175,
+      "end_time": "2014-04-14T19:24:00Z",
+      "previous_corr": 0.2955,
+      "start_time": "2014-04-14T14:29:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 44
+    },
+    {
+      "current_corr": -0.0255,
+      "delta": 0.0959,
+      "end_time": "2014-04-14T19:24:00Z",
+      "previous_corr": 0.0704,
+      "start_time": "2014-04-14T14:29:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 44
+    },
+    {
+      "current_corr": 0.0731,
+      "delta": 0.0821,
+      "end_time": "2014-04-14T21:54:00Z",
+      "previous_corr": -0.0091,
+      "start_time": "2014-04-14T16:59:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 45
+    },
+    {
+      "current_corr": -0.0871,
+      "delta": 0.2652,
+      "end_time": "2014-04-14T21:54:00Z",
+      "previous_corr": 0.1781,
+      "start_time": "2014-04-14T16:59:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 45
+    },
+    {
+      "current_corr": -0.0791,
+      "delta": 0.0536,
+      "end_time": "2014-04-14T21:54:00Z",
+      "previous_corr": -0.0255,
+      "start_time": "2014-04-14T16:59:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 45
+    },
+    {
+      "current_corr": -0.1756,
+      "delta": 0.2487,
+      "end_time": "2014-04-15T00:24:00Z",
+      "previous_corr": 0.0731,
+      "start_time": "2014-04-14T19:29:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 46
+    },
+    {
+      "current_corr": -0.2498,
+      "delta": 0.1627,
+      "end_time": "2014-04-15T00:24:00Z",
+      "previous_corr": -0.0871,
+      "start_time": "2014-04-14T19:29:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 46
+    },
+    {
+      "current_corr": 0.0358,
+      "delta": 0.1148,
+      "end_time": "2014-04-15T00:24:00Z",
+      "previous_corr": -0.0791,
+      "start_time": "2014-04-14T19:29:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 46
+    },
+    {
+      "current_corr": 0.1057,
+      "delta": 0.2813,
+      "end_time": "2014-04-15T02:54:00Z",
+      "previous_corr": -0.1756,
+      "start_time": "2014-04-14T21:59:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 47
+    },
+    {
+      "current_corr": 0.0618,
+      "delta": 0.3116,
+      "end_time": "2014-04-15T02:54:00Z",
+      "previous_corr": -0.2498,
+      "start_time": "2014-04-14T21:59:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 47
+    },
+    {
+      "current_corr": 0.0058,
+      "delta": 0.0299,
+      "end_time": "2014-04-15T02:54:00Z",
+      "previous_corr": 0.0358,
+      "start_time": "2014-04-14T21:59:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 47
+    },
+    {
+      "current_corr": 0.0663,
+      "delta": 0.0394,
+      "end_time": "2014-04-15T05:24:00Z",
+      "previous_corr": 0.1057,
+      "start_time": "2014-04-15T00:29:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 48
+    },
+    {
+      "current_corr": 0.1298,
+      "delta": 0.0681,
+      "end_time": "2014-04-15T05:24:00Z",
+      "previous_corr": 0.0618,
+      "start_time": "2014-04-15T00:29:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 48
+    },
+    {
+      "current_corr": -0.0968,
+      "delta": 0.1027,
+      "end_time": "2014-04-15T05:24:00Z",
+      "previous_corr": 0.0058,
+      "start_time": "2014-04-15T00:29:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 48
+    },
+    {
+      "current_corr": -0.3206,
+      "delta": 0.3869,
+      "end_time": "2014-04-15T07:54:00Z",
+      "previous_corr": 0.0663,
+      "start_time": "2014-04-15T02:59:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 49
+    },
+    {
+      "current_corr": -0.0892,
+      "delta": 0.219,
+      "end_time": "2014-04-15T07:54:00Z",
+      "previous_corr": 0.1298,
+      "start_time": "2014-04-15T02:59:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 49
+    },
+    {
+      "current_corr": -0.0351,
+      "delta": 0.0617,
+      "end_time": "2014-04-15T07:54:00Z",
+      "previous_corr": -0.0968,
+      "start_time": "2014-04-15T02:59:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 49
+    },
+    {
+      "current_corr": -0.2775,
+      "delta": 0.0431,
+      "end_time": "2014-04-15T10:24:00Z",
+      "previous_corr": -0.3206,
+      "start_time": "2014-04-15T05:29:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 50
+    },
+    {
+      "current_corr": -0.1424,
+      "delta": 0.0532,
+      "end_time": "2014-04-15T10:24:00Z",
+      "previous_corr": -0.0892,
+      "start_time": "2014-04-15T05:29:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 50
+    },
+    {
+      "current_corr": 0.1548,
+      "delta": 0.19,
+      "end_time": "2014-04-15T10:24:00Z",
+      "previous_corr": -0.0351,
+      "start_time": "2014-04-15T05:29:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 50
+    },
+    {
+      "current_corr": -0.1067,
+      "delta": 0.1708,
+      "end_time": "2014-04-15T12:54:00Z",
+      "previous_corr": -0.2775,
+      "start_time": "2014-04-15T07:59:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 51
+    },
+    {
+      "current_corr": -0.0354,
+      "delta": 0.107,
+      "end_time": "2014-04-15T12:54:00Z",
+      "previous_corr": -0.1424,
+      "start_time": "2014-04-15T07:59:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 51
+    },
+    {
+      "current_corr": 0.1021,
+      "delta": 0.0528,
+      "end_time": "2014-04-15T12:54:00Z",
+      "previous_corr": 0.1548,
+      "start_time": "2014-04-15T07:59:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 51
+    },
+    {
+      "current_corr": -0.2017,
+      "delta": 0.095,
+      "end_time": "2014-04-15T15:24:00Z",
+      "previous_corr": -0.1067,
+      "start_time": "2014-04-15T10:29:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 52
+    },
+    {
+      "current_corr": 0.1678,
+      "delta": 0.2032,
+      "end_time": "2014-04-15T15:24:00Z",
+      "previous_corr": -0.0354,
+      "start_time": "2014-04-15T10:29:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 52
+    },
+    {
+      "current_corr": 0.1416,
+      "delta": 0.0395,
+      "end_time": "2014-04-15T15:24:00Z",
+      "previous_corr": 0.1021,
+      "start_time": "2014-04-15T10:29:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 52
+    },
+    {
+      "current_corr": -0.2221,
+      "delta": 0.0204,
+      "end_time": "2014-04-15T17:54:00Z",
+      "previous_corr": -0.2017,
+      "start_time": "2014-04-15T12:59:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 53
+    },
+    {
+      "current_corr": 0.0783,
+      "delta": 0.0894,
+      "end_time": "2014-04-15T17:54:00Z",
+      "previous_corr": 0.1678,
+      "start_time": "2014-04-15T12:59:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 53
+    },
+    {
+      "current_corr": 0.1,
+      "delta": 0.0416,
+      "end_time": "2014-04-15T17:54:00Z",
+      "previous_corr": 0.1416,
+      "start_time": "2014-04-15T12:59:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 53
+    },
+    {
+      "current_corr": -0.0194,
+      "delta": 0.2027,
+      "end_time": "2014-04-15T20:24:00Z",
+      "previous_corr": -0.2221,
+      "start_time": "2014-04-15T15:29:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 54
+    },
+    {
+      "current_corr": 0.0214,
+      "delta": 0.0569,
+      "end_time": "2014-04-15T20:24:00Z",
+      "previous_corr": 0.0783,
+      "start_time": "2014-04-15T15:29:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 54
+    },
+    {
+      "current_corr": -0.0688,
+      "delta": 0.1688,
+      "end_time": "2014-04-15T20:24:00Z",
+      "previous_corr": 0.1,
+      "start_time": "2014-04-15T15:29:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 54
+    },
+    {
+      "current_corr": -0.0013,
+      "delta": 0.0181,
+      "end_time": "2014-04-15T22:54:00Z",
+      "previous_corr": -0.0194,
+      "start_time": "2014-04-15T17:59:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 55
+    },
+    {
+      "current_corr": -0.0261,
+      "delta": 0.0475,
+      "end_time": "2014-04-15T22:54:00Z",
+      "previous_corr": 0.0214,
+      "start_time": "2014-04-15T17:59:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 55
+    },
+    {
+      "current_corr": -0.2143,
+      "delta": 0.1455,
+      "end_time": "2014-04-15T22:54:00Z",
+      "previous_corr": -0.0688,
+      "start_time": "2014-04-15T17:59:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 55
+    },
+    {
+      "current_corr": 0.047,
+      "delta": 0.0483,
+      "end_time": "2014-04-16T01:24:00Z",
+      "previous_corr": -0.0013,
+      "start_time": "2014-04-15T20:29:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 56
+    },
+    {
+      "current_corr": 0.0676,
+      "delta": 0.0937,
+      "end_time": "2014-04-16T01:24:00Z",
+      "previous_corr": -0.0261,
+      "start_time": "2014-04-15T20:29:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 56
+    },
+    {
+      "current_corr": -0.4503,
+      "delta": 0.2361,
+      "end_time": "2014-04-16T01:24:00Z",
+      "previous_corr": -0.2143,
+      "start_time": "2014-04-15T20:29:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 56
+    },
+    {
+      "current_corr": 0.1843,
+      "delta": 0.1373,
+      "end_time": "2014-04-16T03:54:00Z",
+      "previous_corr": 0.047,
+      "start_time": "2014-04-15T22:59:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 57
+    },
+    {
+      "current_corr": 0.0873,
+      "delta": 0.0197,
+      "end_time": "2014-04-16T03:54:00Z",
+      "previous_corr": 0.0676,
+      "start_time": "2014-04-15T22:59:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 57
+    },
+    {
+      "current_corr": -0.1256,
+      "delta": 0.3248,
+      "end_time": "2014-04-16T03:54:00Z",
+      "previous_corr": -0.4503,
+      "start_time": "2014-04-15T22:59:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 57
+    },
+    {
+      "current_corr": 0.3565,
+      "delta": 0.1722,
+      "end_time": "2014-04-16T06:29:00Z",
+      "previous_corr": 0.1843,
+      "start_time": "2014-04-16T01:29:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 58
+    },
+    {
+      "current_corr": 0.1015,
+      "delta": 0.0142,
+      "end_time": "2014-04-16T06:29:00Z",
+      "previous_corr": 0.0873,
+      "start_time": "2014-04-16T01:29:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 58
+    },
+    {
+      "current_corr": 0.0701,
+      "delta": 0.1957,
+      "end_time": "2014-04-16T06:29:00Z",
+      "previous_corr": -0.1256,
+      "start_time": "2014-04-16T01:29:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 58
+    },
+    {
+      "current_corr": -0.6155,
+      "delta": 0.9721,
+      "end_time": "2014-04-16T08:59:00Z",
+      "previous_corr": 0.3565,
+      "start_time": "2014-04-16T03:59:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 59
+    },
+    {
+      "current_corr": 0.0996,
+      "delta": 0.0019,
+      "end_time": "2014-04-16T08:59:00Z",
+      "previous_corr": 0.1015,
+      "start_time": "2014-04-16T03:59:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 59
+    },
+    {
+      "current_corr": -0.2329,
+      "delta": 0.303,
+      "end_time": "2014-04-16T08:59:00Z",
+      "previous_corr": 0.0701,
+      "start_time": "2014-04-16T03:59:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 59
+    },
+    {
+      "current_corr": -0.0995,
+      "delta": 0.516,
+      "end_time": "2014-04-16T11:34:00Z",
+      "previous_corr": -0.6155,
+      "start_time": "2014-04-16T06:34:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 60
+    },
+    {
+      "current_corr": -0.2293,
+      "delta": 0.3289,
+      "end_time": "2014-04-16T11:34:00Z",
+      "previous_corr": 0.0996,
+      "start_time": "2014-04-16T06:34:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 60
+    },
+    {
+      "current_corr": -0.1018,
+      "delta": 0.1312,
+      "end_time": "2014-04-16T11:34:00Z",
+      "previous_corr": -0.2329,
+      "start_time": "2014-04-16T06:34:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 60
+    },
+    {
+      "current_corr": 0.0359,
+      "delta": 0.1355,
+      "end_time": "2014-04-16T14:04:00Z",
+      "previous_corr": -0.0995,
+      "start_time": "2014-04-16T09:04:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 61
+    },
+    {
+      "current_corr": 0.0879,
+      "delta": 0.3172,
+      "end_time": "2014-04-16T14:04:00Z",
+      "previous_corr": -0.2293,
+      "start_time": "2014-04-16T09:04:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 61
+    },
+    {
+      "current_corr": 0.0138,
+      "delta": 0.1156,
+      "end_time": "2014-04-16T14:04:00Z",
+      "previous_corr": -0.1018,
+      "start_time": "2014-04-16T09:04:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 61
+    },
+    {
+      "current_corr": 0.2842,
+      "delta": 0.2483,
+      "end_time": "2014-04-16T16:34:00Z",
+      "previous_corr": 0.0359,
+      "start_time": "2014-04-16T11:39:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 62
+    },
+    {
+      "current_corr": 0.1557,
+      "delta": 0.0678,
+      "end_time": "2014-04-16T16:34:00Z",
+      "previous_corr": 0.0879,
+      "start_time": "2014-04-16T11:39:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 62
+    },
+    {
+      "current_corr": 0.2585,
+      "delta": 0.2446,
+      "end_time": "2014-04-16T16:34:00Z",
+      "previous_corr": 0.0138,
+      "start_time": "2014-04-16T11:39:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 62
+    },
+    {
+      "current_corr": 0.0512,
+      "delta": 0.233,
+      "end_time": "2014-04-16T19:04:00Z",
+      "previous_corr": 0.2842,
+      "start_time": "2014-04-16T14:09:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 63
+    },
+    {
+      "current_corr": -0.1876,
+      "delta": 0.3433,
+      "end_time": "2014-04-16T19:04:00Z",
+      "previous_corr": 0.1557,
+      "start_time": "2014-04-16T14:09:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 63
+    },
+    {
+      "current_corr": 0.0377,
+      "delta": 0.2208,
+      "end_time": "2014-04-16T19:04:00Z",
+      "previous_corr": 0.2585,
+      "start_time": "2014-04-16T14:09:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 63
+    },
+    {
+      "current_corr": 0.2247,
+      "delta": 0.1734,
+      "end_time": "2014-04-16T21:34:00Z",
+      "previous_corr": 0.0512,
+      "start_time": "2014-04-16T16:39:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 64
+    },
+    {
+      "current_corr": -0.0404,
+      "delta": 0.1471,
+      "end_time": "2014-04-16T21:34:00Z",
+      "previous_corr": -0.1876,
+      "start_time": "2014-04-16T16:39:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 64
+    },
+    {
+      "current_corr": 0.0614,
+      "delta": 0.0237,
+      "end_time": "2014-04-16T21:34:00Z",
+      "previous_corr": 0.0377,
+      "start_time": "2014-04-16T16:39:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 64
+    },
+    {
+      "current_corr": 0.2496,
+      "delta": 0.0249,
+      "end_time": "2014-04-17T00:04:00Z",
+      "previous_corr": 0.2247,
+      "start_time": "2014-04-16T19:09:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 65
+    },
+    {
+      "current_corr": 0.1999,
+      "delta": 0.2404,
+      "end_time": "2014-04-17T00:04:00Z",
+      "previous_corr": -0.0404,
+      "start_time": "2014-04-16T19:09:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 65
+    },
+    {
+      "current_corr": 0.2415,
+      "delta": 0.1801,
+      "end_time": "2014-04-17T00:04:00Z",
+      "previous_corr": 0.0614,
+      "start_time": "2014-04-16T19:09:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 65
+    },
+    {
+      "current_corr": -0.111,
+      "delta": 0.3606,
+      "end_time": "2014-04-17T02:34:00Z",
+      "previous_corr": 0.2496,
+      "start_time": "2014-04-16T21:39:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 66
+    },
+    {
+      "current_corr": 0.0522,
+      "delta": 0.1477,
+      "end_time": "2014-04-17T02:34:00Z",
+      "previous_corr": 0.1999,
+      "start_time": "2014-04-16T21:39:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 66
+    },
+    {
+      "current_corr": 0.0596,
+      "delta": 0.1819,
+      "end_time": "2014-04-17T02:34:00Z",
+      "previous_corr": 0.2415,
+      "start_time": "2014-04-16T21:39:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 66
+    },
+    {
+      "current_corr": -0.0617,
+      "delta": 0.0493,
+      "end_time": "2014-04-17T05:04:00Z",
+      "previous_corr": -0.111,
+      "start_time": "2014-04-17T00:09:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 67
+    },
+    {
+      "current_corr": 0.1217,
+      "delta": 0.0695,
+      "end_time": "2014-04-17T05:04:00Z",
+      "previous_corr": 0.0522,
+      "start_time": "2014-04-17T00:09:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 67
+    },
+    {
+      "current_corr": 0.1256,
+      "delta": 0.066,
+      "end_time": "2014-04-17T05:04:00Z",
+      "previous_corr": 0.0596,
+      "start_time": "2014-04-17T00:09:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 67
+    },
+    {
+      "current_corr": -0.1496,
+      "delta": 0.0878,
+      "end_time": "2014-04-17T07:34:00Z",
+      "previous_corr": -0.0617,
+      "start_time": "2014-04-17T02:39:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 68
+    },
+    {
+      "current_corr": 0.2512,
+      "delta": 0.1295,
+      "end_time": "2014-04-17T07:34:00Z",
+      "previous_corr": 0.1217,
+      "start_time": "2014-04-17T02:39:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 68
+    },
+    {
+      "current_corr": 0.0487,
+      "delta": 0.0769,
+      "end_time": "2014-04-17T07:34:00Z",
+      "previous_corr": 0.1256,
+      "start_time": "2014-04-17T02:39:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 68
+    },
+    {
+      "current_corr": -0.1972,
+      "delta": 0.0477,
+      "end_time": "2014-04-17T10:04:00Z",
+      "previous_corr": -0.1496,
+      "start_time": "2014-04-17T05:09:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 69
+    },
+    {
+      "current_corr": 0.0718,
+      "delta": 0.1794,
+      "end_time": "2014-04-17T10:04:00Z",
+      "previous_corr": 0.2512,
+      "start_time": "2014-04-17T05:09:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 69
+    },
+    {
+      "current_corr": 0.1863,
+      "delta": 0.1375,
+      "end_time": "2014-04-17T10:04:00Z",
+      "previous_corr": 0.0487,
+      "start_time": "2014-04-17T05:09:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 69
+    },
+    {
+      "current_corr": -0.0184,
+      "delta": 0.1788,
+      "end_time": "2014-04-17T12:34:00Z",
+      "previous_corr": -0.1972,
+      "start_time": "2014-04-17T07:39:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 70
+    },
+    {
+      "current_corr": -0.0072,
+      "delta": 0.079,
+      "end_time": "2014-04-17T12:34:00Z",
+      "previous_corr": 0.0718,
+      "start_time": "2014-04-17T07:39:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 70
+    },
+    {
+      "current_corr": -0.0392,
+      "delta": 0.2255,
+      "end_time": "2014-04-17T12:34:00Z",
+      "previous_corr": 0.1863,
+      "start_time": "2014-04-17T07:39:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 70
+    },
+    {
+      "current_corr": -0.0505,
+      "delta": 0.0321,
+      "end_time": "2014-04-17T15:04:00Z",
+      "previous_corr": -0.0184,
+      "start_time": "2014-04-17T10:09:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 71
+    },
+    {
+      "current_corr": -0.0153,
+      "delta": 0.008,
+      "end_time": "2014-04-17T15:04:00Z",
+      "previous_corr": -0.0072,
+      "start_time": "2014-04-17T10:09:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 71
+    },
+    {
+      "current_corr": 0.0926,
+      "delta": 0.1318,
+      "end_time": "2014-04-17T15:04:00Z",
+      "previous_corr": -0.0392,
+      "start_time": "2014-04-17T10:09:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 71
+    },
+    {
+      "current_corr": 0.3931,
+      "delta": 0.4436,
+      "end_time": "2014-04-17T17:39:00Z",
+      "previous_corr": -0.0505,
+      "start_time": "2014-04-17T12:39:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 72
+    },
+    {
+      "current_corr": 0.0353,
+      "delta": 0.0506,
+      "end_time": "2014-04-17T17:39:00Z",
+      "previous_corr": -0.0153,
+      "start_time": "2014-04-17T12:39:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 72
+    },
+    {
+      "current_corr": 0.256,
+      "delta": 0.1635,
+      "end_time": "2014-04-17T17:39:00Z",
+      "previous_corr": 0.0926,
+      "start_time": "2014-04-17T12:39:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 72
+    },
+    {
+      "current_corr": 0.2527,
+      "delta": 0.1404,
+      "end_time": "2014-04-17T20:09:00Z",
+      "previous_corr": 0.3931,
+      "start_time": "2014-04-17T15:09:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 73
+    },
+    {
+      "current_corr": 0.197,
+      "delta": 0.1616,
+      "end_time": "2014-04-17T20:09:00Z",
+      "previous_corr": 0.0353,
+      "start_time": "2014-04-17T15:09:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 73
+    },
+    {
+      "current_corr": 0.1817,
+      "delta": 0.0744,
+      "end_time": "2014-04-17T20:09:00Z",
+      "previous_corr": 0.256,
+      "start_time": "2014-04-17T15:09:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 73
+    },
+    {
+      "current_corr": 0.0169,
+      "delta": 0.2357,
+      "end_time": "2014-04-17T22:39:00Z",
+      "previous_corr": 0.2527,
+      "start_time": "2014-04-17T17:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 74
+    },
+    {
+      "current_corr": 0.0742,
+      "delta": 0.1227,
+      "end_time": "2014-04-17T22:39:00Z",
+      "previous_corr": 0.197,
+      "start_time": "2014-04-17T17:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 74
+    },
+    {
+      "current_corr": 0.0222,
+      "delta": 0.1595,
+      "end_time": "2014-04-17T22:39:00Z",
+      "previous_corr": 0.1817,
+      "start_time": "2014-04-17T17:44:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 74
+    },
+    {
+      "current_corr": 0.0428,
+      "delta": 0.0259,
+      "end_time": "2014-04-18T01:09:00Z",
+      "previous_corr": 0.0169,
+      "start_time": "2014-04-17T20:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 75
+    },
+    {
+      "current_corr": 0.1133,
+      "delta": 0.039,
+      "end_time": "2014-04-18T01:09:00Z",
+      "previous_corr": 0.0742,
+      "start_time": "2014-04-17T20:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 75
+    },
+    {
+      "current_corr": 0.0466,
+      "delta": 0.0245,
+      "end_time": "2014-04-18T01:09:00Z",
+      "previous_corr": 0.0222,
+      "start_time": "2014-04-17T20:14:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 75
+    },
+    {
+      "current_corr": 0.1346,
+      "delta": 0.0917,
+      "end_time": "2014-04-18T03:39:00Z",
+      "previous_corr": 0.0428,
+      "start_time": "2014-04-17T22:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 76
+    },
+    {
+      "current_corr": 0.1076,
+      "delta": 0.0056,
+      "end_time": "2014-04-18T03:39:00Z",
+      "previous_corr": 0.1133,
+      "start_time": "2014-04-17T22:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 76
+    },
+    {
+      "current_corr": -0.0053,
+      "delta": 0.0519,
+      "end_time": "2014-04-18T03:39:00Z",
+      "previous_corr": 0.0466,
+      "start_time": "2014-04-17T22:44:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 76
+    },
+    {
+      "current_corr": 0.0705,
+      "delta": 0.0641,
+      "end_time": "2014-04-18T06:09:00Z",
+      "previous_corr": 0.1346,
+      "start_time": "2014-04-18T01:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 77
+    },
+    {
+      "current_corr": 0.0148,
+      "delta": 0.0928,
+      "end_time": "2014-04-18T06:09:00Z",
+      "previous_corr": 0.1076,
+      "start_time": "2014-04-18T01:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 77
+    },
+    {
+      "current_corr": 0.0987,
+      "delta": 0.1039,
+      "end_time": "2014-04-18T06:09:00Z",
+      "previous_corr": -0.0053,
+      "start_time": "2014-04-18T01:14:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 77
+    },
+    {
+      "current_corr": 0.2485,
+      "delta": 0.178,
+      "end_time": "2014-04-18T08:44:00Z",
+      "previous_corr": 0.0705,
+      "start_time": "2014-04-18T03:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 78
+    },
+    {
+      "current_corr": -0.0523,
+      "delta": 0.0671,
+      "end_time": "2014-04-18T08:44:00Z",
+      "previous_corr": 0.0148,
+      "start_time": "2014-04-18T03:44:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 78
+    },
+    {
+      "current_corr": -0.1579,
+      "delta": 0.2566,
+      "end_time": "2014-04-18T08:44:00Z",
+      "previous_corr": 0.0987,
+      "start_time": "2014-04-18T03:44:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 78
+    },
+    {
+      "current_corr": 0.0375,
+      "delta": 0.211,
+      "end_time": "2014-04-18T11:14:00Z",
+      "previous_corr": 0.2485,
+      "start_time": "2014-04-18T06:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 79
+    },
+    {
+      "current_corr": -0.0935,
+      "delta": 0.0412,
+      "end_time": "2014-04-18T11:14:00Z",
+      "previous_corr": -0.0523,
+      "start_time": "2014-04-18T06:14:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 79
+    },
+    {
+      "current_corr": -0.264,
+      "delta": 0.106,
+      "end_time": "2014-04-18T11:14:00Z",
+      "previous_corr": -0.1579,
+      "start_time": "2014-04-18T06:14:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 79
+    },
+    {
+      "current_corr": -0.1151,
+      "delta": 0.1526,
+      "end_time": "2014-04-18T13:44:00Z",
+      "previous_corr": 0.0375,
+      "start_time": "2014-04-18T08:49:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 80
+    },
+    {
+      "current_corr": 0.0093,
+      "delta": 0.1028,
+      "end_time": "2014-04-18T13:44:00Z",
+      "previous_corr": -0.0935,
+      "start_time": "2014-04-18T08:49:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 80
+    },
+    {
+      "current_corr": -0.0881,
+      "delta": 0.1759,
+      "end_time": "2014-04-18T13:44:00Z",
+      "previous_corr": -0.264,
+      "start_time": "2014-04-18T08:49:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 80
+    },
+    {
+      "current_corr": 0.1299,
+      "delta": 0.245,
+      "end_time": "2014-04-18T16:14:00Z",
+      "previous_corr": -0.1151,
+      "start_time": "2014-04-18T11:19:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 81
+    },
+    {
+      "current_corr": 0.1638,
+      "delta": 0.1544,
+      "end_time": "2014-04-18T16:14:00Z",
+      "previous_corr": 0.0093,
+      "start_time": "2014-04-18T11:19:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 81
+    },
+    {
+      "current_corr": 0.0861,
+      "delta": 0.1742,
+      "end_time": "2014-04-18T16:14:00Z",
+      "previous_corr": -0.0881,
+      "start_time": "2014-04-18T11:19:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 81
+    },
+    {
+      "current_corr": 0.3571,
+      "delta": 0.2271,
+      "end_time": "2014-04-18T18:44:00Z",
+      "previous_corr": 0.1299,
+      "start_time": "2014-04-18T13:49:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 82
+    },
+    {
+      "current_corr": -0.104,
+      "delta": 0.2678,
+      "end_time": "2014-04-18T18:44:00Z",
+      "previous_corr": 0.1638,
+      "start_time": "2014-04-18T13:49:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 82
+    },
+    {
+      "current_corr": 0.1207,
+      "delta": 0.0346,
+      "end_time": "2014-04-18T18:44:00Z",
+      "previous_corr": 0.0861,
+      "start_time": "2014-04-18T13:49:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 82
+    },
+    {
+      "current_corr": 0.1074,
+      "delta": 0.2497,
+      "end_time": "2014-04-18T21:14:00Z",
+      "previous_corr": 0.3571,
+      "start_time": "2014-04-18T16:19:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 83
+    },
+    {
+      "current_corr": -0.344,
+      "delta": 0.24,
+      "end_time": "2014-04-18T21:14:00Z",
+      "previous_corr": -0.104,
+      "start_time": "2014-04-18T16:19:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 83
+    },
+    {
+      "current_corr": -0.023,
+      "delta": 0.1437,
+      "end_time": "2014-04-18T21:14:00Z",
+      "previous_corr": 0.1207,
+      "start_time": "2014-04-18T16:19:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 83
+    },
+    {
+      "current_corr": 0.1744,
+      "delta": 0.067,
+      "end_time": "2014-04-18T23:44:00Z",
+      "previous_corr": 0.1074,
+      "start_time": "2014-04-18T18:49:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 84
+    },
+    {
+      "current_corr": -0.1274,
+      "delta": 0.2167,
+      "end_time": "2014-04-18T23:44:00Z",
+      "previous_corr": -0.344,
+      "start_time": "2014-04-18T18:49:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 84
+    },
+    {
+      "current_corr": -0.1218,
+      "delta": 0.0988,
+      "end_time": "2014-04-18T23:44:00Z",
+      "previous_corr": -0.023,
+      "start_time": "2014-04-18T18:49:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 84
+    },
+    {
+      "current_corr": 0.339,
+      "delta": 0.1646,
+      "end_time": "2014-04-19T02:14:00Z",
+      "previous_corr": 0.1744,
+      "start_time": "2014-04-18T21:19:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 85
+    },
+    {
+      "current_corr": -0.0706,
+      "delta": 0.0567,
+      "end_time": "2014-04-19T02:14:00Z",
+      "previous_corr": -0.1274,
+      "start_time": "2014-04-18T21:19:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 85
+    },
+    {
+      "current_corr": -0.1094,
+      "delta": 0.0125,
+      "end_time": "2014-04-19T02:14:00Z",
+      "previous_corr": -0.1218,
+      "start_time": "2014-04-18T21:19:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 85
+    },
+    {
+      "current_corr": 0.1513,
+      "delta": 0.1878,
+      "end_time": "2014-04-19T04:44:00Z",
+      "previous_corr": 0.339,
+      "start_time": "2014-04-18T23:49:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 86
+    },
+    {
+      "current_corr": -0.1263,
+      "delta": 0.0556,
+      "end_time": "2014-04-19T04:44:00Z",
+      "previous_corr": -0.0706,
+      "start_time": "2014-04-18T23:49:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 86
+    },
+    {
+      "current_corr": 0.1961,
+      "delta": 0.3055,
+      "end_time": "2014-04-19T04:44:00Z",
+      "previous_corr": -0.1094,
+      "start_time": "2014-04-18T23:49:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 86
+    },
+    {
+      "current_corr": -0.045,
+      "delta": 0.1963,
+      "end_time": "2014-04-19T07:14:00Z",
+      "previous_corr": 0.1513,
+      "start_time": "2014-04-19T02:19:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 87
+    },
+    {
+      "current_corr": -0.1425,
+      "delta": 0.0162,
+      "end_time": "2014-04-19T07:14:00Z",
+      "previous_corr": -0.1263,
+      "start_time": "2014-04-19T02:19:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 87
+    },
+    {
+      "current_corr": 0.2649,
+      "delta": 0.0688,
+      "end_time": "2014-04-19T07:14:00Z",
+      "previous_corr": 0.1961,
+      "start_time": "2014-04-19T02:19:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 87
+    },
+    {
+      "current_corr": 0.0249,
+      "delta": 0.0699,
+      "end_time": "2014-04-19T09:44:00Z",
+      "previous_corr": -0.045,
+      "start_time": "2014-04-19T04:49:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 88
+    },
+    {
+      "current_corr": -0.0899,
+      "delta": 0.0526,
+      "end_time": "2014-04-19T09:44:00Z",
+      "previous_corr": -0.1425,
+      "start_time": "2014-04-19T04:49:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 88
+    },
+    {
+      "current_corr": -0.0286,
+      "delta": 0.2935,
+      "end_time": "2014-04-19T09:44:00Z",
+      "previous_corr": 0.2649,
+      "start_time": "2014-04-19T04:49:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 88
+    },
+    {
+      "current_corr": 0.1939,
+      "delta": 0.1691,
+      "end_time": "2014-04-19T12:14:00Z",
+      "previous_corr": 0.0249,
+      "start_time": "2014-04-19T07:19:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 89
+    },
+    {
+      "current_corr": -0.0296,
+      "delta": 0.0603,
+      "end_time": "2014-04-19T12:14:00Z",
+      "previous_corr": -0.0899,
+      "start_time": "2014-04-19T07:19:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 89
+    },
+    {
+      "current_corr": -0.1935,
+      "delta": 0.1649,
+      "end_time": "2014-04-19T12:14:00Z",
+      "previous_corr": -0.0286,
+      "start_time": "2014-04-19T07:19:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 89
+    },
+    {
+      "current_corr": 0.2022,
+      "delta": 0.0083,
+      "end_time": "2014-04-19T14:44:00Z",
+      "previous_corr": 0.1939,
+      "start_time": "2014-04-19T09:49:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 90
+    },
+    {
+      "current_corr": 0.039,
+      "delta": 0.0685,
+      "end_time": "2014-04-19T14:44:00Z",
+      "previous_corr": -0.0296,
+      "start_time": "2014-04-19T09:49:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 90
+    },
+    {
+      "current_corr": -0.2132,
+      "delta": 0.0196,
+      "end_time": "2014-04-19T14:44:00Z",
+      "previous_corr": -0.1935,
+      "start_time": "2014-04-19T09:49:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 90
+    },
+    {
+      "current_corr": 0.0147,
+      "delta": 0.1875,
+      "end_time": "2014-04-19T17:14:00Z",
+      "previous_corr": 0.2022,
+      "start_time": "2014-04-19T12:19:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 91
+    },
+    {
+      "current_corr": -0.0286,
+      "delta": 0.0676,
+      "end_time": "2014-04-19T17:14:00Z",
+      "previous_corr": 0.039,
+      "start_time": "2014-04-19T12:19:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 91
+    },
+    {
+      "current_corr": -0.103,
+      "delta": 0.1102,
+      "end_time": "2014-04-19T17:14:00Z",
+      "previous_corr": -0.2132,
+      "start_time": "2014-04-19T12:19:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 91
+    },
+    {
+      "current_corr": 0.004,
+      "delta": 0.0108,
+      "end_time": "2014-04-19T19:44:00Z",
+      "previous_corr": 0.0147,
+      "start_time": "2014-04-19T14:49:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 92
+    },
+    {
+      "current_corr": -0.0125,
+      "delta": 0.016,
+      "end_time": "2014-04-19T19:44:00Z",
+      "previous_corr": -0.0286,
+      "start_time": "2014-04-19T14:49:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 92
+    },
+    {
+      "current_corr": 0.0422,
+      "delta": 0.1451,
+      "end_time": "2014-04-19T19:44:00Z",
+      "previous_corr": -0.103,
+      "start_time": "2014-04-19T14:49:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 92
+    },
+    {
+      "current_corr": 0.0203,
+      "delta": 0.0164,
+      "end_time": "2014-04-19T22:14:00Z",
+      "previous_corr": 0.004,
+      "start_time": "2014-04-19T17:19:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 93
+    },
+    {
+      "current_corr": -0.1408,
+      "delta": 0.1283,
+      "end_time": "2014-04-19T22:14:00Z",
+      "previous_corr": -0.0125,
+      "start_time": "2014-04-19T17:19:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 93
+    },
+    {
+      "current_corr": 0.1993,
+      "delta": 0.1572,
+      "end_time": "2014-04-19T22:14:00Z",
+      "previous_corr": 0.0422,
+      "start_time": "2014-04-19T17:19:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 93
+    },
+    {
+      "current_corr": -0.0444,
+      "delta": 0.0647,
+      "end_time": "2014-04-20T00:44:00Z",
+      "previous_corr": 0.0203,
+      "start_time": "2014-04-19T19:49:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 94
+    },
+    {
+      "current_corr": -0.1985,
+      "delta": 0.0577,
+      "end_time": "2014-04-20T00:44:00Z",
+      "previous_corr": -0.1408,
+      "start_time": "2014-04-19T19:49:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 94
+    },
+    {
+      "current_corr": 0.1481,
+      "delta": 0.0512,
+      "end_time": "2014-04-20T00:44:00Z",
+      "previous_corr": 0.1993,
+      "start_time": "2014-04-19T19:49:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 94
+    },
+    {
+      "current_corr": 0.0496,
+      "delta": 0.094,
+      "end_time": "2014-04-20T03:14:00Z",
+      "previous_corr": -0.0444,
+      "start_time": "2014-04-19T22:19:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 95
+    },
+    {
+      "current_corr": -0.0246,
+      "delta": 0.1739,
+      "end_time": "2014-04-20T03:14:00Z",
+      "previous_corr": -0.1985,
+      "start_time": "2014-04-19T22:19:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 95
+    },
+    {
+      "current_corr": 0.0287,
+      "delta": 0.1195,
+      "end_time": "2014-04-20T03:14:00Z",
+      "previous_corr": 0.1481,
+      "start_time": "2014-04-19T22:19:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 95
+    },
+    {
+      "current_corr": 0.0526,
+      "delta": 0.003,
+      "end_time": "2014-04-20T05:49:00Z",
+      "previous_corr": 0.0496,
+      "start_time": "2014-04-20T00:49:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 96
+    },
+    {
+      "current_corr": 0.0745,
+      "delta": 0.0991,
+      "end_time": "2014-04-20T05:49:00Z",
+      "previous_corr": -0.0246,
+      "start_time": "2014-04-20T00:49:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 96
+    },
+    {
+      "current_corr": -0.095,
+      "delta": 0.1237,
+      "end_time": "2014-04-20T05:49:00Z",
+      "previous_corr": 0.0287,
+      "start_time": "2014-04-20T00:49:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 96
+    },
+    {
+      "current_corr": 0.1763,
+      "delta": 0.1237,
+      "end_time": "2014-04-20T08:19:00Z",
+      "previous_corr": 0.0526,
+      "start_time": "2014-04-20T03:19:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 97
+    },
+    {
+      "current_corr": -0.03,
+      "delta": 0.1045,
+      "end_time": "2014-04-20T08:19:00Z",
+      "previous_corr": 0.0745,
+      "start_time": "2014-04-20T03:19:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 97
+    },
+    {
+      "current_corr": -0.0547,
+      "delta": 0.0403,
+      "end_time": "2014-04-20T08:19:00Z",
+      "previous_corr": -0.095,
+      "start_time": "2014-04-20T03:19:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 97
+    },
+    {
+      "current_corr": 0.3517,
+      "delta": 0.1754,
+      "end_time": "2014-04-20T10:49:00Z",
+      "previous_corr": 0.1763,
+      "start_time": "2014-04-20T05:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 98
+    },
+    {
+      "current_corr": -0.1987,
+      "delta": 0.1687,
+      "end_time": "2014-04-20T10:49:00Z",
+      "previous_corr": -0.03,
+      "start_time": "2014-04-20T05:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 98
+    },
+    {
+      "current_corr": -0.0161,
+      "delta": 0.0387,
+      "end_time": "2014-04-20T10:49:00Z",
+      "previous_corr": -0.0547,
+      "start_time": "2014-04-20T05:54:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 98
+    },
+    {
+      "current_corr": 0.2886,
+      "delta": 0.0631,
+      "end_time": "2014-04-20T13:19:00Z",
+      "previous_corr": 0.3517,
+      "start_time": "2014-04-20T08:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 99
+    },
+    {
+      "current_corr": -0.1947,
+      "delta": 0.004,
+      "end_time": "2014-04-20T13:19:00Z",
+      "previous_corr": -0.1987,
+      "start_time": "2014-04-20T08:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 99
+    },
+    {
+      "current_corr": 0.1945,
+      "delta": 0.2105,
+      "end_time": "2014-04-20T13:19:00Z",
+      "previous_corr": -0.0161,
+      "start_time": "2014-04-20T08:24:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 99
+    },
+    {
+      "current_corr": 0.2161,
+      "delta": 0.0725,
+      "end_time": "2014-04-20T15:49:00Z",
+      "previous_corr": 0.2886,
+      "start_time": "2014-04-20T10:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 100
+    },
+    {
+      "current_corr": -0.0211,
+      "delta": 0.1735,
+      "end_time": "2014-04-20T15:49:00Z",
+      "previous_corr": -0.1947,
+      "start_time": "2014-04-20T10:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 100
+    },
+    {
+      "current_corr": 0.1339,
+      "delta": 0.0606,
+      "end_time": "2014-04-20T15:49:00Z",
+      "previous_corr": 0.1945,
+      "start_time": "2014-04-20T10:54:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 100
+    },
+    {
+      "current_corr": 0.046,
+      "delta": 0.17,
+      "end_time": "2014-04-20T18:19:00Z",
+      "previous_corr": 0.2161,
+      "start_time": "2014-04-20T13:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 101
+    },
+    {
+      "current_corr": -0.0616,
+      "delta": 0.0405,
+      "end_time": "2014-04-20T18:19:00Z",
+      "previous_corr": -0.0211,
+      "start_time": "2014-04-20T13:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 101
+    },
+    {
+      "current_corr": 0.0149,
+      "delta": 0.119,
+      "end_time": "2014-04-20T18:19:00Z",
+      "previous_corr": 0.1339,
+      "start_time": "2014-04-20T13:24:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 101
+    },
+    {
+      "current_corr": 0.0438,
+      "delta": 0.0023,
+      "end_time": "2014-04-20T20:49:00Z",
+      "previous_corr": 0.046,
+      "start_time": "2014-04-20T15:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 102
+    },
+    {
+      "current_corr": -0.2517,
+      "delta": 0.1901,
+      "end_time": "2014-04-20T20:49:00Z",
+      "previous_corr": -0.0616,
+      "start_time": "2014-04-20T15:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 102
+    },
+    {
+      "current_corr": 0.012,
+      "delta": 0.0029,
+      "end_time": "2014-04-20T20:49:00Z",
+      "previous_corr": 0.0149,
+      "start_time": "2014-04-20T15:54:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 102
+    },
+    {
+      "current_corr": 0.1725,
+      "delta": 0.1288,
+      "end_time": "2014-04-20T23:19:00Z",
+      "previous_corr": 0.0438,
+      "start_time": "2014-04-20T18:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 103
+    },
+    {
+      "current_corr": -0.0891,
+      "delta": 0.1626,
+      "end_time": "2014-04-20T23:19:00Z",
+      "previous_corr": -0.2517,
+      "start_time": "2014-04-20T18:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 103
+    },
+    {
+      "current_corr": -0.0134,
+      "delta": 0.0254,
+      "end_time": "2014-04-20T23:19:00Z",
+      "previous_corr": 0.012,
+      "start_time": "2014-04-20T18:24:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 103
+    },
+    {
+      "current_corr": 0.2599,
+      "delta": 0.0874,
+      "end_time": "2014-04-21T01:49:00Z",
+      "previous_corr": 0.1725,
+      "start_time": "2014-04-20T20:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 104
+    },
+    {
+      "current_corr": 0.1667,
+      "delta": 0.2558,
+      "end_time": "2014-04-21T01:49:00Z",
+      "previous_corr": -0.0891,
+      "start_time": "2014-04-20T20:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 104
+    },
+    {
+      "current_corr": 0.0965,
+      "delta": 0.1099,
+      "end_time": "2014-04-21T01:49:00Z",
+      "previous_corr": -0.0134,
+      "start_time": "2014-04-20T20:54:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 104
+    },
+    {
+      "current_corr": 0.1139,
+      "delta": 0.146,
+      "end_time": "2014-04-21T04:19:00Z",
+      "previous_corr": 0.2599,
+      "start_time": "2014-04-20T23:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 105
+    },
+    {
+      "current_corr": 0.0372,
+      "delta": 0.1294,
+      "end_time": "2014-04-21T04:19:00Z",
+      "previous_corr": 0.1667,
+      "start_time": "2014-04-20T23:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 105
+    },
+    {
+      "current_corr": 0.03,
+      "delta": 0.0665,
+      "end_time": "2014-04-21T04:19:00Z",
+      "previous_corr": 0.0965,
+      "start_time": "2014-04-20T23:24:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 105
+    },
+    {
+      "current_corr": 0.0029,
+      "delta": 0.1109,
+      "end_time": "2014-04-21T06:49:00Z",
+      "previous_corr": 0.1139,
+      "start_time": "2014-04-21T01:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 106
+    },
+    {
+      "current_corr": -0.0828,
+      "delta": 0.12,
+      "end_time": "2014-04-21T06:49:00Z",
+      "previous_corr": 0.0372,
+      "start_time": "2014-04-21T01:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 106
+    },
+    {
+      "current_corr": -0.1112,
+      "delta": 0.1412,
+      "end_time": "2014-04-21T06:49:00Z",
+      "previous_corr": 0.03,
+      "start_time": "2014-04-21T01:54:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 106
+    },
+    {
+      "current_corr": 0.0897,
+      "delta": 0.0868,
+      "end_time": "2014-04-21T09:19:00Z",
+      "previous_corr": 0.0029,
+      "start_time": "2014-04-21T04:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 107
+    },
+    {
+      "current_corr": -0.0853,
+      "delta": 0.0025,
+      "end_time": "2014-04-21T09:19:00Z",
+      "previous_corr": -0.0828,
+      "start_time": "2014-04-21T04:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 107
+    },
+    {
+      "current_corr": 0.0155,
+      "delta": 0.1267,
+      "end_time": "2014-04-21T09:19:00Z",
+      "previous_corr": -0.1112,
+      "start_time": "2014-04-21T04:24:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 107
+    },
+    {
+      "current_corr": 0.2015,
+      "delta": 0.1118,
+      "end_time": "2014-04-21T11:49:00Z",
+      "previous_corr": 0.0897,
+      "start_time": "2014-04-21T06:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 108
+    },
+    {
+      "current_corr": -0.1568,
+      "delta": 0.0716,
+      "end_time": "2014-04-21T11:49:00Z",
+      "previous_corr": -0.0853,
+      "start_time": "2014-04-21T06:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 108
+    },
+    {
+      "current_corr": -0.1696,
+      "delta": 0.1851,
+      "end_time": "2014-04-21T11:49:00Z",
+      "previous_corr": 0.0155,
+      "start_time": "2014-04-21T06:54:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 108
+    },
+    {
+      "current_corr": 0.2503,
+      "delta": 0.0488,
+      "end_time": "2014-04-21T14:19:00Z",
+      "previous_corr": 0.2015,
+      "start_time": "2014-04-21T09:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 109
+    },
+    {
+      "current_corr": 0.186,
+      "delta": 0.3429,
+      "end_time": "2014-04-21T14:19:00Z",
+      "previous_corr": -0.1568,
+      "start_time": "2014-04-21T09:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 109
+    },
+    {
+      "current_corr": -0.0612,
+      "delta": 0.1084,
+      "end_time": "2014-04-21T14:19:00Z",
+      "previous_corr": -0.1696,
+      "start_time": "2014-04-21T09:24:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 109
+    },
+    {
+      "current_corr": 0.103,
+      "delta": 0.1474,
+      "end_time": "2014-04-21T16:49:00Z",
+      "previous_corr": 0.2503,
+      "start_time": "2014-04-21T11:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 110
+    },
+    {
+      "current_corr": 0.1127,
+      "delta": 0.0733,
+      "end_time": "2014-04-21T16:49:00Z",
+      "previous_corr": 0.186,
+      "start_time": "2014-04-21T11:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 110
+    },
+    {
+      "current_corr": 0.1436,
+      "delta": 0.2047,
+      "end_time": "2014-04-21T16:49:00Z",
+      "previous_corr": -0.0612,
+      "start_time": "2014-04-21T11:54:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 110
+    },
+    {
+      "current_corr": 0.2601,
+      "delta": 0.1571,
+      "end_time": "2014-04-21T19:19:00Z",
+      "previous_corr": 0.103,
+      "start_time": "2014-04-21T14:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 111
+    },
+    {
+      "current_corr": 0.1083,
+      "delta": 0.0045,
+      "end_time": "2014-04-21T19:19:00Z",
+      "previous_corr": 0.1127,
+      "start_time": "2014-04-21T14:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 111
+    },
+    {
+      "current_corr": 0.0369,
+      "delta": 0.1067,
+      "end_time": "2014-04-21T19:19:00Z",
+      "previous_corr": 0.1436,
+      "start_time": "2014-04-21T14:24:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 111
+    },
+    {
+      "current_corr": 0.2907,
+      "delta": 0.0307,
+      "end_time": "2014-04-21T21:49:00Z",
+      "previous_corr": 0.2601,
+      "start_time": "2014-04-21T16:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 112
+    },
+    {
+      "current_corr": -0.0666,
+      "delta": 0.1749,
+      "end_time": "2014-04-21T21:49:00Z",
+      "previous_corr": 0.1083,
+      "start_time": "2014-04-21T16:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 112
+    },
+    {
+      "current_corr": 0.0271,
+      "delta": 0.0098,
+      "end_time": "2014-04-21T21:49:00Z",
+      "previous_corr": 0.0369,
+      "start_time": "2014-04-21T16:54:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 112
+    },
+    {
+      "current_corr": 0.1339,
+      "delta": 0.1568,
+      "end_time": "2014-04-22T00:19:00Z",
+      "previous_corr": 0.2907,
+      "start_time": "2014-04-21T19:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 113
+    },
+    {
+      "current_corr": -0.1909,
+      "delta": 0.1243,
+      "end_time": "2014-04-22T00:19:00Z",
+      "previous_corr": -0.0666,
+      "start_time": "2014-04-21T19:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 113
+    },
+    {
+      "current_corr": -0.0132,
+      "delta": 0.0403,
+      "end_time": "2014-04-22T00:19:00Z",
+      "previous_corr": 0.0271,
+      "start_time": "2014-04-21T19:24:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 113
+    },
+    {
+      "current_corr": 0.1284,
+      "delta": 0.0055,
+      "end_time": "2014-04-22T02:49:00Z",
+      "previous_corr": 0.1339,
+      "start_time": "2014-04-21T21:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 114
+    },
+    {
+      "current_corr": -0.0663,
+      "delta": 0.1245,
+      "end_time": "2014-04-22T02:49:00Z",
+      "previous_corr": -0.1909,
+      "start_time": "2014-04-21T21:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 114
+    },
+    {
+      "current_corr": -0.0759,
+      "delta": 0.0628,
+      "end_time": "2014-04-22T02:49:00Z",
+      "previous_corr": -0.0132,
+      "start_time": "2014-04-21T21:54:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 114
+    },
+    {
+      "current_corr": 0.0931,
+      "delta": 0.0353,
+      "end_time": "2014-04-22T05:19:00Z",
+      "previous_corr": 0.1284,
+      "start_time": "2014-04-22T00:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 115
+    },
+    {
+      "current_corr": -0.0153,
+      "delta": 0.0511,
+      "end_time": "2014-04-22T05:19:00Z",
+      "previous_corr": -0.0663,
+      "start_time": "2014-04-22T00:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 115
+    },
+    {
+      "current_corr": -0.029,
+      "delta": 0.047,
+      "end_time": "2014-04-22T05:19:00Z",
+      "previous_corr": -0.0759,
+      "start_time": "2014-04-22T00:24:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 115
+    },
+    {
+      "current_corr": 0.1009,
+      "delta": 0.0078,
+      "end_time": "2014-04-22T07:49:00Z",
+      "previous_corr": 0.0931,
+      "start_time": "2014-04-22T02:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 116
+    },
+    {
+      "current_corr": -0.0205,
+      "delta": 0.0053,
+      "end_time": "2014-04-22T07:49:00Z",
+      "previous_corr": -0.0153,
+      "start_time": "2014-04-22T02:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 116
+    },
+    {
+      "current_corr": 0.0076,
+      "delta": 0.0366,
+      "end_time": "2014-04-22T07:49:00Z",
+      "previous_corr": -0.029,
+      "start_time": "2014-04-22T02:54:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 116
+    },
+    {
+      "current_corr": -0.0207,
+      "delta": 0.1215,
+      "end_time": "2014-04-22T10:19:00Z",
+      "previous_corr": 0.1009,
+      "start_time": "2014-04-22T05:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 117
+    },
+    {
+      "current_corr": 0.0986,
+      "delta": 0.1191,
+      "end_time": "2014-04-22T10:19:00Z",
+      "previous_corr": -0.0205,
+      "start_time": "2014-04-22T05:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 117
+    },
+    {
+      "current_corr": 0.1657,
+      "delta": 0.1581,
+      "end_time": "2014-04-22T10:19:00Z",
+      "previous_corr": 0.0076,
+      "start_time": "2014-04-22T05:24:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 117
+    },
+    {
+      "current_corr": -0.0124,
+      "delta": 0.0083,
+      "end_time": "2014-04-22T12:49:00Z",
+      "previous_corr": -0.0207,
+      "start_time": "2014-04-22T07:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 118
+    },
+    {
+      "current_corr": 0.0721,
+      "delta": 0.0264,
+      "end_time": "2014-04-22T12:49:00Z",
+      "previous_corr": 0.0986,
+      "start_time": "2014-04-22T07:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 118
+    },
+    {
+      "current_corr": 0.0671,
+      "delta": 0.0987,
+      "end_time": "2014-04-22T12:49:00Z",
+      "previous_corr": 0.1657,
+      "start_time": "2014-04-22T07:54:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 118
+    },
+    {
+      "current_corr": 0.0696,
+      "delta": 0.0821,
+      "end_time": "2014-04-22T15:19:00Z",
+      "previous_corr": -0.0124,
+      "start_time": "2014-04-22T10:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 119
+    },
+    {
+      "current_corr": -0.0606,
+      "delta": 0.1328,
+      "end_time": "2014-04-22T15:19:00Z",
+      "previous_corr": 0.0721,
+      "start_time": "2014-04-22T10:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 119
+    },
+    {
+      "current_corr": -0.0291,
+      "delta": 0.0962,
+      "end_time": "2014-04-22T15:19:00Z",
+      "previous_corr": 0.0671,
+      "start_time": "2014-04-22T10:24:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 119
+    },
+    {
+      "current_corr": -0.1798,
+      "delta": 0.2494,
+      "end_time": "2014-04-22T17:49:00Z",
+      "previous_corr": 0.0696,
+      "start_time": "2014-04-22T12:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 120
+    },
+    {
+      "current_corr": -0.281,
+      "delta": 0.2204,
+      "end_time": "2014-04-22T17:49:00Z",
+      "previous_corr": -0.0606,
+      "start_time": "2014-04-22T12:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 120
+    },
+    {
+      "current_corr": 0.0418,
+      "delta": 0.0709,
+      "end_time": "2014-04-22T17:49:00Z",
+      "previous_corr": -0.0291,
+      "start_time": "2014-04-22T12:54:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 120
+    },
+    {
+      "current_corr": -0.1033,
+      "delta": 0.0765,
+      "end_time": "2014-04-22T20:19:00Z",
+      "previous_corr": -0.1798,
+      "start_time": "2014-04-22T15:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 121
+    },
+    {
+      "current_corr": -0.2109,
+      "delta": 0.0701,
+      "end_time": "2014-04-22T20:19:00Z",
+      "previous_corr": -0.281,
+      "start_time": "2014-04-22T15:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 121
+    },
+    {
+      "current_corr": -0.1024,
+      "delta": 0.1442,
+      "end_time": "2014-04-22T20:19:00Z",
+      "previous_corr": 0.0418,
+      "start_time": "2014-04-22T15:24:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 121
+    },
+    {
+      "current_corr": 0.2675,
+      "delta": 0.3708,
+      "end_time": "2014-04-22T22:49:00Z",
+      "previous_corr": -0.1033,
+      "start_time": "2014-04-22T17:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 122
+    },
+    {
+      "current_corr": -0.2643,
+      "delta": 0.0534,
+      "end_time": "2014-04-22T22:49:00Z",
+      "previous_corr": -0.2109,
+      "start_time": "2014-04-22T17:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 122
+    },
+    {
+      "current_corr": -0.1377,
+      "delta": 0.0354,
+      "end_time": "2014-04-22T22:49:00Z",
+      "previous_corr": -0.1024,
+      "start_time": "2014-04-22T17:54:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 122
+    },
+    {
+      "current_corr": 0.2111,
+      "delta": 0.0564,
+      "end_time": "2014-04-23T01:19:00Z",
+      "previous_corr": 0.2675,
+      "start_time": "2014-04-22T20:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 123
+    },
+    {
+      "current_corr": -0.2568,
+      "delta": 0.0075,
+      "end_time": "2014-04-23T01:19:00Z",
+      "previous_corr": -0.2643,
+      "start_time": "2014-04-22T20:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 123
+    },
+    {
+      "current_corr": 0.0457,
+      "delta": 0.1834,
+      "end_time": "2014-04-23T01:19:00Z",
+      "previous_corr": -0.1377,
+      "start_time": "2014-04-22T20:24:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 123
+    },
+    {
+      "current_corr": 0.0859,
+      "delta": 0.1253,
+      "end_time": "2014-04-23T03:49:00Z",
+      "previous_corr": 0.2111,
+      "start_time": "2014-04-22T22:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 124
+    },
+    {
+      "current_corr": 0.2547,
+      "delta": 0.5114,
+      "end_time": "2014-04-23T03:49:00Z",
+      "previous_corr": -0.2568,
+      "start_time": "2014-04-22T22:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 124
+    },
+    {
+      "current_corr": 0.0533,
+      "delta": 0.0076,
+      "end_time": "2014-04-23T03:49:00Z",
+      "previous_corr": 0.0457,
+      "start_time": "2014-04-22T22:54:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 124
+    },
+    {
+      "current_corr": 0.0181,
+      "delta": 0.0677,
+      "end_time": "2014-04-23T06:19:00Z",
+      "previous_corr": 0.0859,
+      "start_time": "2014-04-23T01:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 125
+    },
+    {
+      "current_corr": 0.1287,
+      "delta": 0.126,
+      "end_time": "2014-04-23T06:19:00Z",
+      "previous_corr": 0.2547,
+      "start_time": "2014-04-23T01:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 125
+    },
+    {
+      "current_corr": 0.0035,
+      "delta": 0.0498,
+      "end_time": "2014-04-23T06:19:00Z",
+      "previous_corr": 0.0533,
+      "start_time": "2014-04-23T01:24:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 125
+    },
+    {
+      "current_corr": -0.0871,
+      "delta": 0.1053,
+      "end_time": "2014-04-23T08:49:00Z",
+      "previous_corr": 0.0181,
+      "start_time": "2014-04-23T03:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 126
+    },
+    {
+      "current_corr": -0.1149,
+      "delta": 0.2436,
+      "end_time": "2014-04-23T08:49:00Z",
+      "previous_corr": 0.1287,
+      "start_time": "2014-04-23T03:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 126
+    },
+    {
+      "current_corr": -0.0143,
+      "delta": 0.0178,
+      "end_time": "2014-04-23T08:49:00Z",
+      "previous_corr": 0.0035,
+      "start_time": "2014-04-23T03:54:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 126
+    },
+    {
+      "current_corr": 0.1469,
+      "delta": 0.234,
+      "end_time": "2014-04-23T11:19:00Z",
+      "previous_corr": -0.0871,
+      "start_time": "2014-04-23T06:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 127
+    },
+    {
+      "current_corr": -0.1327,
+      "delta": 0.0178,
+      "end_time": "2014-04-23T11:19:00Z",
+      "previous_corr": -0.1149,
+      "start_time": "2014-04-23T06:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 127
+    },
+    {
+      "current_corr": 0.1036,
+      "delta": 0.1179,
+      "end_time": "2014-04-23T11:19:00Z",
+      "previous_corr": -0.0143,
+      "start_time": "2014-04-23T06:24:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 127
+    },
+    {
+      "current_corr": 0.1974,
+      "delta": 0.0505,
+      "end_time": "2014-04-23T13:49:00Z",
+      "previous_corr": 0.1469,
+      "start_time": "2014-04-23T08:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 128
+    },
+    {
+      "current_corr": 0.1306,
+      "delta": 0.2633,
+      "end_time": "2014-04-23T13:49:00Z",
+      "previous_corr": -0.1327,
+      "start_time": "2014-04-23T08:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 128
+    },
+    {
+      "current_corr": 0.0913,
+      "delta": 0.0123,
+      "end_time": "2014-04-23T13:49:00Z",
+      "previous_corr": 0.1036,
+      "start_time": "2014-04-23T08:54:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 128
+    },
+    {
+      "current_corr": 0.2507,
+      "delta": 0.0533,
+      "end_time": "2014-04-23T16:19:00Z",
+      "previous_corr": 0.1974,
+      "start_time": "2014-04-23T11:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 129
+    },
+    {
+      "current_corr": 0.1303,
+      "delta": 0.0002,
+      "end_time": "2014-04-23T16:19:00Z",
+      "previous_corr": 0.1306,
+      "start_time": "2014-04-23T11:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 129
+    },
+    {
+      "current_corr": 0.0035,
+      "delta": 0.0878,
+      "end_time": "2014-04-23T16:19:00Z",
+      "previous_corr": 0.0913,
+      "start_time": "2014-04-23T11:24:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 129
+    },
+    {
+      "current_corr": 0.0797,
+      "delta": 0.171,
+      "end_time": "2014-04-23T18:49:00Z",
+      "previous_corr": 0.2507,
+      "start_time": "2014-04-23T13:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 130
+    },
+    {
+      "current_corr": 0.0639,
+      "delta": 0.0665,
+      "end_time": "2014-04-23T18:49:00Z",
+      "previous_corr": 0.1303,
+      "start_time": "2014-04-23T13:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 130
+    },
+    {
+      "current_corr": -0.091,
+      "delta": 0.0946,
+      "end_time": "2014-04-23T18:49:00Z",
+      "previous_corr": 0.0035,
+      "start_time": "2014-04-23T13:54:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 130
+    },
+    {
+      "current_corr": 0.0738,
+      "delta": 0.0059,
+      "end_time": "2014-04-23T21:19:00Z",
+      "previous_corr": 0.0797,
+      "start_time": "2014-04-23T16:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 131
+    },
+    {
+      "current_corr": 0.0001,
+      "delta": 0.0638,
+      "end_time": "2014-04-23T21:19:00Z",
+      "previous_corr": 0.0639,
+      "start_time": "2014-04-23T16:24:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 131
+    },
+    {
+      "current_corr": -0.1717,
+      "delta": 0.0806,
+      "end_time": "2014-04-23T21:19:00Z",
+      "previous_corr": -0.091,
+      "start_time": "2014-04-23T16:24:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 131
+    },
+    {
+      "current_corr": 0.0554,
+      "delta": 0.0184,
+      "end_time": "2014-04-23T23:49:00Z",
+      "previous_corr": 0.0738,
+      "start_time": "2014-04-23T18:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "ec2_net",
+      "window_index": 132
+    },
+    {
+      "current_corr": 0.0852,
+      "delta": 0.0851,
+      "end_time": "2014-04-23T23:49:00Z",
+      "previous_corr": 0.0001,
+      "start_time": "2014-04-23T18:54:00Z",
+      "stream_1": "ec2_cpu",
+      "stream_2": "elb_req",
+      "window_index": 132
+    },
+    {
+      "current_corr": -0.0636,
+      "delta": 0.1081,
+      "end_time": "2014-04-23T23:49:00Z",
+      "previous_corr": -0.1717,
+      "start_time": "2014-04-23T18:54:00Z",
+      "stream_1": "ec2_net",
+      "stream_2": "elb_req",
+      "window_index": 132
+    }
+  ],
+  "correlations": [
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.1909,
+          "elb_req": -0.2045
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.1909,
+          "ec2_net": 1.0,
+          "elb_req": 0.0866
+        },
+        "elb_req": {
+          "ec2_cpu": -0.2045,
+          "ec2_net": 0.0866,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-10T05:04:00Z",
+      "start_time": "2014-04-10T00:04:00Z",
+      "window_index": 0,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.1029,
+          "elb_req": 0.0148
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.1029,
+          "ec2_net": 1.0,
+          "elb_req": 0.1385
+        },
+        "elb_req": {
+          "ec2_cpu": 0.0148,
+          "ec2_net": 0.1385,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-10T07:34:00Z",
+      "start_time": "2014-04-10T02:34:00Z",
+      "window_index": 1,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.0917,
+          "elb_req": 0.2425
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.0917,
+          "ec2_net": 1.0,
+          "elb_req": 0.0938
+        },
+        "elb_req": {
+          "ec2_cpu": 0.2425,
+          "ec2_net": 0.0938,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-10T10:04:00Z",
+      "start_time": "2014-04-10T05:09:00Z",
+      "window_index": 2,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0663,
+          "elb_req": 0.1993
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0663,
+          "ec2_net": 1.0,
+          "elb_req": -0.0579
+        },
+        "elb_req": {
+          "ec2_cpu": 0.1993,
+          "ec2_net": -0.0579,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-10T12:39:00Z",
+      "start_time": "2014-04-10T07:39:00Z",
+      "window_index": 3,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.1575,
+          "elb_req": -0.1298
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.1575,
+          "ec2_net": 1.0,
+          "elb_req": 0.0623
+        },
+        "elb_req": {
+          "ec2_cpu": -0.1298,
+          "ec2_net": 0.0623,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-10T15:09:00Z",
+      "start_time": "2014-04-10T10:09:00Z",
+      "window_index": 4,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0436,
+          "elb_req": -0.1991
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0436,
+          "ec2_net": 1.0,
+          "elb_req": 0.0378
+        },
+        "elb_req": {
+          "ec2_cpu": -0.1991,
+          "ec2_net": 0.0378,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-10T17:39:00Z",
+      "start_time": "2014-04-10T12:44:00Z",
+      "window_index": 5,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.3343,
+          "elb_req": -0.1196
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.3343,
+          "ec2_net": 1.0,
+          "elb_req": -0.025
+        },
+        "elb_req": {
+          "ec2_cpu": -0.1196,
+          "ec2_net": -0.025,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-10T20:09:00Z",
+      "start_time": "2014-04-10T15:14:00Z",
+      "window_index": 6,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.2705,
+          "elb_req": 0.12
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.2705,
+          "ec2_net": 1.0,
+          "elb_req": 0.0391
+        },
+        "elb_req": {
+          "ec2_cpu": 0.12,
+          "ec2_net": 0.0391,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-10T22:39:00Z",
+      "start_time": "2014-04-10T17:44:00Z",
+      "window_index": 7,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.1124,
+          "elb_req": 0.1598
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.1124,
+          "ec2_net": 1.0,
+          "elb_req": -0.0353
+        },
+        "elb_req": {
+          "ec2_cpu": 0.1598,
+          "ec2_net": -0.0353,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-11T01:09:00Z",
+      "start_time": "2014-04-10T20:14:00Z",
+      "window_index": 8,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.1154,
+          "elb_req": 0.0539
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.1154,
+          "ec2_net": 1.0,
+          "elb_req": -0.038
+        },
+        "elb_req": {
+          "ec2_cpu": 0.0539,
+          "ec2_net": -0.038,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-11T03:39:00Z",
+      "start_time": "2014-04-10T22:44:00Z",
+      "window_index": 9,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.0263,
+          "elb_req": -0.0255
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.0263,
+          "ec2_net": 1.0,
+          "elb_req": -0.0584
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0255,
+          "ec2_net": -0.0584,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-11T06:09:00Z",
+      "start_time": "2014-04-11T01:14:00Z",
+      "window_index": 10,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.1624,
+          "elb_req": -0.0011
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.1624,
+          "ec2_net": 1.0,
+          "elb_req": -0.2362
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0011,
+          "ec2_net": -0.2362,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-11T08:39:00Z",
+      "start_time": "2014-04-11T03:44:00Z",
+      "window_index": 11,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.1044,
+          "elb_req": 0.0552
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.1044,
+          "ec2_net": 1.0,
+          "elb_req": -0.0802
+        },
+        "elb_req": {
+          "ec2_cpu": 0.0552,
+          "ec2_net": -0.0802,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-11T11:09:00Z",
+      "start_time": "2014-04-11T06:14:00Z",
+      "window_index": 12,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0708,
+          "elb_req": 0.0395
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0708,
+          "ec2_net": 1.0,
+          "elb_req": -0.0364
+        },
+        "elb_req": {
+          "ec2_cpu": 0.0395,
+          "ec2_net": -0.0364,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-11T13:39:00Z",
+      "start_time": "2014-04-11T08:44:00Z",
+      "window_index": 13,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.0579,
+          "elb_req": -0.1867
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.0579,
+          "ec2_net": 1.0,
+          "elb_req": 0.0
+        },
+        "elb_req": {
+          "ec2_cpu": -0.1867,
+          "ec2_net": 0.0,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-11T16:09:00Z",
+      "start_time": "2014-04-11T11:14:00Z",
+      "window_index": 14,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.5568,
+          "elb_req": -0.0446
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.5568,
+          "ec2_net": 1.0,
+          "elb_req": -0.0426
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0446,
+          "ec2_net": -0.0426,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-11T18:39:00Z",
+      "start_time": "2014-04-11T13:44:00Z",
+      "window_index": 15,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.6047,
+          "elb_req": 0.0275
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.6047,
+          "ec2_net": 1.0,
+          "elb_req": -0.1272
+        },
+        "elb_req": {
+          "ec2_cpu": 0.0275,
+          "ec2_net": -0.1272,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-11T21:09:00Z",
+      "start_time": "2014-04-11T16:14:00Z",
+      "window_index": 16,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.5235,
+          "elb_req": 0.2843
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.5235,
+          "ec2_net": 1.0,
+          "elb_req": 0.0491
+        },
+        "elb_req": {
+          "ec2_cpu": 0.2843,
+          "ec2_net": 0.0491,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-11T23:39:00Z",
+      "start_time": "2014-04-11T18:44:00Z",
+      "window_index": 17,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.0825,
+          "elb_req": 0.0618
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.0825,
+          "ec2_net": 1.0,
+          "elb_req": -0.2438
+        },
+        "elb_req": {
+          "ec2_cpu": 0.0618,
+          "ec2_net": -0.2438,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-12T02:09:00Z",
+      "start_time": "2014-04-11T21:14:00Z",
+      "window_index": 18,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0026,
+          "elb_req": -0.2447
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0026,
+          "ec2_net": 1.0,
+          "elb_req": -0.0662
+        },
+        "elb_req": {
+          "ec2_cpu": -0.2447,
+          "ec2_net": -0.0662,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-12T04:39:00Z",
+      "start_time": "2014-04-11T23:44:00Z",
+      "window_index": 19,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.2323,
+          "elb_req": 0.0624
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.2323,
+          "ec2_net": 1.0,
+          "elb_req": -0.1002
+        },
+        "elb_req": {
+          "ec2_cpu": 0.0624,
+          "ec2_net": -0.1002,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-12T07:09:00Z",
+      "start_time": "2014-04-12T02:14:00Z",
+      "window_index": 20,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.1704,
+          "elb_req": 0.0653
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.1704,
+          "ec2_net": 1.0,
+          "elb_req": -0.0937
+        },
+        "elb_req": {
+          "ec2_cpu": 0.0653,
+          "ec2_net": -0.0937,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-12T09:39:00Z",
+      "start_time": "2014-04-12T04:44:00Z",
+      "window_index": 21,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.06,
+          "elb_req": 0.224
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.06,
+          "ec2_net": 1.0,
+          "elb_req": 0.1266
+        },
+        "elb_req": {
+          "ec2_cpu": 0.224,
+          "ec2_net": 0.1266,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-12T12:09:00Z",
+      "start_time": "2014-04-12T07:14:00Z",
+      "window_index": 22,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.0132,
+          "elb_req": 0.295
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.0132,
+          "ec2_net": 1.0,
+          "elb_req": 0.0669
+        },
+        "elb_req": {
+          "ec2_cpu": 0.295,
+          "ec2_net": 0.0669,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-12T14:39:00Z",
+      "start_time": "2014-04-12T09:44:00Z",
+      "window_index": 23,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.0133,
+          "elb_req": 0.2551
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.0133,
+          "ec2_net": 1.0,
+          "elb_req": 0.0225
+        },
+        "elb_req": {
+          "ec2_cpu": 0.2551,
+          "ec2_net": 0.0225,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-12T17:09:00Z",
+      "start_time": "2014-04-12T12:14:00Z",
+      "window_index": 24,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.073,
+          "elb_req": 0.268
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.073,
+          "ec2_net": 1.0,
+          "elb_req": -0.202
+        },
+        "elb_req": {
+          "ec2_cpu": 0.268,
+          "ec2_net": -0.202,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-12T19:39:00Z",
+      "start_time": "2014-04-12T14:44:00Z",
+      "window_index": 25,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.0029,
+          "elb_req": 0.1285
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.0029,
+          "ec2_net": 1.0,
+          "elb_req": -0.1809
+        },
+        "elb_req": {
+          "ec2_cpu": 0.1285,
+          "ec2_net": -0.1809,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-12T22:09:00Z",
+      "start_time": "2014-04-12T17:14:00Z",
+      "window_index": 26,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0325,
+          "elb_req": -0.1924
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0325,
+          "ec2_net": 1.0,
+          "elb_req": 0.0474
+        },
+        "elb_req": {
+          "ec2_cpu": -0.1924,
+          "ec2_net": 0.0474,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-13T00:39:00Z",
+      "start_time": "2014-04-12T19:44:00Z",
+      "window_index": 27,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.0065,
+          "elb_req": -0.0429
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.0065,
+          "ec2_net": 1.0,
+          "elb_req": -0.0125
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0429,
+          "ec2_net": -0.0125,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-13T03:09:00Z",
+      "start_time": "2014-04-12T22:14:00Z",
+      "window_index": 28,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.0663,
+          "elb_req": -0.1702
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.0663,
+          "ec2_net": 1.0,
+          "elb_req": 0.1288
+        },
+        "elb_req": {
+          "ec2_cpu": -0.1702,
+          "ec2_net": 0.1288,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-13T05:44:00Z",
+      "start_time": "2014-04-13T00:44:00Z",
+      "window_index": 29,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.0284,
+          "elb_req": -0.0988
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.0284,
+          "ec2_net": 1.0,
+          "elb_req": 0.3069
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0988,
+          "ec2_net": 0.3069,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-13T08:14:00Z",
+      "start_time": "2014-04-13T03:14:00Z",
+      "window_index": 30,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.0301,
+          "elb_req": -0.0583
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.0301,
+          "ec2_net": 1.0,
+          "elb_req": -0.036
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0583,
+          "ec2_net": -0.036,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-13T10:44:00Z",
+      "start_time": "2014-04-13T05:49:00Z",
+      "window_index": 31,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.1579,
+          "elb_req": -0.026
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.1579,
+          "ec2_net": 1.0,
+          "elb_req": -0.1274
+        },
+        "elb_req": {
+          "ec2_cpu": -0.026,
+          "ec2_net": -0.1274,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-13T13:14:00Z",
+      "start_time": "2014-04-13T08:19:00Z",
+      "window_index": 32,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0396,
+          "elb_req": 0.1045
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0396,
+          "ec2_net": 1.0,
+          "elb_req": 0.0041
+        },
+        "elb_req": {
+          "ec2_cpu": 0.1045,
+          "ec2_net": 0.0041,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-13T15:44:00Z",
+      "start_time": "2014-04-13T10:49:00Z",
+      "window_index": 33,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.1392,
+          "elb_req": 0.1644
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.1392,
+          "ec2_net": 1.0,
+          "elb_req": -0.0242
+        },
+        "elb_req": {
+          "ec2_cpu": 0.1644,
+          "ec2_net": -0.0242,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-13T18:14:00Z",
+      "start_time": "2014-04-13T13:19:00Z",
+      "window_index": 34,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.0269,
+          "elb_req": -0.0366
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.0269,
+          "ec2_net": 1.0,
+          "elb_req": -0.215
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0366,
+          "ec2_net": -0.215,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-13T20:44:00Z",
+      "start_time": "2014-04-13T15:49:00Z",
+      "window_index": 35,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.0199,
+          "elb_req": -0.1615
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.0199,
+          "ec2_net": 1.0,
+          "elb_req": -0.0064
+        },
+        "elb_req": {
+          "ec2_cpu": -0.1615,
+          "ec2_net": -0.0064,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-13T23:19:00Z",
+      "start_time": "2014-04-13T18:19:00Z",
+      "window_index": 36,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.2454,
+          "elb_req": -0.0873
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.2454,
+          "ec2_net": 1.0,
+          "elb_req": -0.0546
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0873,
+          "ec2_net": -0.0546,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-14T01:54:00Z",
+      "start_time": "2014-04-13T20:49:00Z",
+      "window_index": 37,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.0583,
+          "elb_req": -0.1159
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.0583,
+          "ec2_net": 1.0,
+          "elb_req": 0.0258
+        },
+        "elb_req": {
+          "ec2_cpu": -0.1159,
+          "ec2_net": 0.0258,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-14T04:24:00Z",
+      "start_time": "2014-04-13T23:24:00Z",
+      "window_index": 38,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0002,
+          "elb_req": -0.1712
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0002,
+          "ec2_net": 1.0,
+          "elb_req": 0.1482
+        },
+        "elb_req": {
+          "ec2_cpu": -0.1712,
+          "ec2_net": 0.1482,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-14T06:54:00Z",
+      "start_time": "2014-04-14T01:59:00Z",
+      "window_index": 39,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.1773,
+          "elb_req": -0.0907
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.1773,
+          "ec2_net": 1.0,
+          "elb_req": -0.1238
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0907,
+          "ec2_net": -0.1238,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-14T09:24:00Z",
+      "start_time": "2014-04-14T04:29:00Z",
+      "window_index": 40,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.0336,
+          "elb_req": 0.1413
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.0336,
+          "ec2_net": 1.0,
+          "elb_req": -0.1299
+        },
+        "elb_req": {
+          "ec2_cpu": 0.1413,
+          "ec2_net": -0.1299,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-14T11:54:00Z",
+      "start_time": "2014-04-14T06:59:00Z",
+      "window_index": 41,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0182,
+          "elb_req": 0.3515
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0182,
+          "ec2_net": 1.0,
+          "elb_req": 0.2101
+        },
+        "elb_req": {
+          "ec2_cpu": 0.3515,
+          "ec2_net": 0.2101,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-14T14:24:00Z",
+      "start_time": "2014-04-14T09:29:00Z",
+      "window_index": 42,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.0925,
+          "elb_req": 0.2955
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.0925,
+          "ec2_net": 1.0,
+          "elb_req": 0.0704
+        },
+        "elb_req": {
+          "ec2_cpu": 0.2955,
+          "ec2_net": 0.0704,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-14T16:54:00Z",
+      "start_time": "2014-04-14T11:59:00Z",
+      "window_index": 43,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.0091,
+          "elb_req": 0.1781
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.0091,
+          "ec2_net": 1.0,
+          "elb_req": -0.0255
+        },
+        "elb_req": {
+          "ec2_cpu": 0.1781,
+          "ec2_net": -0.0255,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-14T19:24:00Z",
+      "start_time": "2014-04-14T14:29:00Z",
+      "window_index": 44,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0731,
+          "elb_req": -0.0871
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0731,
+          "ec2_net": 1.0,
+          "elb_req": -0.0791
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0871,
+          "ec2_net": -0.0791,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-14T21:54:00Z",
+      "start_time": "2014-04-14T16:59:00Z",
+      "window_index": 45,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.1756,
+          "elb_req": -0.2498
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.1756,
+          "ec2_net": 1.0,
+          "elb_req": 0.0358
+        },
+        "elb_req": {
+          "ec2_cpu": -0.2498,
+          "ec2_net": 0.0358,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-15T00:24:00Z",
+      "start_time": "2014-04-14T19:29:00Z",
+      "window_index": 46,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.1057,
+          "elb_req": 0.0618
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.1057,
+          "ec2_net": 1.0,
+          "elb_req": 0.0058
+        },
+        "elb_req": {
+          "ec2_cpu": 0.0618,
+          "ec2_net": 0.0058,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-15T02:54:00Z",
+      "start_time": "2014-04-14T21:59:00Z",
+      "window_index": 47,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0663,
+          "elb_req": 0.1298
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0663,
+          "ec2_net": 1.0,
+          "elb_req": -0.0968
+        },
+        "elb_req": {
+          "ec2_cpu": 0.1298,
+          "ec2_net": -0.0968,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-15T05:24:00Z",
+      "start_time": "2014-04-15T00:29:00Z",
+      "window_index": 48,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.3206,
+          "elb_req": -0.0892
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.3206,
+          "ec2_net": 1.0,
+          "elb_req": -0.0351
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0892,
+          "ec2_net": -0.0351,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-15T07:54:00Z",
+      "start_time": "2014-04-15T02:59:00Z",
+      "window_index": 49,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.2775,
+          "elb_req": -0.1424
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.2775,
+          "ec2_net": 1.0,
+          "elb_req": 0.1548
+        },
+        "elb_req": {
+          "ec2_cpu": -0.1424,
+          "ec2_net": 0.1548,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-15T10:24:00Z",
+      "start_time": "2014-04-15T05:29:00Z",
+      "window_index": 50,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.1067,
+          "elb_req": -0.0354
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.1067,
+          "ec2_net": 1.0,
+          "elb_req": 0.1021
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0354,
+          "ec2_net": 0.1021,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-15T12:54:00Z",
+      "start_time": "2014-04-15T07:59:00Z",
+      "window_index": 51,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.2017,
+          "elb_req": 0.1678
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.2017,
+          "ec2_net": 1.0,
+          "elb_req": 0.1416
+        },
+        "elb_req": {
+          "ec2_cpu": 0.1678,
+          "ec2_net": 0.1416,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-15T15:24:00Z",
+      "start_time": "2014-04-15T10:29:00Z",
+      "window_index": 52,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.2221,
+          "elb_req": 0.0783
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.2221,
+          "ec2_net": 1.0,
+          "elb_req": 0.1
+        },
+        "elb_req": {
+          "ec2_cpu": 0.0783,
+          "ec2_net": 0.1,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-15T17:54:00Z",
+      "start_time": "2014-04-15T12:59:00Z",
+      "window_index": 53,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.0194,
+          "elb_req": 0.0214
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.0194,
+          "ec2_net": 1.0,
+          "elb_req": -0.0688
+        },
+        "elb_req": {
+          "ec2_cpu": 0.0214,
+          "ec2_net": -0.0688,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-15T20:24:00Z",
+      "start_time": "2014-04-15T15:29:00Z",
+      "window_index": 54,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.0013,
+          "elb_req": -0.0261
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.0013,
+          "ec2_net": 1.0,
+          "elb_req": -0.2143
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0261,
+          "ec2_net": -0.2143,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-15T22:54:00Z",
+      "start_time": "2014-04-15T17:59:00Z",
+      "window_index": 55,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.047,
+          "elb_req": 0.0676
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.047,
+          "ec2_net": 1.0,
+          "elb_req": -0.4503
+        },
+        "elb_req": {
+          "ec2_cpu": 0.0676,
+          "ec2_net": -0.4503,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-16T01:24:00Z",
+      "start_time": "2014-04-15T20:29:00Z",
+      "window_index": 56,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.1843,
+          "elb_req": 0.0873
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.1843,
+          "ec2_net": 1.0,
+          "elb_req": -0.1256
+        },
+        "elb_req": {
+          "ec2_cpu": 0.0873,
+          "ec2_net": -0.1256,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-16T03:54:00Z",
+      "start_time": "2014-04-15T22:59:00Z",
+      "window_index": 57,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.3565,
+          "elb_req": 0.1015
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.3565,
+          "ec2_net": 1.0,
+          "elb_req": 0.0701
+        },
+        "elb_req": {
+          "ec2_cpu": 0.1015,
+          "ec2_net": 0.0701,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-16T06:29:00Z",
+      "start_time": "2014-04-16T01:29:00Z",
+      "window_index": 58,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.6155,
+          "elb_req": 0.0996
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.6155,
+          "ec2_net": 1.0,
+          "elb_req": -0.2329
+        },
+        "elb_req": {
+          "ec2_cpu": 0.0996,
+          "ec2_net": -0.2329,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-16T08:59:00Z",
+      "start_time": "2014-04-16T03:59:00Z",
+      "window_index": 59,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.0995,
+          "elb_req": -0.2293
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.0995,
+          "ec2_net": 1.0,
+          "elb_req": -0.1018
+        },
+        "elb_req": {
+          "ec2_cpu": -0.2293,
+          "ec2_net": -0.1018,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-16T11:34:00Z",
+      "start_time": "2014-04-16T06:34:00Z",
+      "window_index": 60,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0359,
+          "elb_req": 0.0879
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0359,
+          "ec2_net": 1.0,
+          "elb_req": 0.0138
+        },
+        "elb_req": {
+          "ec2_cpu": 0.0879,
+          "ec2_net": 0.0138,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-16T14:04:00Z",
+      "start_time": "2014-04-16T09:04:00Z",
+      "window_index": 61,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.2842,
+          "elb_req": 0.1557
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.2842,
+          "ec2_net": 1.0,
+          "elb_req": 0.2585
+        },
+        "elb_req": {
+          "ec2_cpu": 0.1557,
+          "ec2_net": 0.2585,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-16T16:34:00Z",
+      "start_time": "2014-04-16T11:39:00Z",
+      "window_index": 62,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0512,
+          "elb_req": -0.1876
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0512,
+          "ec2_net": 1.0,
+          "elb_req": 0.0377
+        },
+        "elb_req": {
+          "ec2_cpu": -0.1876,
+          "ec2_net": 0.0377,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-16T19:04:00Z",
+      "start_time": "2014-04-16T14:09:00Z",
+      "window_index": 63,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.2247,
+          "elb_req": -0.0404
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.2247,
+          "ec2_net": 1.0,
+          "elb_req": 0.0614
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0404,
+          "ec2_net": 0.0614,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-16T21:34:00Z",
+      "start_time": "2014-04-16T16:39:00Z",
+      "window_index": 64,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.2496,
+          "elb_req": 0.1999
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.2496,
+          "ec2_net": 1.0,
+          "elb_req": 0.2415
+        },
+        "elb_req": {
+          "ec2_cpu": 0.1999,
+          "ec2_net": 0.2415,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-17T00:04:00Z",
+      "start_time": "2014-04-16T19:09:00Z",
+      "window_index": 65,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.111,
+          "elb_req": 0.0522
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.111,
+          "ec2_net": 1.0,
+          "elb_req": 0.0596
+        },
+        "elb_req": {
+          "ec2_cpu": 0.0522,
+          "ec2_net": 0.0596,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-17T02:34:00Z",
+      "start_time": "2014-04-16T21:39:00Z",
+      "window_index": 66,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.0617,
+          "elb_req": 0.1217
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.0617,
+          "ec2_net": 1.0,
+          "elb_req": 0.1256
+        },
+        "elb_req": {
+          "ec2_cpu": 0.1217,
+          "ec2_net": 0.1256,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-17T05:04:00Z",
+      "start_time": "2014-04-17T00:09:00Z",
+      "window_index": 67,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.1496,
+          "elb_req": 0.2512
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.1496,
+          "ec2_net": 1.0,
+          "elb_req": 0.0487
+        },
+        "elb_req": {
+          "ec2_cpu": 0.2512,
+          "ec2_net": 0.0487,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-17T07:34:00Z",
+      "start_time": "2014-04-17T02:39:00Z",
+      "window_index": 68,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.1972,
+          "elb_req": 0.0718
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.1972,
+          "ec2_net": 1.0,
+          "elb_req": 0.1863
+        },
+        "elb_req": {
+          "ec2_cpu": 0.0718,
+          "ec2_net": 0.1863,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-17T10:04:00Z",
+      "start_time": "2014-04-17T05:09:00Z",
+      "window_index": 69,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.0184,
+          "elb_req": -0.0072
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.0184,
+          "ec2_net": 1.0,
+          "elb_req": -0.0392
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0072,
+          "ec2_net": -0.0392,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-17T12:34:00Z",
+      "start_time": "2014-04-17T07:39:00Z",
+      "window_index": 70,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.0505,
+          "elb_req": -0.0153
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.0505,
+          "ec2_net": 1.0,
+          "elb_req": 0.0926
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0153,
+          "ec2_net": 0.0926,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-17T15:04:00Z",
+      "start_time": "2014-04-17T10:09:00Z",
+      "window_index": 71,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.3931,
+          "elb_req": 0.0353
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.3931,
+          "ec2_net": 1.0,
+          "elb_req": 0.256
+        },
+        "elb_req": {
+          "ec2_cpu": 0.0353,
+          "ec2_net": 0.256,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-17T17:39:00Z",
+      "start_time": "2014-04-17T12:39:00Z",
+      "window_index": 72,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.2527,
+          "elb_req": 0.197
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.2527,
+          "ec2_net": 1.0,
+          "elb_req": 0.1817
+        },
+        "elb_req": {
+          "ec2_cpu": 0.197,
+          "ec2_net": 0.1817,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-17T20:09:00Z",
+      "start_time": "2014-04-17T15:09:00Z",
+      "window_index": 73,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0169,
+          "elb_req": 0.0742
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0169,
+          "ec2_net": 1.0,
+          "elb_req": 0.0222
+        },
+        "elb_req": {
+          "ec2_cpu": 0.0742,
+          "ec2_net": 0.0222,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-17T22:39:00Z",
+      "start_time": "2014-04-17T17:44:00Z",
+      "window_index": 74,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0428,
+          "elb_req": 0.1133
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0428,
+          "ec2_net": 1.0,
+          "elb_req": 0.0466
+        },
+        "elb_req": {
+          "ec2_cpu": 0.1133,
+          "ec2_net": 0.0466,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-18T01:09:00Z",
+      "start_time": "2014-04-17T20:14:00Z",
+      "window_index": 75,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.1346,
+          "elb_req": 0.1076
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.1346,
+          "ec2_net": 1.0,
+          "elb_req": -0.0053
+        },
+        "elb_req": {
+          "ec2_cpu": 0.1076,
+          "ec2_net": -0.0053,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-18T03:39:00Z",
+      "start_time": "2014-04-17T22:44:00Z",
+      "window_index": 76,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0705,
+          "elb_req": 0.0148
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0705,
+          "ec2_net": 1.0,
+          "elb_req": 0.0987
+        },
+        "elb_req": {
+          "ec2_cpu": 0.0148,
+          "ec2_net": 0.0987,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-18T06:09:00Z",
+      "start_time": "2014-04-18T01:14:00Z",
+      "window_index": 77,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.2485,
+          "elb_req": -0.0523
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.2485,
+          "ec2_net": 1.0,
+          "elb_req": -0.1579
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0523,
+          "ec2_net": -0.1579,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-18T08:44:00Z",
+      "start_time": "2014-04-18T03:44:00Z",
+      "window_index": 78,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0375,
+          "elb_req": -0.0935
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0375,
+          "ec2_net": 1.0,
+          "elb_req": -0.264
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0935,
+          "ec2_net": -0.264,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-18T11:14:00Z",
+      "start_time": "2014-04-18T06:14:00Z",
+      "window_index": 79,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.1151,
+          "elb_req": 0.0093
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.1151,
+          "ec2_net": 1.0,
+          "elb_req": -0.0881
+        },
+        "elb_req": {
+          "ec2_cpu": 0.0093,
+          "ec2_net": -0.0881,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-18T13:44:00Z",
+      "start_time": "2014-04-18T08:49:00Z",
+      "window_index": 80,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.1299,
+          "elb_req": 0.1638
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.1299,
+          "ec2_net": 1.0,
+          "elb_req": 0.0861
+        },
+        "elb_req": {
+          "ec2_cpu": 0.1638,
+          "ec2_net": 0.0861,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-18T16:14:00Z",
+      "start_time": "2014-04-18T11:19:00Z",
+      "window_index": 81,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.3571,
+          "elb_req": -0.104
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.3571,
+          "ec2_net": 1.0,
+          "elb_req": 0.1207
+        },
+        "elb_req": {
+          "ec2_cpu": -0.104,
+          "ec2_net": 0.1207,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-18T18:44:00Z",
+      "start_time": "2014-04-18T13:49:00Z",
+      "window_index": 82,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.1074,
+          "elb_req": -0.344
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.1074,
+          "ec2_net": 1.0,
+          "elb_req": -0.023
+        },
+        "elb_req": {
+          "ec2_cpu": -0.344,
+          "ec2_net": -0.023,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-18T21:14:00Z",
+      "start_time": "2014-04-18T16:19:00Z",
+      "window_index": 83,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.1744,
+          "elb_req": -0.1274
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.1744,
+          "ec2_net": 1.0,
+          "elb_req": -0.1218
+        },
+        "elb_req": {
+          "ec2_cpu": -0.1274,
+          "ec2_net": -0.1218,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-18T23:44:00Z",
+      "start_time": "2014-04-18T18:49:00Z",
+      "window_index": 84,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.339,
+          "elb_req": -0.0706
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.339,
+          "ec2_net": 1.0,
+          "elb_req": -0.1094
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0706,
+          "ec2_net": -0.1094,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-19T02:14:00Z",
+      "start_time": "2014-04-18T21:19:00Z",
+      "window_index": 85,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.1513,
+          "elb_req": -0.1263
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.1513,
+          "ec2_net": 1.0,
+          "elb_req": 0.1961
+        },
+        "elb_req": {
+          "ec2_cpu": -0.1263,
+          "ec2_net": 0.1961,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-19T04:44:00Z",
+      "start_time": "2014-04-18T23:49:00Z",
+      "window_index": 86,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.045,
+          "elb_req": -0.1425
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.045,
+          "ec2_net": 1.0,
+          "elb_req": 0.2649
+        },
+        "elb_req": {
+          "ec2_cpu": -0.1425,
+          "ec2_net": 0.2649,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-19T07:14:00Z",
+      "start_time": "2014-04-19T02:19:00Z",
+      "window_index": 87,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0249,
+          "elb_req": -0.0899
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0249,
+          "ec2_net": 1.0,
+          "elb_req": -0.0286
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0899,
+          "ec2_net": -0.0286,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-19T09:44:00Z",
+      "start_time": "2014-04-19T04:49:00Z",
+      "window_index": 88,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.1939,
+          "elb_req": -0.0296
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.1939,
+          "ec2_net": 1.0,
+          "elb_req": -0.1935
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0296,
+          "ec2_net": -0.1935,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-19T12:14:00Z",
+      "start_time": "2014-04-19T07:19:00Z",
+      "window_index": 89,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.2022,
+          "elb_req": 0.039
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.2022,
+          "ec2_net": 1.0,
+          "elb_req": -0.2132
+        },
+        "elb_req": {
+          "ec2_cpu": 0.039,
+          "ec2_net": -0.2132,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-19T14:44:00Z",
+      "start_time": "2014-04-19T09:49:00Z",
+      "window_index": 90,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0147,
+          "elb_req": -0.0286
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0147,
+          "ec2_net": 1.0,
+          "elb_req": -0.103
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0286,
+          "ec2_net": -0.103,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-19T17:14:00Z",
+      "start_time": "2014-04-19T12:19:00Z",
+      "window_index": 91,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.004,
+          "elb_req": -0.0125
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.004,
+          "ec2_net": 1.0,
+          "elb_req": 0.0422
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0125,
+          "ec2_net": 0.0422,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-19T19:44:00Z",
+      "start_time": "2014-04-19T14:49:00Z",
+      "window_index": 92,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0203,
+          "elb_req": -0.1408
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0203,
+          "ec2_net": 1.0,
+          "elb_req": 0.1993
+        },
+        "elb_req": {
+          "ec2_cpu": -0.1408,
+          "ec2_net": 0.1993,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-19T22:14:00Z",
+      "start_time": "2014-04-19T17:19:00Z",
+      "window_index": 93,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.0444,
+          "elb_req": -0.1985
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.0444,
+          "ec2_net": 1.0,
+          "elb_req": 0.1481
+        },
+        "elb_req": {
+          "ec2_cpu": -0.1985,
+          "ec2_net": 0.1481,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-20T00:44:00Z",
+      "start_time": "2014-04-19T19:49:00Z",
+      "window_index": 94,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0496,
+          "elb_req": -0.0246
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0496,
+          "ec2_net": 1.0,
+          "elb_req": 0.0287
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0246,
+          "ec2_net": 0.0287,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-20T03:14:00Z",
+      "start_time": "2014-04-19T22:19:00Z",
+      "window_index": 95,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0526,
+          "elb_req": 0.0745
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0526,
+          "ec2_net": 1.0,
+          "elb_req": -0.095
+        },
+        "elb_req": {
+          "ec2_cpu": 0.0745,
+          "ec2_net": -0.095,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-20T05:49:00Z",
+      "start_time": "2014-04-20T00:49:00Z",
+      "window_index": 96,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.1763,
+          "elb_req": -0.03
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.1763,
+          "ec2_net": 1.0,
+          "elb_req": -0.0547
+        },
+        "elb_req": {
+          "ec2_cpu": -0.03,
+          "ec2_net": -0.0547,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-20T08:19:00Z",
+      "start_time": "2014-04-20T03:19:00Z",
+      "window_index": 97,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.3517,
+          "elb_req": -0.1987
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.3517,
+          "ec2_net": 1.0,
+          "elb_req": -0.0161
+        },
+        "elb_req": {
+          "ec2_cpu": -0.1987,
+          "ec2_net": -0.0161,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-20T10:49:00Z",
+      "start_time": "2014-04-20T05:54:00Z",
+      "window_index": 98,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.2886,
+          "elb_req": -0.1947
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.2886,
+          "ec2_net": 1.0,
+          "elb_req": 0.1945
+        },
+        "elb_req": {
+          "ec2_cpu": -0.1947,
+          "ec2_net": 0.1945,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-20T13:19:00Z",
+      "start_time": "2014-04-20T08:24:00Z",
+      "window_index": 99,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.2161,
+          "elb_req": -0.0211
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.2161,
+          "ec2_net": 1.0,
+          "elb_req": 0.1339
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0211,
+          "ec2_net": 0.1339,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-20T15:49:00Z",
+      "start_time": "2014-04-20T10:54:00Z",
+      "window_index": 100,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.046,
+          "elb_req": -0.0616
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.046,
+          "ec2_net": 1.0,
+          "elb_req": 0.0149
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0616,
+          "ec2_net": 0.0149,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-20T18:19:00Z",
+      "start_time": "2014-04-20T13:24:00Z",
+      "window_index": 101,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0438,
+          "elb_req": -0.2517
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0438,
+          "ec2_net": 1.0,
+          "elb_req": 0.012
+        },
+        "elb_req": {
+          "ec2_cpu": -0.2517,
+          "ec2_net": 0.012,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-20T20:49:00Z",
+      "start_time": "2014-04-20T15:54:00Z",
+      "window_index": 102,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.1725,
+          "elb_req": -0.0891
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.1725,
+          "ec2_net": 1.0,
+          "elb_req": -0.0134
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0891,
+          "ec2_net": -0.0134,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-20T23:19:00Z",
+      "start_time": "2014-04-20T18:24:00Z",
+      "window_index": 103,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.2599,
+          "elb_req": 0.1667
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.2599,
+          "ec2_net": 1.0,
+          "elb_req": 0.0965
+        },
+        "elb_req": {
+          "ec2_cpu": 0.1667,
+          "ec2_net": 0.0965,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-21T01:49:00Z",
+      "start_time": "2014-04-20T20:54:00Z",
+      "window_index": 104,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.1139,
+          "elb_req": 0.0372
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.1139,
+          "ec2_net": 1.0,
+          "elb_req": 0.03
+        },
+        "elb_req": {
+          "ec2_cpu": 0.0372,
+          "ec2_net": 0.03,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-21T04:19:00Z",
+      "start_time": "2014-04-20T23:24:00Z",
+      "window_index": 105,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0029,
+          "elb_req": -0.0828
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0029,
+          "ec2_net": 1.0,
+          "elb_req": -0.1112
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0828,
+          "ec2_net": -0.1112,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-21T06:49:00Z",
+      "start_time": "2014-04-21T01:54:00Z",
+      "window_index": 106,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0897,
+          "elb_req": -0.0853
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0897,
+          "ec2_net": 1.0,
+          "elb_req": 0.0155
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0853,
+          "ec2_net": 0.0155,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-21T09:19:00Z",
+      "start_time": "2014-04-21T04:24:00Z",
+      "window_index": 107,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.2015,
+          "elb_req": -0.1568
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.2015,
+          "ec2_net": 1.0,
+          "elb_req": -0.1696
+        },
+        "elb_req": {
+          "ec2_cpu": -0.1568,
+          "ec2_net": -0.1696,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-21T11:49:00Z",
+      "start_time": "2014-04-21T06:54:00Z",
+      "window_index": 108,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.2503,
+          "elb_req": 0.186
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.2503,
+          "ec2_net": 1.0,
+          "elb_req": -0.0612
+        },
+        "elb_req": {
+          "ec2_cpu": 0.186,
+          "ec2_net": -0.0612,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-21T14:19:00Z",
+      "start_time": "2014-04-21T09:24:00Z",
+      "window_index": 109,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.103,
+          "elb_req": 0.1127
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.103,
+          "ec2_net": 1.0,
+          "elb_req": 0.1436
+        },
+        "elb_req": {
+          "ec2_cpu": 0.1127,
+          "ec2_net": 0.1436,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-21T16:49:00Z",
+      "start_time": "2014-04-21T11:54:00Z",
+      "window_index": 110,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.2601,
+          "elb_req": 0.1083
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.2601,
+          "ec2_net": 1.0,
+          "elb_req": 0.0369
+        },
+        "elb_req": {
+          "ec2_cpu": 0.1083,
+          "ec2_net": 0.0369,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-21T19:19:00Z",
+      "start_time": "2014-04-21T14:24:00Z",
+      "window_index": 111,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.2907,
+          "elb_req": -0.0666
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.2907,
+          "ec2_net": 1.0,
+          "elb_req": 0.0271
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0666,
+          "ec2_net": 0.0271,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-21T21:49:00Z",
+      "start_time": "2014-04-21T16:54:00Z",
+      "window_index": 112,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.1339,
+          "elb_req": -0.1909
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.1339,
+          "ec2_net": 1.0,
+          "elb_req": -0.0132
+        },
+        "elb_req": {
+          "ec2_cpu": -0.1909,
+          "ec2_net": -0.0132,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-22T00:19:00Z",
+      "start_time": "2014-04-21T19:24:00Z",
+      "window_index": 113,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.1284,
+          "elb_req": -0.0663
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.1284,
+          "ec2_net": 1.0,
+          "elb_req": -0.0759
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0663,
+          "ec2_net": -0.0759,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-22T02:49:00Z",
+      "start_time": "2014-04-21T21:54:00Z",
+      "window_index": 114,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0931,
+          "elb_req": -0.0153
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0931,
+          "ec2_net": 1.0,
+          "elb_req": -0.029
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0153,
+          "ec2_net": -0.029,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-22T05:19:00Z",
+      "start_time": "2014-04-22T00:24:00Z",
+      "window_index": 115,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.1009,
+          "elb_req": -0.0205
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.1009,
+          "ec2_net": 1.0,
+          "elb_req": 0.0076
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0205,
+          "ec2_net": 0.0076,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-22T07:49:00Z",
+      "start_time": "2014-04-22T02:54:00Z",
+      "window_index": 116,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.0207,
+          "elb_req": 0.0986
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.0207,
+          "ec2_net": 1.0,
+          "elb_req": 0.1657
+        },
+        "elb_req": {
+          "ec2_cpu": 0.0986,
+          "ec2_net": 0.1657,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-22T10:19:00Z",
+      "start_time": "2014-04-22T05:24:00Z",
+      "window_index": 117,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.0124,
+          "elb_req": 0.0721
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.0124,
+          "ec2_net": 1.0,
+          "elb_req": 0.0671
+        },
+        "elb_req": {
+          "ec2_cpu": 0.0721,
+          "ec2_net": 0.0671,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-22T12:49:00Z",
+      "start_time": "2014-04-22T07:54:00Z",
+      "window_index": 118,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0696,
+          "elb_req": -0.0606
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0696,
+          "ec2_net": 1.0,
+          "elb_req": -0.0291
+        },
+        "elb_req": {
+          "ec2_cpu": -0.0606,
+          "ec2_net": -0.0291,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-22T15:19:00Z",
+      "start_time": "2014-04-22T10:24:00Z",
+      "window_index": 119,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.1798,
+          "elb_req": -0.281
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.1798,
+          "ec2_net": 1.0,
+          "elb_req": 0.0418
+        },
+        "elb_req": {
+          "ec2_cpu": -0.281,
+          "ec2_net": 0.0418,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-22T17:49:00Z",
+      "start_time": "2014-04-22T12:54:00Z",
+      "window_index": 120,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.1033,
+          "elb_req": -0.2109
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.1033,
+          "ec2_net": 1.0,
+          "elb_req": -0.1024
+        },
+        "elb_req": {
+          "ec2_cpu": -0.2109,
+          "ec2_net": -0.1024,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-22T20:19:00Z",
+      "start_time": "2014-04-22T15:24:00Z",
+      "window_index": 121,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.2675,
+          "elb_req": -0.2643
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.2675,
+          "ec2_net": 1.0,
+          "elb_req": -0.1377
+        },
+        "elb_req": {
+          "ec2_cpu": -0.2643,
+          "ec2_net": -0.1377,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-22T22:49:00Z",
+      "start_time": "2014-04-22T17:54:00Z",
+      "window_index": 122,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.2111,
+          "elb_req": -0.2568
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.2111,
+          "ec2_net": 1.0,
+          "elb_req": 0.0457
+        },
+        "elb_req": {
+          "ec2_cpu": -0.2568,
+          "ec2_net": 0.0457,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-23T01:19:00Z",
+      "start_time": "2014-04-22T20:24:00Z",
+      "window_index": 123,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0859,
+          "elb_req": 0.2547
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0859,
+          "ec2_net": 1.0,
+          "elb_req": 0.0533
+        },
+        "elb_req": {
+          "ec2_cpu": 0.2547,
+          "ec2_net": 0.0533,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-23T03:49:00Z",
+      "start_time": "2014-04-22T22:54:00Z",
+      "window_index": 124,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0181,
+          "elb_req": 0.1287
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0181,
+          "ec2_net": 1.0,
+          "elb_req": 0.0035
+        },
+        "elb_req": {
+          "ec2_cpu": 0.1287,
+          "ec2_net": 0.0035,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-23T06:19:00Z",
+      "start_time": "2014-04-23T01:24:00Z",
+      "window_index": 125,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": -0.0871,
+          "elb_req": -0.1149
+        },
+        "ec2_net": {
+          "ec2_cpu": -0.0871,
+          "ec2_net": 1.0,
+          "elb_req": -0.0143
+        },
+        "elb_req": {
+          "ec2_cpu": -0.1149,
+          "ec2_net": -0.0143,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-23T08:49:00Z",
+      "start_time": "2014-04-23T03:54:00Z",
+      "window_index": 126,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.1469,
+          "elb_req": -0.1327
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.1469,
+          "ec2_net": 1.0,
+          "elb_req": 0.1036
+        },
+        "elb_req": {
+          "ec2_cpu": -0.1327,
+          "ec2_net": 0.1036,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-23T11:19:00Z",
+      "start_time": "2014-04-23T06:24:00Z",
+      "window_index": 127,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.1974,
+          "elb_req": 0.1306
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.1974,
+          "ec2_net": 1.0,
+          "elb_req": 0.0913
+        },
+        "elb_req": {
+          "ec2_cpu": 0.1306,
+          "ec2_net": 0.0913,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-23T13:49:00Z",
+      "start_time": "2014-04-23T08:54:00Z",
+      "window_index": 128,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.2507,
+          "elb_req": 0.1303
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.2507,
+          "ec2_net": 1.0,
+          "elb_req": 0.0035
+        },
+        "elb_req": {
+          "ec2_cpu": 0.1303,
+          "ec2_net": 0.0035,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-23T16:19:00Z",
+      "start_time": "2014-04-23T11:24:00Z",
+      "window_index": 129,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0797,
+          "elb_req": 0.0639
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0797,
+          "ec2_net": 1.0,
+          "elb_req": -0.091
+        },
+        "elb_req": {
+          "ec2_cpu": 0.0639,
+          "ec2_net": -0.091,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-23T18:49:00Z",
+      "start_time": "2014-04-23T13:54:00Z",
+      "window_index": 130,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0738,
+          "elb_req": 0.0001
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0738,
+          "ec2_net": 1.0,
+          "elb_req": -0.1717
+        },
+        "elb_req": {
+          "ec2_cpu": 0.0001,
+          "ec2_net": -0.1717,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-23T21:19:00Z",
+      "start_time": "2014-04-23T16:24:00Z",
+      "window_index": 131,
+      "window_size": 60
+    },
+    {
+      "correlation_matrix": {
+        "ec2_cpu": {
+          "ec2_cpu": 1.0,
+          "ec2_net": 0.0554,
+          "elb_req": 0.0852
+        },
+        "ec2_net": {
+          "ec2_cpu": 0.0554,
+          "ec2_net": 1.0,
+          "elb_req": -0.0636
+        },
+        "elb_req": {
+          "ec2_cpu": 0.0852,
+          "ec2_net": -0.0636,
+          "elb_req": 1.0
+        }
+      },
+      "end_time": "2014-04-23T23:49:00Z",
+      "start_time": "2014-04-23T18:54:00Z",
+      "window_index": 132,
+      "window_size": 60
+    }
+  ],
+  "status": "success",
+  "summary": {
+    "alerts": 23,
+    "changes": 396,
+    "correlation_results": 133,
+    "missing_values_imputed": 0,
+    "non_numeric_values_coerced": 0,
+    "processed_rows": 4024,
+    "windows": 133
+  }
+}

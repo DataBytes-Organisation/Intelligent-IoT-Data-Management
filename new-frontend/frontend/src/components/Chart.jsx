@@ -9,14 +9,7 @@ import {
   YAxis,
 } from 'recharts';
 
-const colors = [
-  '#2563eb',
-  '#16a34a',
-  '#9333ea',
-  '#ea580c',
-  '#0891b2',
-  '#7c3aed',
-];
+import { getChartColor } from "../utils/chartColors.js";
 
 const formatTimestamp = (timestamp) => {
   const date = new Date(timestamp);
@@ -119,8 +112,7 @@ const getRawAlertValue = (
   stream,
   streamLabels
 ) => {
-  const supportingValues =
-    alert?.supporting_values;
+  const supportingValues = alert?.supporting_values;
 
   if (
     !supportingValues ||
@@ -193,7 +185,7 @@ const TimelineTooltip = ({
         </strong>
 
         <div>
-          {formatTimestamp(label)}
+          {formatTimestamp(alert?.timestamp || label)}
         </div>
 
         <div>
@@ -225,8 +217,18 @@ const TimelineTooltip = ({
             key={stream}
             className="sensor-tooltip-row"
           >
-            <span>
-              {streamLabels[stream] || stream}
+            <span className="sensor-tooltip-label">
+              <span
+                className="sensor-tooltip-color-dot"
+                style={{
+                  backgroundColor: item.color || "#64748b",
+                }}
+                aria-hidden="true"
+              />
+
+              <span>
+                {streamLabels[stream] || stream}
+              </span>
             </span>
 
             <strong>
@@ -244,6 +246,7 @@ const Chart = ({
   selectedStreams,
   streamLabels = {},
   alerts = [],
+  highlightedStream = null,
 }) => {
   if (selectedStreams.length === 0) {
     return (
@@ -326,13 +329,32 @@ const Chart = ({
   );
 
   /*
-   * Map every anomaly to the closest
-   * visible chart timestamp.
+   * Determine the currently visible time range
+   * once before processing anomaly alerts.
+   */
+  const visibleTimes = chartData
+    .map((row) =>
+      new Date(row.created_at).getTime()
+    )
+    .filter(Number.isFinite);
+
+  const visibleStart =
+    visibleTimes.length > 0
+      ? Math.min(...visibleTimes)
+      : null;
+
+  const visibleEnd =
+    visibleTimes.length > 0
+      ? Math.max(...visibleTimes)
+      : null;
+
+  /*
+   * Map anomalies within the visible time
+   * range to the closest chart timestamp.
    *
-   * This is important because filtering/
-   * intervals may mean the Analytics
-   * timestamp is not exactly equal to a
-   * displayed chart point.
+   * Alerts outside the visible range are
+   * ignored so they are not incorrectly
+   * attached to the first or last point.
    */
   anomalyAlerts.forEach((alert) => {
     const stream = findMatchingStream(
@@ -350,6 +372,27 @@ const Chart = ({
     ).getTime();
 
     if (!Number.isFinite(alertTime)) {
+      return;
+    }
+
+    /*
+     * Do not attach an out-of-range anomaly
+     * to the nearest visible chart point.
+     */
+    console.log('Anomaly range check:', {
+      anomalyTime: alert.timestamp,
+      visibleStart: new Date(visibleStart).toISOString(),
+      visibleEnd: new Date(visibleEnd).toISOString(),
+      inRange:
+        alertTime >= visibleStart &&
+        alertTime <= visibleEnd,
+    });
+    if (
+      visibleStart === null ||
+      visibleEnd === null ||
+      alertTime < visibleStart ||
+      alertTime > visibleEnd
+    ) {
       return;
     }
 
@@ -522,23 +565,18 @@ const Chart = ({
                 key={stream}
                 type="monotone"
                 dataKey={stream}
-                name={
-                  streamLabels[stream] ||
-                  stream
+                name={streamLabels[stream] || stream}
+                stroke={getChartColor(index)}
+                strokeWidth={
+                  highlightedStream === stream ? 4 : 2.5
                 }
-                stroke={
-                  colors[
-                    index %
-                      colors.length
-                  ]
+                strokeOpacity={
+                  highlightedStream && highlightedStream !== stream
+                    ? 0.2
+                    : 1
                 }
-                strokeWidth={2.5}
-                dot={renderAnomalyDot(
-                  stream
-                )}
-                activeDot={{
-                  r: 4,
-                }}
+                dot={renderAnomalyDot(stream)}
+                activeDot={{ r: 4 }}
                 connectNulls
               />
             )

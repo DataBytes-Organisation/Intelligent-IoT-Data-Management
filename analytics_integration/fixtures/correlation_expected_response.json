@@ -1,0 +1,37 @@
+[
+  {
+    "timestamp": "2026-08-05T08:25:00Z",
+    "alert_type": "CORRELATION_CHANGE",
+    "target": {
+      "entity_id": null,
+      "metrics": [
+        "temperature",
+        "pressure"
+      ]
+    },
+    "method": "Rolling_Pearson_Correlation",
+    "score": 0.79,
+    "score_metadata": {
+      "type": "absolute_correlation_delta",
+      "normalized": false
+    },
+    "severity": "HIGH",
+    "message": "Correlation between temperature and pressure changed by 0.79.",
+    "time_window": {
+      "start": "2026-08-05T08:20:00Z",
+      "end": "2026-08-05T08:25:00Z",
+      "window_size": 30,
+      "step_size": 5
+    },
+    "supporting_values": {
+      "previous_correlation": 0.91,
+      "current_correlation": 0.12,
+      "delta": 0.79,
+      "window_index": 4
+    },
+    "source": {
+      "component": "correlation"
+    },
+    "alert_id": null
+  }
+]

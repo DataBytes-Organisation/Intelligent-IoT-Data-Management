@@ -21,6 +21,11 @@ class DatasetRepository {
       status === "deleted"
         ? "d.deleted_at IS NOT NULL AND d.deleted_at > CURRENT_TIMESTAMP - INTERVAL '15 days'"
         : "d.deleted_at IS NULL";
+    const accessClause = userId
+      ? "AND (d.created_by = $1 OR d.created_by = $2)"
+      : "";
+    const queryParams = userId ? [userId, thingspeakOwnerId] : [];
+
     const result = await db.query(
       `
       SELECT
@@ -35,11 +40,11 @@ class DatasetRepository {
       FROM datasets d
       LEFT JOIN timeseries t ON t.dataset_id = d.id
       WHERE ${whereClause}
-        AND (d.created_by = $1 OR d.created_by = $2)
+        ${accessClause}
       GROUP BY d.id, d.name, d.created_by, d.updated_by, d.created_at, d.updated_at, d.deleted_at
       ORDER BY d.id ASC
     `,
-      [userId, thingspeakOwnerId],
+      queryParams,
     );
 
     return result.rows.map((row) => {
@@ -59,6 +64,10 @@ class DatasetRepository {
   }
 
   async findById(id, userId, thingspeakOwnerId) {
+    const accessClause = userId
+      ? "AND (d.created_by = $2 OR d.created_by = $3)"
+      : "";
+    const queryParams = userId ? [id, userId, thingspeakOwnerId] : [id];
     const result = await db.query(
       `
       SELECT
@@ -94,9 +103,9 @@ class DatasetRepository {
       FROM datasets d
       WHERE d.id = $1
         AND d.deleted_at IS NULL
-        AND (d.created_by = $2 OR d.created_by = $3)
+        ${accessClause}
       `,
-      [id, userId, thingspeakOwnerId],
+      queryParams,
     );
     return result.rows[0] || null;
   }
@@ -114,6 +123,79 @@ class DatasetRepository {
       [name, userId],
     );
     return result.rows[0] || null;
+  }
+
+  async findMappingsByName(name) {
+    const result = await db.query(
+      `
+      SELECT
+        m.source_field AS "sourceField",
+        m.storage_field AS "storageField"
+      FROM datasets d
+      INNER JOIN dataset_field_mappings m ON m.dataset_id = d.id
+      WHERE d.name = $1
+      ORDER BY m.storage_field ASC
+      `,
+      [name],
+    );
+    return result.rows;
+  }
+
+  /**
+   * Seeds a system-managed mapping exactly once. A different existing mapping
+   * is an explicit migration concern, not something polling may overwrite.
+   */
+  async ensureSystemMappings(datasetId, mappings) {
+    const existing = await db.query(
+      `SELECT source_field AS "sourceField", storage_field AS "storageField",
+              source_data_type AS "sourceDataType", display_name AS "displayName"
+       FROM dataset_field_mappings
+       WHERE dataset_id = $1
+       ORDER BY storage_field ASC`,
+      [datasetId],
+    );
+    const expected = mappings.map((mapping) => ({
+      sourceField: mapping.sourceField,
+      storageField: mapping.storageField,
+      sourceDataType: "number",
+      displayName: mapping.displayName,
+    }));
+    const mappingsAlreadyMatch =
+      existing.rows.length === expected.length &&
+      existing.rows.every((mapping, index) =>
+        mapping.sourceField === expected[index].sourceField &&
+        mapping.storageField === expected[index].storageField &&
+        mapping.sourceDataType === expected[index].sourceDataType &&
+        mapping.displayName === expected[index].displayName,
+      );
+    if (mappingsAlreadyMatch) return false;
+    if (existing.rows.length) {
+      throw repositoryError(
+        "THINGSPEAK_MAPPING_CONFLICT",
+        409,
+        "Dataset already has a different field mapping. Use a new dataset name or migrate its data explicitly.",
+      );
+    }
+
+    const client = await db.connect();
+    try {
+      await client.query("BEGIN");
+      for (const mapping of mappings) {
+        await client.query(
+          `INSERT INTO dataset_field_mappings
+             (dataset_id, source_field, storage_field, source_data_type, display_name)
+           VALUES ($1, $2, $3, 'number', $4)`,
+          [datasetId, mapping.sourceField, mapping.storageField, mapping.displayName],
+        );
+      }
+      await client.query("COMMIT");
+      return true;
+    } catch (error) {
+      await client.query("ROLLBACK");
+      throw error;
+    } finally {
+      client.release();
+    }
   }
 
   async create(data) {
@@ -311,7 +393,7 @@ class DatasetRepository {
     }
   }
 
-  async deleteDataset(datasetId, user, thingspeakDatasetName) {
+  async deleteDataset(datasetId, user, thingspeakOwnerId) {
     const client = await db.connect();
     try {
       await client.query("BEGIN");
@@ -321,9 +403,9 @@ class DatasetRepository {
          FROM datasets
          WHERE id = $1
            AND created_by = $2
-           AND name <> $3
+           AND created_by <> $3
          FOR UPDATE`,
-        [datasetId, user.sub, thingspeakDatasetName],
+        [datasetId, user.sub, thingspeakOwnerId],
       );
       const dataset = datasetResult.rows[0];
       if (!dataset)
@@ -373,7 +455,7 @@ class DatasetRepository {
       client.release();
     }
   }
-    async restoreDataset(datasetId, user, thingspeakDatasetName) {
+    async restoreDataset(datasetId, user, thingspeakOwnerId) {
     const client = await db.connect();
 
     try {
@@ -388,9 +470,9 @@ class DatasetRepository {
          FROM datasets
          WHERE id = $1
             AND created_by = $2
-            AND name <> $3
+            AND created_by <> $3
          FOR UPDATE`,
-        [datasetId, user.sub, thingspeakDatasetName],
+        [datasetId, user.sub, thingspeakOwnerId],
       );
 
       const dataset = result.rows[0];

@@ -797,3 +797,31 @@ README files explain how to use and maintain the system
 ```
 
 This will make it easier for future capstone teams to continue the project without needing to reverse-engineer the whole codebase.
+
+## Week 5 - Input Validator v2 + Integration Demo (Deepakkumar)
+
+Extends the Week 4 input validator to lock the input boundary, and demonstrates
+it wired into a real detector end-to-end.
+
+Files:
+- input_validator.py - v2. Adds sensor_id/sensor_id_col, min_rows, and a
+  fix for a real bug found in Week 4: numeric timestamp columns (e.g. a plain
+  sample index) were silently parsed into meaningless 1970-epoch dates. Now
+  rejected unless explicitly acknowledged via timestamp_is_index=True.
+- pipeline_demo.py - proves validator -> detector -> standard JSON output
+  connects end to end, using the real ThresholdADDetector.
+
+Run it:
+  python3 input_validator.py   (6 unit tests for the validator alone)
+  python3 pipeline_demo.py     (full integration demo against datasets/complex.csv)
+
+Known limitations / temporary pieces (to replace once merged):
+- run_detector() in pipeline_demo.py is a TEMPORARY entry point standing in
+  for Pradeep's real detector runner.
+- format_standard_output() is a TEMPORARY JSON formatter standing in for
+  Saran's real output adapter.
+- Only ThresholdAD is wired in for this demo; other detectors can be added
+  to AVAILABLE_DETECTORS once the real runner replaces the temporary one.
+- Finding: at the default threshold=3.0, ThresholdAD flags 0/1008 rows on
+  complex.csv - needed threshold=1.5 (162/1008 flagged) to produce an
+  anomaly example. Worth revisiting default threshold tuning.

@@ -121,7 +121,7 @@
 }
 
 .control-label {
-  color: #111827;
+  color: #0f172a;
   font-size: 13px;
   font-weight: 600;
   line-height: 1;
@@ -148,8 +148,8 @@
   min-height: 40px !important;
   padding: 0 12px !important;
   background: #ffffff !important;
-  color: #111827 !important;
-  border: 1px solid #1f2937 !important;
+  color: #0f172a !important;
+  border: 1px solid #cbd5e1 !important;
   border-radius: 6px !important;
   box-shadow: none !important;
   font-family: inherit !important;
@@ -211,8 +211,8 @@
   align-items: center;
   gap: 8px;
   background: #ffffff;
-  color: #111827;
-  border: 1px solid #1f2937;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
   border-radius: 6px;
   box-shadow: none;
   font-family: inherit;
@@ -273,8 +273,8 @@
   align-items: center;
   justify-content: center;
   gap: 7px;
-  background: #a8bfff;
-  color: #1554e8;
+  background: #dbeafe;
+  color: #1d4ed8;
   border: none;
   border-radius: 8px;
   box-shadow: none;
@@ -288,7 +288,7 @@
 }
 
 .refresh-control-button:hover {
-  background: #96b0fb;
+  background: #dbeafe;
 }
 
 .refresh-control-button:active {
@@ -463,6 +463,12 @@
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1.5rem;
   margin-top: 1rem;
+  align-items: start;
+}
+
+.stream-insight-card {
+  min-width: 0;
+  align-self: start;
 }
 
 .insight-card {
@@ -896,10 +902,8 @@
 }
 
 .stream-chip {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  /* OR use a simpler background if Figma shows plain */
-  background: #f3f4f6;
-  border: 1px solid #e5e7eb;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
   border-radius: 20px; /* Pill shape */
   padding: 8px 16px;
   display: flex;
@@ -913,18 +917,18 @@
 .stream-chip:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-color: #667eea;
+  border-color: #2563eb;
 }
 
 .stream-name {
   font-size: 14px;
   font-weight: 500;
-  color: #1f2937;
+  color: #0f172a;
 }
 
 .stream-unit {
   font-size: 12px;
-  color: #6b7280;
+  color: #475569;
   font-weight: 400;
 }
 
@@ -995,3 +999,266 @@
   margin-top: 4px;
   
 } 
+
+/* =========================================================
+   INSIGHT CARD MINI GRAPHS
+   ========================================================= */
+
+.insight-mini-chart {
+  width: 100%;
+  height: 180px;
+  margin: 0.8rem 0 1rem;
+}
+
+.insight-mini-chart-empty {
+  min-height: 180px;
+  margin: 0.8rem 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed #cbd5e1;
+  border-radius: 10px;
+  color: #64748b;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+
+/* =========================================================
+   INSIGHT CARD SUMMARY
+   ========================================================= */
+
+.insight-average-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-bottom: 0;
+}
+
+.insight-average-row > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.insight-average-label {
+  color: #64748b;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.insight-average-value {
+  color: #0f172a;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.insight-record-count {
+  color: #64748b;
+  font-size: 0.78rem;
+}
+
+
+/* =========================================================
+   EXPANDED INSIGHT DETAILS
+   ========================================================= */
+
+.insight-expanded-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  padding: 0.65rem 0;
+}
+
+.insight-expanded-stats .insight-stat,
+.insight-expanded-stats .insight-stat:nth-child(odd),
+.insight-expanded-stats .insight-stat:nth-child(even) {
+  padding: 0 0.45rem;
+  border-bottom: none;
+  border-right: 1px solid #e2e8f0;
+}
+
+.insight-expanded-stats .insight-stat:first-child {
+  padding-left: 0;
+}
+
+.insight-expanded-stats .insight-stat:last-child {
+  border-right: none;
+  padding-right: 0;
+}
+
+.insight-expanded-stats .metric-title {
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+
+.insight-expanded-stats .metric-value {
+  font-size: 0.85rem;
+}
+
+/* =========================================================
+   VIEW DETAILS BUTTON
+   ========================================================= */
+
+.insight-details-toggle {
+  width: 100%;
+  margin-top: 0.55rem;
+  padding: 0.5rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+
+  background: transparent;
+  border: none;
+  border-top: 1px solid #e2e8f0;
+
+  color: #2563eb;
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.insight-details-toggle:hover {
+  color: #1d4ed8;
+}
+
+.insight-details-arrow {
+  display: inline-block;
+  font-size: 0.65rem;
+  transition: transform 0.2s ease;
+}
+
+.insight-details-arrow--expanded {
+  transform: rotate(180deg);
+}
+
+.insight-divider {
+  height: 1px;
+  background: #dbe7f5;
+  margin: 0.65rem 0 0;
+}
+
+/* =========================================================
+   RESPONSIVE INSIGHT CARDS
+   ========================================================= */
+
+@media (max-width: 700px) {
+  .insight-mini-chart {
+    height: 160px;
+  }
+
+  .insight-expanded-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .insight-expanded-stats .insight-stat,
+  .insight-expanded-stats .insight-stat:nth-child(odd),
+  .insight-expanded-stats .insight-stat:nth-child(even) {
+    padding: 0.7rem 0;
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .insight-expanded-stats .insight-stat:last-child {
+    border-bottom: none;
+  }
+}
+
+/* =========================================================
+   Expand animation
+   ========================================================= */
+
+.insight-details-wrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+
+  opacity: 0;
+  transform: translateY(-4px);
+
+  transition:
+    grid-template-rows 0.25s ease,
+    opacity 0.2s ease,
+    transform 0.25s ease;
+}
+
+.insight-details-wrapper--open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.insight-details-inner {
+  overflow: hidden;
+}
+
+
+.insight-mini-chart--clickable {
+  cursor: pointer;
+  border-radius: 8px;
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
+}
+
+.insight-mini-chart--clickable:hover {
+  background: #f8fafc;
+}
+
+.insight-mini-chart--clickable:active {
+  transform: scale(0.99);
+}
+
+.insight-mini-chart--clickable:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 3px;
+}
+
+.sensor-timeline-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.clear-highlight-btn {
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #334155;
+
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
+
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.clear-highlight-btn:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+
+.sensor-tooltip-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.sensor-tooltip-color-dot {
+  width: 8px;
+  height: 8px;
+  min-width: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}

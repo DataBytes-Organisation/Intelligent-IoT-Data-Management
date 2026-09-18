@@ -1,0 +1,4 @@
+2026-08-18T06:24:27 INFO    correlation.api          event=startup service_url=http://127.0.0.1:5091 timeout_seconds=30 log_level=INFO log_file=None debug=False
+2026-08-18T06:24:47 INFO    correlation.api          health ready=true check_ms=9
+2026-08-18T06:24:47 INFO    correlation.api          request_id=5ddd2fbf event=received source=file rows_in=1853 streams=occupancy_t4013,speed_t4013,occupancy_6005,speed_6005 window_size=60 step_size=30 method=spearman
+2026-08-18T06:24:47 INFO    correlation.api          request_id=5ddd2fbf event=completed rows_out=1850 windows=60 alerts=45 runtime_ms=24

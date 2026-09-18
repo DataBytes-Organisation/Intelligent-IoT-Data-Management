@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-08-05T08:25:00Z",
+  "alert_type": "POINTWISE_ANOMALY",
+  "target": {
+    "entity_id": null,
+    "metrics": [
+      "temperature"
+    ]
+  },
+  "method": "IsolationForest",
+  "score": 0.1825,
+  "score_metadata": {
+    "type": "raw_anomaly_score",
+    "normalized": false
+  },
+  "severity": null,
+  "message": "Anomaly detected in temperature.",
+  "time_window": null,
+  "supporting_values": {
+    "sensor_value": 88.5,
+    "runtime_ms": 35
+  },
+  "source": {
+    "component": "models"
+  },
+  "alert_id": null
+}

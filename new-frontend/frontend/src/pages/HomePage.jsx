@@ -3,7 +3,11 @@ import DatasetCard from "../components/DatasetCard";
 import UploadDatasetCard from "../components/UploadDatasetCard";
 import UploadDatasetDialog from "../components/UploadDatasetDialog";
 import { useDatasets } from "../hooks/useDatasets";
-import { deleteDataset } from "../services/datasetService";
+import {
+  deleteDataset,
+  getDeletedDatasets,
+  restoreDataset,
+} from "../services/datasetService";
 import ConfirmDeleteDialog from "../components/ConfirmDeleteDialog";
 import "./HomePage.css";
 
@@ -35,10 +39,16 @@ const HomePage = () => {
 } = useDatasets();
   const [showUploadDialog, setShowUploadDialog] = useState(false);
   const [showRecentlyDeleted, setShowRecentlyDeleted] = useState(false);
+  const [deletedDatasets, setDeletedDatasets] = useState([]);
+  const [deletedLoading, setDeletedLoading] = useState(false);
+  const [deletedError, setDeletedError] = useState(null);
 
   const [pendingDelete, setPendingDelete] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
+
+  const [restoringDatasetId, setRestoringDatasetId] = useState(null);
+  const [restoreError, setRestoreError] = useState(null); 
 
   const handleDeleteClick = (dataset) => {
     setPendingDelete(dataset);
@@ -72,6 +82,48 @@ const HomePage = () => {
     0,
   );
 
+
+  const loadDeletedDatasets = async () => {
+  setDeletedLoading(true);
+  setDeletedError(null);
+
+  try {
+      const data = await getDeletedDatasets();
+      setDeletedDatasets(data);
+    } catch (error) {
+      console.error("Failed to load deleted datasets:", error);
+      setDeletedError(error);
+    } finally {
+      setDeletedLoading(false);
+    }
+  };
+
+  const handleRestoreDataset = async (datasetId) => {
+    setRestoringDatasetId(datasetId);
+    setRestoreError(null);
+
+    try {
+      await restoreDataset(datasetId);
+
+      // Remove it immediately from Recently Deleted
+      setDeletedDatasets((current) =>
+        current.filter((dataset) => dataset.id !== datasetId)
+      );
+
+      // Refresh active datasets so it appears in the Available tab
+      await refreshDatasets();
+    } catch (error) {
+      console.error("Failed to restore dataset:", error);
+
+      setRestoreError(
+        error.response?.data?.error?.message ||
+          "Unable to restore the dataset. Please try again."
+      );
+    } finally {
+      setRestoringDatasetId(null);
+    }
+  };
+
   const renderDatasets = () => {
     if (loading) {
       return (
@@ -102,6 +154,7 @@ const HomePage = () => {
     }
 
     return (
+      
       <div className="homepage__grid">
         {datasets.map((dataset) => (
           <DatasetCard
@@ -204,7 +257,10 @@ const HomePage = () => {
                     ? "homepage__dataset-tab--active"
                     : ""
                 }`}
-                onClick={() => setShowRecentlyDeleted(true)}
+                onClick={() => {
+                  setShowRecentlyDeleted(true);
+                  loadDeletedDatasets();
+                }}
               >
                 Recently Deleted
               </button>
@@ -218,20 +274,90 @@ const HomePage = () => {
           </div>
 
           {showRecentlyDeleted ? (
-            <div className="homepage__dataset-state">
-                <div className="homepage__deleted-icon" aria-hidden="true">
-                <span className="homepage__bin-handle"></span>
-                <span className="homepage__bin-lid"></span>
-                <span className="homepage__bin-body">
-                  <span></span>
-                  <span></span>
-                </span>
+            deletedLoading ? (
+              <div className="homepage__dataset-state">
+                <span className="homepage__spinner" aria-hidden="true"></span>
+                <h3>Loading deleted datasets</h3>
+                <p>Please wait while recently deleted datasets are loaded.</p>
               </div>
+            ) : deletedError ? (
+              <div
+                className="homepage__dataset-state homepage__dataset-state--error"
+                role="alert"
+              >
+                <h3>Unable to load deleted datasets</h3>
+                <p>Please try again.</p>
+              </div>
+            ) : deletedDatasets.length === 0 ? (
+              <div className="homepage__dataset-state">
+                <div className="homepage__deleted-icon" aria-hidden="true">
+                  <span className="homepage__bin-handle"></span>
+                  <span className="homepage__bin-lid"></span>
+                  <span className="homepage__bin-body">
+                    <span></span>
+                    <span></span>
+                  </span>
+                </div>
 
-              <h3>No deleted datasets</h3>
+                <h3>No deleted datasets</h3>
+                <p>There are currently no deleted datasets available.</p>
+              </div>
+              ) : (
+                <>
+                  {restoreError && (
+                    <div
+                      className="homepage__restore-error"
+                      role="alert"
+                    >
+                      {restoreError}
+                    </div>
+                  )}
 
-              <p>There are currently no deleted datasets available.</p>
-            </div>
+                  <div className="homepage__grid">
+                    {deletedDatasets.map((dataset) => (
+                      <article className="dataset-card" key={dataset.id}>
+                        <div>
+                          <div className="dataset-card__top">
+                            <h3>{dataset.name}</h3>
+
+                            <p>
+                              This dataset was deleted and can still be restored during
+                              its recovery period.
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="dataset-card__meta">
+                          <span>
+                            <strong>Deleted</strong>
+
+                            {dataset.deletedAt
+                              ? new Date(dataset.deletedAt).toLocaleString()
+                              : "Unknown"}
+                          </span>
+
+                          <span>
+                            <strong>Recovery</strong>
+
+                            {dataset.remainingRecoveryDays ?? 0} days left
+                          </span>
+                        </div>
+
+                        <button
+                          type="button"
+                          className="homepage__restore-btn"
+                          onClick={() => handleRestoreDataset(dataset.id)}
+                          disabled={restoringDatasetId === dataset.id}
+                        >
+                          {restoringDatasetId === dataset.id
+                            ? "Restoring..."
+                            : "Restore Dataset"}
+                        </button>
+                      </article>
+                    ))}
+                  </div>
+                </>
+              )
           ) : (
             renderDatasets()
           )}

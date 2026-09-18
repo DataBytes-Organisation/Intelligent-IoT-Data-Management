@@ -1,0 +1,27 @@
+{
+  "timestamp": "invalid-date",
+  "alert_type": "INVALID_CORRELATION_TYPE",
+  "target": {
+    "entity_id": null,
+    "metrics": []
+  },
+  "method": "Rolling_Pearson_Correlation",
+  "score": "0.79",
+  "score_metadata": {
+    "type": "absolute_correlation_delta",
+    "normalized": false
+  },
+  "severity": "EXTREME",
+  "message": 123,
+  "time_window": {
+    "start": "invalid-start-time",
+    "end": "invalid-end-time",
+    "window_size": 30,
+    "step_size": 5
+  },
+  "supporting_values": "invalid",
+  "source": {
+    "component": "correlation"
+  },
+  "alert_id": null
+}
