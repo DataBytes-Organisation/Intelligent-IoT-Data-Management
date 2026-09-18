@@ -118,35 +118,89 @@ test('dataset-first analysis rejects a selected stream with no mapping', async (
 test('ThingSpeak live dataset is seeded with configured channel mappings', async () => {
   const originalQuery = db.query;
   const originalEnsureMappings = datasetRepository.ensureSystemMappings;
+  const originalOwnerId = process.env.THINGSPEAK_DATASET_OWNER_ID;
+
+  process.env.THINGSPEAK_DATASET_OWNER_ID = 'thingspeak-owner-uuid';
+
   let receivedMappings;
-  db.query = async (_query, values) => {
-    assert.deepEqual(values, ['thingspeak-live']);
-    return { rows: [{ id: 42 }] };
+
+  db.query = async (query, values) => {
+    if (query.includes('SELECT id FROM auth_users')) {
+      assert.deepEqual(values, ['thingspeak-owner-uuid']);
+
+      return {
+        rows: [
+          {
+            id: 'thingspeak-owner-uuid',
+          },
+        ],
+      };
+    }
+
+    if (query.includes('INSERT INTO datasets')) {
+      assert.deepEqual(values, [
+        'thingspeak-live',
+        'thingspeak-owner-uuid',
+      ]);
+
+      return {
+        rows: [
+          {
+            id: 42,
+          },
+        ],
+      };
+    }
+
+    throw new Error(`Unexpected SQL: ${query}`);
   };
-  datasetRepository.ensureSystemMappings = async (datasetId, mappings) => {
+
+  datasetRepository.ensureSystemMappings = async (
+    datasetId,
+    mappings,
+  ) => {
     assert.equal(datasetId, 42);
     receivedMappings = mappings;
   };
 
   try {
     const dataset = await ensureThingSpeakDataset('1350261');
+
     assert.equal(dataset.id, 42);
+
     assert.deepEqual(
-      receivedMappings.map(({ storageField, sourceField }) => ({ storageField, sourceField })),
+      receivedMappings.map(
+        ({ storageField, sourceField }) => ({
+          storageField,
+          sourceField,
+        }),
+      ),
       [
         { storageField: 'field1', sourceField: 'eco2' },
         { storageField: 'field2', sourceField: 'etvoc' },
         { storageField: 'field3', sourceField: 'temperature' },
         { storageField: 'field4', sourceField: 'air_pressure' },
         { storageField: 'field5', sourceField: 'humidity' },
-        { storageField: 'field6', sourceField: 'temperature_secondary' },
-        { storageField: 'field7', sourceField: 'controller_temperature' },
+        {
+          storageField: 'field6',
+          sourceField: 'temperature_secondary',
+        },
+        {
+          storageField: 'field7',
+          sourceField: 'controller_temperature',
+        },
         { storageField: 'field8', sourceField: 'conductance' },
       ],
     );
   } finally {
     db.query = originalQuery;
     datasetRepository.ensureSystemMappings = originalEnsureMappings;
+
+    if (originalOwnerId === undefined) {
+      delete process.env.THINGSPEAK_DATASET_OWNER_ID;
+    } else {
+      process.env.THINGSPEAK_DATASET_OWNER_ID = originalOwnerId;
+    }
   }
 });
 

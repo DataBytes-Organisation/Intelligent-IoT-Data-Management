@@ -283,10 +283,13 @@ def adapt_models_output(
             },
             "severity": None,
             "message": (
-                f"Anomaly detected across "
-                f"{', '.join(metrics)} "
-                f"using "
-                f"{model_name}."
+                f"Anomaly detected in {metrics[0]} using {model_name}."
+                if len(metrics) == 1
+                else (
+                    f"Anomaly detected across "
+                    f"{', '.join(metrics)} "
+                    f"using {model_name}."
+                )
             ),
             "time_window": None,
             "supporting_values": {
