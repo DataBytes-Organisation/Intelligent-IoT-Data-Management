@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./Footer.css";
 
 const Footer = () => {
@@ -5,8 +6,13 @@ const Footer = () => {
     <footer className="footer">
       <div className="footer__container">
         <div className="footer__left">
-          <span>About</span>
-          <span>Contact</span>
+          <Link
+            to="/about"
+            className="footer__link"
+            onClick={() => window.scrollTo(0, 0)}
+          >
+            About
+          </Link>
         </div>
 
         <div className="footer__right">
