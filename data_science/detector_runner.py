@@ -29,9 +29,9 @@ def run_detector(detector_name, dataframe, parameters=None):
             "anomaly_flag": result["anomaly_flag"],
             "score": result["score"],
             "timestamp": result["timestamp"],
-            "runtime": result["runtime"]
+            "runtime": result["runtime"],
+            "metrics": result.get("metrics", []),
         }
-
     except Exception as e:
 
         return {

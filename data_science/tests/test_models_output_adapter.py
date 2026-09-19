@@ -59,7 +59,7 @@ def test_single_anomaly_conversion():
     assert alert["supporting_values"]["runtime_ms"] == 24.0
     assert (
         alert["message"]
-        == "Anomaly detected in temperature using IsolationForest."
+        == "Anomaly detected across temperature using IsolationForest."
     )
 
 
