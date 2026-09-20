@@ -1,0 +1,162 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: iot-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespw
+      POSTGRES_DB: IoTDatabase
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/src/db/migrations/001_auth.sql:/docker-entrypoint-initdb.d/01-auth.sql:ro
+      - ./backend/src/db/schema.sql:/docker-entrypoint-initdb.d/02-schema.sql:ro
+      - ./backend/src/db/migrations/002_dataset_management.sql:/docker-entrypoint-initdb.d/03-dataset-management.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d IoTDatabase"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    image: intelligent-iot/backend:pr177-observability
+    build:
+      context: ./backend
+    container_name: iot-backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PORT: 3000
+      DB_USER: postgres
+      DB_PASSWORD: postgrespw
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: IoTDatabase
+      PROCESSED_DATA_PATH: ./src/mock_data/processed_data.json
+      THINGSPEAK_CHANNEL_ID: 1350261
+      THINGSPEAK_READ_API_KEY: ""
+      THINGSPEAK_RESULTS: 10
+      THINGSPEAK_DATASET_NAME: thingspeak-live
+      THINGSPEAK_DATASET_OWNER_ID: c736bc88-0239-415e-9515-5437fb5688aa
+      THINGSPEAK_POLL_INTERVAL_MS: 15000
+      THINGSPEAK_MAX_RETRIES: 3
+      THINGSPEAK_RETRY_DELAY_MS: 2000
+      ANALYTICS_SERVICE_URL: http://analytics-integration:5002
+      ANALYTICS_TIMEOUT_MS: 15000
+      JWT_SECRET: dev_secret_key
+      NODE_ENV: development
+      MAIL_TRANSPORT: smtp
+      MAIL_FROM: no-reply@example.com
+      SMTP_HOST: mailhog
+      SMTP_PORT: 1025
+      SMTP_SECURE: "false"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://127.0.0.1:3000/health', (res) => process.exit(res.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  analytics-integration:
+    image: intelligent-iot/analytics-integration:pr177-observability
+    build:
+      context: .
+      dockerfile: ./analytics_integration/Dockerfile
+    container_name: iot-analytics-integration
+    networks:
+      default:
+        aliases:
+          - analytics-integration
+          - analytics_integration
+    ports:
+      - "5002:5002"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5002/health')"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  frontend:
+    image: intelligent-iot/frontend:pr177-observability
+    build:
+      context: ./new-frontend/frontend
+    container_name: iot-frontend
+    depends_on:
+      backend:
+        condition: service_healthy
+    environment:
+      VITE_API_BASE_URL: /api
+      VITE_PROXY_TARGET: http://backend:3000
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./new-frontend/frontend:/app
+      - /app/node_modules
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://127.0.0.1:5173', (res) => process.exit(res.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  prometheus:
+    image: prom/prometheus:v2.55.1
+    container_name: iot-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prometheus/alerts.yml:/etc/prometheus/alerts.yml:ro
+    depends_on:
+      backend:
+        condition: service_started
+      analytics-integration:
+        condition: service_started
+      docker-service-exporter:
+        condition: service_started
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:11.3.1
+    container_name: iot-grafana
+    ports:
+      - "3001:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - ./monitoring/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./monitoring/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on:
+      prometheus:
+        condition: service_started
+    restart: unless-stopped
+
+  docker-service-exporter:
+    image: intelligent-iot/docker-service-exporter:pr177-observability
+    build:
+      context: ./monitoring/docker_exporter
+    container_name: iot-docker-service-exporter
+    ports:
+      - "9104:9104"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: unless-stopped
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    container_name: iot-mailhog
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

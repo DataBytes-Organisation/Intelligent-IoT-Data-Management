@@ -1,0 +1,12 @@
+node_modules
+npm-debug.log*
+.env
+.env.*
+coverage
+.nyc_output
+.pytest_cache
+__pycache__
+*.pyc
+.git
+.gitignore
+Dockerfile
