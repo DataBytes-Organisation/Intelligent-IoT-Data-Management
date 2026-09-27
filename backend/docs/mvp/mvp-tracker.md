@@ -1,6 +1,6 @@
 # MVP Live-Route Inventory (AFI-05)
 
-> **Updated 2026-09-25** to reflect the current merged `main` (post PR #172, PR #182 "add-authentication"). Supersedes the earlier version of this file, which documented pre-authentication, name-based routes (`GET /api/datasets/:name/series`, `POST /api/register`) that are no longer the current contract. Route statuses below were re-verified live, with real captured evidence in `evidence/api-samples.json`.
+> **Updated 2026-09-27** to reflect the current merged `main` (post PR #172, PR #182 "add-authentication"). Supersedes the earlier version of this file, which documented pre-authentication, name-based routes (`GET /api/datasets/:name/series`, `POST /api/register`) that are no longer the current contract. Route statuses below were re-verified live, with real captured evidence in `evidence/api-samples.json`.
 
 Cross-reference for `api-contract.md`. Update the Status column as routes move through the cutover.
 
@@ -21,6 +21,9 @@ Cross-reference for `api-contract.md`. Update the Status column as routes move t
 | `/api/datasets/:id` | DELETE | STABLE V1 | n/a | AFI-23, not re-verified this pass |
 | `/api/datasets/:id/restore` | POST | STABLE V1 | n/a | AFI-24, not re-verified this pass |
 | `/api/datasets/:id/series` | GET | STABLE V1 — verified live | thingspeak-live (id 14095, 165 real rows) | Current target route. Numeric id, not name; requires Bearer token |
+| `/api/datasets/:id/series/filter` | POST | STABLE V1 — verified live | thingspeak-live (id 14095) | Requires `Authorization: Bearer <accessToken>`; body is `{ "streamNames": [...] }`, restricts response fields to `created_at`, `entry_id`, and the requested fields |
+| `/api/datasets/:id/timestamps` | GET | STABLE V1 — verified live | thingspeak-live (id 14095) | Requires `Authorization: Bearer <accessToken>`; returns the full array of ISO-8601 timestamps for the dataset |
+| `/api/feeds` | GET | STABLE V1 — verified live, **data-quality issue open** | thingspeak-live / channel 12397 | Requires `Authorization: Bearer <accessToken>`, confirmed enforced. See open finding below — `temperature` and `humidity` are flat across all captured entries |
 | `/api/analyse` | POST | NOT READY (placeholder only) | n/a | No change |
 | `/api/alerts/latest` | GET | NOT READY — does not exist | n/a | No change |
 | `/api/alerts/history` | GET | NOT READY — does not exist | n/a | No change |
@@ -28,9 +31,9 @@ Cross-reference for `api-contract.md`. Update the Status column as routes move t
 | `/api/register`, `/login`, `/refresh-token`, `/logout` (legacy) | POST | LEGACY — superseded | n/a | Superseded by `/api/auth/*`; do not build new work against these |
 | `/api/datasets/:name/series` (legacy name-based) | GET | LEGACY — no longer the documented contract | n/a | Confirmed this route is not what the current backend serves as the target contract; do not use for new work |
 
-## Live evidence run (2026-09-25) — see `evidence/api-samples.json` for full detail
+## Live evidence run (2026-09-25 to 2026-09-27) — see `evidence/api-samples.json` for full detail
 
-Real requests captured against the current merged `main`, with real authentication (including MFA), against dataset `thingspeak-live` (numeric id `14095`).
+Real requests captured against the current merged `main`, with real authentication (including MFA), against dataset `thingspeak-live` (numeric id `14095`, channel `12397`).
 
 Confirmed in this pass:
 - `POST /api/auth/login` correctly returns `202` + `mfaChallengeId` for an MFA-enabled account
@@ -38,5 +41,12 @@ Confirmed in this pass:
 - `GET /api/datasets` requires authentication — confirmed real `401 UNAUTHENTICATED` with no token
 - `GET /api/datasets` (authenticated) returns the dataset with its real numeric `id`, not just its name
 - `GET /api/datasets/{id}/series` (authenticated, numeric id) returns real wide-format rows
+- `GET /api/datasets/{id}/timestamps` (authenticated) returns the real ISO-8601 timestamp array for the dataset
+- `POST /api/datasets/{id}/series/filter` (authenticated) correctly requires `streamNames` (not `fields`) and returns rows restricted to the requested fields plus `created_at`/`entry_id`
+- `GET /api/feeds` (authenticated) returns the real ThingSpeak channel metadata and a cleaned feeds array — Bearer-token enforcement confirmed
 
 **Not re-verified this pass** (unchanged from the earlier audit, assumed still accurate but not re-tested): `/api/auth/mfa/resend`, `/api/auth/refresh`, `/api/auth/logout`, `/api/auth/password-reset/*`, `GET /api/datasets/:id`, `PUT /api/datasets/:id`, `DELETE /api/datasets/:id`, `POST /api/datasets/:id/restore`.
+
+## Open finding — `/api/feeds` temperature/humidity values (2026-09-27)
+
+Live evidence for `GET /api/feeds` shows `temperature: 0.1` and `humidity: 0` on every single entry across 100+ real captured rows spanning different timestamps, while `pressure` in the same response varies normally, and the raw `field3`/`field4` values for the same dataset and time range (captured via `/api/datasets/{id}/series`) do vary. This points to the temperature/humidity mapping in the `/api/feeds` cleanup step reading the wrong source fields, or another bug in that transformation — it is not an authentication or contract-shape issue. Flagging for a BE look before this route is relied on for dashboard display; not yet resolved as of this update.
