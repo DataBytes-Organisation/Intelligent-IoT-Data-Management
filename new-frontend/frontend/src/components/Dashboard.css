@@ -1498,3 +1498,47 @@
     flex-wrap: wrap;
   }
 }
+
+/* Stream chip selection states */
+.stream-chip {
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+
+.stream-chip.selected {
+  background: #2563eb !important;
+  border-color: #2563eb !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.stream-chip.selected .stream-name {
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+.stream-chip.selected .stream-unit {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.stream-chip .checkmark {
+  font-weight: 700;
+  font-size: 13px;
+  margin-right: 2px;
+  display: none;
+}
+
+.stream-chip.selected .checkmark {
+  display: inline;
+}
+
+.stream-chip:hover:not(.selected) {
+  border-color: #2563eb;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.15);
+}
+
+.stream-chip:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}

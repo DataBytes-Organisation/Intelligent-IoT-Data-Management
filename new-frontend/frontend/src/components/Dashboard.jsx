@@ -65,7 +65,6 @@ const Dashboard = ({ datasetId }) => {
   const [selectedTimeStart, setSelectedTimeStart] = useState('');
   const [selectedTimeEnd, setSelectedTimeEnd] = useState('');
   const [selectedStreams, setSelectedStreams] = useState([]);
-  const [selectedStream, setSelectedStream] = useState(null); // Added for chip highlighting
 
   const [analysisResult, setAnalysisResult] = useState(null);
   const [analysisLoading, setAnalysisLoading] = useState(false);
@@ -435,14 +434,32 @@ const Dashboard = ({ datasetId }) => {
           {sensorData.metadata?.streams?.map((stream, index) => {
             // ✅ USE THE EXACT SAME streamLabels FALLBACK AS THE DROPDOWN ✅
             const displayName = streamLabels[stream.id] || stream.id;
+            const isSelected = selectedStreams.includes(stream.id);
+
+            const toggleStream = () => {
+              setSelectedStreams((previous) =>
+                previous.includes(stream.id)
+                  ? previous.filter((id) => id !== stream.id)
+                  : [...previous, stream.id],
+              );
+            };
     
             return (
               <div 
                 key={index} 
-                className={`stream-chip ${selectedStream === stream.id ? 'selected' : ''}`}
-                onClick={() => setSelectedStream(stream.id)}
+                className={`stream-chip ${isSelected ? 'selected' : ''}`}
+                onClick={toggleStream}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    toggleStream();
+                  }
+                }}
                 tabIndex={0}
+                role="button"
+                aria-pressed={isSelected}
               >
+                {isSelected && <span className="checkmark" aria-hidden="true">&#10003;</span>}
                 <span className="stream-name">{displayName}</span>
                 {stream.unit && <span className="stream-unit">({stream.unit})</span>}
               </div>

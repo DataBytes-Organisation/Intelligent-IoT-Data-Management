@@ -1,11 +1,11 @@
 const auth = require("../services/authService");
 const crypto = require("crypto");
-const cookieOptions = (rememberMe) => ({
+const cookieOptions = (maxAge) => ({
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
   sameSite: "lax",
   path: "/api/auth",
-  ...(rememberMe ? { maxAge: 30 * 24 * 60 * 60 * 1000 } : {}),
+  ...(Number.isFinite(maxAge) && maxAge > 0 ? { maxAge } : {}),
 });
 const requestId = (req) =>
   req.get("x-request-id") || `req_${crypto.randomUUID()}`;
@@ -40,7 +40,7 @@ function setSession(res, req, session) {
   res.cookie(
     "iot_refresh",
     session.refreshToken,
-    cookieOptions(session.rememberMe),
+    cookieOptions(session.maxAge),
   );
   return success(res, req, 200, session.data);
 }
@@ -86,7 +86,7 @@ async function refresh(req, res) {
 async function logout(req, res) {
   try {
     await auth.logout(req.cookies?.iot_refresh);
-    res.clearCookie("iot_refresh", cookieOptions(false));
+    res.clearCookie("iot_refresh", cookieOptions());
     return res.status(204).end();
   } catch (err) {
     return error(res, req, err);

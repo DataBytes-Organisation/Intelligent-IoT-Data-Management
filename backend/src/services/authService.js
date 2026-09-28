@@ -114,7 +114,7 @@ async function login({ email: emailValue, password, rememberMe = false }) {
   }
   return { session: await createSession(user, rememberMe) };
 }
-async function verifyMfa({ mfaChallengeId, otp, rememberMe }) {
+async function verifyMfa({ mfaChallengeId, otp }) {
   const challenge = await store.find("challenges", mfaChallengeId);
   if (!challenge || challenge.usedAt)
     fail("OTP_INVALID", "The verification code is invalid.");
@@ -131,7 +131,7 @@ async function verifyMfa({ mfaChallengeId, otp, rememberMe }) {
   await store.update("challenges", challenge.id, {
     usedAt: new Date().toISOString(),
   });
-  return createSession(await users.findUserById(challenge.userId), rememberMe);
+  return createSession(await users.findUserById(challenge.userId), challenge.rememberMe);
 }
 async function resendMfa({ mfaChallengeId }) {
   const challenge = await store.find("challenges", mfaChallengeId);
