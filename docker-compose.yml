@@ -40,6 +40,7 @@ services:
       THINGSPEAK_RESULTS: 10
       THINGSPEAK_DATASET_NAME: thingspeak-live
       THINGSPEAK_DATASET_OWNER_ID: c736bc88-0239-415e-9515-5437fb5688aa
+      THINGSPEAK_DATASET_OWNER_PASSWORD: ${THINGSPEAK_DATASET_OWNER_PASSWORD:-thingspeak-dev-password}
       THINGSPEAK_POLL_INTERVAL_MS: 15000
       THINGSPEAK_MAX_RETRIES: 3
       THINGSPEAK_RETRY_DELAY_MS: 2000
@@ -144,6 +145,8 @@ services:
     build:
       context: ./monitoring/docker_exporter
     container_name: iot-docker-service-exporter
+    environment:
+      COMPOSE_PROJECT_NAME: intelligent-iot
     ports:
       - "9104:9104"
     volumes:
