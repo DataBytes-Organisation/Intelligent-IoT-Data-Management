@@ -1,0 +1,206 @@
+{
+  "note": "Captured live on 2026-09-25/2026-09-27 against the current merged main (post PR #172 and PR #182 / add-authentication). Supersedes the earlier evidence file, which documented the pre-authentication, name-based API and is no longer accurate. Dataset under test: thingspeak-live (numeric id 14095, channel 12397).",
+  "samples": [
+    {
+      "route": "POST /api/auth/login",
+      "requestBody": { "email": "pau@gmail.com", "password": "<redacted>" },
+      "status": 202,
+      "response": {
+        "data": {
+          "mfaChallengeId": "2978c4f4-6419-4b19-ae1d-201cff5cd685",
+          "expiresInSeconds": 600,
+          "delivery": "email"
+        },
+        "meta": { "requestId": "req_f1929d86-1c08-4234-8225-6b7b26243150" }
+      },
+      "note": "Login is MFA-enabled for this account; a 202 with a mfaChallengeId is returned instead of an access token."
+    },
+    {
+      "route": "POST /api/auth/mfa/verify",
+      "requestBody": {
+        "mfaChallengeId": "2978c4f4-6419-4b19-ae1d-201cff5cd685",
+        "otp": "<redacted>",
+        "rememberMe": true
+      },
+      "status": 200,
+      "response": {
+        "data": {
+          "accessToken": "<redacted — real JWT captured, 15-minute expiry confirmed>",
+          "expiresInSeconds": 900,
+          "user": {
+            "id": "b1e36250-88c6-4980-9878-9e0aa28775b1",
+            "email": "pau@gmail.com",
+            "role": "user"
+          }
+        },
+        "meta": { "requestId": "req_5e5f96b1-6313-456a-a730-d26a69d5dcca" }
+      },
+      "note": "Tokens/OTP redacted before committing to the repo — do not commit raw JWTs or OTPs as evidence, even from a local/dev environment."
+    },
+    {
+      "route": "GET /api/datasets",
+      "auth": "Bearer <accessToken>",
+      "status": 200,
+      "response": [
+        {
+          "id": 14095,
+          "name": "thingspeak-live",
+          "totalRows": 162,
+          "createdBy": "9bf778de-9915-45f5-b752-d186d4000447",
+          "updatedBy": "9bf778de-9915-45f5-b752-d186d4000447",
+          "createdAt": "2026-09-25T05:37:00.353Z",
+          "updatedAt": "2026-09-25T06:41:28.415Z",
+          "deletedAt": null
+        }
+      ],
+      "note": "Datasets are now identified by a numeric id (14095), not the name — use this id for the series route below, not the string 'thingspeak-live'."
+    },
+    {
+      "route": "GET /api/datasets/{id}/series",
+      "auth": "Bearer <accessToken>",
+      "status": 200,
+      "response": [
+        {
+          "dataset_id": 14095,
+          "created_at": "2026-09-25T03:56:14.000Z",
+          "entry_id": 5763153,
+          "field1": 23,
+          "field2": 1.6,
+          "field3": 0,
+          "field4": 0.1,
+          "field5": 0,
+          "field6": 30.09,
+          "field7": 0,
+          "field8": 0
+        },
+        {
+          "dataset_id": 14095,
+          "created_at": "2026-09-25T06:42:14.000Z",
+          "entry_id": 5763317,
+          "field1": 180,
+          "field2": 5.1,
+          "field3": 0,
+          "field4": 0.1,
+          "field5": 0,
+          "field6": 30.03,
+          "field7": 0,
+          "field8": 0
+        }
+      ],
+      "note": "Truncated to first and last of 165 real rows captured for brevity in this evidence file. This is the current, authenticated route — the old GET /api/datasets/:name/series (unauthenticated, name-based) is no longer the documented contract as of PR #182."
+    },
+    {
+      "route": "GET /api/datasets",
+      "auth": "none (no Authorization header sent)",
+      "status": 401,
+      "response": {
+        "error": {
+          "code": "UNAUTHENTICATED",
+          "message": "Authentication is required."
+        },
+        "meta": { "requestId": "req_ab88ce6d-2aee-4b8b-aba4-37e78d8239db" }
+      },
+      "note": "Confirms GET /api/datasets requires authentication under the current API — real evidence this route is no longer publicly accessible."
+    },
+    {
+      "route": "GET /api/datasets/{id}/timestamps",
+      "auth": "Bearer <accessToken>",
+      "status": 200,
+      "response": [
+        "2026-09-25T03:56:14.000Z",
+        "2026-09-25T03:57:14.000Z",
+        "2026-09-25T03:58:14.000Z",
+        "... (truncated) ...",
+        "2026-09-27T15:36:18.000Z",
+        "2026-09-27T15:37:18.000Z"
+      ],
+      "note": "Truncated to first/last 3 of the full real timestamp set for dataset 14095 (thingspeak-live), captured live with a valid Bearer token."
+    },
+    {
+      "route": "POST /api/datasets/{id}/series/filter",
+      "requestBody": { "streamNames": ["field1", "field2"] },
+      "auth": "Bearer <accessToken>",
+      "status": 200,
+      "response": [
+        {
+          "created_at": "2026-09-25T03:56:14.000Z",
+          "entry_id": 5763153,
+          "field1": 23,
+          "field2": 1.6
+        },
+        {
+          "created_at": "2026-09-25T03:57:14.000Z",
+          "entry_id": 5763154,
+          "field1": 23,
+          "field2": 1.6
+        },
+        {
+          "created_at": "2026-09-27T15:39:18.000Z",
+          "entry_id": 5766701,
+          "field1": 62,
+          "field2": 4.8
+        },
+        {
+          "created_at": "2026-09-27T15:40:18.000Z",
+          "entry_id": 5766702,
+          "field1": 198,
+          "field2": 7.4
+        }
+      ],
+      "note": "Confirms the request field is streamNames, not fields — an earlier attempt guessed wrong and got { \"error\": \"streamNames must be a non-empty array\" }. Response correctly restricted to created_at, entry_id, field1, field2, matching the contract's documented shape. Truncated to first 2 / last 2 of the full result for brevity."
+    },
+    {
+      "route": "GET /api/feeds",
+      "auth": "Bearer <accessToken>",
+      "status": 200,
+      "response": {
+        "channel": {
+          "id": 12397,
+          "name": "WeatherStation",
+          "field1": "Wind Direction (North = 0 degrees)",
+          "field2": "Wind Speed (mph)",
+          "field3": "% Humidity",
+          "field4": "Temperature (F)",
+          "field5": "Rain (Inches/minute)",
+          "field6": "Pressure (\"Hg)",
+          "field7": "Power Level (V)",
+          "field8": "Light Intensity"
+        },
+        "feeds": [
+          {
+            "entryId": 5766605,
+            "timestamp": "2026-09-27T14:02:18Z",
+            "temperature": 0.1,
+            "humidity": 0,
+            "pressure": 1001.694162,
+            "anomaly": false
+          },
+          {
+            "entryId": 5766704,
+            "timestamp": "2026-09-27T15:42:18Z",
+            "temperature": 0.1,
+            "humidity": 0,
+            "pressure": 1002.3714400000001,
+            "anomaly": false
+          }
+        ]
+      },
+      "note": "Real captured response; Bearer token required and confirmed enforced (call was made with a valid token). OPEN FINDING: every entry in the live feeds array returns temperature: 0.1 and humidity: 0 with no variation across 100+ real entries spanning different timestamps, while pressure varies normally and the raw /series field3/field4 values from the same dataset and time range do vary. This suggests the temperature/humidity mapping in the /api/feeds cleanup step is reading the wrong source fields or is otherwise broken — needs a BE look before this route can be trusted for the dashboard. Feeds array truncated to first/last entry for brevity; channel object trimmed to the field-label keys relevant to this contract."
+    },
+    {
+      "route": "POST /api/analyse",
+      "auth": "Bearer <accessToken>",
+      "requestBody": {
+        "dataset": "thingspeak-live",
+        "model": { "metric": "temperature" },
+        "correlation": { "streams": ["temperature", "humidity"] }
+      },
+      "status": 503,
+      "response": {
+        "error": "Analytics service is unavailable",
+        "code": "ANALYTICS_UNAVAILABLE"
+      },
+      "note": "MAJOR FINDING — resolves the placeholder-vs-implemented dispute in mvp-tracker.md: the route has real, layered validation logic, confirmed by walking through it live: rejects an empty body with 'dataset is required when data is not supplied'; rejects a numeric dataset id, requiring the dataset name string instead; requires 'model' to be an object; requires 'model.metric' to be a non-empty canonical metric name (temperature accepted); requires 'correlation' to be an object; requires 'correlation.streams' to contain at least two canonical metric names. Only after passing all of that validation does it fail with ANALYTICS_UNAVAILABLE — this error could only be reached by actually attempting to call out to the analytics service, so this is NOT a placeholder that echoes the payload back. This confirms Van's PR review comment. The analytics service itself was unreachable in this test environment, so the full success-path response shape is still unconfirmed — that's a separate follow-up, not evidence the route itself is unimplemented."
+    }
+  ]
+}

@@ -4,13 +4,13 @@ Use this document as the single source of truth for the MVP API release.
 
 ## 1. Contract metadata
 
-| Field | Value |
-| --- | --- |
-| Contract version | `v1.2.0` |
-| Status | Approved contract baseline - BE implementation pending |
-| API base URL | Local: `http://localhost:3000/api`; deployed: `VITE_API_BASE_URL` ending in `/api` over HTTPS |
-| Related tickets | `AFI-14`, `AFI-16` |
-| Approved by | AFI; BE acknowledgement required before deployment |
+| Field            | Value                                                                                         |
+| ---------------- | --------------------------------------------------------------------------------------------- |
+| Contract version | `v1.2.0`                                                                                      |
+| Status           | Approved contract baseline - BE implementation pending                                        |
+| API base URL     | Local: `http://localhost:3000/api`; deployed: `VITE_API_BASE_URL` ending in `/api` over HTTPS |
+| Related tickets  | `AFI-14`, `AFI-16`                                                                            |
+| Approved by      | AFI; BE acknowledgement required before deployment                                            |
 
 ## 2. Contract rules
 
@@ -25,35 +25,36 @@ Use this document as the single source of truth for the MVP API release.
 
 ## 3. Route inventory
 
-| ID | Method | Path | Purpose | Auth | Consumer | Status |
-| --- | --- | --- | --- | --- | --- | --- |
-| OPS-01 | `GET` | `/health` | Process liveness check | None | DevOps | BE pending |
-| OPS-02 | `GET` | `/ready` | Config and PostgreSQL readiness check | None | DevOps | BE pending |
-| AUTH-01 | `POST` | `/api/auth/register` | Create an account | None | FE | BE pending |
-| AUTH-02 | `POST` | `/api/auth/login` | Sign in or begin MFA | None | FE | BE pending |
-| AUTH-03 | `POST` | `/api/auth/mfa/verify` | Verify MFA and complete sign-in | None | FE | BE pending |
-| AUTH-04 | `POST` | `/api/auth/mfa/resend` | Resend MFA code | None | FE | BE pending |
-| AUTH-05 | `POST` | `/api/auth/refresh` | Rotate session and access token | Refresh cookie | FE | BE pending |
-| AUTH-06 | `POST` | `/api/auth/logout` | Revoke current session | Refresh cookie | FE | BE pending |
-| AUTH-07 | `POST` | `/api/auth/password-reset/request` | Request reset instructions | None | FE | BE pending |
-| AUTH-08 | `POST` | `/api/auth/password-reset/confirm` | Confirm password reset | None | FE | BE pending |
-| DATA-01 | `GET` | `/api/datasets` | List datasets with their total persisted row counts | None | FE dataset selector | Implemented |
-| DATA-02 | `POST` | `/api/datasets` | Persist a reviewed CSV dataset, its mappings and mapped time-series rows | Bearer access token | FE upload wizard | Implemented |
-| DATA-03 | `PUT` | `/api/datasets/:id` | Replace mapping metadata and append reviewed CSV rows | Bearer access token | FE dataset editor | Implemented |
-| DATA-04 | `GET` | `/api/datasets/:id` | Retrieve one dataset's metadata and persisted row count | None | FE dataset detail | Implemented |
-| DATA-05 | `DELETE` | `/api/datasets/:id` | Soft-delete a dataset configuration and permanently remove synced time-series rows | Bearer access token | FE dataset management | Implemented |
-| DATA-06 | `POST` | `/api/datasets/:id/restore` | Restore a soft-deleted dataset within the 15-day recovery period | Bearer access token | FE dataset management | Implemented |
+| ID      | Method   | Path                               | Purpose                                                                            | Auth                | Consumer              | Status      |
+| ------- | -------- | ---------------------------------- | ---------------------------------------------------------------------------------- | ------------------- | --------------------- | ----------- |
+| OPS-01  | `GET`    | `/health`                          | Process liveness check                                                             | None                | DevOps                | BE pending  |
+| OPS-02  | `GET`    | `/ready`                           | Config and PostgreSQL readiness check                                              | None                | DevOps                | BE pending  |
+| AUTH-01 | `POST`   | `/api/auth/register`               | Create an account                                                                  | None                | FE                    | BE pending  |
+| AUTH-02 | `POST`   | `/api/auth/login`                  | Sign in or begin MFA                                                               | None                | FE                    | BE pending  |
+| AUTH-03 | `POST`   | `/api/auth/mfa/verify`             | Verify MFA and complete sign-in                                                    | None                | FE                    | BE pending  |
+| AUTH-04 | `POST`   | `/api/auth/mfa/resend`             | Resend MFA code                                                                    | None                | FE                    | BE pending  |
+| AUTH-05 | `POST`   | `/api/auth/refresh`                | Rotate session and access token                                                    | Refresh cookie      | FE                    | BE pending  |
+| AUTH-06 | `POST`   | `/api/auth/logout`                 | Revoke current session                                                             | Refresh cookie      | FE                    | BE pending  |
+| AUTH-07 | `POST`   | `/api/auth/password-reset/request` | Request reset instructions                                                         | None                | FE                    | BE pending  |
+| AUTH-08 | `POST`   | `/api/auth/password-reset/confirm` | Confirm password reset                                                             | None                | FE                    | BE pending  |
+| DATA-01 | `GET`    | `/api/datasets`                    | List datasets with their total persisted row counts                                | None                | FE dataset selector   | Implemented |
+| DATA-02 | `POST`   | `/api/datasets`                    | Persist a reviewed CSV dataset, its mappings and mapped time-series rows           | Bearer access token | FE upload wizard      | Implemented |
+| DATA-03 | `PUT`    | `/api/datasets/:id`                | Replace mapping metadata and append reviewed CSV rows                              | Bearer access token | FE dataset editor     | Implemented |
+| DATA-04 | `GET`    | `/api/datasets/:id`                | Retrieve one dataset's metadata and persisted row count                            | None                | FE dataset detail     | Implemented |
+| DATA-05 | `DELETE` | `/api/datasets/:id`                | Soft-delete a dataset configuration and permanently remove synced time-series rows | Bearer access token | FE dataset management | Implemented |
+| DATA-06 | `POST`   | `/api/datasets/:id/restore`        | Restore a soft-deleted dataset within the 15-day recovery period                   | Bearer access token | FE dataset management | Implemented |
+
 ## 4. Data and naming rules
 
-| Field / concept | Rule | Example |
-| --- | --- | --- |
-| Identity | `email` is the only login identity; lower-case and trim before lookup. `username` is not accepted. | `ada@example.com` |
-| Public user | Expose only `id`, `email`, and `role`. Never return hashes, raw tokens, OTPs, or provider data. | `{ "id": "u_123", "email": "ada@example.com", "role": "user" }` |
-| Access token | JWT held only in FE memory; expires in 900 seconds. | `<jwt>` |
-| Refresh token | Opaque, rotating, server-stored credential in `iot_refresh` HttpOnly cookie. | `<redacted>` |
-| Remember Me | `true`: 30-day persistent cookie. `false`: browser-session cookie with 12-hour maximum server lifetime. | `true` |
-| MFA OTP | Six digits, single use, 10-minute expiry, five failed attempts maximum. | `123456` |
-| Reset token | Opaque, single use, stored hashed, 30-minute expiry. | `<opaque-token>` |
+| Field / concept | Rule                                                                                                    | Example                                                         |
+| --------------- | ------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| Identity        | `email` is the only login identity; lower-case and trim before lookup. `username` is not accepted.      | `ada@example.com`                                               |
+| Public user     | Expose only `id`, `email`, and `role`. Never return hashes, raw tokens, OTPs, or provider data.         | `{ "id": "u_123", "email": "ada@example.com", "role": "user" }` |
+| Access token    | JWT held only in FE memory; expires in 900 seconds.                                                     | `<jwt>`                                                         |
+| Refresh token   | Opaque, rotating, server-stored credential in `iot_refresh` HttpOnly cookie.                            | `<redacted>`                                                    |
+| Remember Me     | `true`: 30-day persistent cookie. `false`: browser-session cookie with 12-hour maximum server lifetime. | `true`                                                          |
+| MFA OTP         | Six digits, single use, 10-minute expiry, five failed attempts maximum.                                 | `123456`                                                        |
+| Reset token     | Opaque, single use, stored hashed, 30-minute expiry.                                                    | `<opaque-token>`                                                |
 
 ## 5. Standard response and error contract
 
@@ -79,42 +80,42 @@ Use this document as the single source of truth for the MVP API release.
 }
 ```
 
-| Scenario | HTTP status | Code | Required frontend behaviour |
-| --- | --- | --- | --- |
-| Invalid body or field | `400` | `VALIDATION_ERROR` | Show field guidance; do not retry automatically. |
-| Duplicate account | `409` | `ACCOUNT_EXISTS` | Offer sign-in or password reset. |
-| Invalid credentials | `401` | `INVALID_CREDENTIALS` | Show generic sign-in error. |
-| Missing / invalid access token | `401` | `UNAUTHENTICATED` | Refresh once; otherwise end session. |
-| Expired access token | `401` | `ACCESS_TOKEN_EXPIRED` | Refresh once; otherwise end session. |
-| Expired / revoked refresh session | `401` | `SESSION_EXPIRED` | Clear all tabs and redirect to Login. |
-| MFA required | `202` | `MFA_REQUIRED` | Move to OTP page; retain no password. |
-| Invalid / expired OTP | `400` | `OTP_INVALID` / `OTP_EXPIRED` | Keep page active; offer resend when expired. |
-| Resend throttled | `429` | `OTP_RESEND_THROTTLED` | Disable resend until `retryAfterSeconds`. |
-| Reset token invalid / expired | `400` | `RESET_TOKEN_INVALID` / `RESET_TOKEN_EXPIRED` | Offer new reset request. |
-| Permission denied | `403` | `FORBIDDEN` | Show a permission message. |
-| Login throttled | `429` | `LOGIN_THROTTLED` | Disable sign-in until the retry time. |
-| OTP attempts exhausted | `429` | `OTP_ATTEMPTS_EXCEEDED` | Restart login. |
-| Service failure | `502` / `503` | `SERVICE_UNAVAILABLE` | Preserve inputs and offer retry. |
-| Unexpected server failure | `500` | `INTERNAL_ERROR` | Show generic retry state and record `correlationId` when provided. |
+| Scenario                          | HTTP status   | Code                                          | Required frontend behaviour                                        |
+| --------------------------------- | ------------- | --------------------------------------------- | ------------------------------------------------------------------ |
+| Invalid body or field             | `400`         | `VALIDATION_ERROR`                            | Show field guidance; do not retry automatically.                   |
+| Duplicate account                 | `409`         | `ACCOUNT_EXISTS`                              | Offer sign-in or password reset.                                   |
+| Invalid credentials               | `401`         | `INVALID_CREDENTIALS`                         | Show generic sign-in error.                                        |
+| Missing / invalid access token    | `401`         | `UNAUTHENTICATED`                             | Refresh once; otherwise end session.                               |
+| Expired access token              | `401`         | `ACCESS_TOKEN_EXPIRED`                        | Refresh once; otherwise end session.                               |
+| Expired / revoked refresh session | `401`         | `SESSION_EXPIRED`                             | Clear all tabs and redirect to Login.                              |
+| MFA required                      | `202`         | `MFA_REQUIRED`                                | Move to OTP page; retain no password.                              |
+| Invalid / expired OTP             | `400`         | `OTP_INVALID` / `OTP_EXPIRED`                 | Keep page active; offer resend when expired.                       |
+| Resend throttled                  | `429`         | `OTP_RESEND_THROTTLED`                        | Disable resend until `retryAfterSeconds`.                          |
+| Reset token invalid / expired     | `400`         | `RESET_TOKEN_INVALID` / `RESET_TOKEN_EXPIRED` | Offer new reset request.                                           |
+| Permission denied                 | `403`         | `FORBIDDEN`                                   | Show a permission message.                                         |
+| Login throttled                   | `429`         | `LOGIN_THROTTLED`                             | Disable sign-in until the retry time.                              |
+| OTP attempts exhausted            | `429`         | `OTP_ATTEMPTS_EXCEEDED`                       | Restart login.                                                     |
+| Service failure                   | `502` / `503` | `SERVICE_UNAVAILABLE`                         | Preserve inputs and offer retry.                                   |
+| Unexpected server failure         | `500`         | `INTERNAL_ERROR`                              | Show generic retry state and record `correlationId` when provided. |
 
 ## 6. Endpoint specification
 
 ### 6.1 AUTH-01 - POST /api/auth/register
 
-| Field | Value |
-| --- | --- |
-| Status | Approved contract baseline - BE pending |
-| Purpose | Create an email/password account. |
-| Consumers | Registration page and auth API client |
-| Source of truth | PostgreSQL user store |
-| Authentication | None |
+| Field                | Value                                        |
+| -------------------- | -------------------------------------------- |
+| Status               | Approved contract baseline - BE pending      |
+| Purpose              | Create an email/password account.            |
+| Consumers            | Registration page and auth API client        |
+| Source of truth      | PostgreSQL user store                        |
+| Authentication       | None                                         |
 | Rate limit / timeout | 5 requests per IP per 15 minutes; 10 seconds |
 
-| Location | Name | Type | Required | Rules | Example |
-| --- | --- | --- | --- | --- | --- |
-| Body | `email` | string | Yes | Valid email; lower-case and trim | `ada@example.com` |
-| Body | `password` | string | Yes | 12-128 chars; upper, lower, digit, symbol | `ExamplePass1!` |
-| Body | `confirmPassword` | string | Yes | Must equal password | `ExamplePass1!` |
+| Location | Name              | Type   | Required | Rules                                     | Example           |
+| -------- | ----------------- | ------ | -------- | ----------------------------------------- | ----------------- |
+| Body     | `email`           | string | Yes      | Valid email; lower-case and trim          | `ada@example.com` |
+| Body     | `password`        | string | Yes      | 12-128 chars; upper, lower, digit, symbol | `ExamplePass1!`   |
+| Body     | `confirmPassword` | string | Yes      | Must equal password                       | `ExamplePass1!`   |
 
 ```json
 {
@@ -141,29 +142,28 @@ Use this document as the single source of truth for the MVP API release.
 }
 ```
 
-| Failure case | HTTP status / code | Frontend behaviour |
-| --- | --- | --- |
-| Invalid input | `400` / `VALIDATION_ERROR` | Show field errors. |
-| Duplicate email | `409` / `ACCOUNT_EXISTS` | Offer sign-in or password reset. |
-| Service failure | `503` / `SERVICE_UNAVAILABLE` | Show retry state. |
-
+| Failure case    | HTTP status / code            | Frontend behaviour               |
+| --------------- | ----------------------------- | -------------------------------- |
+| Invalid input   | `400` / `VALIDATION_ERROR`    | Show field errors.               |
+| Duplicate email | `409` / `ACCOUNT_EXISTS`      | Offer sign-in or password reset. |
+| Service failure | `503` / `SERVICE_UNAVAILABLE` | Show retry state.                |
 
 ### 6.2 AUTH-02 - POST /api/auth/login
 
-| Field | Value |
-| --- | --- |
-| Status | Approved contract baseline - BE pending |
-| Purpose | Sign in or initiate MFA verification. |
-| Consumers | Login page and auth API client |
-| Source of truth | PostgreSQL user and session store |
-| Authentication | None |
+| Field                | Value                                               |
+| -------------------- | --------------------------------------------------- |
+| Status               | Approved contract baseline - BE pending             |
+| Purpose              | Sign in or initiate MFA verification.               |
+| Consumers            | Login page and auth API client                      |
+| Source of truth      | PostgreSQL user and session store                   |
+| Authentication       | None                                                |
 | Rate limit / timeout | 10 attempts per email/IP per 15 minutes; 10 seconds |
 
-| Location | Name | Type | Required | Rules | Example |
-| --- | --- | --- | --- | --- | --- |
-| Body | `email` | string | Yes | Valid email | `ada@example.com` |
-| Body | `password` | string | Yes | 12-128 chars | `ExamplePass1!` |
-| Body | `rememberMe` | boolean | No | Defaults to false | `true` |
+| Location | Name         | Type    | Required | Rules             | Example           |
+| -------- | ------------ | ------- | -------- | ----------------- | ----------------- |
+| Body     | `email`      | string  | Yes      | Valid email       | `ada@example.com` |
+| Body     | `password`   | string  | Yes      | 12-128 chars      | `ExamplePass1!`   |
+| Body     | `rememberMe` | boolean | No       | Defaults to false | `true`            |
 
 ```json
 {
@@ -196,28 +196,28 @@ The response sets `iot_refresh=<opaque-token>; HttpOnly; Secure; SameSite=Lax; P
 
 For MFA-enabled users return `202` with `data.mfaChallengeId`, `data.expiresInSeconds: 600`, `data.delivery: "email"`, and `meta.code: "MFA_REQUIRED"`.
 
-| Failure case | HTTP status / code | Frontend behaviour |
-| --- | --- | --- |
-| Invalid input | `400` / `VALIDATION_ERROR` | Show field errors. |
-| Invalid credentials | `401` / `INVALID_CREDENTIALS` | Show a generic login error. |
-| Rate limited | `429` / `LOGIN_THROTTLED` | Disable sign-in until the retry time. |
+| Failure case        | HTTP status / code            | Frontend behaviour                    |
+| ------------------- | ----------------------------- | ------------------------------------- |
+| Invalid input       | `400` / `VALIDATION_ERROR`    | Show field errors.                    |
+| Invalid credentials | `401` / `INVALID_CREDENTIALS` | Show a generic login error.           |
+| Rate limited        | `429` / `LOGIN_THROTTLED`     | Disable sign-in until the retry time. |
 
 ### 6.3 AUTH-03 - POST /api/auth/mfa/verify
 
-| Field | Value |
-| --- | --- |
-| Status | Approved contract baseline - BE pending |
-| Purpose | Verify OTP and complete sign-in. |
-| Consumers | OTP verification page |
-| Source of truth | PostgreSQL MFA challenge and session store |
-| Authentication | None |
+| Field                | Value                                          |
+| -------------------- | ---------------------------------------------- |
+| Status               | Approved contract baseline - BE pending        |
+| Purpose              | Verify OTP and complete sign-in.               |
+| Consumers            | OTP verification page                          |
+| Source of truth      | PostgreSQL MFA challenge and session store     |
+| Authentication       | None                                           |
 | Rate limit / timeout | Five failed attempts per challenge; 10 seconds |
 
-| Location | Name | Type | Required | Rules | Example |
-| --- | --- | --- | --- | --- | --- |
-| Body | `mfaChallengeId` | string | Yes | Active, unexpired challenge | `mfa_123` |
-| Body | `otp` | string | Yes | Exactly six digits | `123456` |
-| Body | `rememberMe` | boolean | Yes | Value selected at login | `true` |
+| Location | Name             | Type    | Required | Rules                       | Example   |
+| -------- | ---------------- | ------- | -------- | --------------------------- | --------- |
+| Body     | `mfaChallengeId` | string  | Yes      | Active, unexpired challenge | `mfa_123` |
+| Body     | `otp`            | string  | Yes      | Exactly six digits          | `123456`  |
+| Body     | `rememberMe`     | boolean | Yes      | Value selected at login     | `true`    |
 
 ```json
 {
@@ -248,26 +248,26 @@ For MFA-enabled users return `202` with `data.mfaChallengeId`, `data.expiresInSe
 
 The response sets `iot_refresh=<opaque-token>; HttpOnly; Secure; SameSite=Lax; Path=/api/auth` and `Cache-Control: no-store`.
 
-| Failure case | HTTP status / code | Frontend behaviour |
-| --- | --- | --- |
-| Invalid OTP | `400` / `OTP_INVALID` | Keep the OTP screen active. |
-| Expired OTP | `400` / `OTP_EXPIRED` | Offer resend. |
-| Too many attempts | `429` / `OTP_ATTEMPTS_EXCEEDED` | Restart login. |
+| Failure case      | HTTP status / code              | Frontend behaviour          |
+| ----------------- | ------------------------------- | --------------------------- |
+| Invalid OTP       | `400` / `OTP_INVALID`           | Keep the OTP screen active. |
+| Expired OTP       | `400` / `OTP_EXPIRED`           | Offer resend.               |
+| Too many attempts | `429` / `OTP_ATTEMPTS_EXCEEDED` | Restart login.              |
 
 ### 6.4 AUTH-04 - POST /api/auth/mfa/resend
 
-| Field | Value |
-| --- | --- |
-| Status | Approved contract baseline - BE pending |
-| Purpose | Send a replacement OTP challenge. |
-| Consumers | OTP verification page |
-| Source of truth | PostgreSQL MFA challenge store and email provider |
-| Authentication | None |
+| Field                | Value                                              |
+| -------------------- | -------------------------------------------------- |
+| Status               | Approved contract baseline - BE pending            |
+| Purpose              | Send a replacement OTP challenge.                  |
+| Consumers            | OTP verification page                              |
+| Source of truth      | PostgreSQL MFA challenge store and email provider  |
+| Authentication       | None                                               |
 | Rate limit / timeout | One send per 60 seconds; five per challenge window |
 
-| Location | Name | Type | Required | Rules | Example |
-| --- | --- | --- | --- | --- | --- |
-| Body | `mfaChallengeId` | string | Yes | Existing challenge | `mfa_123` |
+| Location | Name             | Type   | Required | Rules              | Example   |
+| -------- | ---------------- | ------ | -------- | ------------------ | --------- |
+| Body     | `mfaChallengeId` | string | Yes      | Existing challenge | `mfa_123` |
 
 ```json
 {
@@ -291,26 +291,26 @@ The response sets `iot_refresh=<opaque-token>; HttpOnly; Secure; SameSite=Lax; P
 }
 ```
 
-| Failure case | HTTP status / code | Frontend behaviour |
-| --- | --- | --- |
-| Invalid or expired challenge | `400` / `OTP_EXPIRED` | Restart login. |
-| Resend throttled | `429` / `OTP_RESEND_THROTTLED` | Disable resend for `retryAfterSeconds`. |
-| Email unavailable | `503` / `SERVICE_UNAVAILABLE` | Show retry state. |
+| Failure case                 | HTTP status / code             | Frontend behaviour                      |
+| ---------------------------- | ------------------------------ | --------------------------------------- |
+| Invalid or expired challenge | `400` / `OTP_EXPIRED`          | Restart login.                          |
+| Resend throttled             | `429` / `OTP_RESEND_THROTTLED` | Disable resend for `retryAfterSeconds`. |
+| Email unavailable            | `503` / `SERVICE_UNAVAILABLE`  | Show retry state.                       |
 
 ### 6.5 AUTH-05 - POST /api/auth/refresh
 
-| Field | Value |
-| --- | --- |
-| Status | Approved contract baseline - BE pending |
-| Purpose | Rotate refresh session and issue new access token. |
-| Consumers | Auth API client on application boot or access expiry |
-| Source of truth | PostgreSQL session store |
-| Authentication | `iot_refresh` HttpOnly cookie |
-| Rate limit / timeout | One automatic retry only; 10 seconds |
+| Field                | Value                                                |
+| -------------------- | ---------------------------------------------------- |
+| Status               | Approved contract baseline - BE pending              |
+| Purpose              | Rotate refresh session and issue new access token.   |
+| Consumers            | Auth API client on application boot or access expiry |
+| Source of truth      | PostgreSQL session store                             |
+| Authentication       | `iot_refresh` HttpOnly cookie                        |
+| Rate limit / timeout | One automatic retry only; 10 seconds                 |
 
-| Location | Name | Type | Required | Rules | Example |
-| --- | --- | --- | --- | --- | --- |
-| Cookie | `iot_refresh` | opaque string | Yes | Sent with `credentials: 'include'`; JavaScript cannot read it. | `<redacted>` |
+| Location | Name          | Type          | Required | Rules                                                          | Example      |
+| -------- | ------------- | ------------- | -------- | -------------------------------------------------------------- | ------------ |
+| Cookie   | `iot_refresh` | opaque string | Yes      | Sent with `credentials: 'include'`; JavaScript cannot read it. | `<redacted>` |
 
 ```http
 POST /api/auth/refresh
@@ -338,26 +338,26 @@ Cookie: iot_refresh=<redacted>
 
 The response rotates the cookie with `Set-Cookie: iot_refresh=<rotated-token>; HttpOnly; Secure; SameSite=Lax; Path=/api/auth` and sends `Cache-Control: no-store`.
 
-| Failure case | HTTP status / code | Frontend behaviour |
-| --- | --- | --- |
-| Cookie absent, revoked, expired, or replayed | `401` / `SESSION_EXPIRED` | Clear all tabs and redirect to Login. |
-| Service failure | `503` / `SERVICE_UNAVAILABLE` | Show retry state. |
+| Failure case                                 | HTTP status / code            | Frontend behaviour                    |
+| -------------------------------------------- | ----------------------------- | ------------------------------------- |
+| Cookie absent, revoked, expired, or replayed | `401` / `SESSION_EXPIRED`     | Clear all tabs and redirect to Login. |
+| Service failure                              | `503` / `SERVICE_UNAVAILABLE` | Show retry state.                     |
 
 ### 6.6 AUTH-06 - POST /api/auth/logout
 
-| Field | Value |
-| --- | --- |
-| Status | Approved contract baseline - BE pending |
-| Purpose | Revoke session and clear refresh cookie. |
-| Consumers | Navbar/logout action and auth API client |
-| Source of truth | PostgreSQL session store |
-| Authentication | `iot_refresh` cookie; bearer optional |
-| Rate limit / timeout | No rate limit; 10 seconds |
+| Field                | Value                                    |
+| -------------------- | ---------------------------------------- |
+| Status               | Approved contract baseline - BE pending  |
+| Purpose              | Revoke session and clear refresh cookie. |
+| Consumers            | Navbar/logout action and auth API client |
+| Source of truth      | PostgreSQL session store                 |
+| Authentication       | `iot_refresh` cookie; bearer optional    |
+| Rate limit / timeout | No rate limit; 10 seconds                |
 
-| Location | Name | Type | Required | Rules | Example |
-| --- | --- | --- | --- | --- | --- |
-| Cookie | `iot_refresh` | opaque string | No | Idempotent when absent or already revoked. | `<redacted>` |
-| Header | `Authorization` | string | No | Optional `Bearer <accessToken>`. | `Bearer <jwt>` |
+| Location | Name            | Type          | Required | Rules                                      | Example        |
+| -------- | --------------- | ------------- | -------- | ------------------------------------------ | -------------- |
+| Cookie   | `iot_refresh`   | opaque string | No       | Idempotent when absent or already revoked. | `<redacted>`   |
+| Header   | `Authorization` | string        | No       | Optional `Bearer <accessToken>`.           | `Bearer <jwt>` |
 
 ```http
 POST /api/auth/logout
@@ -368,25 +368,25 @@ Cookie: iot_refresh=<redacted>
 
 FE clears memory and broadcasts `{ "type": "LOGOUT" }` via `BroadcastChannel('iot-auth')`, with a storage-event fallback. Every tab clears state and redirects to Login.
 
-| Failure case | HTTP status / code | Frontend behaviour |
-| --- | --- | --- |
-| Existing or absent session | `204` | Clear local state and broadcast logout. |
-| Temporary service failure | `503` / `SERVICE_UNAVAILABLE` | Clear local state anyway and record the failure. |
+| Failure case               | HTTP status / code            | Frontend behaviour                               |
+| -------------------------- | ----------------------------- | ------------------------------------------------ |
+| Existing or absent session | `204`                         | Clear local state and broadcast logout.          |
+| Temporary service failure  | `503` / `SERVICE_UNAVAILABLE` | Clear local state anyway and record the failure. |
 
 ### 6.7 AUTH-07 - POST /api/auth/password-reset/request
 
-| Field | Value |
-| --- | --- |
-| Status | Approved contract baseline - BE pending |
-| Purpose | Request reset instructions without revealing account existence. |
-| Consumers | Forgot-password page |
-| Source of truth | PostgreSQL user/reset-token store and email provider |
-| Authentication | None |
-| Rate limit / timeout | Three requests per email per hour; 10 seconds |
+| Field                | Value                                                           |
+| -------------------- | --------------------------------------------------------------- |
+| Status               | Approved contract baseline - BE pending                         |
+| Purpose              | Request reset instructions without revealing account existence. |
+| Consumers            | Forgot-password page                                            |
+| Source of truth      | PostgreSQL user/reset-token store and email provider            |
+| Authentication       | None                                                            |
+| Rate limit / timeout | Three requests per email per hour; 10 seconds                   |
 
-| Location | Name | Type | Required | Rules | Example |
-| --- | --- | --- | --- | --- | --- |
-| Body | `email` | string | Yes | Valid email | `ada@example.com` |
+| Location | Name    | Type   | Required | Rules       | Example           |
+| -------- | ------- | ------ | -------- | ----------- | ----------------- |
+| Body     | `email` | string | Yes      | Valid email | `ada@example.com` |
 
 ```json
 {
@@ -407,28 +407,28 @@ FE clears memory and broadcasts `{ "type": "LOGOUT" }` via `BroadcastChannel('io
 }
 ```
 
-| Failure case | HTTP status / code | Frontend behaviour |
-| --- | --- | --- |
-| Invalid email format | `400` / `VALIDATION_ERROR` | Show field error. |
-| Request throttled | `429` / `RESET_THROTTLED` | Show retry guidance. |
-| Email unavailable | `503` / `SERVICE_UNAVAILABLE` | Show retry state. |
+| Failure case         | HTTP status / code            | Frontend behaviour   |
+| -------------------- | ----------------------------- | -------------------- |
+| Invalid email format | `400` / `VALIDATION_ERROR`    | Show field error.    |
+| Request throttled    | `429` / `RESET_THROTTLED`     | Show retry guidance. |
+| Email unavailable    | `503` / `SERVICE_UNAVAILABLE` | Show retry state.    |
 
 ### 6.8 AUTH-08 - POST /api/auth/password-reset/confirm
 
-| Field | Value |
-| --- | --- |
-| Status | Approved contract baseline - BE pending |
-| Purpose | Set a new password from a one-time reset token. |
-| Consumers | Reset-password page |
-| Source of truth | PostgreSQL user, reset-token, and session stores |
-| Authentication | None |
-| Rate limit / timeout | Five attempts per token; 10 seconds |
+| Field                | Value                                            |
+| -------------------- | ------------------------------------------------ |
+| Status               | Approved contract baseline - BE pending          |
+| Purpose              | Set a new password from a one-time reset token.  |
+| Consumers            | Reset-password page                              |
+| Source of truth      | PostgreSQL user, reset-token, and session stores |
+| Authentication       | None                                             |
+| Rate limit / timeout | Five attempts per token; 10 seconds              |
 
-| Location | Name | Type | Required | Rules | Example |
-| --- | --- | --- | --- | --- | --- |
-| Body | `token` | string | Yes | Valid, one-time, unexpired opaque token | `<opaque-token>` |
-| Body | `password` | string | Yes | Registration password policy | `NewExamplePass1!` |
-| Body | `confirmPassword` | string | Yes | Must equal password | `NewExamplePass1!` |
+| Location | Name              | Type   | Required | Rules                                   | Example            |
+| -------- | ----------------- | ------ | -------- | --------------------------------------- | ------------------ |
+| Body     | `token`           | string | Yes      | Valid, one-time, unexpired opaque token | `<opaque-token>`   |
+| Body     | `password`        | string | Yes      | Registration password policy            | `NewExamplePass1!` |
+| Body     | `confirmPassword` | string | Yes      | Must equal password                     | `NewExamplePass1!` |
 
 ```json
 {
@@ -440,20 +440,20 @@ FE clears memory and broadcasts `{ "type": "LOGOUT" }` via `BroadcastChannel('io
 
 **Success response: `204 No Content`** - consume token and revoke all sessions; no JSON body.
 
-| Failure case | HTTP status / code | Frontend behaviour |
-| --- | --- | --- |
-| Invalid token | `400` / `RESET_TOKEN_INVALID` | Offer a new reset request. |
-| Expired token | `400` / `RESET_TOKEN_EXPIRED` | Offer a new reset request. |
-| Password validation failure | `400` / `VALIDATION_ERROR` | Show field errors. |
+| Failure case                | HTTP status / code            | Frontend behaviour         |
+| --------------------------- | ----------------------------- | -------------------------- |
+| Invalid token               | `400` / `RESET_TOKEN_INVALID` | Offer a new reset request. |
+| Expired token               | `400` / `RESET_TOKEN_EXPIRED` | Offer a new reset request. |
+| Password validation failure | `400` / `VALIDATION_ERROR`    | Show field errors.         |
 
 ### 6.9 DATA-01 - POST /api/datasets
 
-| Field | Value |
-| --- | --- |
-| Purpose | Commit the upload wizard's reviewed CSV data. The server creates the dataset, records the authenticated user as `created_by` and `updated_by`, saves the selected sensor field mappings and their detected source data types, and writes every selected CSV value to the wide `timeseries` table. |
-| Authentication | `Authorization: Bearer <accessToken>`; `created_by` always comes from the JWT `sub`, never from the request body. |
-| Content type | `application/json` |
-| Transaction behaviour | All inserts succeed or the request is rolled back. No partially imported dataset is visible. |
+| Field                 | Value                                                                                                                                                                                                                                                                                             |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Purpose               | Commit the upload wizard's reviewed CSV data. The server creates the dataset, records the authenticated user as `created_by` and `updated_by`, saves the selected sensor field mappings and their detected source data types, and writes every selected CSV value to the wide `timeseries` table. |
+| Authentication        | `Authorization: Bearer <accessToken>`; `created_by` always comes from the JWT `sub`, never from the request body.                                                                                                                                                                                 |
+| Content type          | `application/json`                                                                                                                                                                                                                                                                                |
+| Transaction behaviour | All inserts succeed or the request is rolled back. No partially imported dataset is visible.                                                                                                                                                                                                      |
 
 The frontend parses the selected file locally for the Upload, Map fields, and Review steps. On **Import**, it posts the parsed values for selected columns together with the user-confirmed `mappings`. Unselected CSV columns are not persisted. This avoids re-uploading a file that the user has already reviewed and makes the final request deterministic.
 
@@ -461,17 +461,17 @@ The frontend parses the selected file locally for the Upload, Map fields, and Re
 
 The reviewed upload request is limited to **10 MiB** of JSON and **10,000 CSV rows**. The mapping limit remains one to eight sensor fields. The frontend should validate these limits before import and display the server error if a request is rejected.
 
-| Body field | Type | Required | Rules |
-| --- | --- | --- | --- |
-| `name` | string | Yes | Trimmed, 1–120 characters; unique dataset name. |
-| `description` | string | No | Trimmed, maximum 1,000 characters. |
-| `timestampField` | string | Yes | Exact CSV header to write to `timeseries.created_at`. It is not a `dataset_field_mappings` row because only sensor columns can use `field1`–`field8`. |
-| `mappings` | array | Yes | 1–8 sensor mappings to `field1`–`field8`. |
-| `mappings[].sourceField` | string | Yes | Exact CSV header in each row. Unique per dataset. |
-| `mappings[].storageField` | string | Yes | `field1` through `field8`; unique per dataset. |
-| `mappings[].displayName` | string | Yes | User-facing field label, maximum 120 characters. |
-| `mappings[].sourceDataType` | string | Yes | `number`. It records the detected source type; `field1`–`field8` require numeric values because their PostgreSQL destination is `DOUBLE PRECISION`. |
-| `rows` | object[] | Yes | 1–10,000 parsed CSV rows keyed by source header. Selected timestamp values must be parseable dates; selected sensor values must be finite numbers or empty (stored as `NULL`). |
+| Body field                  | Type     | Required | Rules                                                                                                                                                                          |
+| --------------------------- | -------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `name`                      | string   | Yes      | Trimmed, 1–120 characters; unique dataset name.                                                                                                                                |
+| `description`               | string   | No       | Trimmed, maximum 1,000 characters.                                                                                                                                             |
+| `timestampField`            | string   | Yes      | Exact CSV header to write to `timeseries.created_at`. It is not a `dataset_field_mappings` row because only sensor columns can use `field1`–`field8`.                          |
+| `mappings`                  | array    | Yes      | 1–8 sensor mappings to `field1`–`field8`.                                                                                                                                      |
+| `mappings[].sourceField`    | string   | Yes      | Exact CSV header in each row. Unique per dataset.                                                                                                                              |
+| `mappings[].storageField`   | string   | Yes      | `field1` through `field8`; unique per dataset.                                                                                                                                 |
+| `mappings[].displayName`    | string   | Yes      | User-facing field label, maximum 120 characters.                                                                                                                               |
+| `mappings[].sourceDataType` | string   | Yes      | `number`. It records the detected source type; `field1`–`field8` require numeric values because their PostgreSQL destination is `DOUBLE PRECISION`.                            |
+| `rows`                      | object[] | Yes      | 1–10,000 parsed CSV rows keyed by source header. Selected timestamp values must be parseable dates; selected sensor values must be finite numbers or empty (stored as `NULL`). |
 
 ```json
 {
@@ -479,11 +479,36 @@ The reviewed upload request is limited to **10 MiB** of JSON and **10,000 CSV ro
   "description": "Greenhouse sensor readings collected during April 2026.",
   "timestampField": "Time",
   "mappings": [
-    { "sourceField": "AirTemperature", "storageField": "field1", "displayName": "Temperature", "sourceDataType": "number" },
-    { "sourceField": "RelativeHumidity", "storageField": "field2", "displayName": "Humidity", "sourceDataType": "number" },
-    { "sourceField": "AtmosphericPressure", "storageField": "field3", "displayName": "Pressure", "sourceDataType": "number" },
-    { "sourceField": "PM25", "storageField": "field4", "displayName": "PM2.5", "sourceDataType": "number" },
-    { "sourceField": "Noise", "storageField": "field5", "displayName": "Noise level", "sourceDataType": "number" }
+    {
+      "sourceField": "AirTemperature",
+      "storageField": "field1",
+      "displayName": "Temperature",
+      "sourceDataType": "number"
+    },
+    {
+      "sourceField": "RelativeHumidity",
+      "storageField": "field2",
+      "displayName": "Humidity",
+      "sourceDataType": "number"
+    },
+    {
+      "sourceField": "AtmosphericPressure",
+      "storageField": "field3",
+      "displayName": "Pressure",
+      "sourceDataType": "number"
+    },
+    {
+      "sourceField": "PM25",
+      "storageField": "field4",
+      "displayName": "PM2.5",
+      "sourceDataType": "number"
+    },
+    {
+      "sourceField": "Noise",
+      "storageField": "field5",
+      "displayName": "Noise level",
+      "sourceDataType": "number"
+    }
   ],
   "rows": [
     {
@@ -510,7 +535,12 @@ The reviewed upload request is limited to **10 MiB** of JSON and **10,000 CSV ro
     "updatedBy": "4c7c77b9-2bb8-4a3e-9b7a-4a66782e9dd6",
     "updatedAt": "2026-09-04T10:00:00.000Z",
     "mappings": [
-      { "sourceField": "AirTemperature", "storageField": "field1", "displayName": "Temperature", "sourceDataType": "number" }
+      {
+        "sourceField": "AirTemperature",
+        "storageField": "field1",
+        "displayName": "Temperature",
+        "sourceDataType": "number"
+      }
     ],
     "importedRowCount": 18
   },
@@ -518,38 +548,38 @@ The reviewed upload request is limited to **10 MiB** of JSON and **10,000 CSV ro
 }
 ```
 
-| Failure case | HTTP status / code | Frontend behaviour |
-| --- | --- | --- |
-| Missing, malformed, duplicate mappings, invalid timestamps/numbers, too many rows | `400` / `VALIDATION_ERROR` | Keep the wizard at review and map `error.fields` to the relevant row or mapping. |
-| JSON request exceeds 10 MiB | `413` / `REQUEST_BODY_TOO_LARGE` | Ask the user to split the CSV into smaller uploads. |
-| No/invalid/expired access token | `401` / `UNAUTHENTICATED` or `ACCESS_TOKEN_EXPIRED` | Refresh once, then return to sign-in if needed. |
-| Dataset name already exists | `409` / `DATASET_NAME_EXISTS` | Ask for a different dataset name; preserve the reviewed data. |
-| Database failure | `500` / `INTERNAL_ERROR` | Leave the user on review; retry is safe because the database transaction was rolled back. |
+| Failure case                                                                      | HTTP status / code                                  | Frontend behaviour                                                                        |
+| --------------------------------------------------------------------------------- | --------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Missing, malformed, duplicate mappings, invalid timestamps/numbers, too many rows | `400` / `VALIDATION_ERROR`                          | Keep the wizard at review and map `error.fields` to the relevant row or mapping.          |
+| JSON request exceeds 10 MiB                                                       | `413` / `REQUEST_BODY_TOO_LARGE`                    | Ask the user to split the CSV into smaller uploads.                                       |
+| No/invalid/expired access token                                                   | `401` / `UNAUTHENTICATED` or `ACCESS_TOKEN_EXPIRED` | Refresh once, then return to sign-in if needed.                                           |
+| Dataset name already exists                                                       | `409` / `DATASET_NAME_EXISTS`                       | Ask for a different dataset name; preserve the reviewed data.                             |
+| Database failure                                                                  | `500` / `INTERNAL_ERROR`                            | Leave the user on review; retry is safe because the database transaction was rolled back. |
 
 ### 6.10 DATA-02 - PUT /api/datasets/:id
 
-| Field | Value |
-| --- | --- |
-| Purpose | Update an existing dataset’s selected field mappings and append reviewed CSV rows. The dataset name cannot be changed. |
-| Authentication | `Authorization: Bearer <accessToken>` |
-| Content type | `application/json` |
-| Transaction behaviour | Mapping changes, audit metadata, and new-row inserts succeed together or are rolled back together. |
-| Row behaviour | Existing time-series rows are never overwritten. The server assigns new `entryId` values after the current highest entry for the dataset. |
+| Field                 | Value                                                                                                                                     |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Purpose               | Update an existing dataset’s selected field mappings and append reviewed CSV rows. The dataset name cannot be changed.                    |
+| Authentication        | `Authorization: Bearer <accessToken>`                                                                                                     |
+| Content type          | `application/json`                                                                                                                        |
+| Transaction behaviour | Mapping changes, audit metadata, and new-row inserts succeed together or are rolled back together.                                        |
+| Row behaviour         | Existing time-series rows are never overwritten. The server assigns new `entryId` values after the current highest entry for the dataset. |
 
 The request uses the same timestamp, mapping, and row fields as `POST /api/datasets`, but omits `name`.
 
 The same **10 MiB** JSON-body and **10,000-row** CSV upload limits apply.
 
-| Body field | Type | Required | Rules |
-| --- | --- | --- | --- |
-| `timestampField` | string | Yes | CSV header written to `timeseries.created_at`. |
-| `description` | string | No | Replaces the stored description when supplied; maximum 1,000 characters. |
-| `mappings` | array | Yes | Complete selected mapping set; `field1` through `field8` only. |
-| `mappings[].sourceField` | string | Yes | Original CSV column header. |
-| `mappings[].storageField` | string | Yes | `field1` through `field8`; unique per dataset. |
-| `mappings[].displayName` | string | Yes | Frontend label, maximum 120 characters. |
-| `mappings[].sourceDataType` | string | Yes | Must be `number`. |
-| `rows` | object[] | Yes | 1–10,000 new parsed CSV rows keyed by source header. |
+| Body field                  | Type     | Required | Rules                                                                    |
+| --------------------------- | -------- | -------- | ------------------------------------------------------------------------ |
+| `timestampField`            | string   | Yes      | CSV header written to `timeseries.created_at`.                           |
+| `description`               | string   | No       | Replaces the stored description when supplied; maximum 1,000 characters. |
+| `mappings`                  | array    | Yes      | Complete selected mapping set; `field1` through `field8` only.           |
+| `mappings[].sourceField`    | string   | Yes      | Original CSV column header.                                              |
+| `mappings[].storageField`   | string   | Yes      | `field1` through `field8`; unique per dataset.                           |
+| `mappings[].displayName`    | string   | Yes      | Frontend label, maximum 120 characters.                                  |
+| `mappings[].sourceDataType` | string   | Yes      | Must be `number`.                                                        |
+| `rows`                      | object[] | Yes      | 1–10,000 new parsed CSV rows keyed by source header.                     |
 
 **Example request body**
 
@@ -613,12 +643,12 @@ The same **10 MiB** JSON-body and **10,000-row** CSV upload limits apply.
 
 ### 6.11 DATA-03- GET /api/datasets
 
-| Field | Value |
-| --- | --- |
-| Purpose | List every dataset and the total number of persisted wide time-series rows it contains. |
-| Authentication | None |
-| Content type | `application/json` |
-| Ordering | Ascending dataset ID. |
+| Field          | Value                                                                                   |
+| -------------- | --------------------------------------------------------------------------------------- |
+| Purpose        | List every dataset and the total number of persisted wide time-series rows it contains. |
+| Authentication | None                                                                                    |
+| Content type   | `application/json`                                                                      |
+| Ordering       | Ascending dataset ID.                                                                   |
 
 `totalRows` is the count of records in the `timeseries` table for the dataset. A dataset with no persisted records is included with `totalRows: 0`.
 
@@ -647,25 +677,25 @@ The same **10 MiB** JSON-body and **10,000-row** CSV upload limits apply.
 ]
 ```
 
-| Response field | Type | Description |
-| --- | --- | --- |
-| `id` | integer | Dataset identifier. |
-| `name` | string | Unique dataset name. |
-| `totalRows` | integer | Total persisted wide time-series rows for the dataset. |
-| `createdBy`, `updatedBy` | UUID or `null` | User IDs recorded in the dataset audit fields. |
-| `createdAt`, `updatedAt` | ISO-8601 timestamp | Dataset audit timestamps. |
+| Response field           | Type               | Description                                            |
+| ------------------------ | ------------------ | ------------------------------------------------------ |
+| `id`                     | integer            | Dataset identifier.                                    |
+| `name`                   | string             | Unique dataset name.                                   |
+| `totalRows`              | integer            | Total persisted wide time-series rows for the dataset. |
+| `createdBy`, `updatedBy` | UUID or `null`     | User IDs recorded in the dataset audit fields.         |
+| `createdAt`, `updatedAt` | ISO-8601 timestamp | Dataset audit timestamps.                              |
 
-| Failure case | HTTP status / response | Frontend behaviour |
-| --- | --- | --- |
+| Failure case     | HTTP status / response                           | Frontend behaviour                              |
+| ---------------- | ------------------------------------------------ | ----------------------------------------------- |
 | Database failure | `500` / `{ "error": "Failed to load datasets" }` | Preserve the current selection and offer retry. |
 
 ### 6.12 DATA-04 - GET /api/datasets/:id
 
-| Field | Value |
-| --- | --- |
-| Purpose | Retrieve metadata for one dataset and the total number of its persisted wide time-series rows. |
-| Authentication | None |
-| Content type | `application/json` |
+| Field          | Value                                                                                          |
+| -------------- | ---------------------------------------------------------------------------------------------- |
+| Purpose        | Retrieve metadata for one dataset and the total number of its persisted wide time-series rows. |
+| Authentication | None                                                                                           |
+| Content type   | `application/json`                                                                             |
 
 **Success response: `200 OK`**
 
@@ -691,23 +721,23 @@ The same **10 MiB** JSON-body and **10,000-row** CSV upload limits apply.
 }
 ```
 
-| Failure case | HTTP status / response |
-| --- | --- |
+| Failure case                         | HTTP status / response                                         |
+| ------------------------------------ | -------------------------------------------------------------- |
 | Dataset ID is not a positive integer | `400` / `{ "error": "Dataset ID must be a positive integer" }` |
-| Dataset does not exist | `404` / `{ "error": "Dataset not found" }` |
-| Database failure | `500` / `{ "error": "Failed to load dataset" }` |
+| Dataset does not exist               | `404` / `{ "error": "Dataset not found" }`                     |
+| Database failure                     | `500` / `{ "error": "Failed to load dataset" }`                |
 
 `timestampField` is the source CSV header used to write `timeseries.created_at`; it can be `null` for legacy datasets created before this field was saved. `mappings` is always an array. Each item contains the saved `sourceField`, `storageField`, `sourceDataType`, and `displayName`; items are ordered by `storageField`.
 
 ### 6.13 DATA-05 - DELETE /api/datasets/:id
 
-| Field | Value |
-| --- | --- |
-| Purpose | Soft-delete an active dataset configuration while permanently deleting all synced rows from `timeseries` and `timeseries_long`. |
-| Authentication | `Authorization: Bearer <accessToken>` |
-| Content type | None |
-| Transaction behaviour | The time-series deletion and dataset metadata update run in one transaction. If any step fails, the request rolls back and no partial deletion is committed. |
-| Retained configuration | The `datasets` row, `timestamp_field`, and `dataset_field_mappings` rows remain for recovery. |
+| Field                  | Value                                                                                                                                                        |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Purpose                | Soft-delete an active dataset configuration while permanently deleting all synced rows from `timeseries` and `timeseries_long`.                              |
+| Authentication         | `Authorization: Bearer <accessToken>`                                                                                                                        |
+| Content type           | None                                                                                                                                                         |
+| Transaction behaviour  | The time-series deletion and dataset metadata update run in one transaction. If any step fails, the request rolls back and no partial deletion is committed. |
+| Retained configuration | The `datasets` row, `timestamp_field`, and `dataset_field_mappings` rows remain for recovery.                                                                |
 
 **Success response: `200 OK`**
 
@@ -733,26 +763,26 @@ The same **10 MiB** JSON-body and **10,000-row** CSV upload limits apply.
 }
 ```
 
-| Failure case | HTTP status / code | Frontend behaviour |
-| --- | --- | --- |
-| Dataset ID is not a positive integer | `400` / `{ "error": "Dataset ID must be a positive integer" }` | Keep the user on the current screen and show validation feedback. |
-| No/invalid/expired access token | `401` / `UNAUTHENTICATED` or `ACCESS_TOKEN_EXPIRED` | Refresh once, then return to sign-in if needed. |
-| Dataset does not exist, is owned by another user, or is owned by the ThingSpeak service account | `404` / `DATASET_NOT_FOUND` | Remove the stale item from local state or show not found. |
-| Dataset is already soft-deleted | `409` / `DATASET_ALREADY_DELETED` | Treat the delete action as no longer available and refresh the dataset list. |
-| Database failure | `500` / `INTERNAL_ERROR` | Keep the dataset visible; retry is safe because the database transaction was rolled back. |
+| Failure case                                                                                    | HTTP status / code                                             | Frontend behaviour                                                                        |
+| ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Dataset ID is not a positive integer                                                            | `400` / `{ "error": "Dataset ID must be a positive integer" }` | Keep the user on the current screen and show validation feedback.                         |
+| No/invalid/expired access token                                                                 | `401` / `UNAUTHENTICATED` or `ACCESS_TOKEN_EXPIRED`            | Refresh once, then return to sign-in if needed.                                           |
+| Dataset does not exist, is owned by another user, or is owned by the ThingSpeak service account | `404` / `DATASET_NOT_FOUND`                                    | Remove the stale item from local state or show not found.                                 |
+| Dataset is already soft-deleted                                                                 | `409` / `DATASET_ALREADY_DELETED`                              | Treat the delete action as no longer available and refresh the dataset list.              |
+| Database failure                                                                                | `500` / `INTERNAL_ERROR`                                       | Keep the dataset visible; retry is safe because the database transaction was rolled back. |
 
 ### 6.14 DATA-06 - POST /api/datasets/:id/restore
 
-| Field | Value |
-| --- | --- |
-| Purpose | Restore a soft-deleted dataset configuration within the 15-day recovery period. Historical time-series data is not restored. |
-| Authentication | `Authorization: Bearer <accessToken>` |
-| Content type | None |
-| Transaction behaviour | Dataset recovery state and audit metadata are updated in one transaction. If any step fails, the request rolls back. |
-| Recovery window | The dataset can be restored only within 15 days of `deleted_at`. |
-| Retained configuration | The existing `datasets` row, `timestamp_field`, and `dataset_field_mappings` rows are retained and become active again. |
-| Historical data | Previously deleted `timeseries` and `timeseries_long` rows are not restored. |
-| Name conflict | Restoration is rejected if another active dataset owned by the same user already uses the dataset name. |
+| Field                  | Value                                                                                                                        |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| Purpose                | Restore a soft-deleted dataset configuration within the 15-day recovery period. Historical time-series data is not restored. |
+| Authentication         | `Authorization: Bearer <accessToken>`                                                                                        |
+| Content type           | None                                                                                                                         |
+| Transaction behaviour  | Dataset recovery state and audit metadata are updated in one transaction. If any step fails, the request rolls back.         |
+| Recovery window        | The dataset can be restored only within 15 days of `deleted_at`.                                                             |
+| Retained configuration | The existing `datasets` row, `timestamp_field`, and `dataset_field_mappings` rows are retained and become active again.      |
+| Historical data        | Previously deleted `timeseries` and `timeseries_long` rows are not restored.                                                 |
+| Name conflict          | Restoration is rejected if another active dataset owned by the same user already uses the dataset name.                      |
 
 **Request**
 
@@ -814,3 +844,16 @@ Authorization: Bearer <accessToken>
 | `/api/login` | Legacy username/password login | `POST /api/auth/login` | HttpOnly cookie, Remember Me, MFA, and tests pass. | BE / AFI-16 date to be confirmed |
 | `/api/refresh-token` | Legacy refresh token in JSON body | `POST /api/auth/refresh` | Rotating cookie works; FE sends credentials. | BE + FE / AFI-16 date to be confirmed |
 | `/api/logout` | Legacy refresh token in JSON body | `POST /api/auth/logout` | Idempotent cookie logout and two-tab test pass. | BE + FE / AFI-16 date to be confirmed |
+
+
+## 9. Analytics & Alerts
+
+`POST /api/analyse` is implemented and calls the analytics service — confirmed live via testing on 2026-10-01. Request body requires:
+- `dataset` (string, dataset name — not the numeric id)
+- `model` (object) — `model.metric` must be a non-empty canonical metric name (e.g. `temperature`)
+- `correlation` (object) — `correlation.streams` must be an array of at least two canonical metric names
+
+Once validation passes, the request reaches the analytics service. In this test it returned `503` / `ANALYTICS_UNAVAILABLE` because the analytics service itself was unreachable in the test environment — the success-path response shape is still unconfirmed. See `backend/docs/mvp/evidence/api-samples.json` for the full captured request/response.
+
+"Latest alerts" (`GET /api/alerts/latest`) and "alert history" (`GET /api/alerts/history`) routes — **NOT READY, do not exist in the codebase yet.** Per the AFI-05 task instructions, these stay out of scope until BDAI-10 and BDAI-11 deliver implementation and evidence.
+```
