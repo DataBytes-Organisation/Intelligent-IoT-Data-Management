@@ -1,0 +1,5 @@
+label,endpoint,path,requests,failures,errorRatePercent,minMs,avgMs,p50Ms,p95Ms,maxMs
+final-pr177,backend_health,/health,20,0,0,5.18,17.86,7.28,21.71,192.49
+final-pr177,backend_ready,/ready,20,0,0,3.25,5.4,4.24,9.08,11
+final-pr177,backend_metrics,/metrics,20,0,0,3.52,5.05,4.52,8.02,8.77
+final-pr177,dataset_list,/api/datasets,20,0,0,6.78,12.56,11.15,22.65,25.96

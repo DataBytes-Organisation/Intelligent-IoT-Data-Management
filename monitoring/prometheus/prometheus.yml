@@ -1,0 +1,30 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - /etc/prometheus/alerts.yml
+
+scrape_configs:
+  - job_name: backend
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - backend:3000
+
+  - job_name: frontend
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - frontend:5173
+
+  - job_name: analytics_integration
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - analytics-integration:5002
+
+  - job_name: docker_service_exporter
+    static_configs:
+      - targets:
+          - docker-service-exporter:9104

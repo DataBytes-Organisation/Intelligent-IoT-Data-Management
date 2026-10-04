@@ -1,0 +1,20 @@
+groups:
+  - name: engineering-analytics-alerts
+    rules:
+      - alert: BackendUnavailable
+        expr: avg(up{job="backend"}) < 1
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: Backend API unavailable
+          description: Backend scrape target is down.
+
+      - alert: HighApiP95Latency
+        expr: histogram_quantile(0.95, sum by (le) (rate(iot_http_request_duration_seconds_bucket[5m]))) > 0.6
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: API p95 latency is elevated
+          description: p95 latency has exceeded 600ms for 5 minutes.
