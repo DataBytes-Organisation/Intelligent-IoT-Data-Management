@@ -1,0 +1,16 @@
+{
+  "status": "error",
+  "generated_at": "2026-08-05T08:35:00Z",
+  "alerts": [],
+  "summary": {
+    "processed_items": 0,
+    "alert_count": 0
+  },
+  "errors": [
+    {
+      "code": "INVALID_SENSOR_VALUE",
+      "message": "Sensor value is missing or invalid.",
+      "source": "models"
+    }
+  ]
+}

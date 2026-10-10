@@ -1,0 +1,10 @@
+{
+  "status": "success",
+  "generated_at": "2026-08-05T08:30:00Z",
+  "alerts": [],
+  "summary": {
+    "processed_items": 1,
+    "alert_count": 0
+  },
+  "errors": []
+}

@@ -1,0 +1,9 @@
+{
+  "timestamp": "2026-08-05T08:30:00Z",
+  "sensor_id": "sensor_01",
+  "value": 28.5,
+  "detector": "ECOD",
+  "parameters": {
+    "sensitivity": "medium"
+  }
+}
