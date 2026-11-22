@@ -1,0 +1,72 @@
+{
+  "items": [
+    {
+      "id": "99b387e1-b0b9-5fd6-b88c-af6c261337af",
+      "datasetId": 42,
+      "datasetName": "melbourne-weather-replay",
+      "datasetDeleted": false,
+      "status": "success",
+      "streams": [
+        "temperature",
+        "humidity",
+        "pressure"
+      ],
+      "modelMetric": "temperature",
+      "processedItems": 500,
+      "alertCount": 3,
+      "alertCountByType": {
+        "POINTWISE_ANOMALY": 1,
+        "CORRELATION_CHANGE": 2
+      },
+      "highestSeverity": "HIGH",
+      "generatedAt": "2026-11-21T09:14:58Z",
+      "createdAt": "2026-11-21T09:15:02Z"
+    },
+    {
+      "id": "a5f5b7d8-b7d3-5731-b39b-9c84f2b34dec",
+      "datasetId": 42,
+      "datasetName": "melbourne-weather-replay",
+      "datasetDeleted": false,
+      "status": "success",
+      "streams": [
+        "temperature",
+        "humidity"
+      ],
+      "modelMetric": "temperature",
+      "processedItems": 500,
+      "alertCount": 0,
+      "alertCountByType": {
+        "POINTWISE_ANOMALY": 0,
+        "CORRELATION_CHANGE": 0
+      },
+      "highestSeverity": null,
+      "generatedAt": "2026-11-19T03:02:11Z",
+      "createdAt": "2026-11-19T03:02:14Z"
+    },
+    {
+      "id": "ba5d3a1c-359d-5468-8e66-ff03f927349b",
+      "datasetId": 37,
+      "datasetName": "thingspeak-12397",
+      "datasetDeleted": true,
+      "status": "success",
+      "streams": [
+        "temperature",
+        "light_level"
+      ],
+      "modelMetric": "temperature",
+      "processedItems": 240,
+      "alertCount": 1,
+      "alertCountByType": {
+        "POINTWISE_ANOMALY": 0,
+        "CORRELATION_CHANGE": 1
+      },
+      "highestSeverity": "LOW",
+      "generatedAt": "2026-11-17T22:41:05Z",
+      "createdAt": "2026-11-17T22:41:09Z"
+    }
+  ],
+  "page": 1,
+  "pageSize": 20,
+  "totalItems": 3,
+  "totalPages": 1
+}

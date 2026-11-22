@@ -1,0 +1,48 @@
+{
+  "id": "a5f5b7d8-b7d3-5731-b39b-9c84f2b34dec",
+  "datasetId": 42,
+  "datasetName": "melbourne-weather-replay",
+  "datasetDeleted": false,
+  "status": "success",
+  "streams": [
+    "temperature",
+    "humidity"
+  ],
+  "modelMetric": "temperature",
+  "processedItems": 500,
+  "alertCount": 0,
+  "alertCountByType": {
+    "POINTWISE_ANOMALY": 0,
+    "CORRELATION_CHANGE": 0
+  },
+  "highestSeverity": null,
+  "generatedAt": "2026-11-19T03:02:11Z",
+  "createdAt": "2026-11-19T03:02:14Z",
+  "contractVersion": "0.1",
+  "request": {
+    "model": {
+      "detector": "isolationforest",
+      "metric": "temperature",
+      "parameters": {}
+    },
+    "correlation": {
+      "streams": [
+        "temperature",
+        "humidity"
+      ],
+      "window_size": 20,
+      "step_size": 10,
+      "method": "pearson"
+    }
+  },
+  "result": {
+    "status": "success",
+    "generated_at": "2026-11-19T03:02:11Z",
+    "alerts": [],
+    "summary": {
+      "processed_items": 500,
+      "alert_count": 0
+    },
+    "errors": []
+  }
+}
