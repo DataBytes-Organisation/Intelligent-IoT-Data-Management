@@ -161,3 +161,38 @@ WHERE id = $1
   AND deleted_at IS NOT NULL
 RETURNING id, name, description, timestamp_field;
 ```
+
+## Running the migration (moved from the backend README)
+
+`004_add_soft_delete_to_datasets.sql` adds `deleted_at`, `deleted_by`, and
+`data_deleted_at` to `datasets`, plus an index for the 15-day cleanup job.
+
+Dataset names are unique among a user's active datasets only. A name may be
+reused immediately after its original dataset is soft-deleted. The migration
+checks that existing datasets have a valid `created_by` value before replacing
+the old global name constraint, then makes `created_by` mandatory. An operator
+must assign an owner to legacy datasets before rerunning it.
+
+Run it from `backend` with:
+
+```bash
+npm run migrate:soft-delete
+```
+
+This schema change deliberately does not delete time-series rows. The
+dataset-deletion API must delete those rows and set the three deletion fields
+in one transaction when a user deletes a dataset. The dataset configuration
+and field mappings remain recoverable for 15 days. API code must use the
+active-dataset uniqueness rule instead of `ON CONFLICT (name)`. If recovery is
+attempted after the name has been reused by an active dataset owned by the same
+user, the dataset-recovery API must return `409 DATASET_NAME_CONFLICT` and
+require the user to choose another name.
+
+The ThingSpeak owner provisioning command creates
+`thingspeak-service@system.local` using `THINGSPEAK_DATASET_OWNER_ID` and a
+bcrypt hash of `THINGSPEAK_DATASET_OWNER_PASSWORD`. Both values must be set in
+the runtime `.env` before running the command; neither credential is committed
+to the repository. The poller validates that the configured UUID exists and
+stops the write with a clear configuration error if it does not. Legacy
+CSV/ThingSpeak CLI ingestion now requires an owner UUID as well, so it cannot
+create an unowned dataset.
