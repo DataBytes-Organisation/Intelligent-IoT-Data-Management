@@ -1,5 +1,0 @@
-{
-  "error": "Invalid query parameters provided.",
-  "code": "VALIDATION_ERROR",
-  "correlationId": "mock-validation-001"
-}
