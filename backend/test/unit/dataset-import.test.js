@@ -7,12 +7,12 @@ const {
   updateDataset,
   validateImport,
   MAX_CSV_UPLOAD_ROWS,
-} = require("../src/services/datasetImportService");
+} = require("../../src/services/datasetImportService");
 const {
   MAX_REQUEST_BODY_BYTES,
   maxUploadSizeLabel,
   requestBodyLimitErrorHandler,
-} = require("../src/middleware/uploadLimitMiddleware");
+} = require("../../src/middleware/uploadLimitMiddleware");
 
 const mappings = [
   { sourceField: "AirTemperature", storageField: "field1", displayName: "Temperature", sourceDataType: "number" },

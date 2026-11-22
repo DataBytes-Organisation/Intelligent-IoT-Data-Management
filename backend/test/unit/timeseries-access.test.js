@@ -1,7 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const pool = require('../src/db/pool');
-const TimeseriesRepository = require('../src/repositories/timeseriesRepository');
+const pool = require('../../src/db/pool');
+const TimeseriesRepository = require('../../src/repositories/timeseriesRepository');
 
 test('dataset lookup by ID is limited to active user or ThingSpeak datasets', async () => {
   const originalQuery = pool.query;

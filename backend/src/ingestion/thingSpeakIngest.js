@@ -1,4 +1,4 @@
-// src/dataIngestion/thingSpeakInjest.js
+// src/ingestion/thingSpeakIngest.js
 const fetch = require("node-fetch");
 const pool = require("../db/pool");
 const TimeseriesRepository = require("../repositories/timeseriesRepository.js");
@@ -85,7 +85,7 @@ const apiUrl = process.argv[3];
 const ownerUserId = process.argv[4];
 
 if (!datasetName || !apiUrl || !ownerUserId) {
-  console.error("Usage: node thingSpeakInjest.js <datasetName> <apiUrl> <ownerUserId>");
+  console.error("Usage: node src/ingestion/thingSpeakIngest.js <datasetName> <apiUrl> <ownerUserId>");
   process.exit(1);
 }
 

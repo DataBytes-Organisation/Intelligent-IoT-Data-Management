@@ -3,13 +3,13 @@ const assert = require('node:assert/strict');
 const {
   RECOVERY_WINDOW_DAYS,
   purgeExpiredDatasets,
-} = require('../src/services/datasetCleanupService');
+} = require('../../src/services/datasetCleanupService');
 const {
   DEFAULT_INTERVAL_MS,
   MINIMUM_INTERVAL_MS,
   resolveIntervalMs,
   startDatasetCleanupJob,
-} = require('../src/jobs/datasetCleanupJob');
+} = require('../../src/jobs/datasetCleanupJob');
 
 test('purgeExpiredDatasets deletes only datasets outside the 15-day recovery window', async () => {
   let query;

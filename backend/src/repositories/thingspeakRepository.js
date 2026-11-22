@@ -6,7 +6,7 @@ class ThingSpeakRepository {
   // Retrieves mock ThingSpeak data from local JSON file
   async getMockThingSpeakData() {
     try {
-      const filePath = path.join(__dirname, "../mock_data/thingspeak.json");
+      const filePath = path.join(__dirname, "../../data/samples/thingspeak.json");
       const rawData = fs.readFileSync(filePath, "utf-8");
       return JSON.parse(rawData);
     } catch (error) {
@@ -16,7 +16,7 @@ class ThingSpeakRepository {
 
   async saveThingSpeakData(data) {
     try {
-      const filePath = path.join(__dirname, "../mock_data/thingspeak.json");
+      const filePath = path.join(__dirname, "../../data/samples/thingspeak.json");
       fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
       return data;
     } catch (error) {

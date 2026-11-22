@@ -8,7 +8,7 @@ The backend is a Node.js + Express server designed to ingest, store, analyse, an
 
 It follows a clean Controller → Service → Repository architecture and integrates with a PostgreSQL database for persistent storage.
 
-The backend supports real-time ingestion from ThingSpeak, CSV ingestion, JWT authentication, and dataset-based API endpoints used by the frontend dashboard. For onboarding, see the Backend Onboarding Document in `Backend/docs`.
+The backend supports real-time ingestion from ThingSpeak, CSV ingestion, JWT authentication, and dataset-based API endpoints used by the frontend dashboard. For onboarding, see `docs/mvp/`.
 
 ## Backend Architecture
 
@@ -50,34 +50,46 @@ This structure ensures each layer has a single responsibility and can be extende
 
 ### 4. API Endpoints
 
-View `Backend/docs` for API documentation.
+See `docs/mvp/api-contract.md` for the API contract.
 
 ## Project Structure
 
 ```text
 backend/
-│
 ├── src/
-│   ├── controllers/
-│   ├── services/
-│   ├── repositories/
-│   ├── routes/
-│   ├── dataIngestion/
-│   ├── db/
-│   └── utils/
-│
-├── docs/
-│   ├── Authentication Document
-│   ├── Database Implementation Documentation
-│   ├── Contract With Frontend
-│   └── Threat Modelling Document
-│
-├── server.js
-├── package.json
-└── schema.sql
+│   ├── server.js        starts the HTTP server
+│   ├── app.js           builds the Express app and mounts all routes under /api
+│   ├── config/          auth and upload limit settings
+│   ├── routes/          URL to controller mapping
+│   ├── controllers/     read the request, call a service, send the response
+│   ├── services/        business logic
+│   ├── repositories/    SQL queries against PostgreSQL
+│   ├── middleware/      auth, role and upload limit checks
+│   ├── models/          shapes used by the repositories
+│   ├── jobs/            scheduled jobs (expired dataset cleanup)
+│   ├── ingestion/       CSV and ThingSpeak ingestion command line tools
+│   ├── db/              connection pool, schema.sql and SQL migrations
+│   └── utils/           hashing and token helpers
+├── scripts/             migration and cleanup scripts run by npm (see package.json)
+├── test/
+│   ├── unit/            fast tests, no database needed: npm test
+│   └── integration/     need a disposable PostgreSQL: npm run test:integration
+├── data/
+│   ├── samples/         sample ThingSpeak and mock data read by the API
+│   └── mappings/        column mappings for the CSV ingestion tool
+├── docs/mvp/            API contract, runbook and migration guides
+├── docker-compose.mailhog.yml   local mail catcher for MFA emails
+├── .env.example
+└── package.json
 ```
 
-To run the backend locally, view the Backend Onboarding Document in `Backend/docs/`.
+Where to put new code: a new endpoint needs a route, a controller, a service and, if it touches the database, a repository. New tests go in `test/unit/` unless they need a real database.
+
+Run the CSV ingestion tool from `backend/`:
+
+```bash
+node src/ingestion/ingest.js <csvFile> data/mappings/sensor1.json
+```
 
 ### Database migrations
 
