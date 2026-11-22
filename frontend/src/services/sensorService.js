@@ -7,7 +7,7 @@ import {
   malformedSensorDataResponse,
   errorResponse,
   insufficientDataResponse,
-} from '../data';
+} from '../mocks/sensors';
 import { authenticatedFetch } from './authClient';
 
 const API_BASE_URL =

@@ -18,7 +18,7 @@ Each response contains different sensor data so that different dashboard routes 
 ### emptyResponse.json
 Represents a successful request where no sensor data is available.
 
-### invalidDataResponse.json
+### validationErrorResponse.json
 Represents invalid request parameters.
 
 **Expected HTTP Status:** 400

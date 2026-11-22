@@ -19,7 +19,7 @@ This contract fixes the request and response JSON for three read endpoints, so B
 | HIST-02 | `GET` | `/api/analysis/runs` | A paged list of the user's past runs, newest first |
 | HIST-03 | `GET` | `/api/analysis/runs/:runId` | One stored run with all of its alerts |
 
-Mock responses for every case below are in `new-frontend/frontend/src/mocks/analysisHistory/`.
+Mock responses for every case below are in `frontend/src/mocks/analysisHistory/`.
 
 ## 2. Design rules
 

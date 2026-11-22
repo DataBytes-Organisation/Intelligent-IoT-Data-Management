@@ -5,7 +5,7 @@ Run from the repository root:
     python docs/contracts/tools/build_analysis_history_mocks.py
 
 It writes every mock named in docs/contracts/analysis-history-api-contract-v0.1.md
-into new-frontend/frontend/src/mocks/analysisHistory/ and then checks that:
+into frontend/src/mocks/analysisHistory/ and then checks that:
 
 1. every stored result passes analytics_validation.response_validator (alert contract V0.1)
 2. every alert has a unique UUID alert_id
@@ -30,7 +30,7 @@ sys.path.insert(0, str(ROOT))
 
 from analytics_validation.response_validator import validate_response  # noqa: E402
 
-OUT = ROOT / "new-frontend" / "frontend" / "src" / "mocks" / "analysisHistory"
+OUT = ROOT / "frontend" / "src" / "mocks" / "analysisHistory"
 NS = uuid.UUID("2b9f6c1e-0d4a-4f7e-9a51-6c3e8d2f1a00")
 SEVERITY_ORDER = {"LOW": 1, "MEDIUM": 2, "HIGH": 3}
 ALERT_TYPES = ("POINTWISE_ANOMALY", "CORRELATION_CHANGE")
