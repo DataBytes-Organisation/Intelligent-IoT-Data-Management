@@ -1,9 +1,9 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const pool = require('../src/db/pool');
+const pool = require('../../src/db/pool');
 const {
   saveThingSpeakRawDataToDatabase,
-} = require('../src/services/thingspeakService');
+} = require('../../src/services/thingspeakService');
 
 const feeds = [{ entry_id: 1, created_at: '2026-09-16T00:00:00Z' }];
 

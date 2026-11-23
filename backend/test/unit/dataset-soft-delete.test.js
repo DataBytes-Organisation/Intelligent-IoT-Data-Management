@@ -1,7 +1,7 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const db = require("../src/db/pool");
-const datasetRepository = require("../src/repositories/datasetRepository");
+const db = require("../../src/db/pool");
+const datasetRepository = require("../../src/repositories/datasetRepository");
 
 const USER_ID = "user-123";
 const THINGSPEAK_OWNER_ID = "thingspeak-owner-456";
@@ -108,7 +108,7 @@ test("findAll(deleted) floors remainingRecoveryDays at 0 once the window has pas
 test("getAccessibleDatasetId excludes soft-deleted datasets and scopes to owner", async () => {
   const originalQuery = db.query;
   let capturedSql;
-  const TimeseriesRepository = require("../src/repositories/timeseriesRepository");
+  const TimeseriesRepository = require("../../src/repositories/timeseriesRepository");
   const timeseriesRepository = new TimeseriesRepository();
   db.query = async (sql) => {
     capturedSql = sql;

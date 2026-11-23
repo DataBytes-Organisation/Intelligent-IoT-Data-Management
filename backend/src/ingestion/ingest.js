@@ -77,7 +77,7 @@ const csvFile = process.argv[2];
 const mappingFile = process.argv[3];
 
 if (!csvFile || !mappingFile) {
-  console.error('Usage: node dataIngestion/inject.js <csvFile> <mappingFile>');
+  console.error('Usage: node src/ingestion/ingest.js <csvFile> <mappingFile>');
   process.exit(1);
 }
 

@@ -13,7 +13,7 @@
     "migrate:thingspeak-owner": "node scripts/migrate-thingspeak-owner.js",
     "cleanup:expired-datasets": "node scripts/cleanup-expired-datasets.js",
     "test:integration": "node --test test/integration/*.test.js",
-    "test": "node --test test/*.test.js"
+    "test": "node --test test/unit/*.test.js"
   },
   "keywords": [],
   "author": "",
@@ -26,7 +26,7 @@
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
-    "nodemailer": "^9.0.5",
+    "nodemailer": "^10.6.1",
     "pg": "^8.20.0"
   },
   "devDependencies": {

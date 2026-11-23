@@ -1,185 +1,63 @@
-# Backend Overview
+# Backend
 
-Intelligent IoT Data Management – Backend
+Node.js and Express API for Intelligent IoT Data Management. It stores sensor datasets in PostgreSQL, ingests CSV and ThingSpeak data, handles login (JWT, MFA by email, roles) and forwards `POST /api/analyse` to the Analytics service.
 
-## Overview
+Request flow: `routes → controllers → services → repositories → PostgreSQL`.
 
-The backend is a Node.js + Express server designed to ingest, store, analyse, and serve IoT sensor data.
+## Quick start
 
-It follows a clean Controller → Service → Repository architecture and integrates with a PostgreSQL database for persistent storage.
+Needs Node.js 20 or newer and PostgreSQL.
 
-The backend supports real-time ingestion from ThingSpeak, CSV ingestion, JWT authentication, and dataset-based API endpoints used by the frontend dashboard. For onboarding, see the Backend Onboarding Document in `Backend/docs`.
+```bash
+cd backend
+cp .env.example .env    # fill in the database, JWT and mail settings
+npm install
+```
 
-## Backend Architecture
-
-The backend is structured into modular layers to ensure maintainability and scalability:
-
-- Routes – define API endpoints
-- Controllers – handle HTTP requests/responses
-- Services – business logic
-- Repositories – database queries
-- Data Ingestion – ThingSpeak + CSV ingestion
-- Authentication – JWT, bcrypt, RBAC
-- Database Layer – PostgreSQL schema + queries
-
-This structure ensures each layer has a single responsibility and can be extended independently.
-
-## Key Features Implemented
-
-### 1. Authentication
-
-- JWT-based login and registration
-- Bcrypt password hashing
-- Role-Based Access Control (RBAC)
-- Protected routes with middleware
-- Account lockout on repeated failures
-
-### 2. Database Layer (PostgreSQL)
-
-- `datasets` table for dataset metadata
-- `timeseries` table (wide format) for CSV + ThingSpeak ingestion
-- Automatic dataset creation during ingestion
-- Efficient wide-format storage for fast dashboard queries
-
-### 3. Ingestion Pipelines
-
-- ThingSpeak ingestion (`field1`–`field8`)
-- CSV ingestion using the same wide-format structure
-- Preview mode for ThingSpeak channels
-- Unified ingestion logic across both sources
-
-### 4. API Endpoints
-
-View `Backend/docs` for API documentation.
+1. Set up the database once: follow `docs/mvp/database-and-rules.md` (fresh or existing database).
+2. Start the API: `npm start` (or `npm run dev` to reload on save). It listens on port 3000 unless `PORT` is set.
+3. Optional, to read MFA emails locally: `docker compose -f docker-compose.mailhog.yml up`, then open http://localhost:8025.
 
 ## Project Structure
 
 ```text
 backend/
-│
 ├── src/
-│   ├── controllers/
-│   ├── services/
-│   ├── repositories/
-│   ├── routes/
-│   ├── dataIngestion/
-│   ├── db/
-│   └── utils/
-│
-├── docs/
-│   ├── Authentication Document
-│   ├── Database Implementation Documentation
-│   ├── Contract With Frontend
-│   └── Threat Modelling Document
-│
-├── server.js
-├── package.json
-└── schema.sql
+│   ├── server.js        starts the HTTP server
+│   ├── app.js           builds the Express app and mounts all routes under /api
+│   ├── config/          auth and upload limit settings
+│   ├── routes/          URL to controller mapping
+│   ├── controllers/     read the request, call a service, send the response
+│   ├── services/        business logic
+│   ├── repositories/    SQL queries against PostgreSQL
+│   ├── middleware/      auth, role and upload limit checks
+│   ├── models/          shapes used by the repositories
+│   ├── jobs/            scheduled jobs (expired dataset cleanup)
+│   ├── ingestion/       CSV and ThingSpeak ingestion command line tools
+│   ├── db/              connection pool, schema.sql and SQL migrations
+│   └── utils/           hashing and token helpers
+├── scripts/             migration and cleanup scripts run by npm (see package.json)
+├── test/
+│   ├── unit/            fast tests, no database needed: npm test
+│   └── integration/     need a disposable PostgreSQL: npm run test:integration
+├── data/
+│   ├── samples/         sample ThingSpeak and mock data read by the API
+│   └── mappings/        column mappings for the CSV ingestion tool
+├── docs/mvp/            API contract, runbook and migration guides
+├── docker-compose.mailhog.yml   local mail catcher for MFA emails
+├── .env.example
+└── package.json
 ```
 
-To run the backend locally, view the Backend Onboarding Document in `Backend/docs/`.
+Where to put new code: a new endpoint needs a route, a controller, a service and, if it touches the database, a repository. New tests go in `test/unit/` unless they need a real database.
 
-### Database migrations
-
-#### Fresh database
-
-1. Run `npm run migrate:auth` to create `auth_users` and its dependent auth
-   tables.
-2. Set `THINGSPEAK_DATASET_OWNER_ID` and
-   `THINGSPEAK_DATASET_OWNER_PASSWORD` in `.env`, then run
-   `npm run migrate:thingspeak-owner` to create the dedicated ThingSpeak
-   service account.
-3. Apply `src/db/schema.sql` using the normal database setup process.
-4. Run `npm run migrate:dataset-import` to create dataset field mappings.
-
-The base schema already includes the final UTC timestamp and soft-delete
-definitions, so do not run the upgrade-only timestamp or soft-delete migrations
-on a fresh database. `schema.sql` drops dataset and time-series tables and must
-**not** be used to upgrade an existing database.
-
-#### Existing database
-
-For an existing database, apply only the migrations that have not already been
-applied, in this order:
+Run the CSV ingestion tool from `backend/`:
 
 ```bash
-npm run migrate:auth
-npm run migrate:dataset-import
-npm run migrate:timeseries-utc
-npm run migrate:soft-delete
-npm run migrate:thingspeak-owner
+node src/ingestion/ingest.js <csvFile> data/mappings/sensor1.json
 ```
 
-Before `npm run migrate:soft-delete`, every existing dataset must have a valid
-`created_by` value. The migration stops without changing the schema if it finds
-an unowned dataset. Assign an owner from `auth_users`, then rerun the command.
-It makes `created_by` mandatory and replaces the former global name constraint
-with active owner-scoped name uniqueness.
-
-### Dataset soft-delete migration
-
-`004_add_soft_delete_to_datasets.sql` adds `deleted_at`, `deleted_by`, and
-`data_deleted_at` to `datasets`, plus an index for the 15-day cleanup job.
-
-Dataset names are unique among a user's active datasets only. A name may be
-reused immediately after its original dataset is soft-deleted. The migration
-checks that existing datasets have a valid `created_by` value before replacing
-the old global name constraint, then makes `created_by` mandatory. An operator
-must assign an owner to legacy datasets before rerunning it.
-
-Run it from `backend` with:
-
-```bash
-npm run migrate:soft-delete
-```
-
-This schema change deliberately does not delete time-series rows. The
-dataset-deletion API must delete those rows and set the three deletion fields
-in one transaction when a user deletes a dataset. The dataset configuration
-and field mappings remain recoverable for 15 days. API code must use the
-active-dataset uniqueness rule instead of `ON CONFLICT (name)`. If recovery is
-attempted after the name has been reused by an active dataset owned by the same
-user, the dataset-recovery API must return `409 DATASET_NAME_CONFLICT` and
-require the user to choose another name.
-
-The ThingSpeak owner provisioning command creates
-`thingspeak-service@system.local` using `THINGSPEAK_DATASET_OWNER_ID` and a
-bcrypt hash of `THINGSPEAK_DATASET_OWNER_PASSWORD`. Both values must be set in
-the runtime `.env` before running the command; neither credential is committed
-to the repository. The poller validates that the configured UUID exists and
-stops the write with a clear configuration error if it does not. Legacy
-CSV/ThingSpeak CLI ingestion now requires an owner UUID as well, so it cannot
-create an unowned dataset.
-
-### Dataset visibility
-
-Dataset list, detail, series, series-filter, and timestamp endpoints require
-authentication. They return active datasets created by the authenticated user
-plus the shared ThingSpeak dataset owned by
-`THINGSPEAK_DATASET_OWNER_ID`. They do not return another user's datasets or
-soft-deleted datasets.
-
-### Ingestion ownership
-
-Every ingestion path must create or find a dataset using its owner:
-
-```sql
-INSERT INTO datasets (name, created_by, updated_by)
-VALUES ($1, $2, $2)
-ON CONFLICT (created_by, name) WHERE deleted_at IS NULL
-DO UPDATE SET updated_by = EXCLUDED.updated_by,
-              updated_at = CURRENT_TIMESTAMP;
-```
-
-### CSV upload limits
-
-The dataset import APIs accept the frontend's reviewed CSV rows as JSON. Each
-`POST /api/datasets` or `PUT /api/datasets/:id` request is limited to **10 MiB**
-and **10,000 rows**, with one to eight sensor mappings. Larger CSV files must
-be split into separate uploads. See `docs/mvp/api-contract.md` for the exact
-request and error-response contract.
-
-### Testing database changes
+## Testing
 
 Run the unit suite from `backend`:
 
@@ -196,79 +74,12 @@ TEST_DATABASE_URL=postgres://... npm run test:integration
 Each migration integration test uses a dedicated schema and a transaction that
 rolls back at the end.
 
-### Time-Series UTC Migration
+## More docs
 
-The `timeseries_long.ts` column is standardised from `TIMESTAMP` to `TIMESTAMPTZ` so stored event timestamps represent unambiguous UTC instants.
-
-#### Before running the migration
-
-Existing `timeseries_long.ts` values must be confirmed to represent UTC timestamps before applying this migration.
-
-Do not run this migration on an existing environment if the legacy timestamps may represent local time, because the migration interprets existing values as UTC.
-
-A pre-deployment audit should confirm the timezone meaning of existing timestamp values before the migration is applied.
-
-#### Run the migration
-
-From the `backend` directory:
-
-```bash
-npm run migrate:timeseries-utc
-```
-
-This runs:
-
-```text
-src/db/migrations/003_standardise_timeseries_utc.sql
-```
-
-The migration converts:
-
-```text
-timeseries_long.ts
-TIMESTAMP -> TIMESTAMPTZ
-```
-
-using UTC as the legacy timestamp assumption.
-
-The migration includes a type guard:
-
-- If `timeseries_long.ts` is `TIMESTAMP WITHOUT TIME ZONE`, it is converted to `TIMESTAMPTZ` using UTC.
-- If `timeseries_long.ts` is already `TIMESTAMPTZ`, the migration safely performs no conversion.
-- This prevents an already-converted timestamp from being reinterpreted using the database session timezone.
-
-#### Verification
-
-After migration:
-
-- `timeseries.created_at` should use `TIMESTAMPTZ`.
-- `timeseries_long.ts` should use `TIMESTAMPTZ`.
-- `idx_timeseries_ts` should still exist.
-- Existing time-range queries should continue to work.
-- Rerunning the migration should leave existing UTC instants unchanged.
-
-#### Integration test
-
-The UTC timestamp migration integration test uses a dedicated PostgreSQL test database configured through `TEST_DATABASE_URL`.
-
-Run the integration test with:
-
-```bash
-npm run test:integration
-```
-
-The integration test verifies that:
-
-- legacy `TIMESTAMP` values are converted to `TIMESTAMPTZ`
-- the expected UTC instant is preserved
-- rerunning the migration is safe and does not shift timestamps
-- the timestamp index remains available
-- time-range queries continue to work
-
-The normal unit-test command remains:
-
-```bash
-npm test
-```
-
-The normal unit-test suite does not depend on the migration integration database.
+| Topic | File |
+|---|---|
+| API contract | `docs/mvp/api-contract.md` |
+| Database setup, migrations, dataset rules | `docs/mvp/database-and-rules.md` |
+| Soft delete migration | `docs/mvp/soft-delete-guide.md` |
+| UTC timestamp migration | `docs/mvp/timestamp-migration.md` |
+| Operations runbook | `docs/mvp/operations-runbook.md` |

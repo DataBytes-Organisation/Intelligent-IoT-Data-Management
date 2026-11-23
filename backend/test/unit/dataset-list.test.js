@@ -1,7 +1,7 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const db = require("../src/db/pool");
-const datasetRepository = require("../src/repositories/datasetRepository");
+const db = require("../../src/db/pool");
+const datasetRepository = require("../../src/repositories/datasetRepository");
 
 test("findAll returns the user's and ThingSpeak datasets with their row counts", async () => {
   const originalQuery = db.query;

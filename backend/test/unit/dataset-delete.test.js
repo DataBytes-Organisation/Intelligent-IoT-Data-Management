@@ -1,7 +1,7 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const db = require("../src/db/pool");
-const datasetRepository = require("../src/repositories/datasetRepository");
+const db = require("../../src/db/pool");
+const datasetRepository = require("../../src/repositories/datasetRepository");
 
 function mockClient(handler) {
   const calls = [];
