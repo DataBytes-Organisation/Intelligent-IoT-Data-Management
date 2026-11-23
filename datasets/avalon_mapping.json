@@ -1,0 +1,7 @@
+{
+  "dataset": "avalon_airport",
+  "field1": "Temperature (temp)",
+  "field2": "Relative Humidity (rhum)",
+  "field3": "Pressure (pres)",
+  "field4": "Wind Speed (wspd)"
+}
