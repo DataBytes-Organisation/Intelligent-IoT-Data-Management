@@ -1,17 +1,26 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
 const { Pool } = require("pg");
+const { randomUUID } = require("node:crypto");
+
 require("dotenv").config();
 
 const TEST_DATABASE_URL = process.env.TEST_DATABASE_URL;
 
 if (!TEST_DATABASE_URL) {
-  throw new Error(
-    "TEST_DATABASE_URL is required to run the analysis tables integration test",
-  );
+  throw new Error("TEST_DATABASE_URL is required");
 }
 
 const pool = new Pool({ connectionString: TEST_DATABASE_URL });
+
+const migrationPath = path.join(
+  __dirname,
+  "../../src/db/migrations/005_analysis_runs_and_alerts.sql",
+);
+
+const analysisRepository = require("../../src/repositories/analysisRepository");
 
 test.after(async () => {
   await pool.end();
@@ -19,170 +28,124 @@ test.after(async () => {
 
 test("analysis runs and alerts can be saved and read back", async () => {
   const client = await pool.connect();
-
-  const schema = `analysis_test_${process.pid}`;
+  const schemaName = `analysis_test_${randomUUID().replace(/-/g, "")}`;
 
   try {
     await client.query("BEGIN");
 
-    await client.query(`CREATE SCHEMA ${schema}`);
-    await client.query(`SET LOCAL search_path TO ${schema}, public`);
+    await client.query(`CREATE SCHEMA "${schemaName}"`);
+    await client.query(`SET LOCAL search_path TO "${schemaName}", public`);
 
+    // Create the minimum parent tables required by the migration.
     await client.query(`
       CREATE TABLE auth_users (
-        id UUID PRIMARY KEY,
-        email TEXT NOT NULL,
-        password_hash TEXT NOT NULL
+        id UUID PRIMARY KEY
       );
 
       CREATE TABLE datasets (
-        id SERIAL PRIMARY KEY,
-        name TEXT NOT NULL
-      );
-
-      CREATE TABLE analysis_runs (
-        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-        user_id UUID NOT NULL REFERENCES auth_users(id),
-        dataset_id INTEGER NOT NULL REFERENCES datasets(id),
-        streams JSONB NOT NULL DEFAULT '[]'::jsonb,
-        settings JSONB NOT NULL DEFAULT '{}'::jsonb,
-        created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
-      );
-
-      CREATE TABLE analysis_alerts (
-        id UUID PRIMARY KEY,
-        run_id UUID NOT NULL REFERENCES analysis_runs(id) ON DELETE CASCADE,
-        timestamp TIMESTAMPTZ NOT NULL,
-        alert_type TEXT NOT NULL,
-        target JSONB NOT NULL,
-        method TEXT NOT NULL,
-        message TEXT NOT NULL,
-        source JSONB NOT NULL,
-        score DOUBLE PRECISION,
-        score_metadata JSONB,
-        severity TEXT,
-        time_window JSONB,
-        supporting_values JSONB
+        id SERIAL PRIMARY KEY
       );
     `);
 
-    const userId = "11111111-1111-1111-1111-111111111111";
+    const userId = randomUUID();
 
-    await client.query(
-      `INSERT INTO auth_users (id, email, password_hash)
-       VALUES ($1, $2, $3)`,
-      [userId, "analysis-test@example.com", "test-hash"],
-    );
+    await client.query("INSERT INTO auth_users (id) VALUES ($1)", [userId]);
 
-    const datasetResult = await client.query(
-      `INSERT INTO datasets (name) VALUES ($1) RETURNING id`,
-      ["analysis-test-dataset"],
-    );
+    await client.query("INSERT INTO datasets (id) VALUES ($1)", [42]);
 
-    const datasetId = datasetResult.rows[0].id;
+    // Run the actual BE-01 migration.
+    const migrationSql = fs.readFileSync(migrationPath, "utf8");
+    await client.query(migrationSql);
 
     const streams = ["temperature", "humidity"];
     const settings = {
       model: { metric: "temperature" },
-      correlation: { streams, method: "pearson" },
+      correlation: { method: "pearson" },
     };
-
-    const runResult = await client.query(
-      `INSERT INTO analysis_runs
-        (user_id, dataset_id, streams, settings)
-       VALUES ($1, $2, $3, $4)
-       RETURNING id`,
-      [userId, datasetId, JSON.stringify(streams), JSON.stringify(settings)],
-    );
-
-    const runId = runResult.rows[0].id;
 
     const alerts = [
       {
-        timestamp: "2026-11-24T10:00:00.000Z",
+        timestamp: "2026-08-27T00:00:00.000Z",
         alert_type: "POINTWISE_ANOMALY",
         target: { metric: "temperature" },
         method: "isolationforest",
-        message: "Unusual temperature detected",
-        source: { dataset: "analysis-test-dataset" },
+        message: "Temperature anomaly detected",
+        source: { service: "analytics" },
         score: 0.95,
         score_metadata: { threshold: 0.8 },
         severity: "HIGH",
-        time_window: { start: "2026-11-24T09:00:00Z" },
-        supporting_values: { temperature: 35 },
+        time_window: { start: "2026-08-27T00:00:00.000Z" },
+        supporting_values: { temperature: 35.5 },
       },
       {
-        timestamp: "2026-11-24T10:05:00.000Z",
+        timestamp: "2026-08-27T00:01:00.000Z",
         alert_type: "CORRELATION_CHANGE",
-        target: { metrics: ["temperature", "humidity"] },
+        target: { streams: ["temperature", "humidity"] },
         method: "pearson",
         message: "Correlation change detected",
-        source: { dataset: "analysis-test-dataset" },
+        source: { service: "analytics" },
         score: 0.75,
-        score_metadata: { previous_score: 0.2 },
+        score_metadata: { threshold: 0.7 },
         severity: "MEDIUM",
-        time_window: { start: "2026-11-24T09:05:00Z" },
-        supporting_values: { temperature: 30, humidity: 60 },
+        time_window: { start: "2026-08-27T00:01:00.000Z" },
+        supporting_values: { correlation: 0.75 },
       },
     ];
 
-    for (const alert of alerts) {
-      await client.query(
-        `INSERT INTO analysis_alerts
-          (id, run_id, timestamp, alert_type, target, method,
-           message, source, score, score_metadata, severity,
-           time_window, supporting_values)
-         VALUES
-          (gen_random_uuid(), $1, $2, $3, $4, $5, $6, $7,
-           $8, $9, $10, $11, $12)`,
-        [
-          runId,
-          alert.timestamp,
-          alert.alert_type,
-          JSON.stringify(alert.target),
-          alert.method,
-          alert.message,
-          JSON.stringify(alert.source),
-          alert.score,
-          JSON.stringify(alert.score_metadata),
-          alert.severity,
-          JSON.stringify(alert.time_window),
-          JSON.stringify(alert.supporting_values),
-        ],
-      );
-    }
+    // Pass the test's client to the repository.
+    const saved = await analysisRepository.saveAnalysisRun({
+      userId,
+      datasetId: 42,
+      streams,
+      settings,
+      alerts,
+      client,
+    });
 
-    const savedRun = await client.query(
+    // Read back the analysis run.
+    const runResult = await client.query(
       `SELECT user_id, dataset_id, streams, settings
-       FROM analysis_runs WHERE id = $1`,
-      [runId],
+       FROM analysis_runs
+       WHERE id = $1`,
+      [saved.runId],
     );
 
-    assert.equal(savedRun.rows.length, 1);
-    assert.equal(savedRun.rows[0].user_id, userId);
-    assert.equal(savedRun.rows[0].dataset_id, datasetId);
-    assert.deepEqual(savedRun.rows[0].streams, streams);
-    assert.deepEqual(savedRun.rows[0].settings, settings);
+    assert.equal(runResult.rows.length, 1);
+    assert.equal(runResult.rows[0].user_id, userId);
+    assert.equal(runResult.rows[0].dataset_id, 42);
+    assert.deepEqual(runResult.rows[0].streams, streams);
+    assert.deepEqual(runResult.rows[0].settings, settings);
 
-    const savedAlerts = await client.query(
-      `SELECT * FROM analysis_alerts
-       WHERE run_id = $1 ORDER BY timestamp`,
-      [runId],
+    // Read back the saved alerts.
+    const alertResult = await client.query(
+      `SELECT *
+       FROM analysis_alerts
+       WHERE run_id = $1
+       ORDER BY timestamp`,
+      [saved.runId],
     );
 
-    assert.equal(savedAlerts.rows.length, 2);
-    assert.equal(savedAlerts.rows[0].alert_type, alerts[0].alert_type);
-    assert.deepEqual(savedAlerts.rows[0].target, alerts[0].target);
-    assert.equal(savedAlerts.rows[0].message, alerts[0].message);
-    assert.equal(savedAlerts.rows[0].severity, alerts[0].severity);
-    assert.ok(savedAlerts.rows[0].id);
+    assert.equal(alertResult.rows.length, 2);
 
-    assert.equal(savedAlerts.rows[1].alert_type, alerts[1].alert_type);
-    assert.deepEqual(savedAlerts.rows[1].target, alerts[1].target);
-    assert.equal(savedAlerts.rows[1].message, alerts[1].message);
-    assert.equal(savedAlerts.rows[1].severity, alerts[1].severity);
-    assert.ok(savedAlerts.rows[1].id);
+    for (let i = 0; i < alerts.length; i++) {
+      const actual = alertResult.rows[i];
+      const expected = alerts[i];
+
+      assert.equal(actual.timestamp.toISOString(), expected.timestamp);
+      assert.equal(actual.alert_type, expected.alert_type);
+      assert.deepEqual(actual.target, expected.target);
+      assert.equal(actual.method, expected.method);
+      assert.equal(actual.message, expected.message);
+      assert.deepEqual(actual.source, expected.source);
+      assert.equal(Number(actual.score), expected.score);
+      assert.deepEqual(actual.score_metadata, expected.score_metadata);
+      assert.equal(actual.severity, expected.severity);
+      assert.deepEqual(actual.time_window, expected.time_window);
+      assert.deepEqual(actual.supporting_values, expected.supporting_values);
+      assert.equal(actual.id, saved.alerts[i].alert_id);
+    }
   } finally {
+    // Roll back all test data and the temporary schema.
     await client.query("ROLLBACK");
     client.release();
   }
