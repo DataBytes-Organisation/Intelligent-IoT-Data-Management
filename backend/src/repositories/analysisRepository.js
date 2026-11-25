@@ -1,13 +1,24 @@
 const db = require("../db/pool");
 
 class AnalysisRepository {
-  async saveAnalysisRun({ userId, datasetId, streams, settings, alerts }) {
-    const client = await db.connect();
+  async saveAnalysisRun({
+    userId,
+    datasetId,
+    streams,
+    settings,
+    alerts,
+    client: providedClient,
+  }) {
+    // Use the test's client if provided; otherwise create our own.
+    const client = providedClient || (await db.connect());
+    const ownsClient = !providedClient;
 
     try {
-      await client.query("BEGIN");
+      // Only manage the transaction when this repository owns the connection.
+      if (ownsClient) {
+        await client.query("BEGIN");
+      }
 
-      // Save the analysis run
       const runResult = await client.query(
         `INSERT INTO analysis_runs
           (user_id, dataset_id, streams, settings)
@@ -24,7 +35,6 @@ class AnalysisRepository {
       const runId = runResult.rows[0].id;
       const savedAlerts = [];
 
-      // Save each alert belonging to this analysis run
       for (const alert of alerts || []) {
         const alertResult = await client.query(
           `INSERT INTO analysis_alerts
@@ -63,17 +73,23 @@ class AnalysisRepository {
         });
       }
 
-      await client.query("COMMIT");
+      if (ownsClient) {
+        await client.query("COMMIT");
+      }
 
       return {
         runId,
         alerts: savedAlerts,
       };
     } catch (error) {
-      await client.query("ROLLBACK");
+      if (ownsClient) {
+        await client.query("ROLLBACK");
+      }
       throw error;
     } finally {
-      client.release();
+      if (ownsClient) {
+        client.release();
+      }
     }
   }
 }
