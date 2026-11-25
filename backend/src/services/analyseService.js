@@ -1,5 +1,6 @@
 const timeseriesService = require('./timeseriesService');
 const datasetRepository = require('../repositories/datasetRepository');
+const analyticsAlertRepository = require('../repositories/analyticsAlertRepository');
 const {
   fieldMapForChannel,
   fieldMapFromMappings,
@@ -282,22 +283,56 @@ async function callAnalytics(payload) {
 
 async function runAnalysis(request, userId) {
   assertObject(request, 'Request body');
+
   const rows = await loadRows(request, userId);
+
   const dataset = Array.isArray(request.data)
     ? null
     : await datasetRepository.findById(
-      request.datasetId,
-      userId,
-      process.env.THINGSPEAK_DATASET_OWNER_ID,
-    );
+        request.datasetId,
+        userId,
+        process.env.THINGSPEAK_DATASET_OWNER_ID,
+      );
+
   if (!Array.isArray(request.data) && !dataset) {
     throw new AnalysisServiceError('Dataset not found or contains no sensor data', {
       status: 404,
       code: 'DATASET_NOT_FOUND',
     });
   }
+
   const payload = await buildAnalyticsPayload(request, rows, dataset);
-  return callAnalytics(payload);
+
+  // Step 1: Request analytics results from the Python service.
+  const analyticsResponse = await callAnalytics(payload);
+
+  // Step 2: Only persist alerts from successful analytics responses.
+  if (analyticsResponse.status !== 'success') {
+    return analyticsResponse;
+  }
+
+  if (!Array.isArray(analyticsResponse.alerts)) {
+    throw new AnalysisServiceError(
+      'Analytics service returned an invalid alerts collection',
+      {
+        status: 502,
+        code: 'ANALYTICS_INVALID_RESPONSE',
+      },
+    );
+  }
+
+  // Step 3: Save generated alerts permanently in PostgreSQL.
+  const savedAlerts = await analyticsAlertRepository.createMany({
+    alerts: analyticsResponse.alerts,
+    userId,
+    datasetId: Array.isArray(request.data) ? null : request.datasetId,
+  });
+
+  // Step 4: Return alerts with their permanent database IDs.
+  return {
+    ...analyticsResponse,
+    alerts: savedAlerts,
+  };
 }
 
 module.exports = {
