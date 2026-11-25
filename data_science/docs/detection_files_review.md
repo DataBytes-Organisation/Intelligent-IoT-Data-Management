@@ -1,7 +1,10 @@
 # Isolation Forest Script Review
-
+November 2026 - T3
 ## Key points
-Contamination has a 5%
+- Contamination is set at 0.05, so it only flags the top 5% of readings. This limits recall (51/76 on synthetic, 834/2268 on NAB).
+- Severity is always None, and theres one alert per flagged reading, so one event can show up asa multiple of alerts
+- Missing data is handled differently: preprocessor.py drops rows, input_validator.py rejects the whole dataset.
+- No drift handling as the model retrains on every batch so scores aren't consistent between runs.
 
 ## iforest_detector.py
 **What does it do:** This file acts as a wrapper for sklearn's Isolation Forest, which we use to detect anomalies in the data, so it works with the project's format.
@@ -9,10 +12,11 @@ Contamination has a 5%
 **fit()** trains the model.
 **detect()** flags anomalies and gives scores.
 **Output:** The output of the file is simple. It provides key details: anomaly_flag (whether each reading is considered an anomaly) and score (how anomalous each reading is). It also gives basic run info like timestamps, runtime and model_name.
-**Comments:** Contamination is set to 0.05, which acts as a 5% cap, so it will only pick up the top 5% of readings. If a dataset has 12% anomalies, the extra 7% will be missed, which lowers the recall of the scan. It also always flags the top 5% as anomalies, even if they aren't. Another possible issue is that the scores haven't been normalised.
+**Comments:** Contamination is set to 0.05, which acts as a 5% cap, so it will only pick up the top 5% of readings. If a dataset has 12% anomalies, the extra 7% will be missed, which lowers the recall of the scan. By default (training and predicting on the same data) it flags the top 5% as anomalies, even if they aren't. Another possible issue is that the scores haven't been normalised.
 
 ## pipeline.py
-**What does it do:** This is used for benchmarking. It loads in a dataset and will run all 11 detectors on it, including Isolation Forest. It compares results and formats them into a text file for easy reading, a CSV file and also a graph to view differences and patterns. Main use is for testing.
+**What does it do:** This is used for benchmarking. It loads in a dataset and will run all 11 detectors on it, including Isolation Forest. It compares results and formats them into a text file for easy reading, a CSV and JSON file, and multiple graphs to view differences and patterns. main use is for testing.
+
 **Settings:** Settings are set within build_detectors(). Isolation Forest is set with the same contamination of 0.05.
 **run_pipeline()** is the main flow of the program. It works through the steps to load and scale the inputted data, inject anomalies and run each detector, then evaluate and report.
 **run_train_test_benchmark()** trains on the first 70% of the data and tests on the last 30% with added anomalies.
@@ -35,11 +39,11 @@ Contamination has a 5%
 **Comments:** Precision, recall and F1 use the flags, but ROC-AUC uses the scores. That's why Isolation Forest got 1.0 AUC but only 0.67 recall on synthetic. The scores ranked every anomaly right, but the 5% cap stopped it flagging all of them, so the issue is the threshold, not the model.
 
 ## anomaly_injector.py
-used to add fake anomalies (level shift, spikes) to clean data and returns where the data points are so detectors can be tested and scored. Uses random fixed seed so anomalies are same each run through. Adds set number of anomalies not % based, so data size would not scale with anomaly size in testing.
+used to add fake anomalies (level shift, spikes, volatility shifts) to clean data and returns where the anomalies are so detectors can be tested and scored. Uses random fixed seed so anomalies are same each run through. Adds set number of anomalies not % based, so number of anomalies would not scale with data size so anomaly rate would change. 
 
 ## preprocessor.py
 Loads in a csv, uses the real timestamp column if there is one, otherwise will make a new timestamp per second. Helps with cleaning data, drops empty value rows and scales values 0-1 with minmaxscaler
-**Comments:** any columns with an empty value get completely dropped, which could mean potential data loss before giving results.
+**Comments:** any rows with an empty value get completely dropped, which could mean potential data loss before giving results.
 
 ## input_validator.py
 Checks the sensor data before it gets to the detector, so invalid data gets caught early with an error. checks the data isn't empty, the timestamps are valid with no duplicates (if there's no timestamp column it makes per second ones similar to preprocessor.py and the sensor columns are numbers. It can also tag data with a sensor ID.
