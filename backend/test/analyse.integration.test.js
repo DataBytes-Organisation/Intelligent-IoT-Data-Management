@@ -346,3 +346,101 @@ test('POST /api/analyse returns an actionable unavailable error when AIntl canno
     await close(backendServer);
   }
 });
+
+test('Payload with Flask API and mapping check', async (t) => {
+  // Check Flask API.
+  let healthResponse;
+  try {
+    healthResponse = await fetch('http://127.0.0.1:5002/health');
+  } catch {
+        t.skip('Flask API is not running on port 5002');
+    return;
+  }
+
+  if (!healthResponse.ok) {
+        t.skip('Flask API health check failed');
+    return;
+  }
+
+  const healthBody = await healthResponse.json();
+  assert.equal(healthBody.status, 'ok');
+
+  // Generate TestRows
+  function generateTestRows(count) {
+    const rows = [];
+    const startTime = Date.now();
+
+    for (let i = 0; i < count; i++) {
+      rows.push({
+        created_at: new Date(startTime + i * 60000).toISOString(),
+        entry_id: i + 1,
+        field3: String(2 + i),
+        field4: String(3 * i),
+        field6: String(9 + i),
+      });
+    }
+    return rows;
+  }
+
+  const testRows = generateTestRows(20);
+
+  const testDataset = {
+    id: 42,
+    name: 'thingspeak-12397',
+    mappings: [
+      { storageField: 'field3', sourceField: 'humidity' },
+      { storageField: 'field4', sourceField: 'temperature' },
+      { storageField: 'field6', sourceField: 'pressure' },
+    ],
+  };
+
+  const testRequest = {
+    datasetId: 42,
+    model: {
+      metric: 'temperature',
+    },
+    correlation: {
+      streams: ['temperature', 'humidity'],
+    },
+  };
+
+  const payload = await buildAnalyticsPayload(testRequest, testRows, testDataset );
+
+  assert.equal(payload.data.length, 20);
+  assert.equal(payload.data[1].humidity, 3);
+  assert.equal(payload.data[1].temperature, 3);
+  // Pressure conversion
+  assert.ok(Math.abs(payload.data[1].pressure - 338.639) < 1e-6,);
+  // Check for raw field names
+  assert.deepEqual(Object.keys(payload.data[1]).sort(),['humidity', 'pressure', 'temperature', 'timestamp'],);
+  assert.equal(payload.model.metric, 'temperature');
+  assert.deepEqual(payload.correlation.streams,['temperature', 'humidity'],);
+
+  //Send Generated Payload to Flask
+  const response = await fetch(
+    'http://127.0.0.1:5002/analytics/analyze',
+    {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        accept: 'application/json',
+      },
+      body: JSON.stringify(payload)
+    },
+  );
+
+  const body = await response.json();
+  console.log('Flask API response:', JSON.stringify(body, null, 2),);
+
+  assert.equal(response.status, 200, JSON.stringify(body));
+  assert.equal(body.status, 'success');
+  assert.equal(typeof body.generated_at, 'string');
+  assert.ok(Array.isArray(body.alerts));
+  assert.ok(Array.isArray(body.errors));
+  assert.ok(body.summary);
+  assert.equal(body.summary.processed_items, 20);
+});
+
+
+
+
