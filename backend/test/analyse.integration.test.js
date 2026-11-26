@@ -374,9 +374,9 @@ test('Payload with Flask API and mapping check', async (t) => {
       rows.push({
         created_at: new Date(startTime + i * 60000).toISOString(),
         entry_id: i + 1,
-        field3: String(2 + i),
+        field3: i === 5 ? null : String(2 + i),
         field4: String(3 * i),
-        field6: String(9 + i),
+        field6: i === 7 ? null : String(9 + i),
       });
     }
     return rows;
@@ -432,12 +432,23 @@ test('Payload with Flask API and mapping check', async (t) => {
   const body = await response.json();
   console.log('Flask API response:', JSON.stringify(body, null, 2),);
 
+  //Response Structure Check
   assert.equal(response.status, 200, JSON.stringify(body));
+  assert.equal(isNaN(Date.parse(body.generated_at)), false);
   assert.equal(body.status, 'success');
   assert.equal(typeof body.generated_at, 'string');
-  assert.ok(Array.isArray(body.alerts));
-  assert.ok(Array.isArray(body.errors));
   assert.ok(body.summary);
+  assert.ok(Array.isArray(body.alerts));
+  assert.equal(body.summary.alert_count, body.alerts.length);
+  for (let alert of body.alerts) {
+    assert.ok(alert.method);
+    assert.ok(alert.target);
+    assert.ok(alert.supporting_values);
+    assert.ok(alert.score_metadata);
+    assert.equal(isNaN(Date.parse(alert.timestamp)), false);
+    }
+  assert.ok(Array.isArray(body.errors));
+  assert.equal(body.errors.length, 0);
   assert.equal(body.summary.processed_items, 20);
 });
 
