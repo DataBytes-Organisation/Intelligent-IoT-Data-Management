@@ -13,8 +13,9 @@ const ConfirmDeleteDialog = ({ datasetName, isDeleting, error, onCancel, onConfi
         </p>
 
         <p>
-          Your dataset settings and field mappings can be restored within 15
-          days, but you will need to sync your data again.
+          Your dataset settings and field mappings can be restored within 15 days.
+          However, deleted readings cannot be recovered. You will need to sync your
+          data again to restore your readings.
         </p>
 
         <p className="confirm-delete-question">Do you want to continue?</p>

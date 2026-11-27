@@ -321,8 +321,10 @@ const HomePage = () => {
                             <h3>{dataset.name}</h3>
 
                             <p>
-                              This dataset was deleted and can still be restored during
-                              its recovery period.
+                              This dataset's settings and field mappings can be restored
+                              during the recovery period. Previously deleted readings
+                              cannot be recovered. You will need to sync the dataset
+                              again to upload your readings.
                             </p>
                           </div>
                         </div>
