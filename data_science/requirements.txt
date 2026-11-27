@@ -5,3 +5,4 @@ seaborn
 adtk
 pyod
 scikit-learn
+ruptures==1.1.10

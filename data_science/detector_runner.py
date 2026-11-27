@@ -8,18 +8,22 @@ def run_detector(detector_name, dataframe, parameters=None):
         parameters = {}
 
     detector_name = detector_name.lower()
-
-    if detector_name == "isolationforest":
-
-        detector = IsolationForestDetector(**parameters)
-
-    else:
-        return {
-            "status": "failed",
-            "error": f"Detector '{detector_name}' is not supported"
-        }
-
     try:
+        if detector_name == "isolationforest":
+
+            detector = IsolationForestDetector(**parameters)
+
+        elif detector_name == "ruptures":
+            from data_science.detectors.ruptures_detector import RupturesDetector
+            detector = RupturesDetector(**parameters)
+
+        else:
+            return {
+                "status": "failed",
+                "error": f"Detector '{detector_name}' is not supported"
+            }
+
+    
 
         result = detector.detect(dataframe)
 
