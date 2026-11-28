@@ -3,47 +3,83 @@ const db = require("../db/pool");
 class AnalysisRepository {
   async saveAnalysisRun({
     userId,
-    datasetId,
-    streams,
-    settings,
-    alerts,
+    datasetId = null,
+    datasetName = null,
+    streams = [],
+    settings = {},
+    request = {},
+    result = {},
+    status,
+    contractVersion = null,
+    generatedAt = null,
+    alerts = [],
     client: providedClient,
   }) {
-    // Use the test's client if provided; otherwise create our own.
     const client = providedClient || (await db.connect());
     const ownsClient = !providedClient;
 
     try {
-      // Only manage the transaction when this repository owns the connection.
       if (ownsClient) {
         await client.query("BEGIN");
       }
 
       const runResult = await client.query(
         `INSERT INTO analysis_runs
-          (user_id, dataset_id, streams, settings)
-         VALUES ($1, $2, $3, $4)
+          (
+            user_id,
+            dataset_id,
+            dataset_name,
+            streams,
+            settings,
+            request,
+            result,
+            status,
+            contract_version,
+            generated_at
+          )
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
          RETURNING id`,
         [
           userId,
           datasetId,
-          JSON.stringify(streams || []),
-          JSON.stringify(settings || {}),
+          datasetName,
+          JSON.stringify(streams),
+          JSON.stringify(settings),
+          JSON.stringify(request),
+          JSON.stringify(result),
+          status,
+          contractVersion,
+          generatedAt,
         ],
       );
 
       const runId = runResult.rows[0].id;
       const savedAlerts = [];
 
-      for (const alert of alerts || []) {
+      for (const alert of alerts) {
         const alertResult = await client.query(
           `INSERT INTO analysis_alerts
-            (id, run_id, timestamp, alert_type, target, method,
-             message, source, score, score_metadata, severity,
-             time_window, supporting_values)
+            (
+              id,
+              run_id,
+              timestamp,
+              alert_type,
+              target,
+              method,
+              message,
+              source,
+              score,
+              score_metadata,
+              severity,
+              time_window,
+              supporting_values
+            )
            VALUES
-            (gen_random_uuid(), $1, $2, $3, $4, $5,
-             $6, $7, $8, $9, $10, $11, $12)
+            (
+              gen_random_uuid(),
+              $1, $2, $3, $4, $5, $6, $7,
+              $8, $9, $10, $11, $12
+            )
            RETURNING id`,
           [
             runId,
@@ -85,6 +121,7 @@ class AnalysisRepository {
       if (ownsClient) {
         await client.query("ROLLBACK");
       }
+
       throw error;
     } finally {
       if (ownsClient) {

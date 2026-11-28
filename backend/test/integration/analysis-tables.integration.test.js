@@ -15,10 +15,14 @@ if (!TEST_DATABASE_URL) {
 
 const pool = new Pool({ connectionString: TEST_DATABASE_URL });
 
-const migrationPath = path.join(
-  __dirname,
-  "../../src/db/migrations/005_analysis_runs_and_alerts.sql",
-);
+// Run both BE-01 migrations in order.
+const migrationPaths = [
+  path.join(
+    __dirname,
+    "../../src/db/migrations/005_analysis_runs_and_alerts.sql",
+  ),
+  path.join(__dirname, "../../src/db/migrations/006_extend_analysis_runs.sql"),
+];
 
 const analysisRepository = require("../../src/repositories/analysisRepository");
 
@@ -36,7 +40,7 @@ test("analysis runs and alerts can be saved and read back", async () => {
     await client.query(`CREATE SCHEMA "${schemaName}"`);
     await client.query(`SET LOCAL search_path TO "${schemaName}", public`);
 
-    // Create the minimum parent tables required by the migration.
+    // Create the minimum parent tables required by the migrations.
     await client.query(`
       CREATE TABLE auth_users (
         id UUID PRIMARY KEY
@@ -50,14 +54,16 @@ test("analysis runs and alerts can be saved and read back", async () => {
     const userId = randomUUID();
 
     await client.query("INSERT INTO auth_users (id) VALUES ($1)", [userId]);
-
     await client.query("INSERT INTO datasets (id) VALUES ($1)", [42]);
 
-    // Run the actual BE-01 migration.
-    const migrationSql = fs.readFileSync(migrationPath, "utf8");
-    await client.query(migrationSql);
+    // Run the actual BE-01 migrations in order.
+    for (const migrationPath of migrationPaths) {
+      const migrationSql = fs.readFileSync(migrationPath, "utf8");
+      await client.query(migrationSql);
+    }
 
     const streams = ["temperature", "humidity"];
+
     const settings = {
       model: { metric: "temperature" },
       correlation: { method: "pearson" },
@@ -92,19 +98,27 @@ test("analysis runs and alerts can be saved and read back", async () => {
       },
     ];
 
-    // Pass the test's client to the repository.
+    // Pass the test's database client to the repository.
     const saved = await analysisRepository.saveAnalysisRun({
       userId,
       datasetId: 42,
+      datasetName: "Test Dataset",
       streams,
       settings,
+      request: { datasetId: 42 },
+      result: { status: "success", alerts },
+      status: "success",
+      contractVersion: "1.0",
+      generatedAt: new Date().toISOString(),
       alerts,
       client,
     });
 
-    // Read back the analysis run.
+    // Read back the saved analysis run.
     const runResult = await client.query(
-      `SELECT user_id, dataset_id, streams, settings
+      `SELECT user_id, dataset_id, streams, settings,
+              dataset_name, request, result, status,
+              contract_version, generated_at
        FROM analysis_runs
        WHERE id = $1`,
       [saved.runId],
@@ -145,7 +159,7 @@ test("analysis runs and alerts can be saved and read back", async () => {
       assert.equal(actual.id, saved.alerts[i].alert_id);
     }
   } finally {
-    // Roll back all test data and the temporary schema.
+    // Roll back all test data and remove the temporary schema.
     await client.query("ROLLBACK");
     client.release();
   }

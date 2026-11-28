@@ -15,20 +15,43 @@ const analyse = async (req, res) => {
   try {
     const result = await analyseService.runAnalysis(req.body, req.user.sub);
 
+    // Only save successful Analytics responses.
+    if (result.status !== "success") {
+      return res.status(200).json(result);
+    }
+
+    // Preserve the original Analytics result.
+    const originalResult = structuredClone(result);
+
     const saved = await analysisRepository.saveAnalysisRun({
       userId: req.user.sub,
-      datasetId: req.body.datasetId,
+      datasetId: req.body.datasetId ?? null,
+      datasetName: req.body.datasetName ?? null,
+
       streams: req.body.correlation?.streams || [],
+
       settings: {
         model: req.body.model || null,
         correlation: req.body.correlation || null,
       },
+
+      // Store the complete request and Analytics response.
+      request: req.body,
+      result: originalResult,
+
+      status: result.status,
+      contractVersion: result.contract_version ?? null,
+      generatedAt: result.generated_at ?? null,
+
       alerts: Array.isArray(result.alerts) ? result.alerts : [],
     });
 
-    result.alerts = saved.alerts;
-
-    return res.status(200).json(result);
+    // Return the saved alert IDs and the database run ID.
+    return res.status(200).json({
+      ...result,
+      alerts: saved.alerts,
+      run_id: saved.runId,
+    });
   } catch (err) {
     console.error("Error analysing data:", err);
 
