@@ -1,5 +1,0 @@
-{
-  "error": "Sensor data service is temporarily unavailable.",
-  "code": "SERVICE_UNAVAILABLE",
-  "correlationId": "mock-service-001"
-}

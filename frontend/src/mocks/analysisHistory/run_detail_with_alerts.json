@@ -1,0 +1,148 @@
+{
+  "id": "99b387e1-b0b9-5fd6-b88c-af6c261337af",
+  "datasetId": 42,
+  "datasetName": "melbourne-weather-replay",
+  "datasetDeleted": false,
+  "status": "success",
+  "streams": [
+    "temperature",
+    "humidity",
+    "pressure"
+  ],
+  "modelMetric": "temperature",
+  "processedItems": 500,
+  "alertCount": 3,
+  "alertCountByType": {
+    "POINTWISE_ANOMALY": 1,
+    "CORRELATION_CHANGE": 2
+  },
+  "highestSeverity": "HIGH",
+  "generatedAt": "2026-11-21T09:14:58Z",
+  "createdAt": "2026-11-21T09:15:02Z",
+  "contractVersion": "0.1",
+  "request": {
+    "model": {
+      "detector": "isolationforest",
+      "metric": "temperature",
+      "parameters": {}
+    },
+    "correlation": {
+      "streams": [
+        "temperature",
+        "humidity",
+        "pressure"
+      ],
+      "window_size": 20,
+      "step_size": 10,
+      "method": "pearson"
+    }
+  },
+  "result": {
+    "status": "success",
+    "generated_at": "2026-11-21T09:14:58Z",
+    "alerts": [
+      {
+        "timestamp": "2026-11-20T14:30:00Z",
+        "alert_type": "POINTWISE_ANOMALY",
+        "target": {
+          "entity_id": null,
+          "metrics": [
+            "temperature"
+          ]
+        },
+        "method": "IsolationForest",
+        "score": 0.1912,
+        "score_metadata": {
+          "type": "raw_anomaly_score",
+          "normalized": false
+        },
+        "severity": null,
+        "message": "Anomaly detected in temperature.",
+        "time_window": null,
+        "supporting_values": {
+          "sensor_value": 41.7,
+          "runtime_ms": 41
+        },
+        "source": {
+          "component": "models"
+        },
+        "alert_id": "16bdcc6f-3647-5e0b-aef4-f7770b8010d1"
+      },
+      {
+        "timestamp": "2026-11-20T18:30:00Z",
+        "alert_type": "CORRELATION_CHANGE",
+        "target": {
+          "entity_id": null,
+          "metrics": [
+            "temperature",
+            "humidity"
+          ]
+        },
+        "method": "Rolling_Pearson_Correlation",
+        "score": 0.71,
+        "score_metadata": {
+          "type": "absolute_correlation_delta",
+          "normalized": false
+        },
+        "severity": "HIGH",
+        "message": "Correlation between temperature and humidity changed by 0.71.",
+        "time_window": {
+          "start": "2026-11-20T15:10:00Z",
+          "end": "2026-11-20T18:30:00Z",
+          "window_size": 20,
+          "step_size": 10
+        },
+        "supporting_values": {
+          "previous_correlation": -0.82,
+          "current_correlation": -0.11,
+          "delta": 0.71,
+          "window_index": 12
+        },
+        "source": {
+          "component": "correlation"
+        },
+        "alert_id": "fecec439-a46c-58de-829b-24d962afca0b"
+      },
+      {
+        "timestamp": "2026-11-20T22:30:00Z",
+        "alert_type": "CORRELATION_CHANGE",
+        "target": {
+          "entity_id": null,
+          "metrics": [
+            "humidity",
+            "pressure"
+          ]
+        },
+        "method": "Rolling_Pearson_Correlation",
+        "score": 0.37,
+        "score_metadata": {
+          "type": "absolute_correlation_delta",
+          "normalized": false
+        },
+        "severity": "MEDIUM",
+        "message": "Correlation between humidity and pressure changed by 0.37.",
+        "time_window": {
+          "start": "2026-11-20T19:10:00Z",
+          "end": "2026-11-20T22:30:00Z",
+          "window_size": 20,
+          "step_size": 10
+        },
+        "supporting_values": {
+          "previous_correlation": 0.64,
+          "current_correlation": 0.27,
+          "delta": 0.37,
+          "window_index": 14
+        },
+        "source": {
+          "component": "correlation"
+        },
+        "alert_id": "e805f395-124c-5365-aff8-836501b9b63c"
+      }
+    ],
+    "summary": {
+      "processed_items": 500,
+      "alert_count": 3
+    },
+    "errors": []
+  }
+}

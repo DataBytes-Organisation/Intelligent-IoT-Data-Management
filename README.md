@@ -75,6 +75,25 @@ The Intelligent IoT Data Management Platform is designed to provide a smarter wa
 
 We welcome data scientists, developers, and IoT engineers to build upon and extend this project! The codebase is modular, clean, and well-documented, making it easy to add new features or integrate new data sources. Docker and .env files ensure a flexible and consistent development environment. Whether you want to improve the machine learning models, enhance the frontend, or integrate with new sensors, your contributions are valued. Check out open issues and feature requests on GitHub to get started—pick up where we left off and keep building!
 
+## Engineering ways of working (T3 2026)
+
+**Tasks:** MS Planner, plan "Intelligent IoT Data Management T3/2026", your subteam's bucket.
+
+**Branches:** one per task, from the latest fork `main`. Name: `<item-number>-<short-description>` (e.g. `be-03-ready-check`). Never delete after merge.
+
+**Two review levels:**
+
+| Level | Pull request | Reviewer |
+|---|---|---|
+| 1 | Your branch → fork `main` | Junior Lead (Megan: Backend, Lorenzo: Frontend), runs the code first |
+| 2 | Fork `main` → DataBytes `main` | Senior Lead |
+
+⚠️ GitHub sets the base to DataBytes by default. Change it to our fork.
+
+**PR template:** filled in automatically from `.github/pull_request_template.md`. Never tick a box that is not true.
+
+**Done means:** works as the Planner card asks, tests pass, API changes documented, PR approved and merged into fork `main`.
+
 ## Contact
 
 Questions, suggestions, or want to join the project?  
