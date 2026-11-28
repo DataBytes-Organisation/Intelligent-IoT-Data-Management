@@ -5,18 +5,18 @@ const jwt = require("jsonwebtoken");
 
 process.env.JWT_SECRET ||= "test-only-secret-not-for-production";
 
-const app = require("../src/app");
-const db = require("../src/db/pool");
-const datasetRepository = require("../src/repositories/datasetRepository");
-const analysisRepository = require("../src/repositories/analysisRepository");
-const timeseriesService = require("../src/services/timeseriesService");
+const app = require("../../src/app");
+const db = require("../../src/db/pool");
+const datasetRepository = require("../../src/repositories/datasetRepository");
+const analysisRepository = require("../../src/repositories/analysisRepository");
+const timeseriesService = require("../../src/services/timeseriesService");
 const {
   buildAnalyticsPayload,
   normaliseRows,
-} = require("../src/services/analyseService");
+} = require("../../src/services/analyseService");
 const {
   ensureThingSpeakDataset,
-} = require("../src/services/thingspeakService");
+} = require("../../src/services/thingspeakService");
 
 function authHeaders(userId = "11111111-1111-4111-8111-111111111111") {
   return {

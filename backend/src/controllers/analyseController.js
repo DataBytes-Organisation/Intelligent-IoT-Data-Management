@@ -5,6 +5,7 @@
  * and saves successful results to the database.
  */
 
+const { randomUUID } = require("node:crypto");
 const analyseService = require("../services/analyseService");
 const analysisRepository = require("../repositories/analysisRepository");
 
@@ -13,43 +14,46 @@ const analysisRepository = require("../repositories/analysisRepository");
  */
 const analyse = async (req, res) => {
   try {
-    const result = await analyseService.runAnalysis(req.body, req.user.sub);
+    const { result, datasetName, storedRequest } =
+      await analyseService.runAnalysis(req.body, req.user.sub);
 
     // Only save successful Analytics responses.
-    if (result.status !== "success") {
+    if (result?.status !== "success") {
       return res.status(200).json(result);
     }
 
-    // Preserve the original Analytics result.
-    const originalResult = structuredClone(result);
+    const alerts = (Array.isArray(result.alerts) ? result.alerts : []).map(
+      (alert) => ({
+        ...alert,
+        alert_id: alert.alert_id ?? randomUUID(),
+      }),
+    );
+    const storedResult = { ...result, alerts };
 
     const saved = await analysisRepository.saveAnalysisRun({
       userId: req.user.sub,
       datasetId: req.body.datasetId ?? null,
-      datasetName: req.body.datasetName ?? null,
+      datasetName,
 
-      streams: req.body.correlation?.streams || [],
+      streams: storedRequest.correlation?.streams || [],
 
       settings: {
         model: req.body.model || null,
         correlation: req.body.correlation || null,
       },
 
-      // Store the complete request and Analytics response.
-      request: req.body,
-      result: originalResult,
+      request: storedRequest,
+      result: storedResult,
 
       status: result.status,
-      contractVersion: result.contract_version ?? null,
+      contractVersion: "0.1",
       generatedAt: result.generated_at ?? null,
 
-      alerts: Array.isArray(result.alerts) ? result.alerts : [],
+      alerts,
     });
 
-    // Return the saved alert IDs and the database run ID.
     return res.status(200).json({
-      ...result,
-      alerts: saved.alerts,
+      ...storedResult,
       run_id: saved.runId,
     });
   } catch (err) {

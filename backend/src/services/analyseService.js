@@ -297,7 +297,16 @@ async function runAnalysis(request, userId) {
     });
   }
   const payload = await buildAnalyticsPayload(request, rows, dataset);
-  return callAnalytics(payload);
+  const analyticsResult = await callAnalytics(payload);
+
+  return {
+    result: analyticsResult,
+    datasetName: dataset?.name ?? null,
+    storedRequest: {
+      model: payload.model,
+      correlation: payload.correlation,
+    },
+  };
 }
 
 module.exports = {
